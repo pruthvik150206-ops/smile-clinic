@@ -20,7 +20,7 @@ const mlRoutes          = require('./routes/ml.routes');
 const app  = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(helmet());
+app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors({ origin: process.env.CORS_ORIGIN || '*', credentials: true }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
@@ -43,7 +43,8 @@ const path = require('path');
 const staticPath = path.join(__dirname, '../../frontend/static');
 app.use(express.static(staticPath));
 
-app.get('/', (req, res) => {
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api/')) return next();
   res.sendFile(path.join(staticPath, 'index.html'));
 });
 
