@@ -2,6 +2,10 @@
   "name": "smile-clinic-app",
   "version": "1.0.0",
   "main": "api/index.js",
+  "scripts": {
+    "start": "node backend/src/server.js",
+    "dev": "npx nodemon backend/src/server.js"
+  },
   "dependencies": {
     "@supabase/supabase-js": "^2.111.0",
     "@vercel/analytics": "^2.0.1",
