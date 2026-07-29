@@ -1252,13 +1252,14 @@
       if (role() === 'patient') calls.push(api('GET', '/patients/me'));
 
       const res = await Promise.all(calls);
-      if (res[0]?.success) STATE.patients = res[0].data;
-      if (res[1]?.success) STATE.doctors = res[1].data;
-      if (res[2]?.success) STATE.appointments = res[2].data;
-      if (res[3]?.success) STATE.treatments = res[3].data;
-      if (res[4]?.success) STATE.stats = res[4].data;
-      if (res[5]?.success) STATE.prescriptions = res[5].data;
-      if (res[6]?.success) STATE.invoices = res[6].data;
+      const toArr = val => Array.isArray(val) ? val : (val?.items || []);
+      if (res[0]?.success) STATE.patients = toArr(res[0].data);
+      if (res[1]?.success) STATE.doctors = toArr(res[1].data);
+      if (res[2]?.success) STATE.appointments = toArr(res[2].data);
+      if (res[3]?.success) STATE.treatments = toArr(res[3].data);
+      if (res[4]?.success) STATE.stats = res[4].data || {};
+      if (res[5]?.success) STATE.prescriptions = toArr(res[5].data);
+      if (res[6]?.success) STATE.invoices = toArr(res[6].data);
       if (role() === 'patient' && res[7]?.success) STATE.myPatientProfile = res[7].data;
     }
 
