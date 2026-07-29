@@ -1509,13 +1509,26 @@
 
     function setDemo(r, el) { }  // keep for compatibility
     async function doLogin() {
-      const email = document.getElementById('a-email').value.trim(), pass = document.getElementById('a-pass').value;
-      const errEl = document.getElementById('auth-err'); errEl.style.display = 'none';
-      const r = await api('POST', '/auth/login', { email, password: pass });
-      if (!r.success) { errEl.textContent = r.error?.message || 'Login failed'; errEl.style.display = 'block'; return; }
-      localStorage.setItem('sc_token', r.data.token); STATE.user = r.data.user;
-      toast(`Welcome, ${r.data.user.username}!`);
-      await loadData(); STATE.page = 'dashboard'; renderPage();
+      const email = (document.getElementById('a-email')?.value || '').trim();
+      const pass = document.getElementById('a-pass')?.value || '';
+      const errEl = document.getElementById('auth-err');
+      if (errEl) errEl.style.display = 'none';
+      const btn = document.getElementById('login-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Signing in...'; }
+      try {
+        const r = await api('POST', '/auth/login', { email, password: pass });
+        if (!r.success) {
+          if (errEl) { errEl.textContent = r.error?.message || 'Login failed'; errEl.style.display = 'block'; }
+          return;
+        }
+        localStorage.setItem('sc_token', r.data.token); STATE.user = r.data.user;
+        toast(`Welcome, ${r.data.user.username}!`);
+        await loadData(); STATE.page = 'dashboard'; renderPage();
+      } catch (e) {
+        if (errEl) { errEl.textContent = e.message || 'Login request failed'; errEl.style.display = 'block'; }
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = 'Sign in →'; }
+      }
     }
     function showRegister() {
       document.getElementById('app').innerHTML = `

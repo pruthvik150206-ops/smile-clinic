@@ -1,16 +1,32 @@
 const { Pool } = require('pg');
 const logger   = require('../utils/logger');
 
-const pool = new Pool({
-  host:     process.env.DB_HOST     || 'localhost',
-  port:     parseInt(process.env.DB_PORT || '5432'),
-  database: process.env.DB_NAME     || 'dental_clinic',
-  user:     process.env.DB_USER     || 'postgres',
-  password: process.env.DB_PASSWORD || '',
-  max:      parseInt(process.env.DB_POOL_MAX        || '10'),
-  idleTimeoutMillis:    parseInt(process.env.DB_POOL_IDLE_MS    || '30000'),
-  connectionTimeoutMillis: parseInt(process.env.DB_POOL_ACQUIRE_MS || '60000'),
-});
+const isSslEnabled = process.env.DB_SSL === 'true' || (process.env.DB_HOST && process.env.DB_HOST.includes('supabase'));
+
+const defaultDbUrl = 'postgresql://postgres.iyqkzdhhkkmhrebsfril:9a4d49f1g12h78@aws-1-ap-south-1.pooler.supabase.com:6543/postgres';
+const databaseUrl = process.env.DATABASE_URL || (process.env.DB_HOST ? null : defaultDbUrl);
+
+const poolConfig = databaseUrl
+  ? {
+      connectionString: databaseUrl,
+      ssl: { rejectUnauthorized: false },
+      max: parseInt(process.env.DB_POOL_MAX || '10'),
+      idleTimeoutMillis: parseInt(process.env.DB_POOL_IDLE_MS || '30000'),
+      connectionTimeoutMillis: parseInt(process.env.DB_POOL_ACQUIRE_MS || '10000'),
+    }
+  : {
+      host:     process.env.DB_HOST     || 'localhost',
+      port:     parseInt(process.env.DB_PORT || '5432'),
+      database: process.env.DB_NAME     || 'dental_clinic',
+      user:     process.env.DB_USER     || 'postgres',
+      password: process.env.DB_PASSWORD || '',
+      max:      parseInt(process.env.DB_POOL_MAX        || '10'),
+      idleTimeoutMillis:    parseInt(process.env.DB_POOL_IDLE_MS    || '30000'),
+      connectionTimeoutMillis: parseInt(process.env.DB_POOL_ACQUIRE_MS || '10000'),
+      ssl: isSslEnabled ? { rejectUnauthorized: false } : false,
+    };
+
+const pool = new Pool(poolConfig);
 
 pool.on('connect', () => logger.info('PostgreSQL: new client connected'));
 pool.on('error',  (err) => logger.error('PostgreSQL idle client error', { error: err.message }));
