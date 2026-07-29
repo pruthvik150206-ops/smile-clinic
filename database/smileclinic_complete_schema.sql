@@ -14,7 +14,33 @@
 -- ── Extensions ──────────────────────────────────────────────────
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
+-- ── Clean up existing objects (allows safe re-execution) ────────
+DROP VIEW IF EXISTS v_upcoming_appointments CASCADE;
+DROP VIEW IF EXISTS v_monthly_revenue CASCADE;
+DROP VIEW IF EXISTS v_treatment_stats CASCADE;
+
+DROP TABLE IF EXISTS ml_predictions CASCADE;
+DROP TABLE IF EXISTS insurance_claims CASCADE;
+DROP TABLE IF EXISTS invoices CASCADE;
+DROP TABLE IF EXISTS appointment_treatments CASCADE;
+DROP TABLE IF EXISTS appointments CASCADE;
+DROP TABLE IF EXISTS doctor_schedules CASCADE;
+DROP TABLE IF EXISTS treatments CASCADE;
+DROP TABLE IF EXISTS doctors CASCADE;
+DROP TABLE IF EXISTS patients CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+
 -- ── ENUM types ───────────────────────────────────────────────────
+DROP TYPE IF EXISTS user_role CASCADE;
+DROP TYPE IF EXISTS gender_type CASCADE;
+DROP TYPE IF EXISTS appointment_status CASCADE;
+DROP TYPE IF EXISTS payment_status CASCADE;
+DROP TYPE IF EXISTS payment_method CASCADE;
+DROP TYPE IF EXISTS claim_status CASCADE;
+DROP TYPE IF EXISTS day_of_week_type CASCADE;
+DROP TYPE IF EXISTS day_of_week CASCADE;
+DROP TYPE IF EXISTS treatment_category CASCADE;
+
 CREATE TYPE user_role          AS ENUM ('admin', 'doctor', 'receptionist', 'patient');
 CREATE TYPE gender_type        AS ENUM ('male', 'female', 'other', 'prefer_not_to_say');
 CREATE TYPE appointment_status AS ENUM ('scheduled', 'confirmed', 'in_progress', 'completed', 'cancelled', 'no_show');
@@ -280,13 +306,13 @@ ORDER BY times_performed DESC;
 -- ── Users (passwords are bcrypt hashes of the plain text shown) ──
 -- admin123 | doctor123 | recept123 | patient123
 INSERT INTO users (username, email, password_hash, role) VALUES
-('admin',      'admin@smile.in',    '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMdJDCpqJzGfBa5bxN3K7LrF2q', 'admin'),
-('dr_priya',   'doctor@smile.in',   '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMdJDCpqJzGfBa5bxN3K7LrF2q', 'doctor'),
-('dr_arjun',   'arjun@smile.in',    '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMdJDCpqJzGfBa5bxN3K7LrF2q', 'doctor'),
-('kavya_rec',  'recept@smile.in',   '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMdJDCpqJzGfBa5bxN3K7LrF2q', 'receptionist'),
-('meera_p',    'meera@patient.in',  '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMdJDCpqJzGfBa5bxN3K7LrF2q', 'patient'),
-('rahul_v',    'rahul@patient.in',  '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMdJDCpqJzGfBa5bxN3K7LrF2q', 'patient'),
-('sunita_r',   'sunita@patient.in', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMdJDCpqJzGfBa5bxN3K7LrF2q', 'patient');
+('admin',      'admin@smile.in',    '$2a$10$kqEYgDEulD9zgJ9/LQNFf.mqHQaOoa14QuGpD5hIrMi2h0ZfCxA7u', 'admin'),
+('dr_priya',   'doctor@smile.in',   '$2a$10$4P4y.Brp3Z0EYz8FS8ktK.6u3uIIbl347lGxMbGgWo7yDm0GAY.Bu', 'doctor'),
+('dr_arjun',   'arjun@smile.in',    '$2a$10$4P4y.Brp3Z0EYz8FS8ktK.6u3uIIbl347lGxMbGgWo7yDm0GAY.Bu', 'doctor'),
+('kavya_rec',  'recept@smile.in',   '$2a$10$O8rusI7o4IFCev8I7/OJe.nRr4k2cptxnmnIQ2JtqAiXsTI3ZL9Y.', 'receptionist'),
+('meera_p',    'meera@patient.in',  '$2a$10$hGjTi/JIie6quEA2RkQ9wOo6VSWV/8/gXHD3y2qfPo7vEU/9xG.Em', 'patient'),
+('rahul_v',    'rahul@patient.in',  '$2a$10$hGjTi/JIie6quEA2RkQ9wOo6VSWV/8/gXHD3y2qfPo7vEU/9xG.Em', 'patient'),
+('sunita_r',   'sunita@patient.in', '$2a$10$hGjTi/JIie6quEA2RkQ9wOo6VSWV/8/gXHD3y2qfPo7vEU/9xG.Em', 'patient');
 
 -- ── Doctors ────────────────────────────────────────────────────────
 INSERT INTO doctors (user_id, first_name, last_name, specialisation, license_number, phone, consultation_fee) VALUES
@@ -343,13 +369,13 @@ INSERT INTO appointment_treatments (appointment_id, treatment_id, quantity, unit
 (3, 7, 1, 18000.00); -- Sunita: braces (upcoming)
 
 -- ── Invoices ───────────────────────────────────────────────────────
-INSERT INTO invoices (appointment_id, patient_id, subtotal, discount, tax_rate, tax_amount, total_amount, payment_status, payment_method, paid_at) VALUES
-(4, 1,  1400.00, 0.00, 0.00, 0.00,  1400.00, 'paid',    'upi',      NOW() - INTERVAL '38 days'),
-(5, 2,  3000.00, 200.00, 0.00, 0.00, 2800.00, 'paid',   'card',     NOW() - INTERVAL '36 days'),
-(6, 3,   600.00, 0.00, 0.00, 0.00,   600.00, 'paid',    'cash',     NOW() - INTERVAL '87 days'),
-(1, 1,  5500.00, 0.00, 0.00, 0.00,  5500.00, 'pending', NULL,       NULL),
-(2, 2,  1200.00, 0.00, 0.00, 0.00,  1200.00, 'pending', NULL,       NULL),
-(3, 3, 18000.00, 0.00, 0.00, 0.00, 18000.00, 'pending', NULL,       NULL);
+INSERT INTO invoices (appointment_id, patient_id, subtotal, discount, tax_rate, tax_amount, total_amount, payment_status, payment_method, issued_at, paid_at) VALUES
+(4, 1,  1400.00, 0.00, 0.00, 0.00,  1400.00, 'paid',    'upi',  NOW() - INTERVAL '40 days', NOW() - INTERVAL '38 days'),
+(5, 2,  3000.00, 200.00, 0.00, 0.00, 2800.00, 'paid',   'card', NOW() - INTERVAL '40 days', NOW() - INTERVAL '36 days'),
+(6, 3,   600.00, 0.00, 0.00, 0.00,   600.00, 'paid',    'cash', NOW() - INTERVAL '90 days', NOW() - INTERVAL '87 days'),
+(1, 1,  5500.00, 0.00, 0.00, 0.00,  5500.00, 'pending', NULL,   NOW(),                      NULL),
+(2, 2,  1200.00, 0.00, 0.00, 0.00,  1200.00, 'pending', NULL,   NOW(),                      NULL),
+(3, 3, 18000.00, 0.00, 0.00, 0.00, 18000.00, 'pending', NULL,   NOW(),                      NULL);
 
 -- ── Insurance claim ────────────────────────────────────────────────
 INSERT INTO insurance_claims (invoice_id, provider_name, policy_number, claim_amount, approved_amount, claim_status, submitted_on, resolved_on) VALUES
