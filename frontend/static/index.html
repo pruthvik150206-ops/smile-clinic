@@ -3942,7 +3942,8 @@
     //  RENDER
     // ═══════════════════════════════════════════════════════════
     function renderPage() {
-      const app = document.getElementById('app');
+      const app = document.getElementById('app') || document.body;
+      if (!app) return;
       if (!STATE.user) { app.innerHTML = authPage(); return; }
       let inner = '';
       if (STATE.page === 'dashboard') inner = dashboardPage();
@@ -3960,6 +3961,13 @@
     // ═══════════════════════════════════════════════════════════
     //  BOOT
     // ═══════════════════════════════════════════════════════════
+    // Render UI synchronously right away
+    renderPage();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', renderPage);
+    }
+
+    // Background token check if user was logged in
     (async () => {
       try {
         const token = localStorage.getItem('sc_token');
@@ -3968,14 +3976,13 @@
           if (r.success && r.data) {
             STATE.user = r.data;
             try { await loadData(); } catch (err) { console.error('Data load error:', err); }
+            renderPage();
           } else {
             localStorage.removeItem('sc_token');
           }
         }
       } catch (e) {
         console.error('Boot error:', e);
-      } finally {
-        renderPage();
       }
     })();
   </script>
