@@ -1,0 +1,9 @@
+treatment_id,treatment_name,category,description,base_cost,duration_mins,is_active
+1,Dental Cleaning & Scaling,preventive,Scaling and polishing,800.0,45,1
+2,Composite Filling,restorative,Tooth-coloured resin filling,1200.0,30,1
+3,Root Canal Treatment,restorative,Removal of infected pulp,5500.0,90,1
+4,Tooth Extraction,surgical,Simple extraction under local anaesthesia,700.0,30,1
+5,Teeth Whitening,cosmetic,In-office laser whitening,3500.0,60,1
+6,Dental X-Ray (OPG),diagnostic,Full-mouth radiograph,600.0,15,1
+7,Metal Braces,orthodontic,Standard stainless steel braces,18000.0,60,1
+8,Porcelain Crown,restorative,Full ceramic crown,7500.0,60,1

@@ -1,0 +1,10 @@
+patient_id,user_id,first_name,last_name,date_of_birth,gender,phone,address,blood_group,allergies,medical_notes,created_at,updated_at
+1,5,Meera,Patel,1990-03-15,female,+91-9123456701,,O+,Penicillin,,2026-05-24 19:09:55,2026-05-24 19:09:55
+2,6,Rahul,Verma,1985-07-22,male,+91-9123456702,,B+,None,,2026-05-24 19:09:55,2026-05-24 19:09:55
+3,8,prashant,desai,2005-06-10,male,+91 975373837,,O+,None,,2026-05-25 05:29:39,2026-05-25 05:29:39
+4,10,yousuf,M,2006-07-06,male,97217491334,,A+,metal allergy ,metal allergy in terms of braces ,2026-05-26 03:25:08,2026-05-26 03:25:08
+5,11,veera,d akki,2006-06-05,male,745562245,,B+,none ,none,2026-05-26 03:25:48,2026-05-26 03:25:48
+6,12,pruthvik,Gowda B K,2006-02-15,male,9845189814,,A+,none,none,2026-05-26 03:26:29,2026-05-26 03:26:29
+7,13,kushal,M,2006-04-30,male,49873397344,,O+,none,none ,2026-05-26 03:29:41,2026-05-26 03:29:41
+8,14,sharma,patel,2004-05-20,male,999888883,,O+,none,none,2026-06-25 22:11:22,2026-06-25 22:11:22
+9,15,TestAuto,Patient,,,+91-9999900000,,,,,2026-07-22 09:33:19,2026-07-22 09:33:19

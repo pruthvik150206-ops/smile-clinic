@@ -1,0 +1,4 @@
+doctor_id,user_id,first_name,last_name,specialisation,license_number,phone,consultation_fee,is_available,created_at
+1,2,Priya,Sharma,General Dentistry,MCI-DEN-2018-04521,+91-9876543210,600.0,1,2026-05-24 19:09:55
+2,3,Arjun,Nair,Orthodontics,MCI-DEN-2016-03812,+91-9876543211,900.0,0,2026-05-24 19:09:55
+4,9,vijay,rathod,Orthodontics,udi-eyt-ohtin-ao,986544421,850.0,1,2026-05-25 10:13:57

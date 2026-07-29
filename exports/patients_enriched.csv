@@ -1,0 +1,10 @@
+patient_id,first_name,last_name,login_email,login_password,phone,date_of_birth,gender,blood_group,allergies,address,medical_notes,created_at
+1,Meera,Patel,meera@patient.in,Smile4787,+91-9123456701,1990-03-15,female,O+,Penicillin,,,2026-05-24 19:09:55
+2,Rahul,Verma,rahul@patient.in,Smile9037,+91-9123456702,1985-07-22,male,B+,None,,,2026-05-24 19:09:55
+3,prashant,desai,pd@smile.in,Smile4261,+91 975373837,2005-06-10,male,O+,None,,,2026-05-25 05:29:39
+4,yousuf,M,yousufm@smile.in,Smile7830,97217491334,2006-07-06,male,A+,metal allergy ,,metal allergy in terms of braces ,2026-05-26 03:25:08
+5,veera,d akki,veer@smile.in,Smile8425,745562245,2006-06-05,male,B+,none ,,none,2026-05-26 03:25:48
+6,pruthvik,Gowda B K,pruthvik@smile.in,Smile2199,9845189814,2006-02-15,male,A+,none,,none,2026-05-26 03:26:29
+7,kushal,M,kushal@smile.in,Smile4040,49873397344,2006-04-30,male,O+,none,,none ,2026-05-26 03:29:41
+8,sharma,patel,sharma@clinic.in,Smile1433,999888883,2004-05-20,male,O+,none,,none,2026-06-25 22:11:22
+9,TestAuto,Patient,testauto@patient.in,Smile2727,+91-9999900000,,,,,,,2026-07-22 09:33:19

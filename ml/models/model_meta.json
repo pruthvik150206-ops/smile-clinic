@@ -1,0 +1,53 @@
+{
+  "model_name": "no_show_xgboost",
+  "model_version": "2.1",
+  "algorithm": "Logistic Regression",
+  "trained_at": "2026-05-23T22:48:41.742871",
+  "n_train_samples": 3502,
+  "features": [
+    "lead_time_days",
+    "prior_no_shows",
+    "appointment_hour",
+    "age",
+    "distance_km",
+    "treatment_cost",
+    "previous_appointments",
+    "month",
+    "reminder_sent",
+    "has_insurance",
+    "is_follow_up",
+    "day_of_week",
+    "treatment_category",
+    "gender"
+  ],
+  "numeric_features": [
+    "lead_time_days",
+    "prior_no_shows",
+    "appointment_hour",
+    "age",
+    "distance_km",
+    "treatment_cost",
+    "previous_appointments",
+    "month"
+  ],
+  "binary_features": [
+    "reminder_sent",
+    "has_insurance",
+    "is_follow_up"
+  ],
+  "categorical_features": [
+    "day_of_week",
+    "treatment_category",
+    "gender"
+  ],
+  "optimal_threshold": 0.23000000000000007,
+  "test_metrics": {
+    "roc_auc": 0.7287,
+    "pr_auc": 0.5442,
+    "f1": 0.522
+  },
+  "class_labels": {
+    "0": "show",
+    "1": "no_show"
+  }
+}

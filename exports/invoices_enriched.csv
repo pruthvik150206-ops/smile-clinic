@@ -1,0 +1,8 @@
+invoice_id,invoice_number,patient_name,subtotal,discount_amount,tax_amount,total_amount,payment_status,payment_method,issued_at,paid_at
+8,INV-00008,pruthvik Gowda B K,8999.0,999.0,0.0,8000.0,paid,cash,2026-07-22 06:34:54,
+7,INV-00007,sharma patel,2000.0,0.0,0.0,2000.0,paid,cash,2026-06-25 22:13:04,
+6,INV-00006,pruthvik Gowda B K,9000.0,0.0,0.0,9000.0,paid,cash,2026-06-25 22:10:08,
+5,INV-00005,prashant desai,900.0,0.0,0.0,900.0,paid,cash,2026-05-25 07:57:34,
+4,INV-00004,Meera Patel,1500.0,300.0,0.0,1200.0,paid,cash,2026-05-25 05:26:43,2026-05-26 03:30:16
+2,INV-00002,Meera Patel,2800.0,200.0,0.0,2600.0,paid,Card,2026-05-24 19:09:55,
+3,INV-00003,Rahul Verma,600.0,0.0,0.0,600.0,paid,cash,2026-05-24 19:09:55,2026-05-26 03:30:18

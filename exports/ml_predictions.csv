@@ -1,0 +1,9 @@
+prediction_id,appointment_id,model_name,model_version,prediction_score,prediction_label,predicted_at
+1,5,no_show_xgboost,2.1,0.233,no_show,2026-05-25 05:30:30
+2,6,no_show_xgboost,2.1,0.2229,show,2026-05-26 03:27:03
+3,7,no_show_xgboost,2.1,0.2502,no_show,2026-05-26 03:28:13
+4,8,no_show_xgboost,2.1,0.0929,show,2026-05-26 03:28:40
+5,9,no_show_xgboost,2.1,0.2439,no_show,2026-05-26 03:30:06
+6,10,no_show_xgboost,2.1,0.2545,no_show,2026-06-25 22:11:36
+7,11,no_show_xgboost,2.1,0.1623,show,2026-07-22 06:39:03
+8,12,no_show_xgboost,2.1,0.1675,show,2026-07-22 09:37:03

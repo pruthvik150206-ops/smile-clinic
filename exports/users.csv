@@ -1,0 +1,16 @@
+user_id,username,email,password_hash,role,is_active,created_at,raw_password
+1,admin,admin@smile.in,895305d00e4462bf7fe6d5d224c11e4db7b0bbf852ee70892f104030fd917819,admin,1,2026-05-24 19:09:55,admin123
+2,dr_priya,doctor@smile.in,ab1afa4f7b191251f956d5a3405018389b6a92bb51c94b46d070bdbf5e5b5e06,doctor,1,2026-05-24 19:09:55,doctor123
+3,dr_arjun,arjun@smile.in,17251f675a4927496153e99a71347a21f9a57e6010f4ff39108be67f6a06de5c,doctor,1,2026-05-24 19:09:55,arjun123
+4,kavya_recep,recept@smile.in,d12520bd369b5659dfd7bf852f1f856c231f0457aa928ae3494bf60b0e85809d,receptionist,1,2026-05-24 19:09:55,recept123
+5,meera_p,meera@patient.in,94a49e140f625fdc67fd8d5ebf2ca49858bd5dea0dd6a11f6c69c24616574d59,patient,1,2026-05-24 19:09:55,Smile4787
+6,rahul_v,rahul@patient.in,5289088d758927ebab55947a47642aabdec16bd48c07977c813c0f2684006eaf,patient,1,2026-05-24 19:09:55,Smile9037
+7,dr_raj_6816,raj@clinic.in,077e7b77a1fe5ecb16ea94d5f50343f0753fc2e4545b02f59c518027b33fca8e,doctor,1,2026-05-24 19:10:24,
+8,prashant_986e4e8c,pd@smile.in,7350ed9292d253709c8558f7f382d9627dc23916073f3b4e9796cc6069855108,patient,1,2026-05-25 05:29:39,Smile4261
+9,dr_vijay_5267,vijay@smile.in,c5d7ede612e8dafccbaaf23296495d554d12e1f830f6fcda79181379b4e4370b,doctor,1,2026-05-25 10:13:57,
+10,yousuf_7e79b2df,yousufm@smile.in,ccd61f4a3febb17f974e1897fe55e929653cf1a9ed9af1800fbe3f86f4cf251b,patient,1,2026-05-26 03:25:08,Smile7830
+11,veera_48e0df80,veer@smile.in,45d657c028c2626fb05b6f22b3faeb35c049a20cfc2a37a24d04fb52d75bd4a7,patient,1,2026-05-26 03:25:48,Smile8425
+12,pruthvik_6f8890d2,pruthvik@smile.in,66b79f59819a14b2cccd7a1c518115a7d335bda4836f2794ca8d167308fa56b1,patient,1,2026-05-26 03:26:29,Smile2199
+13,kushal_24a807b9,kushal@smile.in,3ff0a85ef3d3e39a714b804151d1373ca7d4aafba1fb428db38afd6fc4001784,patient,1,2026-05-26 03:29:41,Smile4040
+14,sharma_3def519f,sharma@clinic.in,5c2fb6b11cc8297b1196fe52afabc60f8a4c8f0997970ca36593944ec09e3ade,patient,1,2026-06-25 22:11:22,Smile1433
+15,testauto_90bf3a7b,testauto@patient.in,2a8f970fa9c9289ec3e307350b677e5ffee2de84c439ff70493d241bd84a49e2,patient,1,2026-07-22 09:33:19,Smile2727

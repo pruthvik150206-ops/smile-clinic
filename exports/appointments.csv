@@ -1,0 +1,15 @@
+appointment_id,patient_id,doctor_id,scheduled_at,duration_mins,status,reason,notes,no_show_probability,risk_level,recommended_action,priority,reminder_sent,created_at,updated_at
+2,2,1,2026-05-22 10:00,30,completed,Filling follow-up,"it was fine 
+
+Follow-up: 1 week",,,,normal,0,2026-05-24 19:09:55,2026-05-24 19:12:50
+3,1,2,2026-05-27 11:00,60,confirmed,Braces consultation,,,,,normal,0,2026-05-24 19:09:55,2026-05-26 03:26:42
+5,3,1,2026-05-25T15:00,30,completed,,"molar check up done will need to take the medications and follow a liquid only diet 
+
+Follow-up: 1 week",0.233,Low,✅ Standard automated reminder is sufficient,high,0,2026-05-25 05:30:30,2026-05-25 07:57:03
+6,6,4,2026-05-26T08:00,30,confirmed,,,0.2229,Low,✅ Standard automated reminder is sufficient,high,0,2026-05-26 03:27:03,2026-05-26 03:31:52
+7,4,1,2026-05-26T08:00,30,completed,left upper molar ache ,pain due to cavity suggested to floss mouth before sleeping ,0.2502,Low,✅ Standard automated reminder is sufficient,high,0,2026-05-26 03:28:13,2026-05-26 03:31:23
+8,5,2,2026-05-26T08:00,30,confirmed,braces appointment ,,0.0929,Low,✅ Standard automated reminder is sufficient,normal,0,2026-05-26 03:28:40,2026-06-25 22:10:21
+9,6,1,2026-05-26T08:00,30,scheduled,unbearable tooth pain ,,0.2439,Low,✅ Standard automated reminder is sufficient,urgent,0,2026-05-26 03:30:06,2026-05-26 03:30:06
+10,8,2,2026-06-26T03:00,30,completed,,,0.2545,Low,✅ Standard automated reminder is sufficient,normal,0,2026-06-25 22:11:36,2026-06-25 22:12:33
+11,6,2,2026-07-22T12:00,30,confirmed,,,0.1623,Low,✅ Standard automated reminder is sufficient,normal,0,2026-07-22 06:39:03,2026-07-22 10:04:42
+12,4,1,2026-07-22T15:00,30,completed,upper molar ache ,gargle twice with hot water and salt,0.1675,Low,✅ Standard automated reminder is sufficient,high,0,2026-07-22 09:37:03,2026-07-22 09:52:40

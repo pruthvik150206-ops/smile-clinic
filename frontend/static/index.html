@@ -1,0 +1,3973 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SmileClinic DMS</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --bg: #F7F5F1;
+      --surface: #fff;
+      --surface2: #F0EDE7;
+      --border: #E3DED7;
+      --text: #1C1917;
+      --text2: #6B6560;
+      --text3: #A8A29E;
+      --green: #15803D;
+      --green-bg: #DCFCE7;
+      --green-bd: #86EFAC;
+      --amber: #B45309;
+      --amber-bg: #FEF3C7;
+      --amber-bd: #FCD34D;
+      --red: #DC2626;
+      --red-bg: #FEE2E2;
+      --red-bd: #FCA5A5;
+      --blue: #1D4ED8;
+      --blue-bg: #DBEAFE;
+      --blue-bd: #93C5FD;
+      --sidebar: 236px;
+      --r: 10px;
+      --font: 'DM Sans', sans-serif;
+      --serif: 'DM Serif Display', serif;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      min-height: 100vh
+    }
+
+    /* ── AUTH ─────────────────────────────────────── */
+    .auth-wrap {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr
+    }
+
+    .auth-brand {
+      background: var(--green);
+      padding: 56px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden
+    }
+
+    .auth-brand::before {
+      content: '';
+      position: absolute;
+      width: 480px;
+      height: 480px;
+      border-radius: 50%;
+      border: 90px solid rgba(255, 255, 255, .07);
+      top: -110px;
+      right: -110px
+    }
+
+    .auth-brand::after {
+      content: '';
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      border: 60px solid rgba(255, 255, 255, .05);
+      bottom: 50px;
+      left: -70px
+    }
+
+    .auth-logo {
+      font-family: var(--serif);
+      font-size: 26px;
+      color: #fff;
+      z-index: 1
+    }
+
+    .auth-hl {
+      z-index: 1
+    }
+
+    .auth-hl h1 {
+      font-family: var(--serif);
+      font-size: 44px;
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 14px
+    }
+
+    .auth-hl p {
+      color: rgba(255, 255, 255, .65);
+      font-size: 15px;
+      line-height: 1.65;
+      max-width: 300px
+    }
+
+    .auth-copy {
+      font-size: 12px;
+      color: rgba(255, 255, 255, .35);
+      z-index: 1
+    }
+
+    .auth-form {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      background: var(--surface)
+    }
+
+    .auth-box {
+      width: 100%;
+      max-width: 400px
+    }
+
+    .auth-box h2 {
+      font-family: var(--serif);
+      font-size: 30px;
+      margin-bottom: 5px
+    }
+
+    .auth-box .sub {
+      color: var(--text2);
+      margin-bottom: 28px;
+      font-size: 14px
+    }
+
+    /* quick role pills */
+    .role-strip {
+      display: flex;
+      gap: 5px;
+      background: var(--surface2);
+      border-radius: 8px;
+      padding: 4px;
+      margin-bottom: 18px
+    }
+
+    .rpill {
+      flex: 1;
+      padding: 6px;
+      border: none;
+      border-radius: 6px;
+      background: none;
+      cursor: pointer;
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text2);
+      transition: all .15s
+    }
+
+    .rpill.on {
+      background: var(--surface);
+      color: var(--green);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, .09)
+    }
+
+    /* ── FORM ─────────────────────────────────────── */
+    .fg {
+      margin-bottom: 15px
+    }
+
+    .fg label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--text2);
+      margin-bottom: 5px
+    }
+
+    .fg input,
+    .fg select,
+    .fg textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: var(--font);
+      font-size: 14px;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color .2s
+    }
+
+    .fg input:focus,
+    .fg select:focus,
+    .fg textarea:focus {
+      border-color: var(--green)
+    }
+
+    .fg textarea {
+      resize: vertical;
+      min-height: 70px
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px
+    }
+
+    /* ── BUTTONS ──────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 17px;
+      border-radius: 8px;
+      font-family: var(--font);
+      font-weight: 500;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      transition: all .15s;
+      line-height: 1
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: #fff
+    }
+
+    .btn-primary:hover {
+      background: #166534
+    }
+
+    .btn-secondary {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border)
+    }
+
+    .btn-secondary:hover {
+      background: var(--border)
+    }
+
+    .btn-danger {
+      background: var(--red-bg);
+      color: var(--red);
+      border: 1px solid var(--red-bd)
+    }
+
+    .btn-danger:hover {
+      filter: brightness(.95)
+    }
+
+    .btn-ghost {
+      background: none;
+      color: var(--text2);
+      border: 1px solid var(--border)
+    }
+
+    .btn-ghost:hover {
+      background: var(--surface2)
+    }
+
+    .btn-full {
+      width: 100%
+    }
+
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 12px;
+      border-radius: 6px
+    }
+
+    .err-msg {
+      background: var(--red-bg);
+      color: var(--red);
+      border: 1px solid var(--red-bd);
+      border-radius: 7px;
+      padding: 9px 12px;
+      font-size: 13px;
+      margin-bottom: 14px
+    }
+
+    /* ── LAYOUT ───────────────────────────────────── */
+    .app {
+      display: flex;
+      min-height: 100vh
+    }
+
+    .sidebar {
+      width: var(--sidebar);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      z-index: 100
+    }
+
+    .sb-logo {
+      padding: 20px 18px;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .sb-logo-name {
+      font-family: var(--serif);
+      font-size: 21px;
+      color: var(--green)
+    }
+
+    .sb-logo-sub {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: 1px
+    }
+
+    .sb-nav {
+      flex: 1;
+      padding: 12px 10px;
+      overflow-y: auto
+    }
+
+    .sb-sec {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text3);
+      padding: 0 8px;
+      margin: 18px 0 7px
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--text2);
+      font-size: 13.5px;
+      font-weight: 500;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      transition: all .12s;
+      margin-bottom: 2px
+    }
+
+    .nav-item:hover {
+      background: var(--surface2);
+      color: var(--text)
+    }
+
+    .nav-item.active {
+      background: var(--green-bg);
+      color: var(--green)
+    }
+
+    .nav-icon {
+      font-size: 15px;
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0
+    }
+
+    .sb-footer {
+      padding: 14px;
+      border-top: 1px solid var(--border)
+    }
+
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px;
+      background: var(--surface2);
+      border-radius: 9px
+    }
+
+    .av {
+      width: 30px;
+      height: 30px;
+      border-radius: 7px;
+      background: var(--green);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 12px;
+      flex-shrink: 0
+    }
+
+    .av.sm {
+      width: 26px;
+      height: 26px;
+      font-size: 11px;
+      border-radius: 6px
+    }
+
+    .u-name {
+      font-weight: 600;
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap
+    }
+
+    .u-role {
+      font-size: 11px;
+      color: var(--text3);
+      text-transform: capitalize
+    }
+
+    .logout-btn {
+      margin-left: auto;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text3);
+      font-size: 15px;
+      padding: 3px;
+      border-radius: 5px;
+      line-height: 1
+    }
+
+    .logout-btn:hover {
+      color: var(--red)
+    }
+
+    .main {
+      margin-left: var(--sidebar);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh
+    }
+
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50
+    }
+
+    .page-title {
+      font-family: var(--serif);
+      font-size: 20px
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .content {
+      padding: 24px;
+      flex: 1
+    }
+
+    /* ── BADGES ───────────────────────────────────── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid transparent;
+      white-space: nowrap;
+      line-height: 1.2;
+    }
+
+    .bg-green {
+      background: var(--green-bg);
+      color: var(--green);
+      border-color: var(--green-bd)
+    }
+
+    .bg-amber {
+      background: #FEF3C7;
+      color: #B45309;
+      border-color: #FCD34D
+    }
+
+    .bg-red {
+      background: #FEE2E2;
+      color: #DC2626;
+      border-color: #FCA5A5
+    }
+
+    .bg-blue {
+      background: #DBEAFE;
+      color: #1D4ED8;
+      border-color: #93C5FD
+    }
+
+    .bg-gray {
+      background: #EFECE6;
+      color: #57534E;
+      border-color: transparent
+    }
+
+    /* Action buttons matching screenshot */
+    .btn-consult {
+      background: #15803D !important;
+      color: #FFFFFF !important;
+      border-radius: 9999px !important;
+      padding: 6px 14px !important;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      border: none !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      cursor: pointer !important;
+      transition: all 0.15s ease !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+    }
+
+    .btn-consult:hover {
+      background: #166534 !important;
+      box-shadow: 0 2px 6px rgba(21, 128, 61, 0.3) !important;
+    }
+
+    .btn-view {
+      background: #EFECE6 !important;
+      color: #374151 !important;
+      border-radius: 9999px !important;
+      padding: 6px 14px !important;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      border: 1px solid #D1D5DB !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      cursor: pointer !important;
+      transition: all 0.15s ease !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+    }
+
+    .btn-view:hover {
+      background: #E3DFD7 !important;
+      color: #111827 !important;
+      border-color: #9CA3AF !important;
+    }
+
+    /* ── STAT CARDS ───────────────────────────────── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 18px 20px;
+      position: relative;
+      overflow: hidden
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2.5px;
+      background: var(--accent-color, var(--green))
+    }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 8px
+    }
+
+    .stat-val {
+      font-family: var(--serif);
+      font-size: 32px;
+      line-height: 1;
+      color: var(--accent-color, var(--text))
+    }
+
+    .stat-sub {
+      font-size: 12px;
+      color: var(--text2);
+      margin-top: 5px
+    }
+
+    /* ── PANELS ───────────────────────────────────── */
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+      margin-bottom: 18px
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .panel-title {
+      font-weight: 600;
+      font-size: 14px
+    }
+
+    .panel-body {
+      padding: 20px
+    }
+
+    .g2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px
+    }
+
+    .chart-wrap {
+      height: 210px;
+      position: relative
+    }
+
+    /* ── TABLE ────────────────────────────────────── */
+    .tbl {
+      overflow-x: auto
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse
+    }
+
+    th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      padding: 10px 16px;
+      border-bottom: 1.5px solid var(--border);
+      background: var(--bg);
+      white-space: nowrap
+    }
+
+    td {
+      padding: 11px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+      font-size: 13.5px
+    }
+
+    tr:last-child td {
+      border-bottom: none
+    }
+
+    tr:hover td {
+      background: var(--bg)
+    }
+
+    .td-main {
+      font-weight: 500
+    }
+
+    .td-sub {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: 2px
+    }
+
+    /* ── TOOLBAR ──────────────────────────────────── */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap
+    }
+
+    .search {
+      position: relative;
+      flex: 1;
+      min-width: 180px
+    }
+
+    .search input {
+      width: 100%;
+      padding: 9px 13px 9px 34px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: var(--font);
+      font-size: 14px;
+      background: var(--surface);
+      outline: none;
+      transition: border-color .2s
+    }
+
+    .search input:focus {
+      border-color: var(--green)
+    }
+
+    .search-ic {
+      position: absolute;
+      left: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text3)
+    }
+
+    /* ── MODAL ────────────────────────────────────── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .38);
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(2px);
+      animation: fadeIn .15s
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: 14px;
+      padding: 28px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, .16);
+      animation: slideUp .2s ease;
+      max-height: 90vh;
+      overflow-y: auto
+    }
+
+    .modal-lg {
+      max-width: 640px
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px
+    }
+
+    .modal-head h3 {
+      font-family: var(--serif);
+      font-size: 22px
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text3);
+      font-size: 20px;
+      line-height: 1;
+      padding: 3px;
+      border-radius: 5px
+    }
+
+    .close-btn:hover {
+      color: var(--text);
+      background: var(--surface2)
+    }
+
+    .modal-foot {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border)
+    }
+
+    /* ── TOAST ────────────────────────────────────── */
+    .toast-wrap {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 7px
+    }
+
+    .toast {
+      padding: 11px 16px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 220px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, .14);
+      animation: slideUp .2s
+    }
+
+    .toast.ok {
+      background: var(--green);
+      color: #fff
+    }
+
+    .toast.er {
+      background: var(--red);
+      color: #fff
+    }
+
+    .toast.in {
+      background: #1C1917;
+      color: #fff
+    }
+
+    /* ── ML SPECIFIC ──────────────────────────────── */
+    .risk-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .risk-track {
+      height: 5px;
+      border-radius: 3px;
+      background: var(--border);
+      flex: 1;
+      overflow: hidden
+    }
+
+    .risk-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width .4s
+    }
+
+    .prob-big {
+      font-family: var(--serif);
+      font-size: 52px;
+      line-height: 1;
+      text-align: center;
+      margin: 8px 0
+    }
+
+    .action-box {
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      border-left: 3px solid;
+      margin-top: 12px;
+      line-height: 1.5
+    }
+
+    .feat-bar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 7px
+    }
+
+    .feat-name {
+      font-size: 11px;
+      color: var(--text2);
+      width: 170px;
+      flex-shrink: 0;
+      font-family: monospace;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap
+    }
+
+    .feat-track {
+      flex: 1;
+      height: 7px;
+      background: var(--surface2);
+      border-radius: 4px;
+      overflow: hidden
+    }
+
+    .feat-fill {
+      height: 100%;
+      border-radius: 4px
+    }
+
+    .feat-val {
+      font-size: 10px;
+      font-family: monospace;
+      width: 44px;
+      text-align: right;
+      color: var(--text3)
+    }
+
+    /* ── MISC ─────────────────────────────────────── */
+    .empty {
+      text-align: center;
+      padding: 44px 20px;
+      color: var(--text3)
+    }
+
+    .empty-icon {
+      font-size: 36px;
+      margin-bottom: 10px;
+      opacity: .5
+    }
+
+    .spinner {
+      width: 22px;
+      height: 22px;
+      border: 2.5px solid var(--border);
+      border-top-color: var(--green);
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      margin: 0 auto
+    }
+
+    .loading-block {
+      padding: 36px;
+      text-align: center;
+      color: var(--text3)
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 16px 0
+    }
+
+    a.link-btn {
+      background: none;
+      border: none;
+      color: var(--green);
+      cursor: pointer;
+      font-family: var(--font);
+      font-size: 14px;
+      padding: 0;
+      text-decoration: underline
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0
+      }
+
+      to {
+        opacity: 1
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    .page {
+      animation: slideUp .2s ease
+    }
+
+    @media(max-width:800px) {
+      .auth-brand {
+        display: none
+      }
+
+      .auth-wrap {
+        grid-template-columns: 1fr
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .g2 {
+        grid-template-columns: 1fr
+      }
+
+      .sidebar {
+        width: 58px
+      }
+
+      .sb-logo-name,
+      .sb-logo-sub,
+      .nav-item span,
+      .u-name,
+      .u-role,
+      .sb-sec {
+        display: none
+      }
+
+      .nav-item {
+        justify-content: center;
+        padding: 12px
+      }
+
+      .main {
+        margin-left: 58px
+      }
+    }
+
+    /* ── INVOICE PREVIEW & PRINTING ── */
+    .invoice-preview-container {
+      background: #fff;
+      color: #1C1917;
+      padding: 30px;
+      border-radius: 8px;
+      font-family: var(--font);
+      line-height: 1.5;
+    }
+    .invoice-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+    }
+    .invoice-logo-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--serif);
+      font-size: 24px;
+      color: var(--green);
+      font-weight: 700;
+    }
+    .invoice-meta-info {
+      text-align: right;
+      font-size: 13px;
+      color: var(--text2);
+    }
+    .invoice-meta-id {
+      font-family: monospace;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .invoice-details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 24px;
+      font-size: 13px;
+    }
+    .invoice-details-col h4 {
+      text-transform: uppercase;
+      font-size: 11px;
+      color: var(--text3);
+      letter-spacing: .05em;
+      margin-bottom: 6px;
+    }
+    .invoice-details-col p {
+      margin-bottom: 2px;
+      color: var(--text);
+    }
+    .invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      font-size: 13px;
+    }
+    .invoice-table th {
+      background: var(--surface2);
+      color: var(--text2);
+      text-align: left;
+      padding: 10px 12px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+    }
+    .invoice-table td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    .invoice-totals {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      margin-bottom: 30px;
+      font-size: 13px;
+    }
+    .invoice-totals-row {
+      display: flex;
+      justify-content: space-between;
+      width: 240px;
+      color: var(--text2);
+    }
+    .invoice-totals-row.grand-total {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      border-top: 2px solid var(--border);
+      padding-top: 8px;
+      margin-top: 4px;
+    }
+    .invoice-footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text3);
+      border-top: 1px solid var(--border);
+      padding-top: 15px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="app"></div>
+  <div class="toast-wrap" id="toasts"></div>
+
+  <script>
+    'use strict';
+    // ═══════════════════════════════════════════════════════════
+    //  CONFIG
+    // ═══════════════════════════════════════════════════════════
+    const API_BASE = 'http://localhost:8080/api';
+
+    // ═══════════════════════════════════════════════════════════
+    //  STATE
+    // ═══════════════════════════════════════════════════════════
+    let STATE = {
+      user: null, page: 'dashboard',
+      patients: [], doctors: [], appointments: [],
+      invoices: [], treatments: [], prescriptions: [], stats: {},
+      myPatientProfile: null
+    };
+
+    // ═══════════════════════════════════════════════════════════
+    //  UTILITIES
+    // ═══════════════════════════════════════════════════════════
+    const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    const fmtRs = n => '₹' + Number(n || 0).toLocaleString('en-IN');
+    const fmtDT = s => s ? s.slice(0, 16).replace('T', ' ') : '—';
+    const fmtD = s => s ? s.slice(0, 10) : '—';
+    const role = () => STATE.user?.role || '';
+    const isAdmin = () => role() === 'admin';
+    const isDoctor = () => role() === 'doctor';
+    const isRecept = () => role() === 'receptionist';
+    const canEdit = () => ['admin', 'receptionist'].includes(role());
+    const canSeeML = () => role() === 'admin';
+    const canSeeBilling = () => ['admin', 'receptionist'].includes(role());
+
+    function toast(msg, type = 'ok') {
+      const d = document.createElement('div');
+      d.className = `toast ${type}`;
+      d.innerHTML = `<span>${type === 'ok' ? '✓' : type === 'er' ? '✕' : 'ℹ'}</span><span>${esc(msg)}</span>`;
+      document.getElementById('toasts').appendChild(d);
+      setTimeout(() => d.remove(), 3200);
+    }
+    function riskBadge(risk, prob) {
+      if (isDoctor()) return '';
+      const r = risk || (prob >= .6 ? 'High' : prob >= .35 ? 'Medium' : prob != null ? 'Low' : null);
+      if (!r) return '<span class="badge bg-gray">—</span>';
+      const cls = { High: 'bg-red', Medium: 'bg-amber', Low: 'bg-green' }[r] || 'bg-gray';
+      return `<span class="badge ${cls}">${r}${prob != null ? ' ' + (prob * 100).toFixed(0) + '%' : ''}</span>`;
+    }
+    function statusBadge(s) {
+      const m = { scheduled: 'bg-blue', confirmed: 'bg-green', completed: 'bg-gray', cancelled: 'bg-red', no_show: 'bg-amber', paid: 'bg-green', pending: 'bg-amber', overdue: 'bg-red' };
+      return `<span class="badge ${m[s] || 'bg-gray'}">${esc(s)}</span>`;
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  API CLIENT
+    // ═══════════════════════════════════════════════════════════
+    async function api(method, path, body) {
+      const token = localStorage.getItem('sc_token');
+      try {
+        const res = await fetch(API_BASE + path, {
+          method,
+          headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+          ...(body ? { body: JSON.stringify(body) } : {})
+        });
+        const j = await res.json();
+        if (!j.success && res.status === 401 && path !== '/auth/login') { localStorage.removeItem('sc_token'); STATE.user = null; renderPage(); }
+        return j;
+      } catch (e) {
+        toast('Cannot reach server. Make sure server.py is running on port 8080.', 'er');
+        return { success: false, error: { message: e.message } };
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  DATA LOADING
+    // ═══════════════════════════════════════════════════════════
+    async function loadData() {
+      const calls = [
+        api('GET', '/patients'), api('GET', '/doctors'),
+        api('GET', '/appointments'), api('GET', '/treatments'),
+        api('GET', '/stats/dashboard'), api('GET', '/prescriptions'),
+      ];
+      if (canSeeBilling() || role() === 'patient') calls.push(api('GET', '/invoices'));
+      if (role() === 'patient') calls.push(api('GET', '/patients/me'));
+
+      const res = await Promise.all(calls);
+      if (res[0]?.success) STATE.patients = res[0].data;
+      if (res[1]?.success) STATE.doctors = res[1].data;
+      if (res[2]?.success) STATE.appointments = res[2].data;
+      if (res[3]?.success) STATE.treatments = res[3].data;
+      if (res[4]?.success) STATE.stats = res[4].data;
+      if (res[5]?.success) STATE.prescriptions = res[5].data;
+      if (res[6]?.success) STATE.invoices = res[6].data;
+      if (role() === 'patient' && res[7]?.success) STATE.myPatientProfile = res[7].data;
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  MODAL
+    // ═══════════════════════════════════════════════════════════
+    function openModal(html, large = false) {
+      closeModal();
+      const ol = document.createElement('div');
+      ol.className = 'overlay'; ol.id = 'modal-ol';
+      ol.innerHTML = `<div class="modal${large ? ' modal-lg' : ''}">${html}</div>`;
+      ol.addEventListener('click', e => { if (e.target === ol) closeModal(); });
+      document.body.appendChild(ol);
+    }
+    function closeModal() { document.getElementById('modal-ol')?.remove(); }
+
+    // ═══════════════════════════════════════════════════════════
+    //  NAV
+    // ═══════════════════════════════════════════════════════════
+    const PAGE_TITLES = {
+      dashboard: 'Dashboard',
+      patients: 'Patients',
+      appointments: 'Appointments',
+      billing: 'Billing',
+      doctors: 'Doctors',
+      ml: 'ML Insights',
+      prescriptions: 'Digital Prescriptions',
+      profile: 'My Health Profile'
+    };
+    const NAV_ALL = [
+      { id: 'dashboard', label: 'Dashboard', icon: `<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 13h6a1 1 0 001-1V4a1 1 0 00-1-1H4a1 1 0 00-1 1v8a1 1 0 001 1zm0 8h6a1 1 0 001-1v-4a1 1 0 00-1-1H4a1 1 0 00-1 1v4a1 1 0 001 1zm10 0h6a1 1 0 001-1v-8a1 1 0 00-1-1h-6a1 1 0 00-1 1v8a1 1 0 001 1zm0-18v4a1 1 0 001 1h6a1 1 0 001-1V3a1 1 0 00-1-1h-6a1 1 0 00-1 1z"/></svg>` },
+      { id: 'prescriptions', label: 'Digital Prescriptions', icon: `<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>`, restrict: ['admin', 'doctor', 'receptionist', 'patient'] },
+      { id: 'appointments', label: 'Appointments', icon: `<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`, patientLabel: 'Consultation Logs' },
+      { id: 'billing', label: 'Billing', icon: `<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`, restrict: ['admin', 'receptionist', 'patient'], patientLabel: 'Bills & Receipts' },
+      { id: 'patients', label: 'Patients', icon: `<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>`, restrict: ['admin', 'doctor', 'receptionist'] },
+      { id: 'doctors', label: 'Doctors', icon: `<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>`, restrict: ['admin', 'receptionist'] },
+      { id: 'ml', label: 'ML Insights', icon: `<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>`, restrict: ['admin'] },
+      { id: 'profile', label: 'My Health Profile', icon: `<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>`, restrict: ['patient'] },
+    ];
+
+    function nav(page) { STATE.page = page; loadData().then(renderPage); }
+    function logout() { localStorage.removeItem('sc_token'); STATE.user = null; renderPage(); }
+
+    // ═══════════════════════════════════════════════════════════
+    //  TABLE SEARCH & RELEVANCE FILTERING
+    // ═══════════════════════════════════════════════════════════
+    function filterTable(inputId, tbodyId, ...colIndices) {
+      const input = document.getElementById(inputId);
+      const tbody = document.getElementById(tbodyId);
+      if (!input || !tbody) return;
+
+      const q = input.value.trim().toLowerCase();
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      if (!rows.length || (rows.length === 1 && rows[0].querySelector('.empty'))) return;
+
+      // Store initial DOM order
+      rows.forEach((r, idx) => {
+        if (r.dataset.origIdx === undefined) {
+          r.dataset.origIdx = idx.toString();
+        }
+      });
+
+      if (!q) {
+        // Reset: restore original order and display all rows
+        rows.sort((a, b) => (parseInt(a.dataset.origIdx || '0') - parseInt(b.dataset.origIdx || '0')));
+        rows.forEach(r => {
+          r.style.display = '';
+          tbody.appendChild(r);
+        });
+        return;
+      }
+
+      const qWords = q.split(/\s+/).filter(Boolean);
+
+      const scoredRows = rows.map(row => {
+        const cells = Array.from(row.cells);
+        let textToSearch = '';
+        if (colIndices.length > 0) {
+          textToSearch = colIndices
+            .map(i => (cells[i] ? cells[i].textContent : ''))
+            .join(' ')
+            .toLowerCase();
+        } else {
+          textToSearch = row.textContent.toLowerCase();
+        }
+
+        let score = 0;
+        if (textToSearch.includes(q)) score += 100;
+
+        let allWordsMatch = true;
+        for (const w of qWords) {
+          if (textToSearch.includes(w)) {
+            score += 20;
+          } else {
+            allWordsMatch = false;
+          }
+        }
+        if (allWordsMatch) score += 50;
+
+        return { row, score };
+      });
+
+      const matched = scoredRows.filter(sr => sr.score > 0);
+      const nonMatched = scoredRows.filter(sr => sr.score === 0);
+
+      // Hide non-matching rows
+      nonMatched.forEach(sr => {
+        sr.row.style.display = 'none';
+      });
+
+      // Sort matched rows by highest score so matching patient appears at the top
+      matched.sort((a, b) => b.score - a.score || (parseInt(a.row.dataset.origIdx || '0') - parseInt(b.row.dataset.origIdx || '0')));
+
+      matched.forEach(sr => {
+        sr.row.style.display = '';
+        tbody.appendChild(sr.row);
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  SHELL
+    // ═══════════════════════════════════════════════════════════
+    function shell(inner) {
+      const r = role();
+      const vis = NAV_ALL.filter(n => !n.restrict || n.restrict.includes(r)).map(n => {
+        if (r === 'patient' && n.patientLabel) return { ...n, label: n.patientLabel };
+        return n;
+      });
+      // Role color
+      const roleCls = { admin: 'bg-red', doctor: 'bg-blue', receptionist: 'bg-amber', patient: 'bg-green' }[r] || 'bg-gray';
+      // Role label for topbar
+      const roleLabel = { admin: 'Admin', doctor: 'Doctor', receptionist: 'Receptionist', patient: 'Patient' }[r] || r;
+
+      return `
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sb-logo">
+        <div class="sb-logo-name">SmileClinic</div>
+        <div class="sb-logo-sub">Dental Management System</div>
+      </div>
+      <nav class="sb-nav">
+        <div class="sb-sec">Menu</div>
+        ${vis.map(n => `
+          <button class="nav-item ${STATE.page === n.id ? 'active' : ''}" onclick="nav('${n.id}')">
+            <span class="nav-icon">${n.icon}</span><span>${n.label}</span>
+          </button>`).join('')}
+      </nav>
+      <div class="sb-footer">
+        <div class="user-chip">
+          <div class="av">${(STATE.user?.username || '?')[0].toUpperCase()}</div>
+          <div style="flex:1;min-width:0">
+            <div class="u-name">${esc(STATE.user?.username || '')}</div>
+            <div class="u-role">${esc(r)}</div>
+          </div>
+          <button class="logout-btn" onclick="logout()" title="Sign out">⬡</button>
+        </div>
+      </div>
+    </aside>
+    <div class="main">
+      <div class="topbar">
+        <span class="page-title">${PAGE_TITLES[STATE.page] || ''}</span>
+        <div class="topbar-right">
+          <span class="badge ${roleCls}">${roleLabel}</span>
+          <span style="font-size:13px;color:var(--text2)">${esc(STATE.user?.email || '')}</span>
+        </div>
+      </div>
+      <div class="content page">${inner}</div>
+    </div>
+  </div>`;
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  AUTH PAGE
+    // ═══════════════════════════════════════════════════════════
+    const DEMOS = { admin: { email: 'admin@smile.in', pass: 'admin123' }, doctor: { email: 'doctor@smile.in', pass: 'doctor123' }, receptionist: { email: 'recept@smile.in', pass: 'recept123' }, patient: { email: 'meera@patient.in', pass: 'patient123' } };
+    function authPage() {
+      return `
+  <div class="auth-wrap">
+
+    <!-- LEFT — green brand panel (original design) -->
+    <div class="auth-brand">
+      <div class="auth-logo">SmileClinic</div>
+      <div class="auth-hl">
+        <h1>Better care,<br><i>better smiles.</i></h1>
+        <p>Access your consultation logs and digital prescriptions online.</p>
+      </div>
+      <div class="auth-copy">© 2026 SmileClinic DMS</div>
+    </div>
+
+    <!-- RIGHT — login form -->
+    <div class="auth-form">
+      <div class="auth-box">
+        <h2>Sign in</h2>
+        <p class="sub">Access your clinic or patient dashboard</p>
+        <div id="auth-err" style="display:none" class="err-msg"></div>
+        
+        <div class="fg">
+          <label>Quick Demo Login</label>
+          <div class="role-strip">
+            <button class="rpill on" onclick="selectRole('admin')" id="pill-admin">Admin</button>
+            <button class="rpill" onclick="selectRole('doctor')" id="pill-doctor">Doctor</button>
+            <button class="rpill" onclick="selectRole('recept')" id="pill-recept">Receptionist</button>
+            <button class="rpill" onclick="selectRole('patient')" id="pill-patient">Patient</button>
+          </div>
+        </div>
+
+        <div class="fg">
+          <label>Email</label>
+          <input id="a-email" type="email" value="admin@smile.in" placeholder="your@email.com"/>
+        </div>
+        <div class="fg">
+          <label>Password</label>
+          <input id="a-pass" type="password" value="admin123" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
+        </div>
+
+        <button class="btn btn-primary btn-full" style="margin-bottom:14px" onclick="doLogin()" id="login-btn">Sign in →</button>
+        <p style="text-align:center;font-size:12px;color:var(--text2)">
+          New staff? <a class="link-btn" onclick="showRegister()">Create account</a>
+        </p>
+      </div>
+    </div>
+
+  </div>`;
+    }
+
+    function selectRole(role) {
+      const cfg = {
+        admin: { email: 'admin@smile.in', pass: 'admin123' },
+        doctor: { email: 'doctor@smile.in', pass: 'doctor123' },
+        recept: { email: 'recept@smile.in', pass: 'recept123' },
+        patient: { email: 'meera@patient.in', pass: 'patient123' },
+      };
+      const c = cfg[role] || cfg.admin;
+
+      // Update pills highlighting
+      ['admin', 'doctor', 'recept', 'patient'].forEach(r => {
+        const el = document.getElementById('pill-' + r);
+        if (el) el.classList.remove('on');
+      });
+      const sel = document.getElementById('pill-' + role);
+      if (sel) sel.classList.add('on');
+
+      // Pre-fill inputs
+      document.getElementById('a-email').value = c.email;
+      document.getElementById('a-pass').value = c.pass;
+      document.getElementById('auth-err').style.display = 'none';
+      document.getElementById('a-email').focus();
+    }
+
+    function setDemo(r, el) { }  // keep for compatibility
+    async function doLogin() {
+      const email = document.getElementById('a-email').value.trim(), pass = document.getElementById('a-pass').value;
+      const errEl = document.getElementById('auth-err'); errEl.style.display = 'none';
+      const r = await api('POST', '/auth/login', { email, password: pass });
+      if (!r.success) { errEl.textContent = r.error?.message || 'Login failed'; errEl.style.display = 'block'; return; }
+      localStorage.setItem('sc_token', r.data.token); STATE.user = r.data.user;
+      toast(`Welcome, ${r.data.user.username}!`);
+      await loadData(); STATE.page = 'dashboard'; renderPage();
+    }
+    function showRegister() {
+      document.getElementById('app').innerHTML = `
+  <div class="auth-wrap">
+    <div class="auth-brand"><div class="auth-logo">SmileClinic</div><div class="auth-hl"><h1>Join the<br><i>team.</i></h1><p>Create a staff account to access the dashboard.</p></div><div class="auth-copy">© 2026 SmileClinic DMS</div></div>
+    <div class="auth-form"><div class="auth-box">
+      <h2>Create account</h2><p class="sub">New staff registration</p>
+      <div id="reg-err" style="display:none" class="err-msg"></div>
+      <div class="fg"><label>Username</label><input id="r-un" placeholder="jane.doe"/></div>
+      <div class="fg"><label>Email</label><input id="r-em" type="email" placeholder="you@clinic.in"/></div>
+      <div class="fg"><label>Role</label><select id="r-role"><option value="receptionist">Receptionist</option><option value="doctor">Doctor</option><option value="admin">Admin</option></select></div>
+      <div class="fg"><label>Password</label><input id="r-pw" type="password" placeholder="••••••••"/></div>
+      <button class="btn btn-primary btn-full" style="margin-bottom:14px" onclick="doRegister()">Create account →</button>
+      <p style="text-align:center;font-size:13px;color:var(--text2)"><a class="link-btn" onclick="renderPage()">← Back to sign in</a></p>
+    </div></div>
+  </div>`;
+    }
+    async function doRegister() {
+      const errEl = document.getElementById('reg-err'); errEl.style.display = 'none';
+      const r = await api('POST', '/auth/register', { username: document.getElementById('r-un').value.trim(), email: document.getElementById('r-em').value.trim(), role: document.getElementById('r-role').value, password: document.getElementById('r-pw').value });
+      if (!r.success) { errEl.textContent = r.error?.message || 'Error'; errEl.style.display = 'block'; return; }
+      localStorage.setItem('sc_token', r.data.token); toast('Account created! Please sign in.'); renderPage();
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  DASHBOARD  (role-aware)
+    // ═══════════════════════════════════════════════════════════
+    function dashboardPage() {
+      const s = STATE.stats, ap = STATE.appointments.slice(0, 6), r = role();
+
+      // Patient-Centric Dashboard
+      if (r === 'patient') {
+        const p = STATE.myPatientProfile || STATE.patients[0];
+        const patName = p ? `${p.first_name} ${p.last_name}` : STATE.user?.username;
+        const myAppts = STATE.appointments;
+        const myRxs = STATE.prescriptions;
+        const myInvoices = STATE.invoices;
+
+        return `
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <div class="card" style="background:linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(59, 130, 246, 0.05));border:1px solid var(--green-bd);display:flex;justify-content:space-between;align-items:center;padding:20px;">
+              <div>
+                <h2 style="margin:0;font-size:22px;color:var(--text)">Welcome back, ${esc(patName)}</h2>
+                <p style="margin:4px 0 0 0;font-size:13px;color:var(--text2)">Access your doctor consultation logs, digital sample prescriptions, and clinic receipts.</p>
+              </div>
+              <button class="btn btn-primary" onclick="nav('prescriptions')">View Prescriptions</button>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:14px;">
+              <div class="stat-card" style="--accent-color:var(--green)">
+                <div class="stat-label">Doctor Consultations</div>
+                <div class="stat-val">${myAppts.length}</div>
+                <div class="stat-sub">Appointments logged</div>
+              </div>
+              <div class="stat-card" style="--accent-color:var(--blue)">
+                <div class="stat-label">Digital Prescriptions</div>
+                <div class="stat-val">${myRxs.length}</div>
+                <div class="stat-sub">Sample Rx documents</div>
+              </div>
+              <div class="stat-card" style="--accent-color:var(--amber)">
+                <div class="stat-label">Bills & Receipts</div>
+                <div class="stat-val">${myInvoices.length}</div>
+                <div class="stat-sub">Invoices issued</div>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div class="card">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+                  <h3 style="margin:0;font-size:16px;">Recent Doctor Consultations</h3>
+                  <button class="btn btn-sm btn-secondary" onclick="nav('appointments')">View All</button>
+                </div>
+                ${myAppts.length === 0 ? '<p style="color:var(--text2);font-size:13px">No doctor visits recorded yet.</p>' : `
+                  <div style="display:flex;flex-direction:column;gap:10px;">
+                    ${myAppts.slice(0, 4).map(a => `
+                      <div style="padding:10px;border-radius:8px;background:var(--bg);border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+                        <div>
+                          <div style="font-weight:600;font-size:14px;">Dr. ${esc(a.doctor_name)}</div>
+                          <div style="font-size:12px;color:var(--text2);">${esc(a.reason || 'Consultation')} · ${fmtDT(a.scheduled_at)}</div>
+                        </div>
+                        <div>${statusBadge(a.status)}</div>
+                      </div>
+                    `).join('')}
+                  </div>
+                `}
+              </div>
+
+              <div class="card">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+                  <h3 style="margin:0;font-size:16px;">Digital Prescriptions</h3>
+                  <button class="btn btn-sm btn-secondary" onclick="nav('prescriptions')">View All</button>
+                </div>
+                ${myRxs.length === 0 ? '<p style="color:var(--text2);font-size:13px">No digital prescriptions issued yet.</p>' : `
+                  <div style="display:flex;flex-direction:column;gap:10px;">
+                    ${myRxs.slice(0, 4).map(rx => `
+                      <div style="padding:10px;border-radius:8px;background:var(--bg);border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+                        <div>
+                          <div style="font-weight:600;font-size:14px;">${esc(rx.diagnosis || 'Prescription')}</div>
+                          <div style="font-size:12px;color:var(--text2);">By Dr. ${esc(rx.doctor_name)} · ${fmtD(rx.issued_at)}</div>
+                        </div>
+                        <button class="btn btn-sm btn-primary" onclick="previewPrescription(${rx.prescription_id})">View Rx</button>
+                      </div>
+                    `).join('')}
+                  </div>
+                `}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // Doctor sees only their own appointments today
+      const myAppts = isDoctor()
+        ? STATE.appointments.filter(a => a.doctor_name && a.doctor_name.toLowerCase().includes((STATE.user?.username || '').toLowerCase().replace('dr_', '')))
+        : STATE.appointments;
+      const todayAppts = myAppts.filter(a => a.scheduled_at && a.scheduled_at.startsWith(new Date().toISOString().slice(0, 10)));
+
+      // Custom Doctor-Centric Admin Dashboard
+      if (isAdmin()) {
+        const todayStr = new Date().toISOString().slice(0, 10);
+        const todayApptsAll = STATE.appointments.filter(a => a.scheduled_at && a.scheduled_at.startsWith(todayStr));
+
+        // Admin Stats Cards
+        const statsCards = `
+        <div class="stats-grid">
+          <div class="stat-card" style="--accent-color:var(--green)">
+            <div class="stat-label">Total Doctors</div>
+            <div class="stat-val">${STATE.doctors.length}</div>
+            <div class="stat-sub">${STATE.doctors.filter(d => d.is_available).length} available today</div>
+          </div>
+          <div class="stat-card" style="--accent-color:var(--blue)">
+            <div class="stat-label">Active Shifts</div>
+            <div class="stat-val">${STATE.doctors.filter(d => d.is_available).length}</div>
+            <div class="stat-sub">On duty for walk-ins</div>
+          </div>
+          <div class="stat-card" style="--accent-color:var(--amber)">
+            <div class="stat-label">Specialisations</div>
+            <div class="stat-val">${new Set(STATE.doctors.map(d => d.specialisation)).size}</div>
+            <div class="stat-sub">Unique specialties</div>
+          </div>
+          <div class="stat-card" style="--accent-color:var(--green)">
+            <div class="stat-label">Revenue Summary</div>
+            <div class="stat-val">${fmtRs(s.total_revenue)}</div>
+            <div class="stat-sub">Pending: ${fmtRs(s.pending_bills)}</div>
+          </div>
+        </div>`;
+
+        // Main Doctor Directory Control Table
+        const docRows = STATE.doctors.map(d => {
+          const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
+          const fn = cap(d.first_name);
+          const ln = cap(d.last_name);
+          const fullName = `Dr. ${fn} ${ln}`.trim();
+          const initial = ((d.first_name || d.last_name || '?').trim()[0] || '?').toUpperCase();
+
+          return `
+          <tr style="cursor:pointer" onclick="openDoctorProfile(${d.doctor_id})">
+            <td>
+              <div style="display:flex;align-items:center;gap:9px">
+                <div class="av sm" style="background:${d.is_available ? 'var(--green-bg)' : 'var(--surface2)'};color:${d.is_available ? 'var(--green)' : 'var(--text3)'};font-weight:600">
+                  ${initial}
+                </div>
+                <div>
+                  <div class="td-main" style="color:var(--green);font-weight:600">${esc(fullName)}</div>
+                  <div class="td-sub" style="font-size:11px;color:var(--text3)">${esc(d.email || '')} · Lic: ${esc(d.license_number || '—')}</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge bg-blue" style="font-size:11.5px">${esc(d.specialisation)}</span></td>
+            <td><strong>${fmtRs(d.consultation_fee)}</strong></td>
+            <td>
+              <span class="badge ${d.is_available ? 'bg-green' : 'bg-gray'}">
+                ${d.is_available ? 'On Duty' : 'Off Duty'}
+              </span>
+            </td>
+          </tr>`;
+        }).join('');
+
+        // Live attendance & workload calculations
+        const availableDocs = STATE.doctors.filter(d => d.is_available);
+        const onCallWorkloadList = availableDocs.map(d => {
+          const docFullName = `${d.first_name} ${d.last_name}`.toLowerCase().trim();
+          const load = todayApptsAll.filter(a => a.doctor_name && a.doctor_name.toLowerCase().trim() === docFullName).length;
+          const loadCls = load > 5 ? 'bg-red' : load > 2 ? 'bg-amber' : 'bg-green';
+          return `
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">
+            <div class="av sm" style="background:var(--green-bg);color:var(--green)">${(d.first_name || '?')[0].toUpperCase()}</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Dr. ${esc(d.first_name)} ${esc(d.last_name)}</div>
+              <div style="font-size:11px;color:var(--text3)">${esc(d.specialisation)}</div>
+            </div>
+            <span class="badge ${loadCls}" title="Appointments scheduled today" style="font-weight:600">${load} appts</span>
+          </div>`;
+        }).join('') || '<div class="empty" style="padding:15px"><div class="empty-icon"></div>No doctors on call today.</div>';
+
+        // Specialty Distribution Coverage
+        const specCounts = {};
+        STATE.doctors.forEach(d => {
+          specCounts[d.specialisation] = (specCounts[d.specialisation] || 0) + 1;
+        });
+        const specialtyList = Object.entries(specCounts).map(([spec, count]) => `
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12.5px">
+            <span style="color:var(--text2)">${esc(spec)}</span>
+            <span style="font-weight:600;color:var(--blue)">${count} ${count === 1 ? 'doctor' : 'doctors'}</span>
+          </div>`).join('');
+
+        return `
+        ${statsCards}
+        <div class="g2">
+          <div class="panel" style="margin-bottom:0">
+            <div class="panel-head">
+              <span class="panel-title">Doctor Control Center</span>
+              <button class="btn btn-sm btn-primary" onclick="openAddDoctor()">+ Add Doctor</button>
+            </div>
+            <div class="tbl" style="overflow-x:auto">
+              <table style="min-width:550px">
+                <thead>
+                  <tr>
+                    <th>Doctor</th>
+                    <th>Specialisation</th>
+                    <th>Fee</th>
+                    <th>On Call</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${docRows || '<tr><td colspan="4" class="empty"><div class="empty-icon"></div>No doctors registered.</td></tr>'}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div class="panel" style="margin-bottom:0">
+              <div class="panel-head">
+                <span class="panel-title">Today's Roster & Workload</span>
+                <span class="badge bg-green">Live Shifts</span>
+              </div>
+              <div class="panel-body" style="padding-top:5px;max-height:280px;overflow-y:auto">
+                ${onCallWorkloadList}
+              </div>
+            </div>
+            <div class="panel" style="margin-bottom:0">
+              <div class="panel-head">
+                <span class="panel-title">Specialty Coverage</span>
+                <span class="badge bg-blue">Clinic Mix</span>
+              </div>
+              <div class="panel-body" style="padding-top:5px">
+                ${specialtyList || '<div style="color:var(--text3);text-align:center;padding:10px">No coverage data.</div>'}
+              </div>
+            </div>
+          </div>
+        </div>`;
+      }
+
+      // Default layout for Doctors / Receptionists
+      const statsCards = isDoctor() ? `
+    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="stat-card" style="--accent-color:var(--green)">
+        <div class="stat-label">My patients today</div>
+        <div class="stat-val">${todayAppts.length}</div>
+        <div class="stat-sub">Scheduled for today</div>
+      </div>
+      <div class="stat-card" style="--accent-color:var(--blue)">
+        <div class="stat-label">Upcoming</div>
+        <div class="stat-val">${myAppts.filter(a => ['scheduled', 'confirmed'].includes(a.status)).length}</div>
+        <div class="stat-sub">Pending appointments</div>
+      </div>
+      <div class="stat-card" style="--accent-color:var(--amber)">
+        <div class="stat-label">High risk</div>
+        <div class="stat-val">${myAppts.filter(a => a.risk_level === 'High').length}</div>
+        <div class="stat-sub">Need phone call</div>
+      </div>
+    </div>` : `
+    <div class="stats-grid">
+      <div class="stat-card" style="--accent-color:var(--green)">
+        <div class="stat-label">Today's patients</div><div class="stat-val">${s.patients_today ?? 0}</div>
+        <div class="stat-sub">Scheduled today</div>
+      </div>
+      <div class="stat-card" style="--accent-color:var(--blue)">
+        <div class="stat-label">This week</div><div class="stat-val">${s.appointments_week ?? 0}</div>
+        <div class="stat-sub">Total appointments</div>
+      </div>
+      ${canSeeBilling() ? `
+      <div class="stat-card" style="--accent-color:var(--amber)">
+        <div class="stat-label">Pending bills</div><div class="stat-val">${fmtRs(s.pending_bills)}</div>
+        <div class="stat-sub">Awaiting payment</div>
+      </div>
+      <div class="stat-card" style="--accent-color:var(--green)">
+        <div class="stat-label">Revenue</div><div class="stat-val">${fmtRs(s.total_revenue)}</div>
+        <div class="stat-sub">${s.total_patients ?? 0} patients · ${s.total_doctors ?? 0} doctors</div>
+      </div>`: `
+      <div class="stat-card" style="--accent-color:var(--green)">
+        <div class="stat-label">Total patients</div><div class="stat-val">${s.total_patients ?? 0}</div>
+        <div class="stat-sub">Registered</div>
+      </div>
+      <div class="stat-card" style="--accent-color:var(--amber)">
+        <div class="stat-label">High risk</div><div class="stat-val">${s.risk?.high ?? 0}</div>
+        <div class="stat-sub">Need phone call</div>
+      </div>`}
+    </div>`;
+
+      const apptTable = (list, title) => `
+    <div class="panel" style="margin-bottom:0">
+      <div class="panel-head"><span class="panel-title">${title}</span><span class="badge bg-blue">${list.length} shown</span></div>
+      <div class="tbl"><table>
+        <thead><tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Status</th><th>Priority</th></tr></thead>
+        <tbody>${list.length ? list.map(a => `<tr style="cursor:pointer" onclick="openPatientProfile(${a.patient_id || 0},'${esc(a.patient_name)}')">
+          <td><div class="td-main" style="color:var(--green);text-decoration:underline;cursor:pointer">${esc(a.patient_name)}</div></td>
+          <td><span style="font-size:13px;color:var(--text2)">${esc(a.doctor_name)}</span></td>
+          <td><span style="font-family:monospace;font-size:12px">${fmtD(a.scheduled_at)}</span></td>
+          <td>${statusBadge(a.status)}</td>
+          <td>${priorityBadge(a.priority || 'normal')}</td>
+        </tr>`).join('') : '<tr><td colspan="5" class="empty"><div class="empty-icon"></div>No appointments</td></tr>'}
+        </tbody>
+      </table></div>
+    </div>`;
+
+      const rightPanel = isDoctor() ? `
+    <div class="panel" style="margin-bottom:0">
+      <div class="panel-head"><span class="panel-title">Today's patients</span><span class="badge bg-green">My schedule</span></div>
+      <div class="panel-body">
+        ${todayAppts.length ? todayAppts.map(a => `
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="openPatientProfile(${a.patient_id || 0},'${esc(a.patient_name)}')">
+          <div class="av sm" style="background:var(--green-bg);color:var(--green)">${(a.patient_name || '?')[0]}</div>
+          <div style="flex:1">
+            <div style="font-weight:500;color:var(--green);text-decoration:underline">${esc(a.patient_name)}</div>
+            <div style="font-size:12px;color:var(--text2)">${fmtDT(a.scheduled_at)} · ${esc(a.reason || '—')}</div>
+          </div>
+          ${riskBadge(a.risk_level, a.no_show_probability)}
+        </div>`).join('') : '<div class="empty"><div class="empty-icon"></div>No patients today</div>'}
+      </div>
+    </div>` : `
+    <div style="display:flex;flex-direction:column;gap:16px">
+      ${isRecept() ? '' : `
+      <div class="panel" style="margin-bottom:0">
+        <div class="panel-head"><span class="panel-title">No-show risk</span><span class="badge bg-green">ML</span></div>
+        <div class="panel-body">
+          ${[['High', (s.risk?.high ?? 0), 'var(--red)'], ['Medium', (s.risk?.medium ?? 0), 'var(--amber)'], ['Low', (s.risk?.low ?? 0), 'var(--green)']].map(([l, v, c]) => `
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+            <span style="font-size:13px;color:var(--text2)">${l}</span>
+            <span style="font-weight:700;font-size:18px;color:${c}">${v}</span>
+          </div>`).join('')}
+        </div>
+      </div>
+      `}
+    </div>`;
+
+      return `${statsCards}
+  ${rightPanel ? `
+  <div class="g2">
+    ${apptTable(isDoctor() ? myAppts.slice(0, 6) : ap, isDoctor() ? 'My recent appointments' : 'Recent appointments')}
+    ${rightPanel}
+  </div>` : `
+  <div style="margin-top: 16px">
+    ${apptTable(isDoctor() ? myAppts.slice(0, 6) : ap, isDoctor() ? 'My recent appointments' : 'Recent appointments')}
+  </div>
+  `}`;
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  PATIENT PROFILE MODAL  (clickable — full medical history)
+    // ═══════════════════════════════════════════════════════════
+    async function openPatientProfile(patientId, patientName) {
+      if (!patientId) { toast('Patient ID not available', 'er'); return; }
+
+      openModal(`<div class="modal-head"><h3>Loading patient…</h3><button class="close-btn" onclick="closeModal()">✕</button></div>
+    <div style="text-align:center;padding:32px"><div class="spinner"></div></div>`, true);
+
+      // Fetch patient details + their appointments + their invoices
+      const [pRes, apRes, invRes] = await Promise.all([
+        api('GET', `/patients/${patientId}`),
+        api('GET', `/appointments?patient_id=${patientId}`),
+        canSeeBilling() ? api('GET', `/invoices?patient_id=${patientId}`) : Promise.resolve({ success: false, data: [] }),
+      ]);
+
+      const p = pRes.success ? pRes.data : null;
+      let aps = apRes.success ? (apRes.data.items || apRes.data || []) : [];
+      if (isDoctor()) {
+        aps = aps.filter(a => a.doctor_name && a.doctor_name.toLowerCase().includes((STATE.user?.username || '').toLowerCase().replace('dr_', '')));
+      }
+      const inv = invRes.success ? (invRes.data.items || invRes.data || []).filter(i => Number(i.patient_id) === Number(patientId)) : [];
+
+      if (!p) { closeModal(); toast('Could not load patient', 'er'); return; }
+
+      const age = p.date_of_birth ? Math.floor((Date.now() - new Date(p.date_of_birth)) / (365.25 * 864e5)) : '?';
+      const completedAppts = aps.filter(a => a.status === 'completed');
+      const upcomingAppts = aps.filter(a => ['scheduled', 'confirmed'].includes(a.status));
+      const totalSpent = inv.filter(i => i.payment_status === 'paid').reduce((s, i) => s + i.total_amount, 0);
+
+      const html = `
+  <div class="modal-head">
+    <h3>Patient Profile</h3>
+    <button class="close-btn" onclick="closeModal()">✕</button>
+  </div>
+
+  <!-- Header card -->
+  <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--surface2);border-radius:10px;margin-bottom:20px">
+    <div style="width:56px;height:56px;border-radius:12px;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;flex-shrink:0">
+      ${(p.first_name || '?')[0]}
+    </div>
+    <div style="flex:1">
+      <div style="font-family:var(--serif);font-size:22px;margin-bottom:2px">${esc(p.first_name)} ${esc(p.last_name)}</div>
+      <div style="font-size:13px;color:var(--text2)">${esc(p.email || '')} · ${esc(p.phone)}</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:12px;color:var(--text3)">Patient ID</div>
+      <div style="font-family:monospace;font-weight:600">#${p.patient_id}</div>
+    </div>
+  </div>
+
+  <!-- Info grid -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px">
+    ${[['Age', age + ' yrs'], ['Blood Group', p.blood_group || '—'], ['Gender', p.gender || '—'],
+        ['Date of Birth', fmtD(p.date_of_birth)], ['Phone', p.phone || '—'],
+        ['Upcoming', upcomingAppts.length + ' appts']
+        ].map(([l, v]) => `
+    <div style="background:var(--surface2);border-radius:8px;padding:10px 12px">
+      <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">${l}</div>
+      <div style="font-weight:600;font-size:14px;color:var(--text)">${esc(String(v))}</div>
+    </div>`).join('')}
+  </div>
+
+  <!-- Allergies & Medical notes -->
+  ${(p.allergies && p.allergies !== 'None') ? `
+  <div style="background:var(--red-bg);border:1px solid var(--red-bd);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px">
+    <strong style="color:var(--red)">Allergies:</strong> <span style="color:var(--red)">${esc(p.allergies)}</span>
+  </div>` : ''}
+  ${p.medical_notes ? `
+  <div style="background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px">
+    <strong style="color:var(--blue)">Medical Notes:</strong> ${esc(p.medical_notes)}
+  </div>` : ''}
+
+  <!-- Upcoming appointments -->
+  <div style="margin-bottom:18px">
+    <div style="font-weight:600;font-size:13px;margin-bottom:8px;display:flex;align-items:center;gap:8px">
+      Upcoming Appointments <span class="badge bg-blue">${upcomingAppts.length}</span>
+    </div>
+    ${upcomingAppts.length ? `
+    <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden">
+      ${upcomingAppts.map((a, i) => `
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;${i < upcomingAppts.length - 1 ? 'border-bottom:1px solid var(--border)' : ''}">
+        <div style="width:42px;text-align:center;flex-shrink:0">
+          <div style="font-weight:600;font-size:13px">${a.scheduled_at ? a.scheduled_at.slice(11, 16) : '—'}</div>
+          <div style="font-size:10px;color:var(--text3)">${fmtD(a.scheduled_at)}</div>
+        </div>
+        <div style="flex:1">
+          <div style="font-weight:500;font-size:13px">${esc(a.reason || '—')}</div>
+          <div style="font-size:12px;color:var(--text2)">${esc(a.doctor_name || '—')}</div>
+        </div>
+        ${priorityBadge(a.priority || 'normal')}
+        ${statusBadge(a.status)}
+        ${riskBadge(a.risk_level, a.no_show_probability)}
+      </div>`).join('')}
+    </div>` : '<div style="color:var(--text3);font-size:13px;padding:8px 0">No upcoming appointments</div>'}
+  </div>
+
+  <!-- Treatment / visit history -->
+  <div style="margin-bottom:18px">
+    <div style="font-weight:600;font-size:13px;margin-bottom:8px;display:flex;align-items:center;gap:8px">
+      Treatment History <span class="badge bg-gray">${completedAppts.length} visits</span>
+    </div>
+    ${completedAppts.length ? `
+    <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden">
+      ${completedAppts.slice(0, 8).map((a, i) => `
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;${i < Math.min(completedAppts.length, 8) - 1 ? 'border-bottom:1px solid var(--border)' : ''}">
+        <div style="width:42px;text-align:center;flex-shrink:0">
+          <div style="font-size:10px;color:var(--text3)">${fmtD(a.scheduled_at)}</div>
+        </div>
+        <div style="flex:1">
+          <div style="font-weight:500;font-size:13px">${esc(a.reason || 'Appointment')}</div>
+          <div style="font-size:12px;color:var(--text2)">${esc(a.doctor_name || '—')}${a.notes ? ` · <em>${esc(a.notes)}</em>` : ''}</div>
+        </div>
+        ${statusBadge(a.status)}
+      </div>`).join('')}
+      ${completedAppts.length > 8 ? `<div style="padding:8px 14px;font-size:12px;color:var(--text3);background:var(--surface2)">${completedAppts.length - 8} more visits not shown</div>` : ''}
+    </div>` : '<div style="color:var(--text3);font-size:13px;padding:8px 0">No treatment history</div>'}
+  </div>
+
+  <!-- Billing / Invoice history -->
+  <div style="margin-bottom:18px">
+    <div style="font-weight:600;font-size:13px;margin-bottom:8px;display:flex;align-items:center;gap:8px">
+      Billing History <span class="badge bg-green">${inv.length} invoices</span>
+    </div>
+    ${inv.length ? `
+    <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden">
+      ${inv.map((i, idx) => `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;background:var(--surface);${idx < inv.length - 1 ? 'border-bottom:1px solid var(--border)' : ''}" onclick="previewInvoice(${i.invoice_id}, true)">
+        <div>
+          <div style="font-weight:600;font-size:13px;font-family:monospace;color:var(--green)">INV-${String(i.invoice_id).padStart(3, '0')}</div>
+          <div style="font-size:11px;color:var(--text3)">${fmtD(i.issued_at)}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <strong style="margin-right: 4px">${fmtRs(i.total_amount)}</strong>
+          ${statusBadge(i.payment_status)}
+          <button class="btn btn-sm btn-secondary" onclick="event.stopPropagation();previewInvoice(${i.invoice_id}, true)">Print Receipt</button>
+        </div>
+      </div>`).join('')}
+    </div>` : '<div style="color:var(--text3);font-size:13px;padding:8px 0">No invoices on record</div>'}
+  </div>
+
+
+
+  <!-- Upcoming appointment actions for doctors -->
+  ${upcomingAppts.length && (isDoctor() || isAdmin()) ? `
+  <div style="margin-bottom:16px">
+    <div style="font-weight:600;font-size:13px;margin-bottom:8px">Update Consultation</div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      ${upcomingAppts.filter(a => ['scheduled', 'confirmed'].includes(a.status)).map(a => `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surface2);border-radius:8px;border:1px solid var(--border)">
+        <div>
+          <div style="font-weight:500;font-size:13px">${esc(a.reason || 'Appointment')}</div>
+          <div style="font-size:12px;color:var(--text2)">${fmtDT(a.scheduled_at)} · ${esc(a.doctor_name || '')}</div>
+        </div>
+        <button class="btn btn-sm btn-primary" onclick="openConsultationAndRx(${a.appointment_id})">
+          Open & Consult
+        </button>
+      </div>`).join('')}
+    </div>
+  </div>` : ''}
+
+  <div class="modal-foot">
+    ${isAdmin() ? `<button class="btn btn-sm btn-ghost" style="color:var(--amber);margin-right:auto;" onclick="closeModal();openPatientChangePassword(${p.patient_id},'${esc(p.first_name + ' ' + p.last_name)}')">Reset Password</button>` : ''}
+    ${canEdit() ? `<button class="btn btn-secondary" onclick="closeModal();openEditPatient(${p.patient_id})">Edit Patient</button>` : ''}
+    <button class="btn btn-primary" onclick="closeModal();STATE.page='appointments';loadData().then(renderPage)">View Appointments</button>
+  </div>`;
+
+      openModal(html, true);
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  PATIENTS PAGE
+    // ═══════════════════════════════════════════════════════════
+    function patientsPage() {
+      const rows = STATE.patients.map(p => {
+        const age = p.date_of_birth ? Math.floor((Date.now() - new Date(p.date_of_birth)) / (365.25 * 864e5)) : '?';
+        return `<tr style="cursor:pointer" onclick="openPatientProfile(${p.patient_id},'${esc(p.first_name + ' ' + p.last_name)}')">
+      <td><div style="display:flex;align-items:center;gap:9px">
+        <div class="av sm">${(p.first_name || '?')[0]}</div>
+        <div>
+          <div class="td-main" style="color:var(--green);text-decoration:underline">${esc(p.first_name)} ${esc(p.last_name)}</div>
+          <div class="td-sub">${esc(p.email || '')}</div>
+        </div>
+      </div></td>
+      <td>${age}</td>
+      <td>${esc(p.phone)}</td>
+      <td><span class="badge bg-blue">${esc(p.blood_group || '—')}</span></td>
+      <td>${p.allergies && p.allergies !== 'None' ? `<span class="badge bg-red">${esc(p.allergies)}</span>` : `<span style="color:var(--text3)">None</span>`}</td>
+      <td onclick="event.stopPropagation()"><div style="display:flex;gap:5px">
+        ${isAdmin() ? `<button class="btn btn-sm btn-ghost" onclick="openPatientChangePassword(${p.patient_id},'${esc(p.first_name + ' ' + p.last_name)}')" title="Reset Password" style="padding:4px 7px;color:var(--amber)">Password</button>` : ''}
+        ${canEdit() ? `<button class="btn btn-sm btn-ghost" onclick="openEditPatient(${p.patient_id})">Edit</button>` : ''}
+        ${isAdmin() ? `<button class="btn btn-sm btn-danger" onclick="deletePatient(${p.patient_id})">Del</button>` : ''}
+      </div></td>
+    </tr>`;
+      }).join('');
+      return `
+  <div style="background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:var(--blue)">
+    Click any patient row to view their full medical history, appointments and billing.
+  </div>
+  <div class="toolbar">
+    <div class="search"><span class="search-ic"></span>
+      <input id="pt-s" placeholder="Search by name or phone…" oninput="filterTable('pt-s','pt-body',0,1,2)"/>
+    </div>
+    ${canEdit() ? `<button class="btn btn-primary" onclick="openAddPatient()">+ Add Patient</button>` : ''}
+  </div>
+  <div class="panel">
+    <div class="panel-head">
+      <span class="panel-title">Patients (${STATE.patients.length})</span>
+      <span class="badge bg-green">${STATE.patients.length} total</span>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>Patient</th><th>Age</th><th>Phone</th><th>Blood</th><th>Allergies</th><th>Actions</th></tr></thead>
+      <tbody id="pt-body">
+      ${rows || '<tr><td colspan="6" class="empty"><div class="empty-icon"></div>No patients yet.</td></tr>'}
+      </tbody>
+    </table></div>
+  </div>`;
+    }
+
+    function generateRandomPassword(targetId) {
+      const num = Math.floor(1000 + Math.random() * 9000);
+      const pass = 'Smile' + num;
+      const input = document.getElementById(targetId);
+      if (input) {
+        input.value = pass;
+        input.type = 'text';
+      }
+      toast(`Generated password: ${pass}`);
+    }
+
+    function openAddPatient() {
+      openModal(`
+  <div class="modal-head"><h3>New Patient Registration</h3><button class="close-btn" onclick="closeModal()">✕</button></div>
+  <div class="form-row">
+    <div class="fg"><label>First name *</label><input id="pf-fn" placeholder="Meera"/></div>
+    <div class="fg"><label>Last name *</label><input id="pf-ln" placeholder="Patel"/></div>
+  </div>
+  <div class="form-row">
+    <div class="fg"><label>Date of birth</label><input id="pf-dob" type="date"/></div>
+    <div class="fg"><label>Gender</label><select id="pf-gd"><option value="female">Female</option><option value="male">Male</option><option value="other">Other</option></select></div>
+  </div>
+  <div class="form-row">
+    <div class="fg"><label>Phone *</label><input id="pf-ph" placeholder="+91 9XXXXXXXXX"/></div>
+    <div class="fg"><label>Blood group</label><select id="pf-bl"><option>O+</option><option>O-</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option></select></div>
+  </div>
+  <div class="fg"><label>Allergies</label><input id="pf-al" placeholder="None or list them"/></div>
+  <div class="fg"><label>Medical notes</label><textarea id="pf-mn" placeholder="Pre-existing conditions, medications…"></textarea></div>
+  
+  <div style="background:var(--surface2);padding:12px 14px;border-radius:8px;margin-top:8px;border:1px solid var(--border)">
+    <div style="font-weight:600;font-size:13px;color:var(--green);margin-bottom:8px">Patient Login Credentials</div>
+    <div class="fg" style="margin-bottom:8px"><label>Email (for patient login)</label><input id="pf-em" type="email" placeholder="patient@email.com"/></div>
+    <div class="fg" style="margin-bottom:0">
+      <label>Login Password (leave blank to auto-generate)</label>
+      <div style="display:flex;gap:8px">
+        <input id="pf-pw" type="text" placeholder="Auto-generates (e.g. Smile7892)" style="flex:1"/>
+        <button type="button" class="btn btn-secondary" onclick="generateRandomPassword('pf-pw')" style="white-space:nowrap">Generate</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-foot">
+    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+    <button class="btn btn-primary" onclick="saveNewPatient()">Save Patient</button>
+  </div>`);
+    }
+
+    async function saveNewPatient() {
+      const fn = document.getElementById('pf-fn').value.trim(), ph = document.getElementById('pf-ph').value.trim();
+      if (!fn || !ph) { toast('First name and phone required', 'er'); return; }
+      const em = document.getElementById('pf-em').value.trim();
+      const pw = document.getElementById('pf-pw').value.trim();
+
+      const r = await api('POST', '/patients', {
+        first_name: fn,
+        last_name: document.getElementById('pf-ln').value.trim(),
+        date_of_birth: document.getElementById('pf-dob').value,
+        gender: document.getElementById('pf-gd').value,
+        phone: ph,
+        blood_group: document.getElementById('pf-bl').value,
+        allergies: document.getElementById('pf-al').value || 'None',
+        medical_notes: document.getElementById('pf-mn').value,
+        email: em,
+        password: pw
+      });
+
+      if (!r.success) { toast(r.error?.message || 'Error', 'er'); return; }
+
+      const createdEmail = r.data.login_email || em || `${fn.toLowerCase()}_patient@clinic.local`;
+      const createdPw = r.data.raw_password || pw || 'patient123';
+
+      closeModal();
+      await loadData();
+      renderPage();
+
+      openModal(`
+        <div class="modal-head">
+          <h3 style="color:var(--green)">Patient Registered Successfully!</h3>
+          <button class="close-btn" onclick="closeModal()">✕</button>
+        </div>
+        <div style="padding:16px;background:var(--surface2);border-radius:10px;margin-bottom:16px;border:1px solid var(--border)">
+          <div style="font-size:14px;margin-bottom:12px">
+            Patient: <strong>${esc(fn)} ${esc(r.data.last_name || '')}</strong>
+          </div>
+          <div style="margin-bottom:10px">
+            <span style="font-size:11px;color:var(--text3);display:block;text-transform:uppercase">Login Email</span>
+            <strong style="font-family:monospace;font-size:14px;color:var(--text)">${esc(createdEmail)}</strong>
+          </div>
+          <div>
+            <span style="font-size:11px;color:var(--text3);display:block;text-transform:uppercase">Stored Password</span>
+            <strong style="font-family:monospace;font-size:18px;color:var(--green);background:var(--surface);padding:4px 10px;border-radius:6px;display:inline-block;border:1px solid var(--green-bd);margin-top:2px">${esc(createdPw)}</strong>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:16px">
+          The patient can now log in using this email and password to view their prescriptions and consultation logs.
+        </div>
+        <div class="modal-foot">
+          <button class="btn btn-primary" onclick="navigator.clipboard.writeText('Email: ${esc(createdEmail)}\\nPassword: ${esc(createdPw)}');toast('Credentials copied!');closeModal();">Copy Credentials & Close</button>
+        </div>
+      `, true);
+    }
+
+    async function openEditPatient(id) {
+      const p = STATE.patients.find(x => x.patient_id === id); if (!p) return;
+      openModal(`
+  <div class="modal-head"><h3>Edit Patient</h3><button class="close-btn" onclick="closeModal()">✕</button></div>
+  <div class="form-row">
+    <div class="fg"><label>First name</label><input id="ef-fn" value="${esc(p.first_name)}"/></div>
+    <div class="fg"><label>Last name</label><input id="ef-ln" value="${esc(p.last_name)}"/></div>
+  </div>
+  <div class="fg"><label>Phone</label><input id="ef-ph" value="${esc(p.phone)}"/></div>
+  <div class="fg"><label>Address</label><input id="ef-ad" value="${esc(p.address || '')}"/></div>
+  <div class="fg"><label>Allergies</label><input id="ef-al" value="${esc(p.allergies || '')}"/></div>
+  <div class="fg"><label>Medical notes</label><textarea id="ef-mn">${esc(p.medical_notes || '')}</textarea></div>
+
+  <div class="modal-foot">
+    ${isAdmin() ? `<button class="btn btn-sm btn-ghost" style="color:var(--amber);margin-right:auto" onclick="closeModal();openPatientChangePassword(${p.patient_id},'${esc(p.first_name + ' ' + p.last_name)}')">Reset Password</button>` : ''}
+    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+    <button class="btn btn-primary" onclick="saveEditPatient(${id})">Update Patient</button>
+  </div>`);
+    }
+    async function saveEditPatient(id) {
+      const r = await api('PATCH', `/patients/${id}`, { first_name: document.getElementById('ef-fn').value, last_name: document.getElementById('ef-ln').value, phone: document.getElementById('ef-ph').value, address: document.getElementById('ef-ad').value, allergies: document.getElementById('ef-al').value, medical_notes: document.getElementById('ef-mn').value });
+      if (!r.success) { toast(r.error?.message || 'Error', 'er'); return; }
+      toast('Patient updated'); closeModal(); await loadData(); renderPage();
+    }
+    async function deletePatient(id) {
+      if (!confirm('Delete this patient? This cannot be undone.')) return;
+      const r = await api('DELETE', `/patients/${id}`);
+      if (r.success) { toast('Patient deleted', 'in'); await loadData(); renderPage(); }
+      else toast(r.error?.message || 'Error', 'er');
+    }
+
+    function openPatientChangePassword(id, name) {
+      if (!isAdmin()) { toast('Only Admin can reset patient passwords', 'er'); return; }
+      openModal(`
+  <div class="modal-head"><h3>Reset Patient Password</h3><button class="close-btn" onclick="closeModal()">✕</button></div>
+  <div style="font-size:13px;color:var(--text2);margin-bottom:14px">
+    Resetting login password for patient: <strong>${esc(name)}</strong>
+  </div>
+  <div class="fg">
+    <label>New Password *</label>
+    <div style="display:flex;gap:8px">
+      <input id="pat-pw-new" type="text" placeholder="Enter or auto-generate password" style="flex:1"/>
+      <button type="button" class="btn btn-secondary" onclick="generateRandomPassword('pat-pw-new')" style="white-space:nowrap">Generate</button>
+    </div>
+  </div>
+  <div class="modal-foot">
+    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+    <button class="btn btn-primary" onclick="savePatientPassword(${id})">Update Password</button>
+  </div>`, true);
+    }
+
+    async function savePatientPassword(id) {
+      if (!isAdmin()) { toast('Only Admin can reset patient passwords', 'er'); return; }
+      const np = document.getElementById('pat-pw-new').value.trim();
+      if (!np) { toast('Password is required', 'er'); return; }
+      if (np.length < 6) { toast('Password must be at least 6 characters', 'er'); return; }
+
+      const r = await api('PATCH', `/patients/${id}/password`, { new_password: np });
+      if (r.success) {
+        closeModal();
+        toast('Patient password updated!');
+        openModal(`
+          <div class="modal-head">
+            <h3 style="color:var(--green)">Password Reset Complete</h3>
+            <button class="close-btn" onclick="closeModal()">✕</button>
+          </div>
+          <div style="padding:16px;background:var(--surface2);border-radius:10px;margin-bottom:16px">
+            <div style="font-size:13px;color:var(--text2);margin-bottom:8px">Updated password for patient:</div>
+            <strong style="font-family:monospace;font-size:18px;color:var(--green);background:var(--surface);padding:6px 12px;border-radius:6px;display:inline-block;border:1px solid var(--green-bd)">${esc(np)}</strong>
+          </div>
+          <div class="modal-foot">
+            <button class="btn btn-primary" onclick="navigator.clipboard.writeText('${esc(np)}');toast('Password copied!');closeModal();">Copy Password & Close</button>
+          </div>
+        `, true);
+      } else {
+        toast(r.error?.message || 'Failed to update password', 'er');
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  APPOINTMENTS PAGE  (role-aware)
+    // ═══════════════════════════════════════════════════════════
+    function appointmentsPage() {
+      // Doctor: show only their own appointments + highlight patient clickable
+      const appts = STATE.appointments;
+      const isDoc = isDoctor();
+      const isPat = role() === 'patient';
+      const showNoShow = !isDoc && !isPat;
+      const showActions = !isPat;
+
+      const rows = appts.map(a => `<tr style="${isPat ? 'cursor:pointer' : ''}" onclick="${isPat ? `openConsultationAndRx(${a.appointment_id})` : ''}">
+    <td style="cursor:pointer" onclick="${isPat ? '' : `openPatientProfile(${a.patient_id || 0},'${esc(a.patient_name)}')`}">
+      <div class="td-main" style="color:var(--green);text-decoration:underline">${esc(a.patient_name)}</div>
+    </td>
+    <td><span style="font-size:13px;color:var(--text2)">Dr. ${esc(a.doctor_name)}</span></td>
+    <td><span style="font-family:monospace;font-size:12px">${fmtDT(a.scheduled_at)}</span></td>
+    <td><span style="color:var(--text2)">${esc(a.reason || '—')}</span></td>
+    <td>${priorityBadge(a.priority || 'normal')}</td>
+    <td>${statusBadge(a.status)}</td>
+    ${showNoShow ? `<td>${riskBadge(a.risk_level, a.no_show_probability)}</td>` : ''}
+    ${showActions ? `<td><div style="display:flex;gap:4px;align-items:center" onclick="event.stopPropagation()">
+      ${(isDoctor() || isAdmin() || isPat) ? `<button class="btn btn-sm ${a.status === 'completed' ? 'btn-secondary' : 'btn-primary'}" onclick="openConsultationAndRx(${a.appointment_id})" title="${a.status === 'completed' ? 'View Visit & Prescription (Read Only)' : 'View Visit & Consult'}" style="display:inline-flex;align-items:center;gap:4px">${a.status === 'completed' ? 'View' : 'View & Consult'}</button>` : ''}
+      ${a.status === 'completed' && isAdmin() ? `<button class="btn btn-sm btn-ghost" style="color:var(--amber);border:1px solid var(--amber-bd);background:var(--amber-bg)" onclick="reopenAppt(${a.appointment_id})" title="Re-open consultation for editing (Admin)">Re-open</button>` : ''}
+      ${a.status === 'scheduled' && canEdit() ? `<button class="btn btn-sm btn-secondary" onclick="confirmAppt(${a.appointment_id})">Confirm</button>` : ''}
+      ${['scheduled', 'confirmed'].includes(a.status) && canEdit() ? `<button class="btn btn-sm btn-ghost" style="background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bd)" onclick="cancelAppt(${a.appointment_id})">Cancel</button>` : ''}
+      ${isAdmin() ? `<button class="btn btn-sm btn-danger" onclick="deleteAppt(${a.appointment_id})">Delete</button>` : ''}
+    </div></td>` : ''}
+  </tr>`).join('');
+
+      const totalCols = 6 + (showNoShow ? 1 : 0) + (showActions ? 1 : 0);
+
+      return `
+  <div style="background:var(--green-bg);border:1px solid var(--green-bd);border-radius:8px;padding:8px 14px;margin-bottom:14px;font-size:12px;color:var(--green)">
+    ${isPat ? 'Tip: Click any appointment row to view your consultation summary & digital prescription.' : 'Tip: Click any patient name to open their full profile and medical history.'}
+  </div>
+  <div class="toolbar">
+    <div class="search">
+      <input id="ap-s" placeholder="Search by patient or reason…" oninput="filterTable('ap-s','ap-body',0,1,3)"/>
+    </div>
+    <button class="btn btn-sm btn-ghost" onclick="filterByPriority('')" id="pf-all" style="border-color:var(--green);color:var(--green)">All</button>
+    <button class="btn btn-sm btn-ghost" onclick="filterByPriority('urgent')" id="pf-urgent">Urgent</button>
+    <button class="btn btn-sm btn-ghost" onclick="filterByPriority('high')" id="pf-high">High</button>
+    <button class="btn btn-sm btn-ghost" onclick="filterByPriority('normal')" id="pf-normal">Normal</button>
+    ${canEdit() ? `<button class="btn btn-primary" onclick="openAddAppt()">+ Schedule</button>` : ''}
+  </div>
+  <div class="panel">
+    <div class="panel-head">
+      <span class="panel-title">Appointments (${appts.length})</span>
+      <span class="badge bg-blue">${appts.filter(a => a.status === 'scheduled').length} upcoming</span>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>Patient</th><th>Doctor</th><th>Date & Time</th><th>Reason</th><th>Priority</th><th>Status</th>${showNoShow ? '<th>No-Show Rate</th>' : ''}${showActions ? '<th>Actions</th>' : ''}</tr></thead>
+      <tbody id="ap-body">
+      ${rows || `<tr><td colspan="${totalCols}" class="empty"><div class="empty-icon"></div>No appointments.</td></tr>`}
+      </tbody>
+    </table></div>
+  </div>`;
+    }
+    async function confirmAppt(id) { const r = await api('PATCH', `/appointments/${id}`, { status: 'confirmed' }); if (r.success) { toast('Confirmed'); await loadData(); renderPage(); } }
+    async function cancelAppt(id) { if (!confirm('Cancel this appointment?')) return; const r = await api('POST', `/appointments/${id}/cancel`); if (r.success) { toast('Cancelled', 'in'); await loadData(); renderPage(); } else { toast(r.error?.message || 'Error', 'er'); } }
+    async function deleteAppt(id) { if (!confirm('Delete this appointment permanently? This will remove related invoice/payment records.')) return; const r = await api('DELETE', `/appointments/${id}`); if (r.success) { toast('Deleted', 'in'); await loadData(); renderPage(); } else { toast(r.error?.message || 'Error', 'er'); } }
+    async function reopenAppt(id) {
+      if (!isAdmin()) { toast('Only Admin can re-open completed appointments', 'er'); return; }
+      if (!confirm('Re-open this consultation? Status will be reset to scheduled so notes & prescriptions can be edited.')) return;
+      const r = await api('PATCH', `/appointments/${id}`, { status: 'scheduled' });
+      if (r.success) {
+        toast('Consultation re-opened for editing');
+        await loadData();
+        if (document.getElementById('modal-container')?.style.display !== 'none') {
+          openConsultationAndRx(id);
+        } else {
+          renderPage();
+        }
+      } else {
+        toast(r.error?.message || 'Error', 'er');
+      }
+    }
+    function openAddAppt() {
+      if (isDoctor()) {
+        toast('Doctors cannot schedule appointments. Only receptionists or admins can schedule.', 'er');
+        return;
+      }
+      const pts = STATE.patients, docs = STATE.doctors, txs = STATE.treatments;
+      const availableDocs = docs.filter(d => d.is_available);
+      const firstAvailId = availableDocs.length ? availableDocs[0].doctor_id : null;
+      const docOptions = docs.length ? docs.map(d => `<option value="${d.doctor_id}" ${!d.is_available ? 'disabled style="color:var(--text3)"' : (d.doctor_id === firstAvailId ? 'selected' : '')}>Dr. ${esc(d.first_name + ' ' + d.last_name)} ${d.is_available ? '(On Duty)' : '(Unavailable / Off Duty)'}</option>`).join('') : '<option value="">No doctors found</option>';
+      const now = new Date(); now.setMinutes(0, 0, 0);
+      const dtLocal = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+      openModal(`
+  <div class="modal-head"><h3>Schedule Appointment</h3><button class="close-btn" onclick="closeModal()">✕</button></div>
+  ${!availableDocs.length ? '<div style="background:var(--red-bg);border:1px solid var(--red-bd);color:var(--red);padding:8px 12px;border-radius:6px;margin-bottom:12px;font-size:12px">All doctors are currently set to Unavailable / Off Duty.</div>' : ''}
+  <div class="form-row">
+    <div class="fg"><label>Patient *</label><select id="af-pt">${pts.length ? pts.map(p => `<option value="${p.patient_id}">${esc(p.first_name + ' ' + p.last_name)}</option>`).join('') : '<option>No patients</option>'}</select></div>
+    <div class="fg"><label>Doctor *</label><select id="af-dr">${docOptions}</select></div>
+  </div>
+  <div class="form-row">
+    <div class="fg"><label>Date & time *</label><input id="af-dt" type="datetime-local" value="${dtLocal}"/></div>
+    <div class="fg"><label>Duration (mins)</label><input id="af-du" type="number" value="30" min="15" step="15"/></div>
+  </div>
+  <div class="fg"><label>Treatment</label><select id="af-tx">${txs.map(t => `<option value="${t.treatment_id}">${esc(t.treatment_name)} — ${fmtRs(t.base_cost)}</option>`).join('')}</select></div>
+  <div class="fg"><label>Reason / chief complaint</label><input id="af-re" placeholder="e.g. Toothache upper right…"/></div>
+  <div class="fg"><label>Priority</label>
+    <select id="af-pri">
+      <option value="urgent">Urgent — needs immediate attention</option>
+      <option value="high">High — see today if possible</option>
+      <option value="normal" selected>Normal — routine appointment</option>
+      <option value="low">Low — flexible scheduling</option>
+    </select>
+  </div>
+  <div class="modal-foot">
+    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+    <button class="btn btn-primary" onclick="saveAppt()" ${!availableDocs.length ? 'disabled' : ''}>Schedule Appointment</button>
+  </div>`, true);
+    }
+    async function saveAppt() {
+      const pid = parseInt(document.getElementById('af-pt').value), did = parseInt(document.getElementById('af-dr').value), dt = document.getElementById('af-dt').value;
+      if (!pid || !did || !dt) { toast('Patient, available doctor, and date/time required', 'er'); return; }
+      const docObj = STATE.doctors.find(d => d.doctor_id === did);
+      if (docObj && !docObj.is_available) {
+        toast(`Dr. ${docObj.first_name} ${docObj.last_name} is currently unavailable / off duty`, 'er');
+        return;
+      }
+      const btn = document.querySelector('.modal-foot .btn-primary'); btn.textContent = 'Scheduling…'; btn.disabled = true;
+      const r = await api('POST', '/appointments', { patient_id: pid, doctor_id: did, scheduled_at: dt, duration_mins: parseInt(document.getElementById('af-du').value) || 30, treatment_id: parseInt(document.getElementById('af-tx').value) || 1, reason: document.getElementById('af-re').value, priority: document.getElementById('af-pri').value });
+      btn.textContent = 'Schedule + Score'; btn.disabled = false;
+      if (!r.success) { toast(r.error?.message || 'Error scheduling', 'er'); return; }
+      const d = r.data;
+      toast('Appointment scheduled successfully');
+      closeModal(); await loadData(); renderPage();
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  BILLING PAGE  (admin / receptionist only)
+    // ═══════════════════════════════════════════════════════════
+    function billingPage() {
+      const inv = STATE.invoices;
+      const paid = inv.filter(i => i.payment_status === 'paid').reduce((s, i) => s + i.total_amount, 0);
+      const pend = inv.filter(i => i.payment_status !== 'paid').reduce((s, i) => s + i.total_amount, 0);
+      const rows = inv.map(i => `<tr>
+    <td>
+      <span style="font-family:monospace;font-size:12px;font-weight:600;color:var(--green);text-decoration:underline;cursor:pointer" onclick="previewInvoice(${i.invoice_id})">
+        INV-${String(i.invoice_id).padStart(3, '0')}
+      </span>
+    </td>
+    <td style="cursor:pointer" onclick="openPatientProfile(${i.patient_id || 0},'${esc(i.patient_name)}')">
+      <div class="td-main" style="color:var(--green);text-decoration:underline">${esc(i.patient_name || '—')}</div>
+    </td>
+    <td><span style="font-family:monospace;font-size:12px">${fmtD(i.issued_at)}</span></td>
+    <td><strong>${fmtRs(i.total_amount)}</strong></td>
+    <td>${statusBadge(i.payment_status)}</td>
+    <td>${esc(i.payment_method || '—')}</td>
+    <td>
+      <div style="display:flex;gap:6px;align-items:center">
+        <button class="btn btn-sm btn-secondary" onclick="previewInvoice(${i.invoice_id})">Print Receipt</button>
+        ${i.payment_status !== 'paid' ? `<button class="btn btn-sm btn-primary" onclick="markPaid(${i.invoice_id})">Mark paid</button>` : ''}
+      </div>
+    </td>
+  </tr>`).join('');
+      return `
+  <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="stat-card" style="--accent-color:var(--green)"><div class="stat-label">Collected</div><div class="stat-val">${fmtRs(paid)}</div><div class="stat-sub">${inv.filter(i => i.payment_status === 'paid').length} invoices paid</div></div>
+    <div class="stat-card" style="--accent-color:var(--amber)"><div class="stat-label">Outstanding</div><div class="stat-val">${fmtRs(pend)}</div><div class="stat-sub">${inv.filter(i => i.payment_status !== 'paid').length} pending</div></div>
+    <div class="stat-card" style="--accent-color:var(--blue)"><div class="stat-label">Total invoices</div><div class="stat-val">${inv.length}</div><div class="stat-sub">All time</div></div>
+  </div>
+  <div class="toolbar">
+    <div class="search"><span class="search-ic"></span><input id="iv-s" placeholder="Search invoices…" oninput="filterTable('iv-s','iv-body',0,1)"/></div>
+    <button class="btn btn-primary" onclick="openAddInvoice()">+ New Invoice</button>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><span class="panel-title">Invoices (${inv.length})</span></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Invoice</th><th>Patient</th><th>Date</th><th>Amount</th><th>Status</th><th>Method</th><th>Actions</th></tr></thead>
+      <tbody id="iv-body">${rows || '<tr><td colspan="7" class="empty"><div class="empty-icon"></div>No invoices yet.</td></tr>'}</tbody>
+    </table></div>
+  </div>`;
+    }
+    async function markPaid(id) { const m = prompt('Payment method (cash/card/upi/insurance):', 'cash'); if (!m) return; const r = await api('PATCH', `/invoices/${id}/pay`, { payment_method: m.toLowerCase() }); if (r.success) { toast('Marked as paid'); await loadData(); renderPage(); previewInvoice(id); } else toast(r.error?.message || 'Error', 'er'); }
+    function openAddInvoice() {
+      const pts = STATE.patients;
+      openModal(`
+  <div class="modal-head"><h3>New Invoice</h3><button class="close-btn" onclick="closeModal()">✕</button></div>
+  <div class="fg"><label>Patient *</label><select id="if-pt">${pts.map(p => `<option value="${p.patient_id}">${esc(p.first_name + ' ' + p.last_name)}</option>`).join('')}</select></div>
+  <div class="form-row">
+    <div class="fg"><label>Amount (₹) *</label><input id="if-am" type="number" min="0" placeholder="1200"/></div>
+    <div class="fg"><label>Discount (₹)</label><input id="if-di" type="number" min="0" value="0"/></div>
+  </div>
+  <div class="form-row">
+    <div class="fg"><label>Payment method</label><select id="if-me"><option value="cash">Cash</option><option value="card">Card</option><option value="upi">UPI</option><option value="insurance">Insurance</option></select></div>
+    <div class="fg"><label>Status</label><select id="if-st"><option value="paid">Paid now</option><option value="pending">Pending</option></select></div>
+  </div>
+  <div class="modal-foot">
+    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+    <button class="btn btn-primary" onclick="saveInvoice()">Create Invoice</button>
+  </div>`);
+    }
+    async function saveInvoice() {
+      const amt = parseFloat(document.getElementById('if-am').value) || 0; const disc = parseFloat(document.getElementById('if-di').value) || 0;
+      if (!amt) { toast('Amount required', 'er'); return; }
+      const r = await api('POST', '/invoices', { patient_id: parseInt(document.getElementById('if-pt').value), subtotal: amt, discount: disc, total_amount: Math.max(0, amt - disc), tax_amount: 0, payment_status: document.getElementById('if-st').value, payment_method: document.getElementById('if-me').value });
+      if (!r.success) { toast(r.error?.message || 'Error', 'er'); return; }
+      toast('Invoice created'); closeModal(); await loadData(); renderPage();
+      if (r.data && r.data.invoice_id) { previewInvoice(r.data.invoice_id); }
+    }
+
+    // ── Generate & Preview Invoice PDF ───────────────────────────────────────────
+    function previewInvoice(invoiceId, fromPatientProfile = false) {
+      const invoice = STATE.invoices.find(i => i.invoice_id === invoiceId);
+      if (!invoice) { toast('Invoice not found', 'er'); return; }
+      const patient = STATE.patients.find(p => p.patient_id === invoice.patient_id);
+      const appt = invoice.appointment_id ? STATE.appointments.find(a => a.appointment_id === invoice.appointment_id) : null;
+      const doctor = appt ? STATE.doctors.find(d => d.doctor_id === appt.doctor_id) : null;
+      
+      const patName = patient ? `${patient.first_name} ${patient.last_name}` : (invoice.patient_name || 'Patient');
+      const patPhone = patient ? patient.phone : '—';
+      const patEmail = patient ? patient.email : '—';
+      const patAddress = patient ? (patient.address || '—') : '—';
+      const issuedAt = fmtD(invoice.issued_at);
+      const invoiceNo = `INV-${String(invoice.invoice_id).padStart(3, '0')}`;
+      
+      const subtotal = invoice.subtotal || 0;
+      const discount = invoice.discount || 0;
+      const taxAmount = invoice.tax_amount || 0;
+      const totalAmount = invoice.total_amount || (subtotal - discount + taxAmount);
+      
+      const statusText = (invoice.payment_status || 'pending').toUpperCase();
+      const methodText = (invoice.payment_method || '—').toUpperCase();
+      
+      const descriptionTitle = appt ? (appt.reason || 'Dental Treatment') : (invoice.notes || 'Dental Consultation & Treatment');
+      const descriptionSubtext = appt 
+        ? `Doctor: Dr. ${doctor ? doctor.first_name + ' ' + doctor.last_name : '—'} (${doctor ? doctor.specialisation : '—'}) · Date: ${fmtD(appt.scheduled_at)}`
+        : 'General dental care services';
+      
+      const closeAction = fromPatientProfile ? `openPatientProfile(${invoice.patient_id}, '${esc(patName)}')` : 'closeModal()';
+      
+      const invoiceHtml = `
+        <div class="modal-head">
+          <h3>Invoice Preview</h3>
+          <button class="close-btn" onclick="${closeAction}">✕</button>
+        </div>
+        
+        <div id="invoice-print-area" class="invoice-preview-container">
+          <div class="invoice-header">
+            <div>
+              <div class="invoice-logo-title">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="color:var(--green)">
+                  <path d="M12 2C11.5 2 10.9 2.1 10.4 2.4C7.9 3.5 6 6.1 6 9C6 13.5 10 16 12 22C14 16 18 13.5 18 9C18 6.1 16.1 3.5 13.6 2.4C13.1 2.1 12.5 2 12 2ZM12 4C14.8 4 16 5.8 16 9C16 12.2 12.5 15.5 12 18.5C11.5 15.5 8 12.2 8 9C8 5.8 9.2 4 12 4Z"/>
+                </svg>
+                <span>SmileClinic</span>
+              </div>
+              <div style="font-size:12px;color:var(--text2);margin-top:4px">Dental Care & Clinic Management</div>
+            </div>
+            <div class="invoice-meta-info">
+              <div class="invoice-meta-id">${invoiceNo}</div>
+              <div>Date Issued: <strong>${issuedAt}</strong></div>
+              <div>Status: <strong style="color:${invoice.payment_status === 'paid' ? 'var(--green)' : 'var(--amber)'}">${statusText}</strong></div>
+              <div>Method: <strong>${methodText}</strong></div>
+            </div>
+          </div>
+          
+          <div class="invoice-details-grid">
+            <div class="invoice-details-col">
+              <h4>Billed To:</h4>
+              <p><strong>${esc(patName)}</strong></p>
+              <p>Patient ID: #${invoice.patient_id}</p>
+              <p>Phone: ${esc(patPhone)}</p>
+              <p>Email: ${esc(patEmail)}</p>
+              <p>Address: ${esc(patAddress)}</p>
+            </div>
+            <div class="invoice-details-col">
+              <h4>Provider:</h4>
+              <p><strong>SmileClinic Dental Care</strong></p>
+              <p>123 Clinic Boulevard, Suite 100</p>
+              <p>Phone: +91 98765 43210</p>
+              <p>Email: billing@smileclinic.in</p>
+            </div>
+          </div>
+          
+          <table class="invoice-table">
+            <thead>
+              <tr>
+                <th style="width:70%">Description</th>
+                <th style="width:10%;text-align:center">Qty</th>
+                <th style="width:20%;text-align:right">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div style="font-weight:600;font-size:14px;color:var(--text)">${esc(descriptionTitle)}</div>
+                  <div style="font-size:11px;color:var(--text2);margin-top:4px">${esc(descriptionSubtext)}</div>
+                </td>
+                <td style="text-align:center">1</td>
+                <td style="text-align:right">${fmtRs(subtotal)}</td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <div class="invoice-totals">
+            <div class="invoice-totals-row">
+              <span>Subtotal:</span>
+              <span>${fmtRs(subtotal)}</span>
+            </div>
+            ${discount > 0 ? `
+              <div class="invoice-totals-row" style="color:var(--red)">
+                <span>Discount:</span>
+                <span>-${fmtRs(discount)}</span>
+              </div>
+            ` : ''}
+            <div class="invoice-totals-row">
+              <span>Tax (GST 18% Included):</span>
+              <span>${fmtRs(taxAmount)}</span>
+            </div>
+            <div class="invoice-totals-row grand-total">
+              <span>Total Amount:</span>
+              <span>${fmtRs(totalAmount)}</span>
+            </div>
+          </div>
+          
+          <div class="invoice-footer">
+            <p>Thank you for choosing SmileClinic! Keep smiling.</p>
+            <p style="font-size:10px;margin-top:5px;color:var(--text3)">This is a computer-generated invoice and requires no signature.</p>
+          </div>
+        </div>
+        
+        <div class="modal-foot">
+          <button class="btn btn-secondary" onclick="${closeAction}">Close</button>
+          <button class="btn btn-ghost" onclick="printInvoice('${invoiceNo}')">Print</button>
+          <button class="btn btn-primary" onclick="downloadInvoicePDF('${invoiceNo}')">Download PDF</button>
+        </div>
+      `;
+      
+      openModal(invoiceHtml, true);
+    }
+    
+    function downloadInvoicePDF(invoiceNo) {
+      const element = document.getElementById('invoice-print-area');
+      if (!element) return;
+      const opt = {
+        margin:       [10, 10, 10, 10],
+        filename:     `${invoiceNo}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    }
+    
+    function printInvoice(invoiceNo) {
+      const printContents = document.getElementById('invoice-print-area').innerHTML;
+      const printWindow = window.open('', '_blank', 'width=800,height=900');
+      printWindow.document.write('<html><head><title>Invoice ' + invoiceNo + '</title>');
+      
+      // Copy over the fonts and styles
+      printWindow.document.write('<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />');
+      printWindow.document.write('<style>');
+      printWindow.document.write(`
+        :root {
+          --bg: #fff;
+          --surface: #fff;
+          --border: #E3DED7;
+          --text: #1C1917;
+          --text2: #6B6560;
+          --text3: #A8A29E;
+          --green: #15803D;
+          --amber: #B45309;
+        }
+        body {
+          font-family: 'DM Sans', sans-serif;
+          background: #fff;
+          color: #1C1917;
+          padding: 20px;
+          margin: 0;
+        }
+        .invoice-preview-container {
+          max-width: 800px;
+          margin: 0 auto;
+        }
+        .invoice-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          border-bottom: 2px solid var(--border);
+          padding-bottom: 20px;
+          margin-bottom: 20px;
+        }
+        .invoice-logo-title {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-family: 'DM Serif Display', serif;
+          font-size: 24px;
+          color: var(--green);
+          font-weight: 700;
+        }
+        .invoice-meta-info {
+          text-align: right;
+          font-size: 13px;
+          color: var(--text2);
+        }
+        .invoice-meta-id {
+          font-family: monospace;
+          font-size: 18px;
+          font-weight: 700;
+          color: var(--text);
+          margin-bottom: 4px;
+        }
+        .invoice-details-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 30px;
+          margin-bottom: 24px;
+          font-size: 13px;
+        }
+        .invoice-details-col h4 {
+          text-transform: uppercase;
+          font-size: 11px;
+          color: var(--text3);
+          letter-spacing: .05em;
+          margin-bottom: 6px;
+        }
+        .invoice-details-col p {
+          margin-bottom: 2px;
+          color: var(--text);
+        }
+        .invoice-table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-bottom: 20px;
+          font-size: 13px;
+        }
+        .invoice-table th {
+          background: #F0EDE7;
+          color: var(--text2);
+          text-align: left;
+          padding: 10px 12px;
+          font-weight: 600;
+          border-bottom: 1px solid var(--border);
+        }
+        .invoice-table td {
+          padding: 12px;
+          border-bottom: 1px solid var(--border);
+        }
+        .invoice-totals {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 8px;
+          margin-bottom: 30px;
+          font-size: 13px;
+        }
+        .invoice-totals-row {
+          display: flex;
+          justify-content: space-between;
+          width: 240px;
+          color: var(--text2);
+        }
+        .invoice-totals-row.grand-total {
+          font-size: 16px;
+          font-weight: 700;
+          color: var(--text);
+          border-top: 2px solid var(--border);
+          padding-top: 8px;
+          margin-top: 4px;
+        }
+        .invoice-footer {
+          text-align: center;
+          font-size: 12px;
+          color: var(--text3);
+          border-top: 1px solid var(--border);
+          padding-top: 15px;
+          margin-top: 20px;
+        }
+      `);
+      printWindow.document.write('</style></head><body>');
+      printWindow.document.write(printContents);
+      printWindow.document.write('</body></html>');
+      printWindow.document.close();
+      printWindow.focus();
+      
+      setTimeout(() => {
+        printWindow.print();
+      }, 300);
+    }
+
+    function openDoctorProfile(id) {
+      const d = STATE.doctors.find(x => x.doctor_id === id);
+      if (!d) return;
+
+      const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
+      const fn = cap(d.first_name);
+      const ln = cap(d.last_name);
+      const fullName = `Dr. ${fn} ${ln}`.trim();
+      const initial = ((d.first_name || d.last_name || '?').trim()[0] || '?').toUpperCase();
+
+      const docAppts = STATE.appointments.filter(a =>
+        a.doctor_id === id ||
+        (a.doctor_name && a.doctor_name.toLowerCase().trim() === `${d.first_name} ${d.last_name}`.toLowerCase().trim())
+      );
+      const upcoming = docAppts.filter(a => ['scheduled', 'confirmed'].includes(a.status));
+      const completed = docAppts.filter(a => a.status === 'completed');
+
+      openModal(`
+  <div class="modal-head">
+    <h3>Doctor Details & Actions</h3>
+    <button class="close-btn" onclick="closeModal()">✕</button>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--surface2);border-radius:10px;margin-bottom:18px;border:1px solid var(--border)">
+    <div class="av" style="width:54px;height:54px;font-size:22px;font-weight:700;background:${d.is_available ? 'var(--green-bg)' : 'var(--surface)'};color:${d.is_available ? 'var(--green)' : 'var(--text3)'};display:flex;align-items:center;justify-content:center;border-radius:12px;border:1px solid var(--border)">
+      ${initial}
+    </div>
+    <div style="flex:1">
+      <div style="font-family:var(--serif);font-size:20px;font-weight:600">${esc(fullName)}</div>
+      <div style="font-size:13px;color:var(--text2);margin-top:2px">${esc(d.qualification || 'BDS, MDS')} · ${esc(d.specialisation)} · License: ${esc(d.license_number || '—')}</div>
+    </div>
+    <div>
+      <span class="badge ${d.is_available ? 'bg-green' : 'bg-gray'}" style="font-size:12px;padding:6px 12px">${d.is_available ? 'On Call (Active)' : 'Off Duty'}</span>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px">
+    <div style="background:var(--surface2);border-radius:8px;padding:10px 12px;border:1px solid var(--border)">
+      <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Qualification</div>
+      <div style="font-weight:600;font-size:13px;color:var(--text)">${esc(d.qualification || 'BDS, MDS')}</div>
+    </div>
+    <div style="background:var(--surface2);border-radius:8px;padding:10px 12px;border:1px solid var(--border)">
+      <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Specialisation</div>
+      <div style="font-weight:600;font-size:13px;color:var(--text)">${esc(d.specialisation)}</div>
+    </div>
+    <div style="background:var(--surface2);border-radius:8px;padding:10px 12px;border:1px solid var(--border)">
+      <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Email Address</div>
+      <div style="font-weight:600;font-size:13px;color:var(--text);word-break:break-all">${esc(d.email || '—')}</div>
+    </div>
+    <div style="background:var(--surface2);border-radius:8px;padding:10px 12px;border:1px solid var(--border)">
+      <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Phone Number</div>
+      <div style="font-weight:600;font-size:13px;color:var(--text)">${esc(d.phone || '—')}</div>
+    </div>
+    <div style="background:var(--surface2);border-radius:8px;padding:10px 12px;border:1px solid var(--border)">
+      <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Consultation Fee</div>
+      <div style="font-weight:600;font-size:14px;color:var(--green)">${fmtRs(d.consultation_fee)}</div>
+    </div>
+    <div style="background:var(--surface2);border-radius:8px;padding:10px 12px;border:1px solid var(--border)">
+      <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">License Number</div>
+      <div style="font-weight:600;font-size:13px;color:var(--text)">${esc(d.license_number || '—')}</div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:12px;margin-bottom:18px">
+    <div style="flex:1;background:var(--surface2);border-radius:8px;padding:10px 12px;border:1px solid var(--border)">
+      <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Upcoming Appts</div>
+      <div style="font-weight:600;font-size:16px;color:var(--blue)">${upcoming.length}</div>
+    </div>
+    <div style="flex:1;background:var(--surface2);border-radius:8px;padding:10px 12px;border:1px solid var(--border)">
+      <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Completed Visits</div>
+      <div style="font-weight:600;font-size:16px;color:var(--green)">${completed.length}</div>
+    </div>
+  </div>
+
+  ${isAdmin() ? `
+  <div style="background:var(--surface2);padding:16px;border-radius:10px;border:1px solid var(--border);margin-bottom:18px">
+    <div style="font-weight:600;font-size:13px;color:var(--text);margin-bottom:12px">
+      Doctor Actions & Controls
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <button class="btn ${d.is_available ? 'btn-secondary' : 'btn-primary'}" style="justify-content:center;padding:10px;font-size:13px" onclick="closeModal();toggleAvailability(${d.doctor_id}, ${d.is_available ? 0 : 1})">
+        ${d.is_available ? 'Set Off Duty' : 'Set On Duty'}
+      </button>
+      <button class="btn btn-secondary" style="justify-content:center;padding:10px;font-size:13px" onclick="closeModal();openEditDoctor(${d.doctor_id})">
+        Edit Doctor Profile
+      </button>
+      <button class="btn btn-ghost" style="justify-content:center;padding:10px;font-size:13px;color:var(--amber);border:1px solid var(--amber-bd);background:var(--amber-bg)" onclick="closeModal();openChangePassword(${d.doctor_id},'${esc(fullName)}')">
+        Reset Password
+      </button>
+      <button class="btn btn-danger" style="justify-content:center;padding:10px;font-size:13px" onclick="closeModal();deleteDoctor(${d.doctor_id},'${esc(fullName)}')">
+        Remove Doctor
+      </button>
+    </div>
+  </div>` : ''}
+
+  <div class="modal-foot">
+    <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+  </div>
+`, true);
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  DOCTORS PAGE
+    // ═══════════════════════════════════════════════════════════
+    function doctorsPage() {
+      const docs = STATE.doctors;
+      const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
+
+      const rows = docs.map(d => {
+        const fn = cap(d.first_name);
+        const ln = cap(d.last_name);
+        const fullName = `Dr. ${fn} ${ln}`.trim();
+        const initial = ((d.first_name || d.last_name || '?').trim()[0] || '?').toUpperCase();
+
+        return `<tr style="cursor:pointer" onclick="openDoctorProfile(${d.doctor_id})">
+    <td><div style="display:flex;align-items:center;gap:10px">
+      <div class="av sm" style="background:${d.is_available ? 'var(--green-bg)' : 'var(--surface2)'};color:${d.is_available ? 'var(--green)' : 'var(--text3)'}">${initial}</div>
+      <div>
+        <div class="td-main" style="color:var(--green);font-weight:600">${esc(fullName)}</div>
+        <div class="td-sub">${esc(d.qualification || 'BDS, MDS')} · Lic: ${esc(d.license_number || '—')}</div>
+      </div>
+    </div></td>
+    <td><span class="badge bg-blue" style="font-size:11.5px">${esc(d.specialisation)}</span></td>
+    <td>${esc(d.phone || '—')}</td>
+    <td><strong>${fmtRs(d.consultation_fee)}</strong></td>
+    <td>${d.is_available ? '<span class="badge bg-green">On Call</span>' : '<span class="badge bg-gray">Off Duty</span>'}</td>
+  </tr>`;
+      }).join('');
+
+      return `
+  <div style="background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:var(--blue)">
+    Tip: Click any doctor row to view details, update duty status, edit profile, change password, or remove doctor.
+  </div>
+  <div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">
+    <div class="stat-card" style="--accent-color:var(--green)"><div class="stat-label">Total doctors</div><div class="stat-val">${docs.length}</div><div class="stat-sub">${docs.filter(d => d.is_available).length} available today</div></div>
+    <div class="stat-card" style="--accent-color:var(--blue)"><div class="stat-label">Specialisations</div><div class="stat-val">${new Set(docs.map(d => d.specialisation)).size}</div><div class="stat-sub">Unique specialities</div></div>
+    <div class="stat-card" style="--accent-color:var(--amber)"><div class="stat-label">Avg fee</div><div class="stat-val">${docs.length ? fmtRs(Math.round(docs.reduce((s, d) => s + d.consultation_fee, 0) / docs.length)) : '—'}</div><div class="stat-sub">Per consultation</div></div>
+    <div class="stat-card" style="--accent-color:var(--red)"><div class="stat-label">Unavailable</div><div class="stat-val">${docs.filter(d => !d.is_available).length}</div><div class="stat-sub">On leave / off duty</div></div>
+  </div>
+  <div class="panel">
+    <div class="panel-head">
+      <span class="panel-title">Doctors Directory (${docs.length})</span>
+      ${isAdmin() ? `<button class="btn btn-sm btn-primary" onclick="openAddDoctor()">+ Add Doctor</button>` : ''}
+    </div>
+    <div class="tbl" style="overflow-x:auto"><table style="min-width:600px">
+      <thead><tr><th>Doctor</th><th>Specialisation</th><th>Phone</th><th>Fee</th><th>Status</th></tr></thead>
+      <tbody>${rows || '<tr><td colspan="5" class="empty"><div class="empty-icon"></div>No doctors on record.</td></tr>'}</tbody>
+    </table></div>
+  </div>`;
+    }
+
+    // ── Add Doctor ────────────────────────────────────────────────
+    function openAddDoctor() {
+      openModal(`
+  <div class="modal-head"><h3>Add Doctor</h3><button class="close-btn" onclick="closeModal()">✕</button></div>
+  <div class="form-row">
+    <div class="fg"><label>First name *</label><input id="df-fn" placeholder="Priya"/></div>
+    <div class="fg"><label>Last name *</label><input id="df-ln" placeholder="Sharma"/></div>
+  </div>
+  <div class="form-row">
+    <div class="fg"><label>Qualification *</label><input id="df-qual" placeholder="BDS, MDS" value="BDS, MDS"/></div>
+    <div class="fg"><label>Specialisation *</label>
+      <select id="df-sp"><option>General Dentistry</option><option>Orthodontics</option><option>Oral Surgery</option><option>Periodontics</option><option>Endodontics</option><option>Pediatric Dentistry</option></select>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="fg"><label>License number *</label><input id="df-lic" placeholder="MCI-DEN-XXXX-XXXXX"/></div>
+    <div class="fg"><label>Phone *</label><input id="df-ph" placeholder="+91 XXXXXXXXXX"/></div>
+  </div>
+  <div class="form-row">
+    <div class="fg"><label>Consultation fee (₹)</label><input id="df-fee" type="number" value="600" min="0"/></div>
+    <div class="fg"><label>Login email *</label><input id="df-em" type="email" placeholder="doctor@clinic.in"/></div>
+  </div>
+  <div class="fg"><label>Login password *</label><input id="df-pw" type="password" placeholder="min 6 characters"/></div>
+  <div class="modal-foot">
+    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+    <button class="btn btn-primary" onclick="saveDoctor()" id="add-doc-btn">Add Doctor</button>
+  </div>`);
+    }
+    async function saveDoctor() {
+      const fn = document.getElementById('df-fn').value.trim();
+      const ln = document.getElementById('df-ln').value.trim();
+      const em = document.getElementById('df-em').value.trim();
+      const pw = document.getElementById('df-pw').value;
+      const qual = document.getElementById('df-qual').value.trim();
+      if (!fn || !em || !pw) { toast('Name, email and password are required', 'er'); return; }
+      if (pw.length < 6) { toast('Password must be at least 6 characters', 'er'); return; }
+      const btn = document.querySelector('#add-doc-btn');
+      if (btn) { btn.textContent = 'Adding…'; btn.disabled = false; }
+
+      // Step 1: create login account
+      const uname = 'dr_' + fn.toLowerCase().replace(/\s+/g, '_') + '_' + (Date.now() % 9999);
+      const userRes = await api('POST', '/auth/register', { username: uname, email: em, password: pw, role: 'doctor' });
+      if (!userRes.success) {
+        if (btn) { btn.textContent = 'Add Doctor'; btn.disabled = false; }
+        toast(userRes.error?.message || 'Email may already be registered', 'er');
+        return;
+      }
+
+      // Step 2: get the user_id from the response
+      const d = userRes.data || {};
+      const newUserId = d.userId || d.user_id || (d.user && d.user.userId);
+      if (!newUserId) {
+        toast('Registration succeeded but user_id missing — contact admin', 'er');
+        return;
+      }
+
+      // Step 3: create doctor profile linked to that user
+      const docRes = await api('POST', '/doctors', {
+        first_name: fn,
+        last_name: ln,
+        specialisation: document.getElementById('df-sp').value,
+        qualification: qual || 'BDS, MDS',
+        license_number: document.getElementById('df-lic').value.trim() || 'LIC-' + Date.now(),
+        phone: document.getElementById('df-ph').value.trim(),
+        consultation_fee: parseFloat(document.getElementById('df-fee').value) || 0,
+        user_id: newUserId
+      });
+      if (btn) { btn.textContent = 'Add Doctor'; btn.disabled = false; }
+      if (!docRes.success) { toast(docRes.error?.message || 'Error creating doctor profile', 'er'); return; }
+      toast(`Dr. ${fn} ${ln} added! Login: ${em}`);
+      closeModal(); await loadData(); renderPage();
+    }
+
+    // ── Edit Doctor ───────────────────────────────────────────────
+    async function openEditDoctor(id) {
+      const d = STATE.doctors.find(x => x.doctor_id === id); if (!d) return;
+      openModal(`
+  <div class="modal-head"><h3>Edit Doctor</h3><button class="close-btn" onclick="closeModal()">✕</button></div>
+  <div style="background:var(--surface2);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:var(--text2)">
+    Editing: <strong>Dr. ${esc(d.first_name)} ${esc(d.last_name)}</strong> · ${esc(d.email || '')}
+  </div>
+  <div class="form-row">
+    <div class="fg"><label>First name</label><input id="ef-dfn" value="${esc(d.first_name)}"/></div>
+    <div class="fg"><label>Last name</label><input id="ef-dln" value="${esc(d.last_name)}"/></div>
+  </div>
+  <div class="form-row">
+    <div class="fg"><label>Qualification</label><input id="ef-dqual" value="${esc(d.qualification || 'BDS, MDS')}"/></div>
+    <div class="fg"><label>Specialisation</label>
+      <select id="ef-dsp">
+        ${['General Dentistry', 'Orthodontics', 'Oral Surgery', 'Periodontics', 'Endodontics', 'Pediatric Dentistry'].map(s => `<option ${d.specialisation === s ? 'selected' : ''}>${s}</option>`).join('')}
+      </select>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="fg"><label>Phone</label><input id="ef-dph" value="${esc(d.phone)}"/></div>
+    <div class="fg"><label>Consultation fee (₹)</label><input id="ef-dfee" type="number" value="${d.consultation_fee}" min="0"/></div>
+  </div>
+  <div class="fg"><label>Availability</label>
+    <select id="ef-dav">
+      <option value="1" ${d.is_available ? 'selected' : ''}>Available</option>
+      <option value="0" ${!d.is_available ? 'selected' : ''}>Unavailable (on leave)</option>
+    </select>
+  </div>
+  <div class="modal-foot">
+    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+    <button class="btn btn-primary" onclick="saveEditDoctor(${id})">Save Changes</button>
+  </div>`);
+    }
+    async function saveEditDoctor(id) {
+      const r = await api('PATCH', '/doctors/' + id, {
+        first_name: document.getElementById('ef-dfn').value,
+        last_name: document.getElementById('ef-dln').value,
+        qualification: document.getElementById('ef-dqual').value.trim(),
+        specialisation: document.getElementById('ef-dsp').value,
+        phone: document.getElementById('ef-dph').value,
+        consultation_fee: parseFloat(document.getElementById('ef-dfee').value) || 0,
+        is_available: parseInt(document.getElementById('ef-dav').value),
+      });
+      if (!r.success) { toast(r.error?.message || 'Error', 'er'); return; }
+      toast('Doctor updated'); closeModal(); await loadData(); renderPage();
+    }
+
+    // ── Toggle availability ────────────────────────────────────────
+    async function toggleAvailability(id, newVal) {
+      const r = await api('PATCH', '/doctors/' + id, { is_available: newVal });
+      if (r.success) { toast(newVal ? 'Doctor set to Available' : 'Doctor set to Unavailable'); await loadData(); renderPage(); }
+      else toast(r.error?.message || 'Error', 'er');
+    }
+
+    // ── Change password ────────────────────────────────────────────
+    function openChangePassword(id, name) {
+      openModal(`
+  <div class="modal-head"><h3>Change Password</h3><button class="close-btn" onclick="closeModal()">✕</button></div>
+  <div style="background:var(--amber-bg);border:1px solid var(--amber-bd);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:var(--amber)">
+    Changing password for: <strong>Dr. ${esc(name)}</strong>
+  </div>
+  <div class="fg"><label>New password *</label><input id="pw-new" type="password" placeholder="min 6 characters"/></div>
+  <div class="fg"><label>Confirm password *</label><input id="pw-confirm" type="password" placeholder="repeat password"/></div>
+  <div class="modal-foot">
+    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+    <button class="btn btn-primary" onclick="savePassword(${id})">Update Password</button>
+  </div>`);
+    }
+    async function savePassword(id) {
+      const np = document.getElementById('pw-new').value;
+      const cp = document.getElementById('pw-confirm').value;
+      if (!np || np.length < 6) { toast('Password must be at least 6 characters', 'er'); return; }
+      if (np !== cp) { toast('Passwords do not match', 'er'); return; }
+      const r = await api('PATCH', '/doctors/' + id + '/password', { new_password: np });
+      if (!r.success) { toast(r.error?.message || 'Error', 'er'); return; }
+      toast('Password updated successfully'); closeModal();
+    }
+
+    // ── Delete Doctor ──────────────────────────────────────────────
+    async function deleteDoctor(id, name) {
+      if (!confirm(`Remove Dr. ${name} from the system?\n\nNote: Doctors with upcoming appointments cannot be removed.`)) return;
+      const r = await api('DELETE', '/doctors/' + id);
+      if (!r.success) { toast(r.error?.message || 'Error removing doctor', 'er'); return; }
+      toast(`Dr. ${name} removed`, 'in'); await loadData(); renderPage();
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  ML INSIGHTS  (admin / doctor only)
+    // ═══════════════════════════════════════════════════════════
+    function mlPage() {
+      const appts = STATE.appointments.filter(a => ['scheduled', 'confirmed'].includes(a.status));
+      const high = appts.filter(a => a.risk_level === 'High').length;
+      const med = appts.filter(a => a.risk_level === 'Medium').length;
+      const rows = appts.map(a => {
+        const prob = a.no_show_probability;
+        const color = a.risk_level === 'High' ? 'var(--red)' : a.risk_level === 'Medium' ? 'var(--amber)' : 'var(--green)';
+        return `<tr>
+      <td style="cursor:pointer" onclick="openPatientProfile(${a.patient_id || 0},'${esc(a.patient_name)}')">
+        <div class="td-main" style="color:var(--green);text-decoration:underline">${esc(a.patient_name)}</div>
+      </td>
+      <td><span style="font-family:monospace;font-size:12px">${fmtDT(a.scheduled_at)}</span></td>
+      <td>${esc(a.reason || '—')}</td>
+      <td><div style="display:flex;align-items:center;gap:6px">
+        <div style="width:60px;height:4px;background:var(--border);border-radius:2px;overflow:hidden"><div style="width:${prob != null ? (prob * 100).toFixed(0) : 0}%;height:100%;background:${color};border-radius:2px"></div></div>
+        <span style="font-family:monospace;font-size:12px;color:${color}">${prob != null ? (prob * 100).toFixed(0) + '%' : '—'}</span>
+      </div></td>
+      <td>${riskBadge(a.risk_level, prob)}</td>
+      <td style="font-size:12px;color:var(--text2)">${a.risk_level === 'High' ? 'Call' : a.risk_level === 'Medium' ? 'SMS' : 'Auto'}</td>
+    </tr>`;
+      }).join('');
+      const feats = [['prior_no_shows', 0.281, 'var(--red)'], ['reminder_sent', 0.164, 'var(--green)'], ['lead_time_days', 0.132, 'var(--amber)'], ['has_insurance', 0.098, 'var(--green)'], ['distance_km', 0.081, 'var(--amber)'], ['treatment_cost', 0.073, 'var(--green)'], ['appointment_hour', 0.062, 'var(--amber)'], ['age', 0.051, 'var(--blue)'], ['day_of_week', 0.048, 'var(--amber)'], ['treatment_category', 0.037, 'var(--blue)']];
+      return `
+  <div class="stats-grid">
+    <div class="stat-card" style="--accent-color:var(--green)"><div class="stat-label">Model AUC-ROC</div><div class="stat-val">0.799</div><div class="stat-sub">no_show_xgboost v2.1</div></div>
+    <div class="stat-card" style="--accent-color:var(--red)"><div class="stat-label">High risk</div><div class="stat-val">${high}</div><div class="stat-sub">Needs phone call</div></div>
+    <div class="stat-card" style="--accent-color:var(--amber)"><div class="stat-label">Medium risk</div><div class="stat-val">${med}</div><div class="stat-sub">Send SMS</div></div>
+    <div class="stat-card" style="--accent-color:var(--green)"><div class="stat-label">Low risk</div><div class="stat-val">${appts.length - high - med}</div><div class="stat-sub">Auto-reminder OK</div></div>
+  </div>
+  <div class="g2">
+    <div class="panel" style="margin-bottom:0">
+      <div class="panel-head"><span class="panel-title">Upcoming — risk scores</span><span class="badge bg-blue">Click patient name for full profile</span></div>
+      <div class="tbl"><table>
+        <thead><tr><th>Patient</th><th>Date</th><th>Reason</th><th>Probability</th><th>Risk</th><th>Action</th></tr></thead>
+        <tbody>${rows || '<tr><td colspan="6" class="empty"><div class="empty-icon"></div>No upcoming appointments.</td></tr>'}</tbody>
+      </table></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="panel" style="margin-bottom:0">
+        <div class="panel-head"><span class="panel-title">Feature importance</span></div>
+        <div class="panel-body">
+          ${feats.map(([n, v, c]) => `<div style="display:flex;align-items:center;gap:7px;margin-bottom:7px">
+            <div style="font-size:11px;color:var(--text2);width:160px;flex-shrink:0;font-family:monospace;overflow:hidden;text-overflow:ellipsis">${n}</div>
+            <div style="flex:1;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden"><div style="width:${(v / 0.281 * 90).toFixed(0)}%;height:100%;background:${c};border-radius:3px"></div></div>
+            <div style="font-size:10px;font-family:monospace;width:36px;text-align:right;color:var(--text3)">${(v * 100).toFixed(1)}%</div>
+          </div>`).join('')}
+        </div>
+      </div>
+      <div class="panel" style="margin-bottom:0">
+        <div class="panel-head"><span class="panel-title">Live predictor</span></div>
+        <div class="panel-body">
+          <div class="form-row"><div class="fg"><label>Lead time (days)</label><input id="ml-ld" type="number" value="14" min="0"/></div><div class="fg"><label>Prior no-shows</label><input id="ml-pr" type="number" value="0" min="0"/></div></div>
+          <div class="form-row"><div class="fg"><label>Age</label><input id="ml-ag" type="number" value="32" min="1"/></div><div class="fg"><label>Distance (km)</label><input id="ml-di" type="number" value="5" step="0.5"/></div></div>
+          <div class="form-row"><div class="fg"><label>Appt. hour</label><input id="ml-hr" type="number" value="10" min="0" max="23"/></div><div class="fg"><label>Treatment cost (₹)</label><input id="ml-co" type="number" value="1200"/></div></div>
+          <div class="form-row"><div class="fg"><label>Reminder sent</label><select id="ml-rm"><option value="0">No</option><option value="1">Yes</option></select></div><div class="fg"><label>Has insurance</label><select id="ml-in"><option value="0">No</option><option value="1">Yes</option></select></div></div>
+          <div class="form-row">
+            <div class="fg"><label>Day</label><select id="ml-dy">${['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'].map(d => `<option value="${d}">${d[0].toUpperCase() + d.slice(1)}</option>`).join('')}</select></div>
+            <div class="fg"><label>Category</label><select id="ml-ca">${['preventive', 'restorative', 'cosmetic', 'surgical', 'diagnostic', 'orthodontic'].map(c => `<option value="${c}">${c[0].toUpperCase() + c.slice(1)}</option>`).join('')}</select></div>
+          </div>
+          <button class="btn btn-primary btn-full" onclick="runPredict()" style="margin-top:4px">Predict No-show Risk</button>
+          <div id="ml-res"></div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+    }
+    async function runPredict() {
+      const el = document.getElementById('ml-res');
+      el.innerHTML = '<div style="text-align:center;padding:16px"><div class="spinner"></div></div>';
+      const r = await api('POST', '/ml/predict/manual', { lead_time_days: parseInt(document.getElementById('ml-ld').value) || 0, prior_no_shows: parseInt(document.getElementById('ml-pr').value) || 0, appointment_hour: parseInt(document.getElementById('ml-hr').value) || 10, age: parseInt(document.getElementById('ml-ag').value) || 30, distance_km: parseFloat(document.getElementById('ml-di').value) || 5, treatment_cost: parseFloat(document.getElementById('ml-co').value) || 1000, previous_appointments: 2, month: 5, reminder_sent: parseInt(document.getElementById('ml-rm').value), has_insurance: parseInt(document.getElementById('ml-in').value), is_follow_up: 0, gender: 'other', day_of_week: document.getElementById('ml-dy').value, treatment_category: document.getElementById('ml-ca').value });
+      if (!r.success) { el.innerHTML = `<div class="err-msg" style="margin-top:12px">${r.error?.message}</div>`; return; }
+      const d = r.data, pct = (d.no_show_probability * 100).toFixed(1);
+      const color = d.risk_level === 'High' ? 'var(--red)' : d.risk_level === 'Medium' ? 'var(--amber)' : 'var(--green)';
+      const bg = d.risk_level === 'High' ? 'var(--red-bg)' : d.risk_level === 'Medium' ? 'var(--amber-bg)' : 'var(--green-bg)';
+      const bd = d.risk_level === 'High' ? 'var(--red-bd)' : d.risk_level === 'Medium' ? 'var(--amber-bd)' : 'var(--green-bd)';
+      el.innerHTML = `<div style="margin-top:14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:18px;animation:slideUp .2s">
+    <div style="text-align:center;margin-bottom:12px">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:4px">No-show probability</div>
+      <div style="font-family:var(--serif);font-size:54px;line-height:1;color:${color}">${pct}%</div>
+      <div style="margin-top:8px">${riskBadge(d.risk_level, d.no_show_probability)}</div>
+    </div>
+    <div style="background:${bg};border:1px solid ${bd};border-left:3px solid ${color};border-radius:8px;padding:10px 13px;font-size:13px;color:${color}">${d.recommended_action}</div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);display:flex;justify-content:space-between"><span>Model v${d.model_version}</span><span>Confidence: ${d.confidence} · Threshold: ${d.threshold_used}</span></div>
+  </div>`;
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  FILTER HELPER
+    // ═══════════════════════════════════════════════════════════
+
+    function priorityBadge(p) {
+      const cfg = {
+        urgent: { cls: 'bg-red', label: 'Urgent' },
+        high: { cls: 'bg-amber', label: 'High' },
+        normal: { cls: 'bg-blue', label: 'Normal' },
+        low: { cls: 'bg-gray', label: 'Low' },
+      };
+      const c = cfg[p] || cfg.normal;
+      return `<span class="badge ${c.cls}" title="Priority: ${c.label}">${c.label}</span>`;
+    }
+
+    function filterByPriority(p) {
+      // update button styles
+      ['all', 'urgent', 'high', 'normal'].forEach(id => {
+        const el = document.getElementById('pf-' + id);
+        if (!el) return;
+        const active = (p === '' && id === 'all') || p === id;
+        el.style.borderColor = active ? 'var(--green)' : 'var(--border)';
+        el.style.color = active ? 'var(--green)' : 'var(--text2)';
+        el.style.fontWeight = active ? '600' : '500';
+      });
+      const rows = document.querySelectorAll('#ap-body tr');
+      rows.forEach(r => {
+        if (!p) { r.style.display = ''; return; }
+        // priority cell is index 4 (Patient=0,Doctor=1,DateTime=2,Reason=3,Status=4,Risk=5,Priority=6... wait check col order)
+        const cells = r.querySelectorAll('td');
+        const priCell = cells[4]; // priority is 5th column (0-indexed: patient,doctor,datetime,reason,priority,status,risk,actions)
+        r.style.display = (priCell && priCell.textContent.toLowerCase().includes(p)) ? '' : 'none';
+      });
+    }
+
+    // ── Consultation Update Modal ─────────────────────────────────────────────
+    // ── Unified Consultation & Digital Prescription Modal ─────────────────────
+    function rxMedRowHtml(name='', dosage='', freq='', dur='', inst='') {
+      return `
+        <tr class="rx-row">
+          <td style="padding:4px"><input class="rx-m-name" value="${esc(name)}" placeholder="e.g. Amoxicillin 500mg" style="width:100%;padding:4px 6px;font-size:12px;border:1px solid var(--border);border-radius:4px"/></td>
+          <td style="padding:4px"><input class="rx-m-dose" value="${esc(dosage)}" placeholder="1 capsule" style="width:100%;padding:4px 6px;font-size:12px;border:1px solid var(--border);border-radius:4px"/></td>
+          <td style="padding:4px"><input class="rx-m-freq" value="${esc(freq)}" placeholder="Thrice daily" style="width:100%;padding:4px 6px;font-size:12px;border:1px solid var(--border);border-radius:4px"/></td>
+          <td style="padding:4px"><input class="rx-m-dur" value="${esc(dur)}" placeholder="5 days" style="width:100%;padding:4px 6px;font-size:12px;border:1px solid var(--border);border-radius:4px"/></td>
+          <td style="padding:4px"><input class="rx-m-inst" value="${esc(inst)}" placeholder="After meals" style="width:100%;padding:4px 6px;font-size:12px;border:1px solid var(--border);border-radius:4px"/></td>
+          <td style="padding:4px;text-align:center"><button type="button" class="btn btn-sm btn-ghost" onclick="this.closest('tr').remove()" style="color:var(--red);padding:2px 4px">✕</button></td>
+        </tr>
+      `;
+    }
+
+    function addRxMedRow() {
+      const tbody = document.getElementById('v-rx-meds');
+      if (tbody) {
+        const div = document.createElement('tbody');
+        div.innerHTML = rxMedRowHtml();
+        tbody.appendChild(div.firstElementChild);
+      }
+    }
+
+    async function openConsultationAndRx(appointmentId) {
+      if (role() === 'receptionist') {
+        toast('Receptionists do not have access to clinical consultations', 'er');
+        return;
+      }
+      const appt = STATE.appointments.find(a => a.appointment_id === appointmentId);
+      if (!appt) { toast('Appointment not found', 'er'); return; }
+
+      openModal(`
+        <div class="modal-head"><h3>Loading Patient Visit Details…</h3><button class="close-btn" onclick="closeModal()">✕</button></div>
+        <div style="text-align:center;padding:32px"><div class="spinner"></div></div>
+      `, true);
+
+      // Fetch patient profile, past appointments, and past prescriptions
+      const [pRes, apRes, rxRes] = await Promise.all([
+        api('GET', `/patients/${appt.patient_id}`),
+        api('GET', `/appointments?patient_id=${appt.patient_id}`),
+        api('GET', `/prescriptions`)
+      ]);
+
+      const patient = pRes.success ? pRes.data : null;
+      const allAppts = apRes.success ? (apRes.data.items || apRes.data || []) : [];
+      const allRxs = rxRes.success ? (rxRes.data.items || rxRes.data || []) : [];
+
+      // Filter previous completed visits (excluding current appointment)
+      const previousVisits = allAppts.filter(x => x.appointment_id !== appointmentId && x.status === 'completed');
+      // Filter prescriptions for this patient
+      const patientRxs = allRxs.filter(x => Number(x.patient_id) === Number(appt.patient_id));
+
+      const patientName = appt.patient_name || (patient ? `${patient.first_name} ${patient.last_name}` : 'Patient');
+      const doctorName = appt.doctor_name || 'Doctor';
+      const visitDate = fmtDT(appt.scheduled_at);
+
+      let existingRx = patientRxs.find(r => r.appointment_id === appointmentId);
+      let initialMeds = [];
+      if (existingRx) {
+        try { initialMeds = typeof existingRx.medications === 'string' ? JSON.parse(existingRx.medications) : (existingRx.medications || []); } catch(e) { initialMeds = []; }
+      }
+
+      const html = `
+        <div class="modal-head">
+          <div>
+            <h3>Patient Consultation & Visit Records</h3>
+            <div style="font-size:12px;color:var(--text2);margin-top:2px">Patient: <strong>${esc(patientName)}</strong> · Appt #${appt.appointment_id} (${visitDate})</div>
+          </div>
+          <button class="close-btn" onclick="closeModal()">✕</button>
+        </div>
+
+        <!-- PATIENT SUMMARY HEADER -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface2);border-radius:8px;margin-bottom:16px;border:1px solid var(--border);font-size:13px">
+          <div>
+            <div>Phone: <strong>${esc(patient ? patient.phone : '—')}</strong> · Blood Group: <strong>${esc(patient ? (patient.blood_group || '—') : '—')}</strong></div>
+            <div style="font-size:12px;color:var(--text2);margin-top:2px">Reason for Visit: <strong>${esc(appt.reason || 'Routine Checkup')}</strong></div>
+          </div>
+          <div>
+            ${patient && patient.allergies && patient.allergies !== 'None' ? `<span class="badge bg-red">Allergies: ${esc(patient.allergies)}</span>` : '<span class="badge bg-green">No known allergies</span>'}
+          </div>
+        </div>
+
+        <!-- SECTION 1: PREVIOUS VISITS HISTORY (READ ONLY) -->
+        <div style="margin-bottom:20px">
+          <div style="font-weight:700;font-size:13px;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px">
+            Previous Visits & Medical History <span class="badge bg-gray">${previousVisits.length} past visits (Read-Only)</span>
+          </div>
+          ${previousVisits.length ? `
+            <div style="max-height:150px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;background:var(--surface)">
+              ${previousVisits.map(pv => `
+                <div style="padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                    <strong style="color:var(--green);font-size:13px">${fmtD(pv.scheduled_at)} — ${esc(pv.reason || 'Consultation')}</strong>
+                    <span style="color:var(--text3)">Doctor: ${esc(pv.doctor_name || '—')}</span>
+                  </div>
+                  <div style="color:var(--text2)">${esc(pv.notes || 'No visit notes recorded.')}</div>
+                </div>
+              `).join('')}
+            </div>
+          ` : '<div style="font-size:12px;color:var(--text3);padding:10px;background:var(--surface2);border-radius:6px;border:1px solid var(--border)">No previous completed visits recorded for this patient.</div>'}
+        </div>
+
+        <!-- PREVIOUS PRESCRIPTIONS LIST (READ ONLY) -->
+        ${patientRxs.length ? `
+        <div style="margin-bottom:20px">
+          <div style="font-weight:700;font-size:13px;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px">
+            Past Digital Prescriptions <span class="badge bg-blue">${patientRxs.length} rx</span>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            ${patientRxs.map(rx => `
+              <button class="btn btn-sm btn-secondary" onclick="previewPrescription(${rx.prescription_id})" style="font-size:12px">
+                Rx #${String(rx.prescription_id).padStart(4,'0')} (${fmtD(rx.issued_at)})
+              </button>
+            `).join('')}
+          </div>
+        </div>` : ''}
+
+        <hr style="border:0;border-top:1px solid var(--border);margin:20px 0"/>
+
+        <!-- SECTION 2: CURRENT VISIT SUMMARY -->
+        ${(appt.status === 'completed' || role() === 'patient') ? `
+        <div style="background:var(--surface2);padding:16px;border-radius:10px;border:1px solid var(--border)">
+          <div style="font-weight:700;font-size:14px;color:var(--green);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
+            <span>Visit & Consultation Record</span>
+            ${statusBadge(appt.status)}
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;background:var(--surface);padding:12px;border-radius:8px;margin-bottom:14px;border:1px solid var(--border);font-size:13px">
+            <div>
+              <div style="font-size:11px;color:var(--text3);text-transform:uppercase;margin-bottom:2px">Attending Doctor</div>
+              <strong style="color:var(--text)">Dr. ${esc(doctorName)}</strong>
+            </div>
+            <div>
+              <div style="font-size:11px;color:var(--text3);text-transform:uppercase;margin-bottom:2px">Clinical Diagnosis</div>
+              <strong style="color:var(--green)">${esc(existingRx ? existingRx.diagnosis : (appt.reason || 'Pending Diagnosis'))}</strong>
+            </div>
+          </div>
+
+          <div style="margin-bottom:14px">
+            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;margin-bottom:4px;font-weight:600">Consultation & Clinical Notes</div>
+            <div style="font-size:13px;color:var(--text);background:var(--surface);padding:10px 12px;border-radius:6px;border:1px solid var(--border);min-height:50px">
+              ${esc(appt.notes || 'No consultation notes recorded for this visit yet.')}
+            </div>
+          </div>
+
+          <!-- PRESCRIPTION SUMMARY FOR PATIENTS -->
+          ${existingRx ? `
+          <div style="background:var(--surface);border:1px solid var(--green-bd);padding:14px;border-radius:8px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+              <div style="font-weight:700;font-size:13px;color:var(--green)">Digital Prescription (Rx Issued)</div>
+              <button class="btn btn-sm btn-primary" onclick="previewPrescription(${existingRx.prescription_id})">View / Print Digital Rx</button>
+            </div>
+            <div style="font-size:12px;color:var(--text2)">
+              Diagnosis: <strong>${esc(existingRx.diagnosis)}</strong> · Advice: ${esc(existingRx.advice || 'Follow doctor instructions.')}
+            </div>
+          </div>` : `
+          <div style="font-size:12px;color:var(--text3);padding:10px;background:var(--surface);border-radius:6px;border:1px solid var(--border)">
+            No digital prescription has been issued yet for this visit.
+          </div>`}
+        </div>
+
+        <div class="modal-foot" style="margin-top:16px">
+          ${appt.status === 'completed' && isAdmin() ? `
+            <button class="btn btn-ghost" style="color:var(--amber);margin-right:auto;border:1px solid var(--amber-bd);background:var(--amber-bg)" onclick="reopenAppt(${appointmentId})">Re-open Consultation (Admin)</button>
+          ` : ''}
+          <button class="btn btn-secondary" onclick="closeModal()">Close Record</button>
+        </div>
+        ` : `
+        <div style="background:var(--surface2);padding:16px;border-radius:10px;border:1px dashed var(--green-bd)">
+          <div style="font-weight:700;font-size:14px;color:var(--green);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
+            <span>Current Visit Consultation & Digital Prescription</span>
+            <span class="badge bg-green">Active Consultation</span>
+          </div>
+
+          <div class="form-row">
+            <div class="fg">
+              <label>Visit Status</label>
+              <select id="v-status">
+                <option value="completed" ${appt.status === 'completed' ? 'selected' : ''}>Completed</option>
+                <option value="confirmed" ${appt.status === 'confirmed' ? 'selected' : ''}>Confirmed / In Progress</option>
+                <option value="scheduled" ${appt.status === 'scheduled' ? 'selected' : ''}>Scheduled</option>
+                <option value="no_show" ${appt.status === 'no_show' ? 'selected' : ''}>No-Show</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label>Clinical Diagnosis *</label>
+              <input id="v-diag" placeholder="e.g. Acute Pulpitis, Dental Caries, Gingivitis" value="${esc(existingRx ? existingRx.diagnosis : '')}"/>
+            </div>
+          </div>
+
+          <div class="fg">
+            <label>Consultation & Treatment Notes</label>
+            <textarea id="v-notes" style="min-height:75px;resize:vertical" placeholder="Enter clinical findings, procedure performed, advice…">${esc(appt.notes || '')}</textarea>
+          </div>
+
+          <!-- EMBEDDED PRESCRIPTION GENERATOR -->
+          <div style="background:var(--surface);padding:14px;border-radius:8px;border:1px solid var(--border);margin-top:14px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+              <div style="font-weight:700;font-size:13px;color:var(--green)">Digital Prescription (Rx)</div>
+              <button type="button" class="btn btn-sm btn-secondary" onclick="addRxMedRow()">+ Add Medication</button>
+            </div>
+
+            <table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:10px">
+              <thead>
+                <tr style="background:var(--surface2);text-align:left">
+                  <th style="padding:6px 8px">Medicine Name *</th>
+                  <th style="padding:6px 8px;width:110px">Dosage</th>
+                  <th style="padding:6px 8px;width:130px">Frequency</th>
+                  <th style="padding:6px 8px;width:90px">Duration</th>
+                  <th style="padding:6px 8px">Instructions</th>
+                  <th style="padding:6px 4px;width:30px"></th>
+                </tr>
+              </thead>
+              <tbody id="v-rx-meds">
+                ${initialMeds.length ? initialMeds.map(m => rxMedRowHtml(m.name, m.dosage, m.frequency, m.duration, m.instructions)).join('') : rxMedRowHtml('Amoxicillin 500mg', '1 capsule', 'Thrice daily', '5 days', 'After food') + rxMedRowHtml('Paracetamol 650mg', '1 tablet', 'Twice daily (SOS)', '3 days', 'Take after food')}
+              </tbody>
+            </table>
+
+            <div class="fg" style="margin-bottom:0">
+              <label>Doctor Advice & Home Care Instructions</label>
+              <textarea id="v-rx-advice" style="min-height:50px;resize:vertical" placeholder="e.g. Avoid hot/cold food, maintain soft diet, perform warm saline gargle 3 times daily.">${esc(existingRx ? existingRx.advice : 'Avoid hot/cold drinks. Maintain soft diet and oral hygiene.')}</textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-foot" style="margin-top:16px">
+          <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-ghost" style="color:var(--amber)" onclick="saveVisitAndRx(${appointmentId}, false)">Save Notes Only</button>
+          <button class="btn btn-primary" onclick="saveVisitAndRx(${appointmentId}, true)">Save Visit & Generate Rx</button>
+        </div>
+        `}
+      `;
+
+      openModal(html, true);
+    }
+
+    async function saveVisitAndRx(appointmentId, issueRx) {
+      if (role() === 'patient') {
+        toast('Patients cannot modify clinical records', 'er');
+        return;
+      }
+      const appt = STATE.appointments.find(a => a.appointment_id === appointmentId);
+      if (!appt) return;
+
+      if (appt.status === 'completed') {
+        toast('Completed consultations are read-only. Contact an Admin to re-open if editing is required.', 'er');
+        return;
+      }
+
+      const status = document.getElementById('v-status').value;
+      const diag = document.getElementById('v-diag').value.trim();
+      const notes = document.getElementById('v-notes').value.trim();
+      const advice = document.getElementById('v-rx-advice').value.trim();
+
+      const rows = document.querySelectorAll('.rx-row');
+      const meds = [];
+      rows.forEach(r => {
+        const name = r.querySelector('.rx-m-name')?.value.trim();
+        if (name) {
+          meds.push({
+            name: name,
+            dosage: r.querySelector('.rx-m-dose')?.value.trim() || '1 tablet',
+            frequency: r.querySelector('.rx-m-freq')?.value.trim() || 'Twice daily',
+            duration: r.querySelector('.rx-m-dur')?.value.trim() || '5 days',
+            instructions: r.querySelector('.rx-m-inst')?.value.trim() || 'After food'
+          });
+        }
+      });
+
+      // Update appointment status & notes
+      const apptRes = await api('PATCH', `/appointments/${appointmentId}`, {
+        status: status,
+        notes: notes
+      });
+
+      if (!apptRes.success) {
+        toast(apptRes.error?.message || 'Failed to update visit notes', 'er');
+        return;
+      }
+
+      let rxId = null;
+      if (issueRx) {
+        if (!diag) {
+          toast('Please enter a Clinical Diagnosis before generating prescription', 'er');
+          return;
+        }
+        const rxRes = await api('POST', '/prescriptions', {
+          appointment_id: appointmentId,
+          patient_id: appt.patient_id,
+          doctor_id: appt.doctor_id || 1,
+          diagnosis: diag,
+          medications: meds,
+          advice: advice
+        });
+        if (rxRes.success) {
+          rxId = rxRes.data.prescription_id;
+        }
+      }
+
+      toast('Visit updated successfully!');
+      closeModal();
+      await loadData();
+      renderPage();
+
+      if (rxId) {
+        previewPrescription(rxId);
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  DIGITAL PRESCRIPTIONS & PATIENT PROFILE
+    // ═══════════════════════════════════════════════════════════
+    function prescriptionsPage() {
+      const rxs = STATE.prescriptions || [];
+      const canIssue = ['admin', 'doctor', 'receptionist'].includes(role());
+
+      const rows = rxs.map((rx) => {
+        let meds = [];
+        try {
+          meds = typeof rx.medications === 'string' ? JSON.parse(rx.medications) : (rx.medications || []);
+        } catch (e) { meds = []; }
+
+        const medNames = meds.map(m => m.name).filter(Boolean).join(', ');
+
+        return `<tr>
+          <td><span style="font-family:monospace;font-size:12px;font-weight:600;color:var(--green)">RX-${String(rx.prescription_id).padStart(4, '0')}</span></td>
+          <td><span style="font-family:monospace;font-size:12px">${fmtD(rx.issued_at)}</span></td>
+          ${role() === 'patient' ? '' : `<td><strong>${esc(rx.patient_name)}</strong><br><span style="font-size:11px;color:var(--text2)">${esc(rx.patient_phone || '')}</span></td>`}
+          <td><strong>Dr. ${esc(rx.doctor_name)}</strong><br><span style="font-size:11px;color:var(--text2)">${esc(rx.doctor_specialisation || '')}</span></td>
+          <td><strong>${esc(rx.diagnosis || '—')}</strong></td>
+          <td>
+            <span style="font-size:12px;font-weight:600;color:var(--text)">${meds.length} item(s)</span>
+            <div style="font-size:11px;color:var(--text2);max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${esc(medNames)}">${esc(medNames || '—')}</div>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-primary" onclick="previewPrescription(${rx.prescription_id})">View / Print Rx</button>
+          </td>
+        </tr>`;
+      }).join('');
+
+      return `
+        <div class="toolbar">
+          <div class="search"><span class="search-ic"></span>
+            <input id="rx-s" placeholder="Search by diagnosis or doctor…" oninput="filterTable('rx-s','rx-body',${role() === 'patient' ? '1,3' : '2,3,4'})"/>
+          </div>
+          ${canIssue ? `<button class="btn btn-primary" onclick="openNewPrescriptionModal()">+ Issue Prescription</button>` : ''}
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <span class="panel-title">Digital Sample Prescriptions (${rxs.length})</span>
+          </div>
+          <div class="tbl"><table>
+            <thead><tr><th>Rx ID</th><th>Date</th>${role() === 'patient' ? '' : '<th>Patient</th>'}<th>Doctor</th><th>Diagnosis</th><th>Medications</th><th>Action</th></tr></thead>
+            <tbody id="rx-body">
+            ${rows || `<tr><td colspan="${role() === 'patient' ? 6 : 7}" class="empty"><div class="empty-icon"></div>No digital prescriptions found.</td></tr>`}
+            </tbody>
+          </table></div>
+        </div>
+      `;
+    }
+
+    function previewPrescription(rxId) {
+      const rx = STATE.prescriptions.find(p => p.prescription_id === rxId);
+      if (!rx) { toast('Prescription not found', 'er'); return; }
+      
+      let meds = [];
+      try {
+        meds = typeof rx.medications === 'string' ? JSON.parse(rx.medications) : (rx.medications || []);
+      } catch(e) { meds = []; }
+
+      const patientName = rx.patient_name || 'Patient';
+      const patientPhone = rx.patient_phone || '—';
+      const patientDob = rx.patient_dob ? fmtD(rx.patient_dob) : '—';
+      const patientGender = (rx.patient_gender || '—').toUpperCase();
+      
+      const doctorName = rx.doctor_name || 'Doctor';
+      const doctorSpec = rx.doctor_specialisation || 'Dentistry';
+      const doctorLic = rx.doctor_license || 'MCI-DEN-REG';
+      
+      const rxNo = `RX-${String(rx.prescription_id).padStart(4, '0')}`;
+      const dateStr = fmtD(rx.issued_at);
+      
+      const rxHtml = `
+        <div class="modal-head">
+          <h3>Digital Prescription</h3>
+          <button class="close-btn" onclick="closeModal()">✕</button>
+        </div>
+        
+        <div id="rx-print-area" style="background:#ffffff;color:#0f172a;padding:24px;border-radius:12px;border:1px solid #cbd5e1;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+          <!-- Clinic Header -->
+          <div style="display:flex;justify-content:space-between;border-bottom:2px solid #10b981;padding-bottom:14px;margin-bottom:16px;">
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:22px;font-weight:800;color:#059669;">
+                <span>SmileClinic</span>
+              </div>
+              <div style="font-size:12px;color:#475569;margin-top:2px;font-weight:500;">Advanced Dental Care & Multispecialty Clinic</div>
+              <div style="font-size:11px;color:#64748b;">123 Healthcare Ave, Dental Wing · +91-9876543210</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:16px;font-weight:700;color:#0f172a;">Dr. ${esc(doctorName)}</div>
+              <div style="font-size:12px;color:#059669;font-weight:600;">${esc(doctorSpec)}</div>
+              <div style="font-size:11px;color:#64748b;">Lic No: ${esc(doctorLic)}</div>
+            </div>
+          </div>
+
+          <!-- Patient & Meta -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;background:#f8fafc;padding:12px 14px;border-radius:8px;font-size:13px;margin-bottom:16px;border:1px solid #e2e8f0;">
+            <div>
+              <div>Patient: <strong style="color:#0f172a;">${esc(patientName)}</strong></div>
+              <div>Gender / DOB: <strong>${esc(patientGender)} (${esc(patientDob)})</strong></div>
+              <div>Contact: <strong>${esc(patientPhone)}</strong></div>
+            </div>
+            <div style="text-align:right;">
+              <div>Prescription No: <strong style="color:#059669;">${rxNo}</strong></div>
+              <div>Issued Date: <strong>${dateStr}</strong></div>
+              ${rx.appointment_reason ? `<div>Visit Reason: <strong>${esc(rx.appointment_reason)}</strong></div>` : ''}
+            </div>
+          </div>
+
+          <!-- Diagnosis -->
+          ${rx.diagnosis ? `
+            <div style="margin-bottom:16px;padding:10px 14px;background:#f1f5f9;border-radius:6px;">
+              <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;">Clinical Diagnosis</div>
+              <div style="font-size:15px;font-weight:700;color:#0f172a;margin-top:2px;">${esc(rx.diagnosis)}</div>
+            </div>` : ''}
+
+          <!-- Rx Section -->
+          <div style="margin-bottom:20px;">
+            <div style="font-size:24px;font-weight:800;color:#059669;font-family:serif;margin-bottom:8px;">Rx</div>
+            <table style="width:100%;border-collapse:collapse;font-size:13px;">
+              <thead>
+                <tr style="background:#e2e8f0;color:#1e293b;text-align:left;">
+                  <th style="padding:8px 10px;border-radius:4px 0 0 4px;">#</th>
+                  <th style="padding:8px 10px;">Medicine Name</th>
+                  <th style="padding:8px 10px;">Dosage</th>
+                  <th style="padding:8px 10px;">Frequency</th>
+                  <th style="padding:8px 10px;">Duration</th>
+                  <th style="padding:8px 10px;border-radius:0 4px 4px 0;">Instructions</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${meds.map((m, idx) => `
+                  <tr style="border-bottom:1px solid #e2e8f0;">
+                    <td style="padding:10px;font-weight:600;color:#64748b;">${idx + 1}</td>
+                    <td style="padding:10px;font-weight:700;color:#0f172a;">${esc(m.name || '—')}</td>
+                    <td style="padding:10px;color:#334155;">${esc(m.dosage || '—')}</td>
+                    <td style="padding:10px;color:#059669;font-weight:700;">${esc(m.frequency || '—')}</td>
+                    <td style="padding:10px;color:#334155;">${esc(m.duration || '—')}</td>
+                    <td style="padding:10px;font-style:italic;color:#64748b;">${esc(m.instructions || '—')}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Advice -->
+          ${rx.advice ? `
+            <div style="background:#ecfdf5;border-left:4px solid #10b981;padding:12px;border-radius:4px;margin-bottom:20px;">
+              <div style="font-size:11px;font-weight:700;color:#047857;text-transform:uppercase;">Doctor's Advice & Care Instructions</div>
+              <div style="font-size:13px;color:#065f46;margin-top:4px;font-weight:500;">${esc(rx.advice)}</div>
+            </div>` : ''}
+
+          <!-- Footer Signature -->
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:24px;padding-top:14px;border-top:1px dashed #cbd5e1;">
+            <div style="font-size:11px;color:#94a3b8;">
+              <div>Verified Digital Sample Prescription · SmileClinic DMS</div>
+              <div>This document is electronically generated and valid for clinical reference.</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-family:Georgia,serif;font-size:18px;font-weight:bold;color:#059669;margin-bottom:4px;font-style:italic;">Dr. ${esc(doctorName)}</div>
+              <div style="border-top:1px solid #0f172a;width:170px;font-size:11px;color:#64748b;padding-top:4px;">Authorized Doctor Signature</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end;align-items:center;">
+          <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+          <button class="btn btn-primary" style="background:var(--blue);border-color:var(--blue);" onclick="printPrescriptionModal()">Print Prescription</button>
+          <button class="btn btn-primary" onclick="downloadPrescriptionModal(${rx.prescription_id})">Download Prescription</button>
+        </div>
+      `;
+      openModal(rxHtml, true);
+    }
+
+    function printPrescriptionModal() {
+      const el = document.getElementById('rx-print-area');
+      if (!el) return;
+      const w = window.open('', '_blank');
+      w.document.write(`
+        <html>
+          <head>
+            <title>Digital Prescription - SmileClinic</title>
+            <style>
+              body { font-family: system-ui, -apple-system, sans-serif; padding: 20px; background: #fff; }
+              table { width: 100%; border-collapse: collapse; }
+              th, td { padding: 8px; text-align: left; }
+              @media print { body { padding: 0; } }
+            </style>
+          </head>
+          <body>
+            ${el.outerHTML}
+            <script>window.onload = () => { window.print(); window.close(); };<\/script>
+          </body>
+        </html>
+      `);
+      w.document.close();
+    }
+
+    function downloadPrescriptionModal(rxId) {
+      const rx = STATE.prescriptions.find(p => p.prescription_id === rxId);
+      const el = document.getElementById('rx-print-area');
+      if (!el || !rx) return;
+      
+      const patientClean = (rx.patient_name || 'Patient').replace(/[^a-zA-Z0-9]/g, '_');
+      const fileName = `Prescription_RX-${String(rx.prescription_id).padStart(4, '0')}_${patientClean}.html`;
+
+      const fullHtml = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Digital Prescription - RX-${String(rx.prescription_id).padStart(4, '0')}</title>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; background: #f8fafc; padding: 30px; display: flex; justify-content: center; }
+    .page-box { max-width: 800px; width: 100%; background: #ffffff; padding: 32px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid #cbd5e1; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px; text-align: left; }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .page-box { box-shadow: none; border: none; padding: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-box">
+    ${el.outerHTML}
+  </div>
+</body>
+</html>`;
+
+      const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast('Digital Prescription downloaded successfully!');
+    }
+
+    function openNewPrescriptionModal(presetApptId = null, presetPatientId = null) {
+      const appt = presetApptId ? STATE.appointments.find(a => a.appointment_id === presetApptId) : null;
+      const patientId = presetPatientId || (appt ? appt.patient_id : '');
+      const doctorId = appt ? appt.doctor_id : (isDoctor() ? (STATE.doctors.find(d => d.user_id === STATE.user.userId)?.doctor_id || '') : '');
+
+      const modalHtml = `
+        <div class="modal-head">
+          <h3>Issue Digital Prescription</h3>
+          <button class="close-btn" onclick="closeModal()">✕</button>
+        </div>
+        
+        <div style="display:flex;flex-direction:column;gap:14px;margin-top:12px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="fg">
+              <label>Patient *</label>
+              <select id="rx-pat-id">
+                <option value="">Select Patient</option>
+                ${STATE.patients.map(p => `<option value="${p.patient_id}" ${p.patient_id == patientId ? 'selected' : ''}>${esc(p.first_name)} ${esc(p.last_name)} (${esc(p.phone)})</option>`).join('')}
+              </select>
+            </div>
+            <div class="fg">
+              <label>Doctor *</label>
+              <select id="rx-doc-id">
+                <option value="">Select Doctor</option>
+                ${STATE.doctors.map(d => `<option value="${d.doctor_id}" ${d.doctor_id == doctorId ? 'selected' : ''}>Dr. ${esc(d.first_name)} ${esc(d.last_name)} (${esc(d.specialisation)})</option>`).join('')}
+              </select>
+            </div>
+          </div>
+          
+          <div class="fg">
+            <label>Clinical Diagnosis</label>
+            <input id="rx-diag" placeholder="e.g. Acute Pulpitis, Dental Plaque, Sensitivity..." value="${appt ? esc(appt.reason || '') : ''}"/>
+          </div>
+
+          <div class="fg">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <label style="margin:0">Medications *</label>
+              <button class="btn btn-sm btn-secondary" onclick="addMedRow()">+ Add Medicine</button>
+            </div>
+            <div id="meds-container" style="display:flex;flex-direction:column;gap:8px;">
+              <div class="med-row" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 2fr 30px;gap:6px;align-items:center;">
+                <input class="m-name" placeholder="Medicine Name (e.g. Amoxicillin 500mg)"/>
+                <input class="m-dose" placeholder="Dosage (1 cap)"/>
+                <input class="m-freq" placeholder="Frequency (1-0-1)"/>
+                <input class="m-dur" placeholder="Duration (5 days)"/>
+                <input class="m-inst" placeholder="Instructions (After meals)"/>
+                <button class="btn btn-sm btn-secondary" style="padding:4px;" onclick="this.closest('.med-row').remove()">✕</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="fg">
+            <label>Doctor's Advice & Care Instructions</label>
+            <textarea id="rx-advice" rows="2" placeholder="e.g. Avoid cold food, warm saline gargle 3x daily..."></textarea>
+          </div>
+
+          <button class="btn btn-primary btn-full" onclick="savePrescription(${presetApptId || 'null'})">Issue Prescription →</button>
+        </div>
+      `;
+      openModal(modalHtml, true);
+    }
+
+    function addMedRow() {
+      const container = document.getElementById('meds-container');
+      if (!container) return;
+      const div = document.createElement('div');
+      div.className = 'med-row';
+      div.style.cssText = 'display:grid;grid-template-columns:2fr 1fr 1fr 1fr 2fr 30px;gap:6px;align-items:center;';
+      div.innerHTML = `
+        <input class="m-name" placeholder="Medicine Name"/>
+        <input class="m-dose" placeholder="Dosage"/>
+        <input class="m-freq" placeholder="Frequency"/>
+        <input class="m-dur" placeholder="Duration"/>
+        <input class="m-inst" placeholder="Instructions"/>
+        <button class="btn btn-sm btn-secondary" style="padding:4px;" onclick="this.closest('.med-row').remove()">✕</button>
+      `;
+      container.appendChild(div);
+    }
+
+    async function savePrescription(apptId) {
+      const patient_id = document.getElementById('rx-pat-id').value;
+      const doctor_id = document.getElementById('rx-doc-id').value;
+      const diagnosis = document.getElementById('rx-diag').value.trim();
+      const advice = document.getElementById('rx-advice').value.trim();
+      
+      const medRows = document.querySelectorAll('.med-row');
+      const medications = [];
+      medRows.forEach(row => {
+        const name = row.querySelector('.m-name').value.trim();
+        if (name) {
+          medications.push({
+            name,
+            dosage: row.querySelector('.m-dose').value.trim(),
+            frequency: row.querySelector('.m-freq').value.trim(),
+            duration: row.querySelector('.m-dur').value.trim(),
+            instructions: row.querySelector('.m-inst').value.trim()
+          });
+        }
+      });
+
+      if (!patient_id || !doctor_id || medications.length === 0) {
+        toast('Patient, Doctor and at least one medication are required.', 'er');
+        return;
+      }
+
+      const res = await api('POST', '/prescriptions', {
+        patient_id: parseInt(patient_id),
+        doctor_id: parseInt(doctor_id),
+        appointment_id: apptId ? parseInt(apptId) : null,
+        diagnosis,
+        medications,
+        advice
+      });
+
+      if (res.success) {
+        toast('Digital Prescription issued successfully!');
+        closeModal();
+        await loadData();
+        renderPage();
+        if (res.data?.prescription_id) {
+          previewPrescription(res.data.prescription_id);
+        }
+      } else {
+        toast(res.error?.message || 'Failed to issue prescription', 'er');
+      }
+    }
+
+    function profilePage() {
+      const p = STATE.myPatientProfile || STATE.patients.find(pat => pat.user_id === STATE.user?.userId) || STATE.patients[0];
+      if (!p) {
+        return `<div class="card"><p>No patient profile linked to this account yet.</p></div>`;
+      }
+      return `
+        <div style="max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:20px;">
+          <div class="card" style="background:linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(59, 130, 246, 0.05));border:1px solid var(--green-bd);padding:20px;">
+            <div style="display:flex;align-items:center;gap:16px;">
+              <div style="width:60px;height:60px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;">
+                ${(p.first_name || 'P')[0].toUpperCase()}
+              </div>
+              <div>
+                <h2 style="margin:0;font-size:22px;color:var(--text);">${esc(p.first_name)} ${esc(p.last_name)}</h2>
+                <div style="font-size:13px;color:var(--text2);margin-top:2px;">Patient ID: #${p.patient_id} · Email: ${esc(p.email || STATE.user?.email)}</div>
+                <div style="display:flex;gap:8px;margin-top:8px;">
+                  <span class="badge bg-green">Blood Group: ${esc(p.blood_group || 'Not specified')}</span>
+                  <span class="badge bg-amber">Allergies: ${esc(p.allergies || 'None reported')}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 style="margin-top:0;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:10px;">Personal & Medical Health Record</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:14px;">
+              <div>
+                <div style="color:var(--text2);font-size:12px;font-weight:600;">FULL NAME</div>
+                <div style="font-weight:600;margin-top:2px;">${esc(p.first_name)} ${esc(p.last_name)}</div>
+              </div>
+              <div>
+                <div style="color:var(--text2);font-size:12px;font-weight:600;">PHONE NUMBER</div>
+                <div style="font-weight:600;margin-top:2px;">${esc(p.phone || '—')}</div>
+              </div>
+              <div>
+                <div style="color:var(--text2);font-size:12px;font-weight:600;">DATE OF BIRTH</div>
+                <div style="font-weight:600;margin-top:2px;">${fmtD(p.date_of_birth)}</div>
+              </div>
+              <div>
+                <div style="color:var(--text2);font-size:12px;font-weight:600;">GENDER</div>
+                <div style="font-weight:600;margin-top:2px;text-transform:capitalize;">${esc(p.gender || '—')}</div>
+              </div>
+              <div>
+                <div style="color:var(--text2);font-size:12px;font-weight:600;">BLOOD GROUP</div>
+                <div style="font-weight:600;margin-top:2px;">${esc(p.blood_group || '—')}</div>
+              </div>
+              <div>
+                <div style="color:var(--text2);font-size:12px;font-weight:600;">KNOWN ALLERGIES</div>
+                <div style="font-weight:600;color:var(--amber);margin-top:2px;">${esc(p.allergies || 'None')}</div>
+              </div>
+              <div style="grid-column: span 2;">
+                <div style="color:var(--text2);font-size:12px;font-weight:600;">ADDRESS</div>
+                <div style="font-weight:600;margin-top:2px;">${esc(p.address || '—')}</div>
+              </div>
+              <div style="grid-column: span 2;">
+                <div style="color:var(--text2);font-size:12px;font-weight:600;">MEDICAL NOTES / HISTORY</div>
+                <div style="font-weight:500;margin-top:2px;background:var(--bg);padding:10px;border-radius:6px;border:1px solid var(--border);">${esc(p.medical_notes || 'No chronic medical history recorded.')}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  RENDER
+    // ═══════════════════════════════════════════════════════════
+    function renderPage() {
+      const app = document.getElementById('app');
+      if (!STATE.user) { app.innerHTML = authPage(); return; }
+      let inner = '';
+      if (STATE.page === 'dashboard') inner = dashboardPage();
+      else if (STATE.page === 'patients') inner = patientsPage();
+      else if (STATE.page === 'appointments') inner = appointmentsPage();
+      else if (STATE.page === 'billing') inner = billingPage();
+      else if (STATE.page === 'doctors') inner = doctorsPage();
+      else if (STATE.page === 'ml') inner = mlPage();
+      else if (STATE.page === 'prescriptions') inner = prescriptionsPage();
+      else if (STATE.page === 'profile') inner = profilePage();
+      else inner = dashboardPage();
+      app.innerHTML = shell(inner);
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  BOOT
+    // ═══════════════════════════════════════════════════════════
+    (async () => {
+      const token = localStorage.getItem('sc_token');
+      if (token) {
+        const r = await api('GET', '/auth/me');
+        if (r.success && r.data) { STATE.user = r.data; await loadData(); }
+        else localStorage.removeItem('sc_token');
+      }
+      renderPage();
+    })();
+  </script>
+</body>
+
+</html>
