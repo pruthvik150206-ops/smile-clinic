@@ -39,20 +39,12 @@ app.use('/api', rateLimit({
   message:  { success: false, error: { code: 'RATE_LIMITED', message: 'Too many requests.' } }
 }));
 
+const path = require('path');
+const staticPath = path.join(__dirname, '../../frontend/static');
+app.use(express.static(staticPath));
+
 app.get('/', (req, res) => {
-  res.json({
-    success: true,
-    message: 'Welcome to SmileClinic API',
-    endpoints: {
-      health: '/api/health',
-      auth: '/api/auth',
-      patients: '/api/patients',
-      doctors: '/api/doctors',
-      appointments: '/api/appointments',
-      treatments: '/api/treatments',
-      invoices: '/api/invoices'
-    }
-  });
+  res.sendFile(path.join(staticPath, 'index.html'));
 });
 
 app.get('/api/health', async (req, res) => {
