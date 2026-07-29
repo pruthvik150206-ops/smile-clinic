@@ -41,7 +41,6 @@ app.use('/api', rateLimit({
   message:  { success: false, error: { code: 'RATE_LIMITED', message: 'Too many requests.' } }
 }));
 
-const path = require('path');
 const staticPath = path.join(__dirname, '../../frontend/static');
 app.use(express.static(staticPath));
 
