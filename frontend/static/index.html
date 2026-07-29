@@ -1198,10 +1198,12 @@
     const canSeeBilling = () => ['admin', 'receptionist'].includes(role());
 
     function toast(msg, type = 'ok') {
+      const container = document.getElementById('toasts');
+      if (!container) return;
       const d = document.createElement('div');
       d.className = `toast ${type}`;
       d.innerHTML = `<span>${type === 'ok' ? '✓' : type === 'er' ? '✕' : 'ℹ'}</span><span>${esc(msg)}</span>`;
-      document.getElementById('toasts').appendChild(d);
+      container.appendChild(d);
       setTimeout(() => d.remove(), 3200);
     }
     function riskBadge(risk, prob) {
@@ -3959,13 +3961,22 @@
     //  BOOT
     // ═══════════════════════════════════════════════════════════
     (async () => {
-      const token = localStorage.getItem('sc_token');
-      if (token) {
-        const r = await api('GET', '/auth/me');
-        if (r.success && r.data) { STATE.user = r.data; await loadData(); }
-        else localStorage.removeItem('sc_token');
+      try {
+        const token = localStorage.getItem('sc_token');
+        if (token) {
+          const r = await api('GET', '/auth/me');
+          if (r.success && r.data) {
+            STATE.user = r.data;
+            try { await loadData(); } catch (err) { console.error('Data load error:', err); }
+          } else {
+            localStorage.removeItem('sc_token');
+          }
+        }
+      } catch (e) {
+        console.error('Boot error:', e);
+      } finally {
+        renderPage();
       }
-      renderPage();
     })();
   </script>
 </body>
