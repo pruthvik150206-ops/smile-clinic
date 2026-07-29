@@ -72,17 +72,19 @@ app.use('/api/ml',           mlRoutes);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-const start = async () => {
-  try {
-    await testConnection();
-    app.listen(PORT, () => {
-      logger.info(`SmileClinic API running on port ${PORT}`);
-    });
-  } catch (err) {
-    logger.error('Failed to start', { error: err.message });
-    process.exit(1);
-  }
-};
+if (require.main === module) {
+  const start = async () => {
+    try {
+      await testConnection();
+      app.listen(PORT, () => {
+        logger.info(`SmileClinic API running on port ${PORT}`);
+      });
+    } catch (err) {
+      logger.error('Failed to start', { error: err.message });
+      process.exit(1);
+    }
+  };
+  start();
+}
 
-start();
 module.exports = app;
