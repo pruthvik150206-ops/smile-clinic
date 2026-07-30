@@ -1,8 +1,9 @@
 const bcrypt   = require('bcryptjs');
 const UserModel = require('../models/user.model');
 const PatientModel = require('../models/patient.model');
+const { sendOTPEmail } = require('../services/emailService');
 const { signAccess, signRefresh, verifyRefresh } = require('../utils/jwt');
-const { success, created, badRequest, unauthorized, conflict } = require('../utils/response');
+const { success, created, badRequest, unauthorized, conflict, notFound } = require('../utils/response');
 const logger = require('../utils/logger');
 
 const SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS || '12');
@@ -60,11 +61,12 @@ const AuthController = {
     if (user.is_2fa_enabled) {
       const otp = Math.floor(100000 + Math.random() * 900000).toString();
       await UserModel.saveOtp({ userId: user.user_id, otpCode: otp, purpose: '2fa_login' });
+      await sendOTPEmail(user.email, otp, '2fa_login');
       logger.info('2FA OTP generated for user', { userId: user.user_id });
       return success(res, {
         requires2FA: true,
         email: user.email,
-        message: '2FA verification code sent',
+        message: '2FA verification code sent to your email',
         demoOtp: otp
       });
     }
@@ -119,6 +121,7 @@ const AuthController = {
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     await UserModel.saveOtp({ userId: user.user_id, otpCode: otp, purpose: 'forgot_password' });
+    await sendOTPEmail(user.email, otp, 'forgot_password');
 
     logger.info('Forgot Password OTP generated', { userId: user.user_id });
     return success(res, {

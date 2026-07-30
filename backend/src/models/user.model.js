@@ -53,10 +53,10 @@ const UserModel = {
     await db.query(
       `UPDATE users 
        SET otp_code = $1, 
-           otp_expires_at = NOW() + ($2 || '10 minutes')::INTERVAL, 
+           otp_expires_at = NOW() + ($2 * INTERVAL '1 minute'), 
            otp_purpose = $3 
        WHERE user_id = $4`,
-      [otpCode, `${expiresMinutes} minutes`, purpose, userId]
+      [otpCode, parseInt(expiresMinutes) || 10, purpose, userId]
     );
   },
 

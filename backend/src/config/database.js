@@ -60,9 +60,22 @@ const withTransaction = async (callback) => {
 
 const testConnection = async () => {
   const client = await pool.connect();
-  const { rows } = await client.query('SELECT NOW() AS now');
-  client.release();
-  logger.info(`PostgreSQL connected — server time: ${rows[0].now}`);
+  try {
+    const { rows } = await client.query('SELECT NOW() AS now');
+    logger.info(`PostgreSQL connected — server time: ${rows[0].now}`);
+
+    // Ensure OTP & 2FA columns exist in PostgreSQL users table
+    await client.query(`
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS otp_code VARCHAR(10);
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS otp_expires_at TIMESTAMP;
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS otp_purpose VARCHAR(30);
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS is_2fa_enabled BOOLEAN DEFAULT FALSE;
+    `);
+  } catch (err) {
+    logger.error('PostgreSQL column migration error', { error: err.message });
+  } finally {
+    client.release();
+  }
 };
 
 module.exports = { query, withTransaction, testConnection, pool };
