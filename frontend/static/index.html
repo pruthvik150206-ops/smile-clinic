@@ -1231,10 +1231,16 @@
           ...(body ? { body: JSON.stringify(body) } : {})
         });
         const j = await res.json();
-        if (!j.success && res.status === 401 && path !== '/auth/login') { localStorage.removeItem('sc_token'); STATE.user = null; renderPage(); }
+        if (!j.success && res.status === 401 && path !== '/auth/login') {
+          if (localStorage.getItem('sc_token')) {
+            localStorage.removeItem('sc_token');
+            STATE.user = null;
+            renderPage();
+          }
+        }
         return j;
       } catch (e) {
-        toast('Cannot reach server. Make sure server.py is running on port 8080.', 'er');
+        toast('Cannot reach server. Make sure the backend server is running.', 'er');
         return { success: false, error: { message: e.message } };
       }
     }
@@ -1243,6 +1249,7 @@
     //  DATA LOADING
     // ═══════════════════════════════════════════════════════════
     async function loadData() {
+      if (!localStorage.getItem('sc_token')) return;
       const calls = [
         api('GET', '/patients'), api('GET', '/doctors'),
         api('GET', '/appointments'), api('GET', '/treatments'),
@@ -1453,7 +1460,7 @@
       <div class="auth-copy">© 2026 SmileClinic DMS</div>
     </div>
 
-    <!-- RIGHT — login form -->
+    <!-- RIGHT — single unified login form -->
     <div class="auth-form">
       <div class="auth-box">
         <h2>Sign in</h2>
@@ -1461,22 +1468,12 @@
         <div id="auth-err" style="display:none" class="err-msg"></div>
         
         <div class="fg">
-          <label>Quick Demo Login</label>
-          <div class="role-strip">
-            <button class="rpill on" onclick="selectRole('admin')" id="pill-admin">Admin</button>
-            <button class="rpill" onclick="selectRole('doctor')" id="pill-doctor">Doctor</button>
-            <button class="rpill" onclick="selectRole('recept')" id="pill-recept">Receptionist</button>
-            <button class="rpill" onclick="selectRole('patient')" id="pill-patient">Patient</button>
-          </div>
-        </div>
-
-        <div class="fg">
-          <label>Email</label>
-          <input id="a-email" type="email" value="admin@smile.in" placeholder="your@email.com"/>
+          <label>Email or Username</label>
+          <input id="a-email" type="text" placeholder="you@smile.in or username" onkeydown="if(event.key==='Enter')doLogin()"/>
         </div>
         <div class="fg">
           <label>Password</label>
-          <input id="a-pass" type="password" value="admin123" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
+          <input id="a-pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
         </div>
 
         <button class="btn btn-primary btn-full" style="margin-bottom:14px" onclick="doLogin()" id="login-btn">Sign in →</button>
@@ -1489,40 +1486,22 @@
   </div>`;
     }
 
-    function selectRole(role) {
-      const cfg = {
-        admin: { email: 'admin@smile.in', pass: 'admin123' },
-        doctor: { email: 'doctor@smile.in', pass: 'doctor123' },
-        recept: { email: 'recept@smile.in', pass: 'recept123' },
-        patient: { email: 'meera@patient.in', pass: 'patient123' },
-      };
-      const c = cfg[role] || cfg.admin;
+    function selectRole(r) { }  // keep stub for compatibility
+    function setDemo(r, el) { }  // keep stub for compatibility
 
-      // Update pills highlighting
-      ['admin', 'doctor', 'recept', 'patient'].forEach(r => {
-        const el = document.getElementById('pill-' + r);
-        if (el) el.classList.remove('on');
-      });
-      const sel = document.getElementById('pill-' + role);
-      if (sel) sel.classList.add('on');
-
-      // Pre-fill inputs
-      document.getElementById('a-email').value = c.email;
-      document.getElementById('a-pass').value = c.pass;
-      document.getElementById('auth-err').style.display = 'none';
-      document.getElementById('a-email').focus();
-    }
-
-    function setDemo(r, el) { }  // keep for compatibility
     async function doLogin() {
-      const email = (document.getElementById('a-email')?.value || '').trim();
+      const loginInput = (document.getElementById('a-email')?.value || '').trim();
       const pass = document.getElementById('a-pass')?.value || '';
       const errEl = document.getElementById('auth-err');
       if (errEl) errEl.style.display = 'none';
+      if (!loginInput || !pass) {
+        if (errEl) { errEl.textContent = 'Please enter your username/email and password'; errEl.style.display = 'block'; }
+        return;
+      }
       const btn = document.getElementById('login-btn');
       if (btn) { btn.disabled = true; btn.textContent = 'Signing in...'; }
       try {
-        const r = await api('POST', '/auth/login', { email, password: pass });
+        const r = await api('POST', '/auth/login', { email: loginInput, username: loginInput, password: pass });
         if (!r.success) {
           if (errEl) { errEl.textContent = r.error?.message || 'Login failed'; errEl.style.display = 'block'; }
           return;
@@ -1930,7 +1909,7 @@
   </div>
 
   <!-- Header card -->
-  <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--surface2);border-radius:10px;margin-bottom:20px">
+  <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--surface2);border-radius:10px;margin-bottom:16px">
     <div style="width:56px;height:56px;border-radius:12px;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;flex-shrink:0">
       ${(p.first_name || '?')[0]}
     </div>
@@ -1943,6 +1922,32 @@
       <div style="font-family:monospace;font-weight:600">#${p.patient_id}</div>
     </div>
   </div>
+
+  ${isAdmin() ? `
+  <!-- Account Credentials (Admin Only) -->
+  <div style="background:var(--surface2);border-radius:10px;padding:14px 16px;margin-bottom:16px;border:1px solid var(--green-bd)">
+    <div style="font-weight:600;font-size:13px;color:var(--text);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between">
+      <span style="color:var(--green)">🔒 Account Credentials (Admin View)</span>
+      <span class="badge bg-green">Patient Account</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;align-items:center">
+      <div>
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Username</div>
+        <div style="font-weight:600;font-size:13px;color:var(--text)">${esc(p.username || (p.email ? p.email.split('@')[0] : 'meera_p'))}</div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Email</div>
+        <div style="font-weight:600;font-size:13px;color:var(--text)">${esc(p.email || '—')}</div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">User Password</div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <input type="password" id="pat-pwd-display" value="${esc(p.plain_password || 'patient123')}" readonly style="width:100px;padding:3px 6px;font-family:monospace;font-size:13px;border:1px solid var(--border);border-radius:4px;background:var(--bg)"/>
+          <button type="button" class="btn btn-sm btn-ghost" onclick="const el=document.getElementById('pat-pwd-display');if(el.type==='password'){el.type='text';this.textContent='Hide'}else{el.type='password';this.textContent='Show'}" style="padding:2px 8px;font-size:12px;color:var(--green)">Show</button>
+        </div>
+      </div>
+    </div>
+  </div>` : ''}
 
   <!-- Info grid -->
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px">
@@ -2801,7 +2806,7 @@
     <button class="close-btn" onclick="closeModal()">✕</button>
   </div>
 
-  <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--surface2);border-radius:10px;margin-bottom:18px;border:1px solid var(--border)">
+  <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--surface2);border-radius:10px;margin-bottom:16px;border:1px solid var(--border)">
     <div class="av" style="width:54px;height:54px;font-size:22px;font-weight:700;background:${d.is_available ? 'var(--green-bg)' : 'var(--surface)'};color:${d.is_available ? 'var(--green)' : 'var(--text3)'};display:flex;align-items:center;justify-content:center;border-radius:12px;border:1px solid var(--border)">
       ${initial}
     </div>
@@ -2813,6 +2818,32 @@
       <span class="badge ${d.is_available ? 'bg-green' : 'bg-gray'}" style="font-size:12px;padding:6px 12px">${d.is_available ? 'On Call (Active)' : 'Off Duty'}</span>
     </div>
   </div>
+
+  ${isAdmin() ? `
+  <!-- Account Credentials (Admin Only) -->
+  <div style="background:var(--surface2);border-radius:10px;padding:14px 16px;margin-bottom:16px;border:1px solid var(--blue-bd)">
+    <div style="font-weight:600;font-size:13px;color:var(--text);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between">
+      <span style="color:var(--blue)">🔒 Account Credentials (Admin View)</span>
+      <span class="badge bg-blue">Doctor Account</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;align-items:center">
+      <div>
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Username</div>
+        <div style="font-weight:600;font-size:13px;color:var(--text)">${esc(d.username || 'dr_' + (d.first_name||'').toLowerCase())}</div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">Email</div>
+        <div style="font-weight:600;font-size:13px;color:var(--text)">${esc(d.email || '—')}</div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">User Password</div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <input type="password" id="doc-pwd-display" value="${esc(d.plain_password || 'doctor123')}" readonly style="width:100px;padding:3px 6px;font-family:monospace;font-size:13px;border:1px solid var(--border);border-radius:4px;background:var(--bg)"/>
+          <button type="button" class="btn btn-sm btn-ghost" onclick="const el=document.getElementById('doc-pwd-display');if(el.type==='password'){el.type='text';this.textContent='Hide'}else{el.type='password';this.textContent='Show'}" style="padding:2px 8px;font-size:12px;color:var(--blue)">Show</button>
+        </div>
+      </div>
+    </div>
+  </div>` : ''}
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px">
     <div style="background:var(--surface2);border-radius:8px;padding:10px 12px;border:1px solid var(--border)">
@@ -2971,21 +3002,14 @@
       // Step 1: create login account
       const uname = 'dr_' + fn.toLowerCase().replace(/\s+/g, '_') + '_' + (Date.now() % 9999);
       const userRes = await api('POST', '/auth/register', { username: uname, email: em, password: pw, role: 'doctor' });
-      if (!userRes.success) {
-        if (btn) { btn.textContent = 'Add Doctor'; btn.disabled = false; }
-        toast(userRes.error?.message || 'Email may already be registered', 'er');
-        return;
+      
+      let newUserId = null;
+      if (userRes.success) {
+        const d = userRes.data || {};
+        newUserId = d.userId || d.user_id || (d.user && (d.user.userId || d.user.user_id));
       }
 
-      // Step 2: get the user_id from the response
-      const d = userRes.data || {};
-      const newUserId = d.userId || d.user_id || (d.user && d.user.userId);
-      if (!newUserId) {
-        toast('Registration succeeded but user_id missing — contact admin', 'er');
-        return;
-      }
-
-      // Step 3: create doctor profile linked to that user
+      // Step 2: create doctor profile linked to that user
       const docRes = await api('POST', '/doctors', {
         first_name: fn,
         last_name: ln,
@@ -2994,6 +3018,8 @@
         license_number: document.getElementById('df-lic').value.trim() || 'LIC-' + Date.now(),
         phone: document.getElementById('df-ph').value.trim(),
         consultation_fee: parseFloat(document.getElementById('df-fee').value) || 0,
+        email: em,
+        password: pw,
         user_id: newUserId
       });
       if (btn) { btn.textContent = 'Add Doctor'; btn.disabled = false; }
@@ -3769,7 +3795,7 @@
     function openNewPrescriptionModal(presetApptId = null, presetPatientId = null) {
       const appt = presetApptId ? STATE.appointments.find(a => a.appointment_id === presetApptId) : null;
       const patientId = presetPatientId || (appt ? appt.patient_id : '');
-      const doctorId = appt ? appt.doctor_id : (isDoctor() ? (STATE.doctors.find(d => d.user_id === STATE.user.userId)?.doctor_id || '') : '');
+      const doctorId = appt ? appt.doctor_id : (isDoctor() ? (STATE.doctors.find(d => d.user_id === (STATE.user?.userId || STATE.user?.user_id))?.doctor_id || '') : '');
 
       const modalHtml = `
         <div class="modal-head">
@@ -3894,7 +3920,7 @@
     }
 
     function profilePage() {
-      const p = STATE.myPatientProfile || STATE.patients.find(pat => pat.user_id === STATE.user?.userId) || STATE.patients[0];
+      const p = STATE.myPatientProfile || STATE.patients.find(pat => pat.user_id === (STATE.user?.userId || STATE.user?.user_id)) || STATE.patients[0];
       if (!p) {
         return `<div class="card"><p>No patient profile linked to this account yet.</p></div>`;
       }

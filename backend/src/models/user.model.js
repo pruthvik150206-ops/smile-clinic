@@ -9,6 +9,14 @@ const UserModel = {
     return rows[0] || null;
   },
 
+  async findByEmailOrUsername(identifier) {
+    const { rows } = await db.query(
+      'SELECT * FROM users WHERE (email = $1 OR username = $1) AND is_active = TRUE',
+      [identifier]
+    );
+    return rows[0] || null;
+  },
+
   async findById(userId) {
     const { rows } = await db.query(
       'SELECT user_id, username, email, role, is_active, created_at FROM users WHERE user_id = $1',

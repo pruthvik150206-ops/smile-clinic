@@ -474,7 +474,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             con.execute("UPDATE users SET created_at=created_at WHERE user_id=?", (row["user_id"],))
             token = jwt_sign({"userId": row["user_id"], "role": row["role"], "email": row["email"]})
             return success({"token": token, "user": {
-                "userId": row["user_id"], "username": row["username"],
+                "userId": row["user_id"], "user_id": row["user_id"], "username": row["username"],
                 "email": row["email"], "role": row["role"]
             }})
 
@@ -490,14 +490,18 @@ class Handler(http.server.BaseHTTPRequestHandler):
             token = jwt_sign({"userId": cur.lastrowid, "role": body.get("role","patient"), "email": body["email"]})
             new_id = cur.lastrowid
             return success({"token": token, "userId": new_id, "user_id": new_id,
-                            "user": {"userId": new_id, "username": body.get("username",""),
+                            "user": {"userId": new_id, "user_id": new_id, "username": body.get("username",""),
                                      "email": body["email"], "role": body.get("role","patient")}}, 201)
 
         if path == "/api/auth/me" and method == "GET":
             if not user: return error("Unauthorized", 401, "UNAUTHORIZED")
             row = con.execute("SELECT user_id,username,email,role FROM users WHERE user_id=?",
                               (user["userId"],)).fetchone()
-            return success(dict(row) if row else None)
+            if not row: return success(None)
+            res_user = dict(row)
+            res_user["userId"] = row["user_id"]
+            res_user["user_id"] = row["user_id"]
+            return success(res_user)
 
         if path == "/api/patients/me" and method == "GET":
             if not user: return error("Unauthorized", 401, "UNAUTHORIZED")

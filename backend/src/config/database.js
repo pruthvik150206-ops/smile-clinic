@@ -10,9 +10,10 @@ const poolConfig = databaseUrl
   ? {
       connectionString: databaseUrl,
       ssl: { rejectUnauthorized: false },
-      max: parseInt(process.env.DB_POOL_MAX || '10'),
-      idleTimeoutMillis: parseInt(process.env.DB_POOL_IDLE_MS || '30000'),
-      connectionTimeoutMillis: parseInt(process.env.DB_POOL_ACQUIRE_MS || '10000'),
+      max: parseInt(process.env.DB_POOL_MAX || '20'),
+      idleTimeoutMillis: parseInt(process.env.DB_POOL_IDLE_MS || '60000'),
+      connectionTimeoutMillis: parseInt(process.env.DB_POOL_ACQUIRE_MS || '5000'),
+      keepAlive: true,
     }
   : {
       host:     process.env.DB_HOST     || 'localhost',
@@ -20,15 +21,15 @@ const poolConfig = databaseUrl
       database: process.env.DB_NAME     || 'dental_clinic',
       user:     process.env.DB_USER     || 'postgres',
       password: process.env.DB_PASSWORD || '',
-      max:      parseInt(process.env.DB_POOL_MAX        || '10'),
-      idleTimeoutMillis:    parseInt(process.env.DB_POOL_IDLE_MS    || '30000'),
-      connectionTimeoutMillis: parseInt(process.env.DB_POOL_ACQUIRE_MS || '10000'),
+      max:      parseInt(process.env.DB_POOL_MAX        || '20'),
+      idleTimeoutMillis:    parseInt(process.env.DB_POOL_IDLE_MS    || '60000'),
+      connectionTimeoutMillis: parseInt(process.env.DB_POOL_ACQUIRE_MS || '5000'),
       ssl: isSslEnabled ? { rejectUnauthorized: false } : false,
+      keepAlive: true,
     };
 
 const pool = new Pool(poolConfig);
 
-pool.on('connect', () => logger.info('PostgreSQL: new client connected'));
 pool.on('error',  (err) => logger.error('PostgreSQL idle client error', { error: err.message }));
 
 /**

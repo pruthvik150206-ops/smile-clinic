@@ -45,7 +45,7 @@ const staticPath = path.join(__dirname, '../../frontend/static');
 app.use(express.static(staticPath));
 
 app.get('*', (req, res, next) => {
-  if (req.path.startsWith('/api/')) return next();
+  if (req.path.startsWith('/api/') || req.path.startsWith('/json/') || req.path === '/favicon.ico') return next();
   res.sendFile(path.join(staticPath, 'index.html'));
 });
 

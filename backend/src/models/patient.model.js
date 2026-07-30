@@ -4,7 +4,7 @@ const PatientModel = {
   async findAll({ search = '', limit = 20, offset = 0 }) {
     const like = `%${search}%`;
     const { rows } = await db.query(
-      `SELECT p.*, u.email
+      `SELECT p.*, u.email, u.username
        FROM patients p
        JOIN users u ON u.user_id = p.user_id
        WHERE p.first_name ILIKE $1 OR p.last_name ILIKE $1 OR p.phone ILIKE $1
@@ -28,7 +28,7 @@ const PatientModel = {
 
   async findById(patientId) {
     const { rows } = await db.query(
-      `SELECT p.*, u.email
+      `SELECT p.*, u.email, u.username
        FROM patients p
        JOIN users u ON u.user_id = p.user_id
        WHERE p.patient_id = $1`,

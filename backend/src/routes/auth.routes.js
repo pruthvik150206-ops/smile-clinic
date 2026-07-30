@@ -5,7 +5,6 @@ const { protect } = require('../middleware/auth');
 const { validate } = require('../middleware/validate');
 
 const loginRules = [
-  body('email').isEmail().withMessage('Valid email required'),
   body('password').notEmpty().withMessage('Password required'),
 ];
 const registerRules = [

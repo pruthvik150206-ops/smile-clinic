@@ -9,7 +9,7 @@ const DoctorModel = {
       params.push(`%${specialisation}%`);
     }
     const { rows } = await db.query(
-      `SELECT d.*, u.email
+      `SELECT d.*, u.email, u.username
        FROM doctors d JOIN users u ON u.user_id = d.user_id
        WHERE ${where}
        ORDER BY d.last_name LIMIT $2 OFFSET $3`,
@@ -31,7 +31,7 @@ const DoctorModel = {
 
   async findById(doctorId) {
     const { rows } = await db.query(
-      `SELECT d.*, u.email,
+      `SELECT d.*, u.email, u.username,
               json_agg(
                 json_build_object('day',da.day_of_week,'start',da.slot_start,'end',da.slot_end)
                 ORDER BY da.day_of_week
@@ -40,7 +40,7 @@ const DoctorModel = {
        JOIN users u ON u.user_id = d.user_id
        LEFT JOIN doctor_availability da ON da.doctor_id = d.doctor_id
        WHERE d.doctor_id = $1
-       GROUP BY d.doctor_id, u.email`,
+       GROUP BY d.doctor_id, u.email, u.username`,
       [doctorId]
     );
     return rows[0] || null;

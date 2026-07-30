@@ -24,17 +24,31 @@ const AuthController = {
     const refreshToken = signRefresh({ userId: user.user_id });
 
     logger.info('New user registered', { userId: user.user_id, role });
-    return created(res, { token: accessToken, refreshToken, user });
+    return created(res, {
+      token: accessToken,
+      refreshToken,
+      user: {
+        userId: user.user_id,
+        user_id: user.user_id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        created_at: user.created_at
+      }
+    });
   },
 
   async login(req, res) {
-    const { email, password } = req.body;
+    const { email, username, password } = req.body;
+    const identifier = (email || username || '').trim();
 
-    const user = await UserModel.findByEmail(email);
-    if (!user) return unauthorized(res, 'Invalid email or password');
+    if (!identifier) return badRequest(res, 'Email or username is required');
+
+    const user = await UserModel.findByEmailOrUsername(identifier);
+    if (!user) return unauthorized(res, 'Invalid email/username or password');
 
     const valid = await bcrypt.compare(password, user.password_hash);
-    if (!valid) return unauthorized(res, 'Invalid email or password');
+    if (!valid) return unauthorized(res, 'Invalid email/username or password');
 
     await UserModel.updateLastLogin(user.user_id);
 
@@ -45,7 +59,13 @@ const AuthController = {
     return success(res, {
       token: accessToken,
       refreshToken,
-      user: { userId: user.user_id, username: user.username, email: user.email, role: user.role }
+      user: {
+        userId: user.user_id,
+        user_id: user.user_id,
+        username: user.username,
+        email: user.email,
+        role: user.role
+      }
     });
   },
 
@@ -67,7 +87,7 @@ const AuthController = {
   async me(req, res) {
     const user = await UserModel.findById(req.user.userId);
     if (!user) return unauthorized(res, 'User not found');
-    return success(res, user);
+    return success(res, { ...user, userId: user.user_id, user_id: user.user_id });
   },
 
   async logout(req, res) {

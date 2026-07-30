@@ -1,4 +1,6 @@
 const DoctorModel  = require('../models/doctor.model');
+const UserModel   = require('../models/user.model');
+const bcrypt      = require('bcryptjs');
 const { withTransaction } = require('../config/database');
 const { success, created, notFound, badRequest, conflict, paginate } = require('../utils/response');
 const logger = require('../utils/logger');
@@ -22,10 +24,23 @@ const DoctorController = {
   },
 
   async create(req, res) {
-    const { first_name, last_name, specialisation, license_number, phone } = req.body;
+    const { first_name, last_name, specialisation, license_number, phone, email, password } = req.body;
     if (!first_name || !last_name || !specialisation || !license_number || !phone)
       return badRequest(res, 'first_name, last_name, specialisation, license_number and phone are required');
-    const doctor = await DoctorModel.create(req.body);
+
+    let targetUserId = req.body.user_id;
+    if (!targetUserId && email) {
+      const existingUser = await UserModel.findByEmail(email);
+      if (existingUser) {
+        targetUserId = existingUser.user_id;
+      } else {
+        const hash = await bcrypt.hash(password || 'Doctor123!', 12);
+        const uname = 'dr_' + first_name.toLowerCase().replace(/\s+/g, '_') + '_' + (Date.now() % 9999);
+        const newUser = await UserModel.create({ username: uname, email, passwordHash: hash, role: 'doctor' });
+        targetUserId = newUser.user_id;
+      }
+    }
+    const doctor = await DoctorModel.create({ ...req.body, user_id: targetUserId });
     logger.info('Doctor created', { doctor_id: doctor.doctor_id });
     return created(res, doctor);
   },
