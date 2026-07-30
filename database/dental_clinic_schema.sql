@@ -10,8 +10,35 @@
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";  -- for gen_random_uuid() if needed
 
 -- ─────────────────────────────────────────────
+--  CLEAN UP (ALLOWS SAFE RE-EXECUTION)
+-- ─────────────────────────────────────────────
+DROP VIEW IF EXISTS v_upcoming_appointments CASCADE;
+DROP VIEW IF EXISTS v_monthly_revenue CASCADE;
+DROP VIEW IF EXISTS v_treatment_stats CASCADE;
+
+DROP TABLE IF EXISTS ml_predictions CASCADE;
+DROP TABLE IF EXISTS insurance_claims CASCADE;
+DROP TABLE IF EXISTS invoices CASCADE;
+DROP TABLE IF EXISTS appointment_treatments CASCADE;
+DROP TABLE IF EXISTS appointments CASCADE;
+DROP TABLE IF EXISTS doctor_schedules CASCADE;
+DROP TABLE IF EXISTS treatments CASCADE;
+DROP TABLE IF EXISTS doctors CASCADE;
+DROP TABLE IF EXISTS patients CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+
+-- ─────────────────────────────────────────────
 --  ENUM TYPES
 -- ─────────────────────────────────────────────
+DROP TYPE IF EXISTS user_role CASCADE;
+DROP TYPE IF EXISTS gender_type CASCADE;
+DROP TYPE IF EXISTS appointment_status CASCADE;
+DROP TYPE IF EXISTS payment_status CASCADE;
+DROP TYPE IF EXISTS payment_method CASCADE;
+DROP TYPE IF EXISTS claim_status CASCADE;
+DROP TYPE IF EXISTS day_of_week CASCADE;
+DROP TYPE IF EXISTS treatment_category CASCADE;
+
 CREATE TYPE user_role          AS ENUM ('admin', 'doctor', 'receptionist', 'patient');
 CREATE TYPE gender_type        AS ENUM ('male', 'female', 'other', 'prefer_not_to_say');
 CREATE TYPE appointment_status AS ENUM ('scheduled', 'confirmed', 'in_progress', 'completed', 'cancelled', 'no_show');
@@ -423,10 +450,10 @@ INSERT INTO appointment_treatments (appointment_id, treatment_id, quantity, unit
 (6, 7, 1, 18000.00); -- Sunita: upper arch braces
 
 -- ─── invoices ─────────────────────────────────────────────────
-INSERT INTO invoices (appointment_id, patient_id, subtotal, discount, tax_rate, tax_amount, total_amount, payment_status, payment_method, paid_at) VALUES
-(1, 1,  1400.00, 0.00,   0.00, 0.00,   1400.00, 'paid',    'upi',      '2026-05-10 11:00:00'),
-(2, 2,  3000.00, 200.00, 0.00, 0.00,   2800.00, 'paid',    'card',     '2026-05-12 12:30:00'),
-(3, 3,   600.00, 0.00,   0.00, 0.00,    600.00, 'paid',    'cash',     '2026-05-13 11:45:00');
+INSERT INTO invoices (appointment_id, patient_id, subtotal, discount, tax_rate, tax_amount, total_amount, payment_status, payment_method, issued_at, paid_at) VALUES
+(1, 1,  1400.00, 0.00,   0.00, 0.00,   1400.00, 'paid',    'upi',  '2026-05-10 10:00:00', '2026-05-10 11:00:00'),
+(2, 2,  3000.00, 200.00, 0.00, 0.00,   2800.00, 'paid',    'card', '2026-05-12 11:30:00', '2026-05-12 12:30:00'),
+(3, 3,   600.00, 0.00,   0.00, 0.00,    600.00, 'paid',    'cash', '2026-05-13 10:30:00', '2026-05-13 11:45:00');
 
 -- ─── insurance_claims ─────────────────────────────────────────
 INSERT INTO insurance_claims (invoice_id, provider_name, policy_number, claim_amount, claim_status, submitted_on) VALUES
