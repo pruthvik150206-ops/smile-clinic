@@ -1198,6 +1198,19 @@
     const canSeeML = () => role() === 'admin';
     const canSeeBilling = () => ['admin', 'receptionist'].includes(role());
 
+    function currentDoctorId() {
+      if (!isDoctor() || !STATE.user) return null;
+      const uid = STATE.user.userId || STATE.user.user_id;
+      const doc = STATE.doctors.find(d => Number(d.user_id) === Number(uid));
+      if (doc) return doc.doctor_id;
+      const userEmail = (STATE.user.email || '').toLowerCase();
+      if (userEmail) {
+        const docByEmail = STATE.doctors.find(d => (d.email || '').toLowerCase() === userEmail);
+        if (docByEmail) return docByEmail.doctor_id;
+      }
+      return null;
+    }
+
     function toast(msg, type = 'ok') {
       const container = document.getElementById('toasts');
       if (!container) return;
@@ -1625,9 +1638,10 @@
         `;
       }
 
-      // Doctor sees only their own appointments today
+      // Doctor sees only their own appointments
+      const docId = currentDoctorId();
       const myAppts = isDoctor()
-        ? STATE.appointments.filter(a => a.doctor_name && a.doctor_name.toLowerCase().includes((STATE.user?.username || '').toLowerCase().replace('dr_', '')))
+        ? STATE.appointments.filter(a => docId ? Number(a.doctor_id) === Number(docId) : (a.doctor_name && a.doctor_name.toLowerCase().includes((STATE.user?.username || '').toLowerCase().replace('dr_', ''))))
         : STATE.appointments;
       const todayAppts = myAppts.filter(a => a.scheduled_at && a.scheduled_at.startsWith(new Date().toISOString().slice(0, 10)));
 
@@ -1891,7 +1905,12 @@
       const p = pRes.success ? pRes.data : null;
       let aps = apRes.success ? (apRes.data.items || apRes.data || []) : [];
       if (isDoctor()) {
-        aps = aps.filter(a => a.doctor_name && a.doctor_name.toLowerCase().includes((STATE.user?.username || '').toLowerCase().replace('dr_', '')));
+        const docId = currentDoctorId();
+        if (docId) {
+          aps = aps.filter(a => Number(a.doctor_id) === Number(docId));
+        } else {
+          aps = aps.filter(a => a.doctor_name && a.doctor_name.toLowerCase().includes((STATE.user?.username || '').toLowerCase().replace('dr_', '')));
+        }
       }
       const inv = invRes.success ? (invRes.data.items || invRes.data || []).filter(i => Number(i.patient_id) === Number(patientId)) : [];
 
@@ -2072,7 +2091,15 @@
     //  PATIENTS PAGE
     // ═══════════════════════════════════════════════════════════
     function patientsPage() {
-      const rows = STATE.patients.map(p => {
+      let pts = STATE.patients;
+      if (isDoctor()) {
+        const docId = currentDoctorId();
+        if (docId) {
+          const myPatientIds = new Set(STATE.appointments.filter(a => Number(a.doctor_id) === Number(docId)).map(a => Number(a.patient_id)));
+          pts = pts.filter(p => myPatientIds.has(Number(p.patient_id)));
+        }
+      }
+      const rows = pts.map(p => {
         const age = p.date_of_birth ? Math.floor((Date.now() - new Date(p.date_of_birth)) / (365.25 * 864e5)) : '?';
         return `<tr style="cursor:pointer" onclick="openPatientProfile(${p.patient_id},'${esc(p.first_name + ' ' + p.last_name)}')">
       <td><div style="display:flex;align-items:center;gap:9px">
@@ -2105,8 +2132,8 @@
   </div>
   <div class="panel">
     <div class="panel-head">
-      <span class="panel-title">Patients (${STATE.patients.length})</span>
-      <span class="badge bg-green">${STATE.patients.length} total</span>
+      <span class="panel-title">${isDoctor() ? 'My Assigned Patients' : 'Patients'} (${pts.length})</span>
+      <span class="badge bg-green">${pts.length} ${isDoctor() ? 'assigned' : 'total'}</span>
     </div>
     <div class="tbl"><table>
       <thead><tr><th>Patient</th><th>Age</th><th>Phone</th><th>Blood</th><th>Allergies</th><th>Actions</th></tr></thead>
@@ -2302,10 +2329,24 @@
     //  APPOINTMENTS PAGE  (role-aware)
     // ═══════════════════════════════════════════════════════════
     function appointmentsPage() {
-      // Doctor: show only their own appointments + highlight patient clickable
-      const appts = STATE.appointments;
       const isDoc = isDoctor();
       const isPat = role() === 'patient';
+      let appts = STATE.appointments;
+
+      if (isDoc) {
+        const docId = currentDoctorId();
+        if (docId) {
+          appts = appts.filter(a => Number(a.doctor_id) === Number(docId));
+        } else {
+          const userEmail = (STATE.user?.email || '').toLowerCase();
+          const usernamePart = (STATE.user?.username || '').toLowerCase().replace('dr_', '');
+          appts = appts.filter(a => {
+            const docName = (a.doctor_name || '').toLowerCase();
+            return (userEmail && docName.includes(userEmail.split('@')[0])) || (usernamePart && docName.includes(usernamePart));
+          });
+        }
+      }
+
       const showNoShow = !isDoc && !isPat;
       const showActions = !isPat;
 
@@ -3554,7 +3595,13 @@
     //  DIGITAL PRESCRIPTIONS & PATIENT PROFILE
     // ═══════════════════════════════════════════════════════════
     function prescriptionsPage() {
-      const rxs = STATE.prescriptions || [];
+      let rxs = STATE.prescriptions || [];
+      if (isDoctor()) {
+        const docId = currentDoctorId();
+        if (docId) {
+          rxs = rxs.filter(r => Number(r.doctor_id) === Number(docId));
+        }
+      }
       const canIssue = ['admin', 'doctor', 'receptionist'].includes(role());
 
       const rows = rxs.map((rx) => {

@@ -17,12 +17,19 @@ const AppointmentController = {
     let effectivePatientId = patient_id;
     if (role === 'patient') {
       const self = await PatientModel.findByUserId(req.user.userId);
-      effectivePatientId = self?.patient_id;
+      effectivePatientId = self ? self.patient_id : -1;
+    }
+
+    // Doctors can only see their assigned appointments
+    let effectiveDoctorId = doctor_id;
+    if (role === 'doctor') {
+      const selfDoc = await DoctorModel.findByUserId(req.user.userId);
+      effectiveDoctorId = selfDoc ? selfDoc.doctor_id : -1;
     }
 
     const [appointments, total] = await Promise.all([
-      AppointmentModel.findAll({ patientId: effectivePatientId, doctorId: doctor_id, status, dateFrom: date_from, dateTo: date_to, limit: parseInt(limit), offset: parseInt(offset) }),
-      AppointmentModel.count({ patientId: effectivePatientId, doctorId: doctor_id, status, dateFrom: date_from, dateTo: date_to }),
+      AppointmentModel.findAll({ patientId: effectivePatientId, doctorId: effectiveDoctorId, status, dateFrom: date_from, dateTo: date_to, limit: parseInt(limit), offset: parseInt(offset) }),
+      AppointmentModel.count({ patientId: effectivePatientId, doctorId: effectiveDoctorId, status, dateFrom: date_from, dateTo: date_to }),
     ]);
     return success(res, paginate(appointments, total, page, limit));
   },

@@ -739,6 +739,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     if doc_row:
                         conditions.append("a.doctor_id=?")
                         args.append(doc_row["doctor_id"])
+                    else:
+                        conditions.append("1=0")
                 # Patients only see their own appointments
                 if user["role"] == "patient":
                     pat_row = con.execute("SELECT patient_id FROM patients WHERE user_id=?", (user["userId"],)).fetchone()
