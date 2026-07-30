@@ -55,13 +55,18 @@ app.get('/api/health', async (req, res) => {
   res.json({ success: true, data: { status: 'healthy', db: 'connected', ml: mlHealth, timestamp: new Date().toISOString() } });
 });
 
-app.use('/api/auth',         authRoutes);
-app.use('/api/patients',     patientRoutes);
-app.use('/api/doctors',      doctorRoutes);
-app.use('/api/appointments', appointmentRoutes);
-app.use('/api/invoices',     billingRoutes);
-app.use('/api/treatments',   treatmentRoutes);
-app.use('/api/ml',           mlRoutes);
+const statsRoutes        = require('./routes/stats.routes');
+const prescriptionRoutes = require('./routes/prescription.routes');
+
+app.use('/api/auth',          authRoutes);
+app.use('/api/patients',      patientRoutes);
+app.use('/api/doctors',       doctorRoutes);
+app.use('/api/appointments',  appointmentRoutes);
+app.use('/api/invoices',      billingRoutes);
+app.use('/api/treatments',    treatmentRoutes);
+app.use('/api/ml',            mlRoutes);
+app.use('/api/stats',         statsRoutes);
+app.use('/api/prescriptions', prescriptionRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
