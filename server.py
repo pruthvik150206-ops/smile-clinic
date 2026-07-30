@@ -147,8 +147,17 @@ def init_db():
         password_hash TEXT NOT NULL,
         role TEXT NOT NULL DEFAULT 'patient',
         is_active INTEGER NOT NULL DEFAULT 1,
+        otp_code TEXT,
+        otp_expires_at TEXT,
+        otp_purpose TEXT,
+        is_2fa_enabled INTEGER DEFAULT 0,
         created_at TEXT DEFAULT (datetime('now'))
     );
+    """)
+    for col in [("otp_code","TEXT"), ("otp_expires_at","TEXT"), ("otp_purpose","TEXT"), ("is_2fa_enabled","INTEGER DEFAULT 0")]:
+        try: con.execute(f"ALTER TABLE users ADD COLUMN {col[0]} {col[1]}")
+        except: pass
+    con.executescript("""
     CREATE TABLE IF NOT EXISTS patients (
         patient_id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER REFERENCES users(user_id),
@@ -467,16 +476,83 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
         # ── Auth ──────────────────────────────────────────────────────────
         if path == "/api/auth/login" and method == "POST":
-            row = con.execute("SELECT * FROM users WHERE email=? AND is_active=1",
-                              (body.get("email",""),)).fetchone()
+            row = con.execute("SELECT * FROM users WHERE (email=? OR username=?) AND is_active=1",
+                              (body.get("email","").strip() or body.get("username","").strip(), body.get("email","").strip() or body.get("username","").strip())).fetchone()
             if not row or row["password_hash"] != hash_pw(body.get("password","")):
                 return error("Invalid email or password", 401, "UNAUTHORIZED")
-            con.execute("UPDATE users SET created_at=created_at WHERE user_id=?", (row["user_id"],))
+            
+            # Check 2FA
+            is_2fa = dict(row).get("is_2fa_enabled", 0)
+            if is_2fa:
+                import random
+                otp = str(random.randint(100000, 999999))
+                exp = time.time() + 600
+                con.execute("UPDATE users SET otp_code=?, otp_expires_at=?, otp_purpose='2fa_login' WHERE user_id=?", (otp, str(exp), row["user_id"]))
+                con.commit()
+                return success({"requires2FA": True, "email": row["email"], "message": "2FA OTP code sent", "demoOtp": otp})
+
             token = jwt_sign({"userId": row["user_id"], "role": row["role"], "email": row["email"]})
             return success({"token": token, "user": {
                 "userId": row["user_id"], "user_id": row["user_id"], "username": row["username"],
-                "email": row["email"], "role": row["role"]
+                "email": row["email"], "role": row["role"], "is_2fa_enabled": bool(is_2fa)
             }})
+
+        if path == "/api/auth/verify-2fa" and method == "POST":
+            email = body.get("email","").strip()
+            otp = body.get("otp","").strip()
+            if not email or not otp: return error("Email and OTP are required")
+            row = con.execute("SELECT * FROM users WHERE email=? AND otp_code=? AND otp_purpose='2fa_login'", (email, otp)).fetchone()
+            if not row: return error("Invalid or expired 2FA OTP code")
+            try:
+                if float(row["otp_expires_at"] or 0) < time.time():
+                    return error("OTP code has expired")
+            except: pass
+            con.execute("UPDATE users SET otp_code=NULL, otp_expires_at=NULL, otp_purpose=NULL WHERE user_id=?", (row["user_id"],))
+            con.commit()
+            token = jwt_sign({"userId": row["user_id"], "role": row["role"], "email": row["email"]})
+            return success({"token": token, "user": {
+                "userId": row["user_id"], "user_id": row["user_id"], "username": row["username"],
+                "email": row["email"], "role": row["role"], "is_2fa_enabled": True
+            }})
+
+        if path == "/api/auth/forgot-password" and method == "POST":
+            email = body.get("email","").strip()
+            if not email: return error("Email is required")
+            row = con.execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
+            if not row: return error("No account found with that email address", 404, "NOT_FOUND")
+            import random
+            otp = str(random.randint(100000, 999999))
+            exp = time.time() + 600
+            con.execute("UPDATE users SET otp_code=?, otp_expires_at=?, otp_purpose='forgot_password' WHERE user_id=?", (otp, str(exp), row["user_id"]))
+            con.commit()
+            return success({"message": "OTP verification code sent", "email": email, "demoOtp": otp})
+
+        if path == "/api/auth/verify-otp" and method == "POST":
+            email = body.get("email","").strip()
+            otp = body.get("otp","").strip()
+            row = con.execute("SELECT * FROM users WHERE email=? AND otp_code=?", (email, otp)).fetchone()
+            if not row: return error("Invalid or expired OTP code")
+            return success({"message": "OTP verified successfully"})
+
+        if path == "/api/auth/reset-password" and method == "POST":
+            email = body.get("email","").strip()
+            otp = body.get("otp","").strip()
+            npw = body.get("newPassword","").strip()
+            if not email or not otp or not npw: return error("Email, OTP and new password are required")
+            if len(npw) < 6: return error("Password must be at least 6 characters")
+            row = con.execute("SELECT * FROM users WHERE email=? AND otp_code=? AND otp_purpose='forgot_password'", (email, otp)).fetchone()
+            if not row: return error("Invalid or expired OTP code")
+            con.execute("UPDATE users SET password_hash=?, raw_password=?, otp_code=NULL, otp_expires_at=NULL, otp_purpose=NULL WHERE user_id=?",
+                        (hash_pw(npw), npw, row["user_id"]))
+            con.commit()
+            return success({"message": "Password reset successfully. You can now sign in."})
+
+        if path == "/api/auth/toggle-2fa" and method == "POST":
+            if not user: return error("Unauthorized", 401, "UNAUTHORIZED")
+            val = 1 if body.get("enabled") else 0
+            con.execute("UPDATE users SET is_2fa_enabled=? WHERE user_id=?", (val, user["userId"]))
+            con.commit()
+            return success({"is_2fa_enabled": bool(val), "message": "2FA updated successfully"})
 
         if path == "/api/auth/register" and method == "POST":
             if not body.get("email") or not body.get("password") or not body.get("username"):

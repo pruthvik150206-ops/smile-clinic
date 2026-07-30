@@ -14,10 +14,15 @@ const registerRules = [
   body('role').optional().isIn(['admin','doctor','receptionist','patient']).withMessage('Invalid role'),
 ];
 
-router.post('/register', registerRules, validate, AuthController.register);
-router.post('/login',    loginRules,    validate, AuthController.login);
-router.post('/refresh',  AuthController.refresh);
-router.get('/me',        protect,       AuthController.me);
-router.post('/logout',   protect,       AuthController.logout);
+router.post('/register',        registerRules, validate, AuthController.register);
+router.post('/login',           loginRules,    validate, AuthController.login);
+router.post('/verify-2fa',      AuthController.verify2FA);
+router.post('/forgot-password', AuthController.forgotPassword);
+router.post('/verify-otp',      AuthController.verifyOtp);
+router.post('/reset-password',  AuthController.resetPassword);
+router.post('/toggle-2fa',     protect, AuthController.toggle2FA);
+router.post('/refresh',         AuthController.refresh);
+router.get('/me',               protect,       AuthController.me);
+router.post('/logout',          protect,       AuthController.logout);
 
 module.exports = router;

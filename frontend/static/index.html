@@ -1446,6 +1446,9 @@
       <div class="topbar">
         <span class="page-title">${PAGE_TITLES[STATE.page] || ''}</span>
         <div class="topbar-right">
+          <button class="btn btn-sm ${STATE.user?.is_2fa_enabled ? 'btn-primary' : 'btn-secondary'}" onclick="toggle2FADialog()" style="font-size:11px;padding:3px 8px;margin-right:6px;" title="Toggle Two-Factor Authentication">
+            ${STATE.user?.is_2fa_enabled ? '🛡️ 2FA Active' : '🛡️ Enable 2FA'}
+          </button>
           <span class="badge ${roleCls}">${roleLabel}</span>
           <span style="font-size:13px;color:var(--text2)">${esc(STATE.user?.email || '')}</span>
         </div>
@@ -1485,7 +1488,10 @@
           <input id="a-email" type="text" placeholder="you@smile.in or username" onkeydown="if(event.key==='Enter')doLogin()"/>
         </div>
         <div class="fg">
-          <label>Password</label>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <label>Password</label>
+            <a class="link-btn" style="font-size:12px;margin-bottom:5px" onclick="openForgotPasswordModal()">Forgot Password?</a>
+          </div>
           <input id="a-pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
         </div>
 
@@ -1519,6 +1525,10 @@
           if (errEl) { errEl.textContent = r.error?.message || 'Login failed'; errEl.style.display = 'block'; }
           return;
         }
+        if (r.data?.requires2FA) {
+          open2FAModal(r.data.email || loginInput, r.data.demoOtp);
+          return;
+        }
         localStorage.setItem('sc_token', r.data.token); STATE.user = r.data.user;
         toast(`Welcome, ${r.data.user.username}!`);
         await loadData(); STATE.page = 'dashboard'; renderPage();
@@ -1527,6 +1537,127 @@
       } finally {
         if (btn) { btn.disabled = false; btn.textContent = 'Sign in →'; }
       }
+    }
+
+    async function toggle2FADialog() {
+      const current = !!STATE.user?.is_2fa_enabled;
+      const next = !current;
+      const r = await api('POST', '/auth/toggle-2fa', { enabled: next });
+      if (r.success) {
+        if (STATE.user) STATE.user.is_2fa_enabled = next;
+        toast(next ? '🛡️ 2FA (Two-Factor Authentication) is now ENABLED for your account!' : '2FA disabled', 'ok');
+        renderPage();
+      } else {
+        toast(r.error?.message || 'Failed to toggle 2FA', 'er');
+      }
+    }
+
+    function openForgotPasswordModal() {
+      openModal(`
+        <div class="modal-head">
+          <h3>Reset Password via OTP</h3>
+          <button class="close-btn" onclick="closeModal()">✕</button>
+        </div>
+        <div id="fp-step1" style="padding-top:6px;">
+          <p style="font-size:13px;color:var(--text2);margin-bottom:14px">
+            Enter your registered email address below to receive a 6-digit OTP verification code.
+          </p>
+          <div class="fg">
+            <label>Registered Email *</label>
+            <input id="fp-email" type="email" placeholder="you@smile.in"/>
+          </div>
+          <button class="btn btn-primary btn-full" id="fp-send-btn" onclick="sendForgotPasswordOTP()">Send OTP Code →</button>
+        </div>
+        <div id="fp-step2" style="display:none;padding-top:6px;">
+          <div style="background:var(--green-bg);border:1px solid var(--green-bd);color:var(--green);padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:14px">
+            ✓ OTP Code Sent! Enter code and your new password below.
+          </div>
+          <div class="fg">
+            <label>6-Digit OTP Code *</label>
+            <input id="fp-otp" type="text" placeholder="123456" maxlength="6" style="font-family:monospace;letter-spacing:4px;font-size:18px;text-align:center"/>
+          </div>
+          <div class="fg">
+            <label>New Password *</label>
+            <input id="fp-newpw" type="password" placeholder="••••••••"/>
+          </div>
+          <button class="btn btn-primary btn-full" id="fp-reset-btn" onclick="confirmPasswordReset()">Reset Password →</button>
+        </div>
+      `);
+    }
+
+    async function sendForgotPasswordOTP() {
+      const email = (document.getElementById('fp-email')?.value || '').trim();
+      if (!email) { toast('Please enter your email', 'er'); return; }
+      const btn = document.getElementById('fp-send-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
+      const r = await api('POST', '/auth/forgot-password', { email });
+      if (btn) { btn.disabled = false; btn.textContent = 'Send OTP Code →'; }
+      if (!r.success) { toast(r.error?.message || 'Error sending OTP', 'er'); return; }
+      
+      toast(`OTP Sent! Code: ${r.data?.demoOtp || 'Check email'}`, 'ok');
+      document.getElementById('fp-step1').style.display = 'none';
+      document.getElementById('fp-step2').style.display = 'block';
+      if (r.data?.demoOtp) {
+        const otpInput = document.getElementById('fp-otp');
+        if (otpInput) otpInput.value = r.data.demoOtp;
+      }
+    }
+
+    async function confirmPasswordReset() {
+      const email = (document.getElementById('fp-email')?.value || '').trim();
+      const otp = (document.getElementById('fp-otp')?.value || '').trim();
+      const newPassword = (document.getElementById('fp-newpw')?.value || '').trim();
+      if (!otp || !newPassword) { toast('Please enter the OTP and new password', 'er'); return; }
+      if (newPassword.length < 6) { toast('Password must be at least 6 characters', 'er'); return; }
+      
+      const btn = document.getElementById('fp-reset-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Resetting...'; }
+      const r = await api('POST', '/auth/reset-password', { email, otp, newPassword });
+      if (btn) { btn.disabled = false; btn.textContent = 'Reset Password →'; }
+      if (!r.success) { toast(r.error?.message || 'Password reset failed', 'er'); return; }
+      
+      toast('Password reset successfully! Please sign in with your new password.', 'ok');
+      closeModal();
+      const passInput = document.getElementById('a-pass');
+      if (passInput) passInput.value = newPassword;
+      const emailInput = document.getElementById('a-email');
+      if (emailInput) emailInput.value = email;
+    }
+
+    function open2FAModal(email, demoOtp) {
+      openModal(`
+        <div class="modal-head">
+          <h3>🛡️ Two-Factor Authentication (2FA)</h3>
+          <button class="close-btn" onclick="closeModal()">✕</button>
+        </div>
+        <div style="background:var(--blue-bg);border:1px solid var(--blue-bd);color:var(--blue);padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:14px">
+          Enter the 6-digit 2FA verification code sent to <strong>${esc(email)}</strong>.
+        </div>
+        <div class="fg">
+          <label>6-Digit 2FA Code *</label>
+          <input id="2fa-otp" type="text" value="${demoOtp || ''}" placeholder="123456" maxlength="6" style="font-family:monospace;letter-spacing:4px;font-size:20px;text-align:center" onkeydown="if(event.key==='Enter')verify2FALogin('${esc(email)}')"/>
+        </div>
+        <button class="btn btn-primary btn-full" id="2fa-btn" onclick="verify2FALogin('${esc(email)}')">Verify & Sign In →</button>
+      `);
+      toast(`2FA OTP Code: ${demoOtp || 'Check email'}`, 'ok');
+    }
+
+    async function verify2FALogin(email) {
+      const otp = (document.getElementById('2fa-otp')?.value || '').trim();
+      if (!otp) { toast('Please enter the 6-digit OTP code', 'er'); return; }
+      const btn = document.getElementById('2fa-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Verifying...'; }
+      const r = await api('POST', '/auth/verify-2fa', { email, otp });
+      if (btn) { btn.disabled = false; btn.textContent = 'Verify & Sign In →'; }
+      if (!r.success) { toast(r.error?.message || 'Invalid or expired 2FA code', 'er'); return; }
+      
+      closeModal();
+      localStorage.setItem('sc_token', r.data.token);
+      STATE.user = r.data.user;
+      toast(`Welcome, ${r.data.user.username}! (2FA Verified)`);
+      await loadData();
+      STATE.page = 'dashboard';
+      renderPage();
     }
     function showRegister() {
       document.getElementById('app').innerHTML = `
