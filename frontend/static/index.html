@@ -1596,13 +1596,11 @@
       if (btn) { btn.disabled = false; btn.textContent = 'Send OTP Code →'; }
       if (!r.success) { toast(r.error?.message || 'Error sending OTP', 'er'); return; }
       
-      toast(`OTP Sent! Code: ${r.data?.demoOtp || 'Check email'}`, 'ok');
+      toast(`OTP Sent! Check your email.${r.data?.demoOtp ? ' (Demo OTP: ' + r.data.demoOtp + ')' : ''}`, 'ok');
       document.getElementById('fp-step1').style.display = 'none';
       document.getElementById('fp-step2').style.display = 'block';
-      if (r.data?.demoOtp) {
-        const otpInput = document.getElementById('fp-otp');
-        if (otpInput) otpInput.value = r.data.demoOtp;
-      }
+      const otpInput = document.getElementById('fp-otp');
+      if (otpInput) { otpInput.value = ''; otpInput.focus(); }
     }
 
     async function confirmPasswordReset() {
@@ -1634,14 +1632,15 @@
         </div>
         <div style="background:var(--blue-bg);border:1px solid var(--blue-bd);color:var(--blue);padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:14px">
           Enter the 6-digit 2FA verification code sent to <strong>${esc(email)}</strong>.
+          ${demoOtp ? `<div style="font-size:11px;opacity:0.85;margin-top:2px;">(Demo Mode OTP: <strong>${demoOtp}</strong>)</div>` : ''}
         </div>
         <div class="fg">
           <label>6-Digit 2FA Code *</label>
-          <input id="2fa-otp" type="text" value="${demoOtp || ''}" placeholder="123456" maxlength="6" style="font-family:monospace;letter-spacing:4px;font-size:20px;text-align:center" onkeydown="if(event.key==='Enter')verify2FALogin('${esc(email)}')"/>
+          <input id="2fa-otp" type="text" value="" placeholder="123456" maxlength="6" style="font-family:monospace;letter-spacing:4px;font-size:20px;text-align:center" onkeydown="if(event.key==='Enter')verify2FALogin('${esc(email)}')"/>
         </div>
         <button class="btn btn-primary btn-full" id="2fa-btn" onclick="verify2FALogin('${esc(email)}')">Verify & Sign In →</button>
       `);
-      toast(`2FA OTP Code: ${demoOtp || 'Check email'}`, 'ok');
+      toast(`2FA OTP Sent! ${demoOtp ? 'Demo Code: ' + demoOtp : 'Check email'}`, 'ok');
     }
 
     async function verify2FALogin(email) {
