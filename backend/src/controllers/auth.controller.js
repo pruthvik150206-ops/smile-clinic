@@ -61,13 +61,13 @@ const AuthController = {
     if (user.is_2fa_enabled) {
       const otp = Math.floor(100000 + Math.random() * 900000).toString();
       await UserModel.saveOtp({ userId: user.user_id, otpCode: otp, purpose: '2fa_login' });
-      await sendOTPEmail(user.email, otp, '2fa_login');
+      const mailRes = await sendOTPEmail(user.email, otp, '2fa_login');
       logger.info('2FA OTP generated for user', { userId: user.user_id });
       return success(res, {
         requires2FA: true,
         email: user.email,
-        message: '2FA verification code sent to your email',
-        demoOtp: otp
+        message: mailRes.provider === 'resend' ? '2FA code sent to your email inbox!' : '2FA code sent',
+        ...(mailRes.provider === 'demo' ? { demoOtp: otp } : {})
       });
     }
 
@@ -121,13 +121,13 @@ const AuthController = {
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     await UserModel.saveOtp({ userId: user.user_id, otpCode: otp, purpose: 'forgot_password' });
-    await sendOTPEmail(user.email, otp, 'forgot_password');
+    const mailRes = await sendOTPEmail(user.email, otp, 'forgot_password');
 
     logger.info('Forgot Password OTP generated', { userId: user.user_id });
     return success(res, {
-      message: 'OTP verification code sent to your email',
+      message: mailRes.provider === 'resend' ? 'OTP verification code sent to your email inbox!' : 'OTP code generated',
       email: user.email,
-      demoOtp: otp
+      ...(mailRes.provider === 'demo' ? { demoOtp: otp } : {})
     });
   },
 
