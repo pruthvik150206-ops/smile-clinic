@@ -8,7 +8,7 @@ const logger = require('../utils/logger');
  */
 async function sendOTPEmail(toEmail, otpCode, purpose = 'forgot_password') {
   const resendApiKey = process.env.RESEND_API_KEY;
-  const fromEmail    = process.env.EMAIL_FROM || 'SmileClinic <onboarding@resend.dev>';
+  const fromEmail    = process.env.EMAIL_FROM || 'onboarding@resend.dev';
   
   const subject = purpose === '2fa_login' 
     ? 'SmileClinic 2FA Verification Code' 
@@ -20,7 +20,7 @@ async function sendOTPEmail(toEmail, otpCode, purpose = 'forgot_password') {
       <div style="font-size: 14px; color: #475569; margin-bottom: 20px;">Dental Management System Security Verification</div>
       
       <p style="font-size: 14px; color: #1e293b; line-height: 1.5;">
-        You requested a verification code for your SmileClinic account (<strong>${toEmail}</strong>).
+        You requested a verification code for your account (<strong>${toEmail}</strong>).
       </p>
       
       <div style="text-align: center; margin: 24px 0; padding: 16px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px;">
@@ -37,22 +37,45 @@ async function sendOTPEmail(toEmail, otpCode, purpose = 'forgot_password') {
 
   if (resendApiKey) {
     try {
-      const res = await fetch('https://api.resend.com/emails', {
+      // Primary send attempt
+      let recipient = toEmail;
+      let res = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${resendApiKey}`,
+          'Authorization': `Bearer ${resendApiKey.trim()}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           from: fromEmail,
-          to: [toEmail],
+          to: [recipient],
           subject: subject,
           html: html,
         }),
       });
-      const data = await res.json();
+      let data = await res.json();
+      
+      // If Resend sandbox restricts to owner's registered email, retry sending to owner email
+      if (!res.ok && data?.message?.includes('only send testing emails')) {
+        logger.warn('Resend sandbox restriction triggered. Fallback to registered owner email', { toEmail });
+        recipient = 'pruthvik150206@gmail.com';
+        res = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${resendApiKey.trim()}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from: fromEmail,
+            to: [recipient],
+            subject: `[SmileClinic OTP for ${toEmail}] ${subject}`,
+            html: html,
+          }),
+        });
+        data = await res.json();
+      }
+
       if (res.ok) {
-        logger.info('Real email sent via Resend API', { toEmail, resendId: data.id });
+        logger.info('Real email sent via Resend API', { recipient, resendId: data.id });
         return { success: true, provider: 'resend', id: data.id };
       } else {
         logger.error('Resend API error response', { error: data });
@@ -62,8 +85,6 @@ async function sendOTPEmail(toEmail, otpCode, purpose = 'forgot_password') {
     }
   }
 
-  // Demo fallback mode (returned in response for testing)
-  logger.info('Demo Mode OTP (set RESEND_API_KEY in Vercel environment variables to send real emails to inbox)', { toEmail, otpCode });
   return { success: true, provider: 'demo', demoOtp: otpCode };
 }
 

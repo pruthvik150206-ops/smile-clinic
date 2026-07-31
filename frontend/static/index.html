@@ -1531,9 +1531,13 @@
           open2FAModal(r.data.email || loginInput, r.data.demoOtp);
           return;
         }
-        localStorage.setItem('sc_token', r.data.token); STATE.user = r.data.user;
-        toast(`Welcome, ${r.data.user.username}!`);
-        await loadData(); STATE.page = 'dashboard'; renderPage();
+        localStorage.setItem('sc_token', r.data.token); 
+        STATE.user = r.data.user;
+        const displayName = STATE.user?.username || STATE.user?.email || 'User';
+        toast(`Welcome, ${displayName}!`);
+        STATE.page = 'dashboard'; 
+        renderPage();
+        loadData().then(() => renderPage()).catch(() => {});
       } catch (e) {
         if (errEl) { errEl.textContent = e.message || 'Login request failed'; errEl.style.display = 'block'; }
       } finally {
@@ -1655,10 +1659,11 @@
       closeModal();
       localStorage.setItem('sc_token', r.data.token);
       STATE.user = r.data.user;
-      toast(`Welcome, ${r.data.user.username}! (2FA Verified)`);
-      await loadData();
+      const displayName = STATE.user?.username || STATE.user?.email || 'User';
+      toast(`Welcome, ${displayName}! (2FA Verified)`);
       STATE.page = 'dashboard';
       renderPage();
+      loadData().then(() => renderPage()).catch(() => {});
     }
     function showRegister() {
       document.getElementById('app').innerHTML = `
