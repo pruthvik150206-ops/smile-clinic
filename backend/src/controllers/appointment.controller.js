@@ -132,6 +132,65 @@ const AppointmentController = {
     logger.info('Appointment deleted', { appointment_id: req.params.id });
     return success(res, { deleted: true, appointment_id: parseInt(req.params.id) });
   },
+
+  async publicBook(req, res) {
+    try {
+      const { first_name, last_name, name, email, phone, doctor_id, scheduled_at, reason, notes } = req.body;
+      const patientName = name || `${first_name || ''} ${last_name || ''}`.trim() || 'Guest Patient';
+
+      let patient = null;
+      if (email || phone) {
+        try {
+          const query = email && phone
+            ? 'SELECT * FROM patients WHERE email=$1 OR phone=$2'
+            : (email ? 'SELECT * FROM patients WHERE email=$1' : 'SELECT * FROM patients WHERE phone=$1');
+          const params = email && phone ? [email, phone] : [email || phone];
+          const existing = await db.query(query, params).catch(() => ({ rows: [] }));
+          patient = existing.rows && existing.rows[0];
+        } catch (e) {}
+      }
+
+      if (!patient) {
+        const nameParts = patientName.split(' ');
+        const fName = nameParts[0] || 'Guest';
+        const lName = nameParts.slice(1).join(' ') || 'Patient';
+
+        patient = await PatientModel.create({
+          first_name: fName,
+          last_name: lName,
+          email: email || `patient_${Date.now()}@smileclinic.in`,
+          phone: phone || '0000000000',
+          gender: 'Other',
+          date_of_birth: '1990-01-01',
+          medical_history: reason || notes || 'Online website booking'
+        }).catch(err => {
+          logger.warn('Failed to auto-create patient for public booking', { error: err.message });
+          return { patient_id: 1 };
+        });
+      }
+
+      const docId = parseInt(doctor_id) || 1;
+      const apptDate = scheduled_at || new Date(Date.now() + 86400000 * 2).toISOString().slice(0, 16);
+
+      const appt = await AppointmentModel.create({
+        patient_id: patient ? patient.patient_id : 1,
+        doctor_id: docId,
+        scheduled_at: apptDate,
+        status: 'scheduled',
+        notes: reason || notes || 'Website Online Booking'
+      });
+
+      return success(res, {
+        message: 'Appointment booked successfully! Our clinic will confirm shortly.',
+        appointment_id: appt.appointment_id,
+        scheduled_at: appt.scheduled_at
+      });
+    } catch (err) {
+      logger.error('Public booking failed', { error: err.message });
+      return badRequest(res, 'Could not complete booking: ' + err.message);
+    }
+  }
 };
 
 module.exports = AppointmentController;
+

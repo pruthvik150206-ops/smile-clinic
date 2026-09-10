@@ -44,6 +44,10 @@ app.use('/api', rateLimit({
 const staticPath = path.join(__dirname, '../../frontend/static');
 app.use(express.static(staticPath));
 
+app.get(['/dms', '/dms.html', '/portal', '/portal.html', '/login', '/login.html'], (req, res) => {
+  res.sendFile(path.join(staticPath, 'dms.html'));
+});
+
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api/') || req.path.startsWith('/json/') || req.path === '/favicon.ico') return next();
   res.sendFile(path.join(staticPath, 'index.html'));
@@ -53,6 +57,19 @@ app.get('/api/health', async (req, res) => {
   const mlService = require('./services/mlService');
   const mlHealth  = await mlService.checkHealth();
   res.json({ success: true, data: { status: 'healthy', db: 'connected', ml: mlHealth, timestamp: new Date().toISOString() } });
+});
+
+const AppointmentController = require('./controllers/appointment.controller');
+const DoctorModel           = require('./models/doctor.model');
+
+app.post('/api/public/book-appointment', AppointmentController.publicBook);
+app.get('/api/public/doctors', async (req, res) => {
+  try {
+    const doctors = await DoctorModel.findAll({});
+    return res.json({ success: true, data: doctors });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: { message: err.message } });
+  }
 });
 
 const statsRoutes        = require('./routes/stats.routes');

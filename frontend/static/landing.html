@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SmileClinic — Advanced Dental Care & Practice Management</title>
+<title>SmileClinic — Advanced Dental Care in Bengaluru</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -46,12 +46,11 @@ nav.scrolled{
 .nav-logo{font-family:var(--serif);font-weight:800;font-size:22px;color:var(--white);text-decoration:none;
   display:flex;align-items:center;gap:8px}
 .nav-logo-dot{width:8px;height:8px;border-radius:50%;background:var(--mint);display:inline-block}
-.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links{display:flex;align-items:center;gap:36px}
 .nav-links a{color:var(--text);font-size:14px;font-weight:500;text-decoration:none;transition:color .2s}
 .nav-links a:hover{color:var(--white)}
-.nav-actions{display:flex;align-items:center;gap:12px}
-.nav-cta{background:var(--mint);color:var(--navy);font-weight:600;font-size:14px;padding:10px 20px;
-  border-radius:8px;text-decoration:none;transition:all .2s;border:none;cursor:pointer;font-family:var(--font)}
+.nav-cta{background:var(--mint);color:var(--navy);font-weight:600;font-size:14px;padding:10px 22px;
+  border-radius:8px;text-decoration:none;transition:all .2s;border:none;cursor:pointer}
 .nav-cta:hover{background:var(--mint2);transform:translateY(-1px)}
 
 /* ── HERO ───────────────────────────────────────────────────── */
@@ -65,11 +64,13 @@ nav.scrolled{
              radial-gradient(ellipse 60% 80% at 20% 80%, rgba(0,100,200,.1) 0%, transparent 60%),
              linear-gradient(135deg, #0B1628 0%, #0F1E38 50%, #0B1628 100%);
 }
+/* animated gradient orbs */
 .orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
 .orb1{width:500px;height:500px;background:rgba(0,229,195,.06);top:-100px;right:-100px;animation:orbFloat 8s ease-in-out infinite}
 .orb2{width:300px;height:300px;background:rgba(0,100,255,.08);bottom:100px;left:100px;animation:orbFloat 6s 2s ease-in-out infinite reverse}
 @keyframes orbFloat{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,-30px)}}
 
+/* grid lines */
 .hero-grid{
   position:absolute;inset:0;opacity:.04;
   background-image:linear-gradient(rgba(255,255,255,1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,1) 1px,transparent 1px);
@@ -110,6 +111,7 @@ nav.scrolled{
 }
 .btn-ghost:hover{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.05)}
 
+/* floating visual */
 .hero-visual{
   position:absolute;right:60px;top:50%;transform:translateY(-50%);
   width:420px;z-index:1;opacity:.95;
@@ -137,6 +139,7 @@ nav.scrolled{
 .appt-badge.confirmed{background:rgba(0,229,195,.15);color:var(--mint)}
 .appt-badge.upcoming{background:rgba(244,197,66,.12);color:var(--gold)}
 
+/* floating chips */
 .chip{
   position:absolute;background:rgba(15,30,56,.9);backdrop-filter:blur(10px);
   border:1px solid rgba(0,229,195,.15);border-radius:12px;padding:10px 16px;
@@ -268,30 +271,6 @@ h2{font-family:var(--serif);font-size:clamp(34px,4vw,52px);font-weight:800;lette
 .cta-section p{color:var(--text);margin:0 auto 36px;max-width:420px;font-size:16px}
 .cta-actions{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;position:relative}
 
-/* ── MODAL STYLES ─────────────────────────────────────────────── */
-.modal-overlay{
-  position:fixed;inset:0;background:rgba(11,22,40,0.88);backdrop-filter:blur(10px);
-  z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all 0.3s ease;
-}
-.modal-overlay.active{opacity:1;visibility:visible}
-.modal-card{
-  background:var(--navy2);border:1px solid rgba(0,229,195,0.25);border-radius:24px;
-  padding:36px;max-width:520px;width:92%;position:relative;box-shadow:0 25px 60px rgba(0,0,0,0.6);
-}
-.modal-close{
-  position:absolute;top:20px;right:20px;background:none;border:none;
-  color:var(--text2);font-size:24px;cursor:pointer;transition:color 0.2s;
-}
-.modal-close:hover{color:var(--mint)}
-.form-group{margin-bottom:16px;text-align:left}
-.form-group label{display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px}
-.form-group input, .form-group select, .form-group textarea{
-  width:100%;background:var(--navy);border:1px solid rgba(255,255,255,0.12);border-radius:10px;
-  padding:11px 14px;color:var(--white);font-family:var(--font);font-size:14px;outline:none;transition:border 0.2s;
-}
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus{border-color:var(--mint)}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-
 /* ── FOOTER ──────────────────────────────────────────────────── */
 footer{
   padding:60px 60px 40px;border-top:1px solid rgba(255,255,255,.06);
@@ -333,7 +312,6 @@ footer{
   .footer-top{grid-template-columns:1fr 1fr}
   .cta-section{margin:0 24px 60px;padding:48px 28px}
   .nav-links{display:none}
-  .form-row{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -348,7 +326,7 @@ footer{
 
 <!-- ── NAV ──────────────────────────────────────────────────── -->
 <nav id="nav">
-  <a href="/" class="nav-logo"><span class="nav-logo-dot"></span>SmileClinic</a>
+  <a href="#" class="nav-logo"><span class="nav-logo-dot"></span>SmileClinic</a>
   <div class="nav-links">
     <a href="#services">Services</a>
     <a href="#doctors">Doctors</a>
@@ -356,10 +334,7 @@ footer{
     <a href="#testimonials">Reviews</a>
     <a href="#contact">Contact</a>
   </div>
-  <div class="nav-actions">
-    <button onclick="openBookingModal()" class="nav-cta">Book Appointment</button>
-    <a href="/dms" class="btn-ghost" style="padding:8px 16px;font-size:13px;border-radius:8px">Staff Portal →</a>
-  </div>
+  <a href="https://smile-clinic-theta.vercel.app" target="_blank" class="nav-cta">Patient Login →</a>
 </nav>
 
 <!-- ── HERO ──────────────────────────────────────────────────── -->
@@ -374,8 +349,8 @@ footer{
     <h1>Your smile,<br><em>reimagined.</em></h1>
     <p class="hero-sub">Bengaluru's most advanced dental practice — combining clinical expertise with intelligent care management to give you the best experience in dentistry.</p>
     <div class="hero-actions">
-      <button onclick="openBookingModal()" class="btn-primary">Book appointment ↗</button>
-      <a href="/dms" class="btn-ghost">Staff & Doctor Portal →</a>
+      <a href="https://smile-clinic-theta.vercel.app" target="_blank" class="btn-primary">Book appointment ↗</a>
+      <a href="#services" class="btn-ghost">Our services</a>
     </div>
   </div>
 
@@ -386,7 +361,7 @@ footer{
         <div class="card-av">🩺</div>
         <div>
           <div class="card-name">Today's Overview</div>
-          <div class="card-role">SmileClinic Practice Platform</div>
+          <div class="card-role">SmileClinic Dashboard</div>
         </div>
       </div>
       <div class="card-stat-row">
@@ -426,8 +401,8 @@ footer{
     </div>
   </div>
 
-  <div class="chip chip1">🤖 Intelligent Patient Syncing</div>
-  <div class="chip chip2">📋 Realtime DMS Integrated</div>
+  <div class="chip chip1">🤖 ML Risk Score: Low ✅</div>
+  <div class="chip chip2">📋 3 consultations updated today</div>
 </section>
 
 <!-- ── STATS ──────────────────────────────────────────────────── -->
@@ -473,51 +448,51 @@ footer{
     <div class="service-card">
       <span class="service-icon">🔬</span>
       <div class="service-title">Root Canal Therapy</div>
-      <div class="service-desc">Single-visit rotary endodontics with precision digital imaging. Painless, effective tooth preservation.</div>
-      <span class="service-tag">From ₹4,200</span>
+      <div class="service-desc">Modern, nearly pain-free root canal treatment with rotary endodontics. Save your natural tooth, eliminate infection.</div>
+      <span class="service-tag">From ₹5,500</span>
     </div>
     <div class="service-card">
       <span class="service-icon">😁</span>
-      <div class="service-title">Orthodontics & Aligners</div>
-      <div class="service-desc">Metal braces, ceramic braces, and clear aligners for all ages. Computer-planned alignment for predictable results.</div>
-      <span class="service-tag">From ₹25,000</span>
+      <div class="service-title">Orthodontics</div>
+      <div class="service-desc">Metal braces and clear aligner systems for children and adults. Beautifully aligned teeth for life.</div>
+      <span class="service-tag">From ₹18,000</span>
     </div>
     <div class="service-card">
       <span class="service-icon">👑</span>
       <div class="service-title">Crowns & Bridges</div>
-      <div class="service-desc">Monolithic zirconia and E-max ceramic restorations. Natural appearance, incredible strength, 10-year warranty.</div>
-      <span class="service-tag">From ₹6,000</span>
+      <div class="service-desc">Full ceramic porcelain crowns fabricated to match your natural tooth — indistinguishable, durable, and beautiful.</div>
+      <span class="service-tag">From ₹7,500</span>
     </div>
     <div class="service-card">
-      <span class="service-icon">🩺</span>
-      <div class="service-title">Pediatric Dentistry</div>
-      <div class="service-desc">Gentle care tailored for children. Preventive sealants, fluoride treatments, and habit counselling in a welcoming space.</div>
-      <span class="service-tag">From ₹600</span>
+      <span class="service-icon">🛡️</span>
+      <div class="service-title">Preventive Care</div>
+      <div class="service-desc">Pit and fissure sealants, fluoride treatments, and OPG X-rays to catch problems before they become costly.</div>
+      <span class="service-tag">From ₹400</span>
     </div>
   </div>
 </section>
 
-<!-- ── DOCTORS ────────────────────────────────────────────────── -->
+<!-- ── DOCTORS ─────────────────────────────────────────────────── -->
 <section id="doctors">
   <div class="doctors-header reveal">
     <div>
-      <div class="section-eyebrow"><span class="eyebrow-line"></span>Our specialists</div>
-      <h2>Expert care from<br>experienced doctors</h2>
+      <div class="section-eyebrow"><span class="eyebrow-line"></span>Our team</div>
+      <h2>Specialists who put<br>you first</h2>
     </div>
-    <button onclick="openBookingModal()" class="btn-primary">Book consultation →</button>
+    <a href="https://smile-clinic-theta.vercel.app" target="_blank" class="btn-ghost">Book now →</a>
   </div>
   <div class="doctors-grid">
     <div class="doctor-card reveal reveal-delay-1">
       <div class="doctor-av">PS</div>
       <div>
         <div class="doctor-name">Dr. Priya Sharma</div>
-        <div class="doctor-spec">General Dentistry & Endodontics · BDS, MDS</div>
-        <div class="doctor-bio">12+ years of clinical experience in advanced restorative procedures, root canal therapy, and aesthetic smile design.</div>
+        <div class="doctor-spec">General Dentistry · BDS, MDS</div>
+        <div class="doctor-bio">8 years of experience in comprehensive dental care. Specialises in restorative procedures and preventive dentistry. Known for a gentle, patient-first approach.</div>
         <div class="doctor-tags">
           <span class="doctor-tag">Root Canal</span>
-          <span class="doctor-tag">Restorations</span>
-          <span class="doctor-tag">Smile Design</span>
+          <span class="doctor-tag">Fillings</span>
           <span class="doctor-tag">Scaling</span>
+          <span class="doctor-tag">Extractions</span>
         </div>
         <div class="available-badge"><span class="avail-dot"></span>Accepting patients</div>
       </div>
@@ -622,59 +597,11 @@ footer{
   <h2>Ready for your best smile?</h2>
   <p>Book your first appointment online or call us directly. New patients always welcome.</p>
   <div class="cta-actions">
-    <button onclick="openBookingModal()" class="btn-primary">Book appointment →</button>
-    <a href="/dms" class="btn-ghost">Staff & Doctor Portal →</a>
+    <a href="https://smile-clinic-theta.vercel.app" target="_blank" class="btn-primary">Book appointment →</a>
+    <a href="tel:+919876543210" class="btn-ghost">📞 +91 98765 43210</a>
   </div>
   <div style="margin-top:28px;font-size:13px;color:var(--text2)">
     Mon–Fri 9am–7pm &nbsp;·&nbsp; Sat 9am–5pm &nbsp;·&nbsp; Koramangala, Bengaluru
-  </div>
-</div>
-
-<!-- ── BOOKING MODAL ─────────────────────────────────────────── -->
-<div id="bookingModal" class="modal-overlay">
-  <div class="modal-card">
-    <button class="modal-close" onclick="closeBookingModal()">&times;</button>
-    <div style="margin-bottom:24px;text-align:left">
-      <div class="section-eyebrow"><span class="eyebrow-line"></span>Online Booking</div>
-      <h3 style="font-family:var(--serif);font-size:24px;margin-top:4px;color:var(--white)">Schedule Appointment</h3>
-      <p style="color:var(--text2);font-size:13px;margin-top:4px">Book in less than 60 seconds. Our reception team will confirm your slot.</p>
-    </div>
-    <form id="publicBookingForm" onsubmit="handlePublicBooking(event)">
-      <div class="form-group">
-        <label>Full Name *</label>
-        <input type="text" id="bkName" placeholder="e.g. Ananya Sen" required />
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Phone Number *</label>
-          <input type="tel" id="bkPhone" placeholder="+91 98765 43210" required />
-        </div>
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" id="bkEmail" placeholder="ananya@example.com" />
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Select Specialist *</label>
-          <select id="bkDoctor" required>
-            <option value="1">Dr. Priya Sharma — General & Endodontics</option>
-            <option value="2">Dr. Arjun Nair — Orthodontics</option>
-            <option value="4">Dr. Vijay Rathod — Orthodontics</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Preferred Date & Time *</label>
-          <input type="datetime-local" id="bkDate" required />
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Reason for Visit / Treatment</label>
-        <textarea id="bkNotes" rows="2" placeholder="e.g. Routine consultation, Scaling, Root canal, Braces..."></textarea>
-      </div>
-      <div id="bkMsg" style="margin-bottom:14px;font-size:13px;display:none;padding:10px;border-radius:8px;background:rgba(255,255,255,0.05)"></div>
-      <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:14px">Confirm Booking →</button>
-    </form>
   </div>
 </div>
 
@@ -710,18 +637,18 @@ footer{
       </ul>
     </div>
     <div>
-      <div class="footer-col-title">Practice System</div>
+      <div class="footer-col-title">Patient Portal</div>
       <ul class="footer-links">
-        <li><a href="/dms">DMS Staff Login</a></li>
-        <li><a href="#" onclick="openBookingModal(); return false;">Book Appointment</a></li>
-        <li><a href="/dms">Doctor Portal</a></li>
-        <li><a href="/dms">Billing & Records</a></li>
+        <li><a href="https://smile-clinic-theta.vercel.app" target="_blank">Login</a></li>
+        <li><a href="https://smile-clinic-theta.vercel.app" target="_blank">Book appointment</a></li>
+        <li><a href="https://smile-clinic-theta.vercel.app" target="_blank">View records</a></li>
+        <li><a href="https://smile-clinic-theta.vercel.app" target="_blank">Billing</a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
     <div class="footer-copy">© 2026 SmileClinic. All rights reserved.</div>
-    <div class="footer-badge">Powered by <span>SmileClinic DMS</span> · Unified Cloud Platform</div>
+    <div class="footer-badge">Powered by <span>SmileClinic DMS</span> · Built with ❤️ in Bengaluru</div>
   </div>
 </footer>
 
@@ -730,7 +657,7 @@ footer{
 window.addEventListener('load', () => {
   setTimeout(() => {
     document.getElementById('loader').classList.add('hidden');
-  }, 800);
+  }, 1800);
 });
 
 // ── NAV SCROLL ────────────────────────────────────────────────
@@ -754,72 +681,13 @@ reveals.forEach(el => observer.observe(el));
 // ── SMOOTH NAV LINKS ──────────────────────────────────────────
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
-    const href = a.getAttribute('href');
-    if (href && href !== '#') {
-      const target = document.querySelector(href);
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   });
 });
-
-// ── BOOKING MODAL LOGIC ───────────────────────────────────────
-function openBookingModal() {
-  const modal = document.getElementById('bookingModal');
-  if (modal) modal.classList.add('active');
-  const dateInput = document.getElementById('bkDate');
-  if (dateInput && !dateInput.value) {
-    const tomorrow = new Date(Date.now() + 86400000);
-    tomorrow.setHours(10, 0, 0, 0);
-    dateInput.value = tomorrow.toISOString().slice(0, 16);
-  }
-}
-function closeBookingModal() {
-  const modal = document.getElementById('bookingModal');
-  if (modal) modal.classList.remove('active');
-}
-
-async function handlePublicBooking(e) {
-  e.preventDefault();
-  const msgEl = document.getElementById('bkMsg');
-  msgEl.style.display = 'block';
-  msgEl.style.color = 'var(--text)';
-  msgEl.textContent = 'Booking your appointment...';
-
-  const payload = {
-    name: document.getElementById('bkName').value,
-    phone: document.getElementById('bkPhone').value,
-    email: document.getElementById('bkEmail').value,
-    doctor_id: document.getElementById('bkDoctor').value,
-    scheduled_at: document.getElementById('bkDate').value,
-    reason: document.getElementById('bkNotes').value
-  };
-
-  try {
-    const res = await fetch('/api/public/book-appointment', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    const data = await res.json();
-    if (data.success) {
-      msgEl.style.color = 'var(--mint)';
-      msgEl.innerHTML = `✅ <strong>Success!</strong> ${data.data.message || 'Appointment confirmed.'} (Appt ID: #${data.data.appointment_id})`;
-      setTimeout(() => {
-        closeBookingModal();
-        alert(`Appointment Booked Successfully!\nAppointment ID: #${data.data.appointment_id}\nOur team looks forward to seeing you.`);
-      }, 1400);
-    } else {
-      msgEl.style.color = '#FF6B6B';
-      msgEl.textContent = 'Failed: ' + (data.error?.message || 'Please try again.');
-    }
-  } catch (err) {
-    msgEl.style.color = '#FF6B6B';
-    msgEl.textContent = 'Network error. Please check your connection and try again.';
-  }
-}
 
 // ── COUNT-UP ANIMATION ────────────────────────────────────────
 function countUp(el, target, suffix='', duration=1500) {
