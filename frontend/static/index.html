@@ -9,7 +9,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
   --bg-dark:#080E1A; --surface-dark:#0F172A; --surface-dark2:#1E293B; --surface-dark3:#334155;
-  --primary:#0EA5E9; --primary-hover:#0284C7; --primary-light:rgba(14,165,233,0.12);
+  --primary:#F59E0B; --primary-hover:#D97706; --primary-light:rgba(245,158,11,0.15);
   --accent:#10B981; --accent-light:rgba(16,185,129,0.12);
   --white:#F8FAFC; --text-muted:#94A3B8; --text-sub:#64748B;
   --border:rgba(255,255,255,0.08); --border-focus:rgba(14,165,233,0.4);
@@ -55,7 +55,7 @@ nav.scrolled{
   background:var(--primary);color:var(--bg-dark);font-weight:700;font-size:13.5px;padding:10px 22px;
   border-radius:8px;text-decoration:none;transition:all .2s;border:none;cursor:pointer;font-family:var(--font);
 }
-.btn-nav:hover{background:var(--primary-hover);transform:translateY(-1px);box-shadow:0 8px 24px rgba(14,165,233,0.3)}
+.btn-nav:hover{background:var(--primary-hover);transform:translateY(-1px);box-shadow:0 8px 24px rgba(245,158,11,0.3)}
 
 /* ── HERO ───────────────────────────────────────────────────── */
 .hero{
@@ -64,12 +64,12 @@ nav.scrolled{
 }
 .hero-bg{
   position:absolute;inset:0;
-  background:radial-gradient(ellipse 70% 50% at 75% 40%, rgba(14,165,233,0.12) 0%, transparent 60%),
+  background:radial-gradient(ellipse 70% 50% at 75% 40%, rgba(245,158,11,0.1) 0%, transparent 60%),
              radial-gradient(ellipse 50% 70% at 15% 80%, rgba(16,185,129,0.08) 0%, transparent 60%),
              linear-gradient(180deg, #080E1A 0%, #0F172A 100%);
 }
 .orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none}
-.orb1{width:450px;height:450px;background:rgba(14,165,233,0.08);top:-80px;right:-50px;animation:orbFloat 8s ease-in-out infinite}
+.orb1{width:450px;height:450px;background:rgba(245,158,11,0.06);top:-80px;right:-50px;animation:orbFloat 8s ease-in-out infinite}
 .orb2{width:320px;height:320px;background:rgba(16,185,129,0.06);bottom:80px;left:80px;animation:orbFloat 6s 2s ease-in-out infinite reverse}
 @keyframes orbFloat{0%,100%{transform:translate(0,0)}50%{transform:translate(15px,-20px)}}
 
@@ -82,7 +82,7 @@ nav.scrolled{
 .hero-content{position:relative;z-index:1;max-width:640px}
 .hero-badge{
   display:inline-flex;align-items:center;gap:8px;
-  background:var(--primary-light);border:1px solid rgba(14,165,233,0.25);
+  background:var(--primary-light);border:1px solid rgba(245,158,11,0.25);
   color:var(--primary);font-size:12px;font-weight:600;padding:6px 14px;border-radius:20px;
   margin-bottom:28px;letter-spacing:.03em;
 }
@@ -105,7 +105,7 @@ nav.scrolled{
   padding:14px 28px;border-radius:10px;text-decoration:none;border:none;cursor:pointer;
   transition:all .25s;display:inline-flex;align-items:center;gap:8px;font-family:var(--font);
 }
-.btn-primary:hover{background:var(--primary-hover);transform:translateY(-2px);box-shadow:0 12px 32px rgba(14,165,233,0.3)}
+.btn-primary:hover{background:var(--primary-hover);transform:translateY(-2px);box-shadow:0 12px 32px rgba(245,158,11,0.3)}
 .btn-ghost{
   color:var(--white);font-weight:600;font-size:14.5px;padding:14px 28px;border-radius:10px;
   text-decoration:none;border:1px solid var(--border);transition:all .25s;
