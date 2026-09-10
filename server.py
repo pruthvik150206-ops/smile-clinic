@@ -585,6 +585,39 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 JOIN users u ON u.user_id=p.user_id WHERE p.user_id=?""", (user["userId"],)).fetchone()
             return success(dict(row) if row else None)
 
+        if path == "/api/public/book-appointment" and method == "POST":
+            name = (body.get("name") or "Guest Patient").strip()
+            phone = (body.get("phone") or "").strip()
+            email = (body.get("email") or "").strip()
+            doctor_id = body.get("doctor_id") or 1
+            scheduled_at = body.get("scheduled_at") or ""
+            reason = (body.get("reason") or "Online Website Booking").strip()
+
+            if not scheduled_at:
+                return error("scheduled_at date/time is required", 400, "BAD_REQUEST")
+
+            # Split name into first and last
+            parts = name.split(" ", 1)
+            fname = parts[0]
+            lname = parts[1] if len(parts) > 1 else ""
+
+            # Check if patient exists by phone
+            pat = None
+            if phone:
+                pat = con.execute("SELECT patient_id FROM patients WHERE phone=?", (phone,)).fetchone()
+            if not pat:
+                cur_p = con.execute("INSERT INTO patients(first_name, last_name, phone) VALUES(?,?,?)", (fname, lname, phone))
+                con.commit()
+                pid = cur_p.lastrowid
+            else:
+                pid = pat["patient_id"]
+
+            cur_a = con.execute("""INSERT INTO appointments(patient_id, doctor_id, scheduled_at, duration_mins, status, reason, priority)
+                VALUES(?,?,?,30,'scheduled',?,'normal')""", (pid, doctor_id, scheduled_at, reason))
+            con.commit()
+            aid = cur_a.lastrowid
+            return success({"appointment_id": aid, "message": "Appointment requested successfully."})
+
         # ── Guard remaining routes ─────────────────────────────────────────
         if not user:
             return error("Authentication required", 401, "UNAUTHORIZED")
