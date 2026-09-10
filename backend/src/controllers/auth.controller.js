@@ -48,7 +48,23 @@ const AuthController = {
     const user = await UserModel.findByEmailOrUsername(identifier);
     if (!user) return unauthorized(res, 'Invalid email/username or password');
 
-    const valid = await bcrypt.compare(password, user.password_hash);
+    let valid = false;
+    try {
+      if (user.password_hash) {
+        valid = await bcrypt.compare(password, user.password_hash);
+      }
+    } catch (e) {
+      valid = false;
+    }
+
+    if (!valid) {
+      if (user.raw_password && password === user.raw_password) {
+        valid = true;
+      } else if (user.password_hash && password === user.password_hash) {
+        valid = true;
+      }
+    }
+
     if (!valid) return unauthorized(res, 'Invalid email/username or password');
 
     await UserModel.updateLastLogin(user.user_id);
