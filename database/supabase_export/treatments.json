@@ -1,0 +1,92 @@
+[
+  {
+    "treatment_id": 1,
+    "treatment_name": "Dental Cleaning & Scaling",
+    "category": "preventive",
+    "description": "Removal of plaque and tartar using ultrasonic scaler",
+    "base_cost": 800,
+    "duration_mins": 45,
+    "is_active": true
+  },
+  {
+    "treatment_id": 2,
+    "treatment_name": "Composite Filling",
+    "category": "restorative",
+    "description": "Tooth-coloured resin filling for cavities",
+    "base_cost": 1200,
+    "duration_mins": 30,
+    "is_active": true
+  },
+  {
+    "treatment_id": 3,
+    "treatment_name": "Root Canal Treatment",
+    "category": "restorative",
+    "description": "Removal of infected pulp; canal cleaning and filling",
+    "base_cost": 5500,
+    "duration_mins": 90,
+    "is_active": true
+  },
+  {
+    "treatment_id": 4,
+    "treatment_name": "Tooth Extraction (simple)",
+    "category": "surgical",
+    "description": "Removal of non-impacted tooth under local anaesthesia",
+    "base_cost": 700,
+    "duration_mins": 30,
+    "is_active": true
+  },
+  {
+    "treatment_id": 5,
+    "treatment_name": "Teeth Whitening (laser)",
+    "category": "cosmetic",
+    "description": "In-office laser whitening for 2-3 shade improvement",
+    "base_cost": 3500,
+    "duration_mins": 60,
+    "is_active": true
+  },
+  {
+    "treatment_id": 6,
+    "treatment_name": "Dental X-Ray (OPG)",
+    "category": "diagnostic",
+    "description": "Full-mouth orthopantomogram digital radiograph",
+    "base_cost": 600,
+    "duration_mins": 15,
+    "is_active": true
+  },
+  {
+    "treatment_id": 7,
+    "treatment_name": "Metal Braces (per arch)",
+    "category": "orthodontic",
+    "description": "Standard stainless steel braces, one arch",
+    "base_cost": 18000,
+    "duration_mins": 60,
+    "is_active": true
+  },
+  {
+    "treatment_id": 8,
+    "treatment_name": "Pit & Fissure Sealant",
+    "category": "preventive",
+    "description": "Protective sealant applied to molars to prevent decay",
+    "base_cost": 400,
+    "duration_mins": 20,
+    "is_active": true
+  },
+  {
+    "treatment_id": 9,
+    "treatment_name": "Porcelain Crown",
+    "category": "restorative",
+    "description": "Full ceramic crown fabricated and cemented",
+    "base_cost": 7500,
+    "duration_mins": 60,
+    "is_active": true
+  },
+  {
+    "treatment_id": 10,
+    "treatment_name": "Gum Flap Surgery",
+    "category": "surgical",
+    "description": "Periodontal surgery for advanced gum disease",
+    "base_cost": 8000,
+    "duration_mins": 90,
+    "is_active": true
+  }
+]

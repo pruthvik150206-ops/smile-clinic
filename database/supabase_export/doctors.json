@@ -1,0 +1,47 @@
+[
+  {
+    "doctor_id": 1,
+    "user_id": 2,
+    "first_name": "Priya",
+    "last_name": "Sharma",
+    "specialisation": "General Dentistry",
+    "license_number": "MCI-DEN-2018-04521",
+    "phone": "+91-9876543210",
+    "consultation_fee": 600,
+    "bio": null,
+    "is_available": true,
+    "joined_date": "2026-07-29",
+    "created_at": "2026-07-29T07:13:46.479627",
+    "updated_at": "2026-07-29T07:13:46.479627"
+  },
+  {
+    "doctor_id": 2,
+    "user_id": 3,
+    "first_name": "Arjun",
+    "last_name": "Nair",
+    "specialisation": "Orthodontics",
+    "license_number": "MCI-DEN-2016-03812",
+    "phone": "+91-9876543211",
+    "consultation_fee": 900,
+    "bio": null,
+    "is_available": true,
+    "joined_date": "2026-07-29",
+    "created_at": "2026-07-29T07:13:46.479627",
+    "updated_at": "2026-07-29T07:13:46.479627"
+  },
+  {
+    "doctor_id": 3,
+    "user_id": 10,
+    "first_name": "mueksh",
+    "last_name": "sharma",
+    "specialisation": "Oral Surgery",
+    "license_number": "hou-jok-oku",
+    "phone": "+91 987634567",
+    "consultation_fee": 700,
+    "bio": null,
+    "is_available": false,
+    "joined_date": "2026-07-30",
+    "created_at": "2026-07-30T18:29:59.545604",
+    "updated_at": "2026-07-30T18:37:01.415335"
+  }
+]

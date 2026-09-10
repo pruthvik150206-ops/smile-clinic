@@ -1,0 +1,59 @@
+[
+  {
+    "prediction_id": 1,
+    "appointment_id": 1,
+    "model_name": "no_show_xgboost",
+    "model_version": "2.1",
+    "prediction_score": 0.235,
+    "prediction_label": "show",
+    "feature_snapshot": {
+      "age": 36,
+      "day_of_week": "wednesday",
+      "distance_km": 4.2,
+      "has_insurance": 1,
+      "reminder_sent": 0,
+      "lead_time_days": 9,
+      "prior_no_shows": 0,
+      "treatment_category": "restorative"
+    },
+    "predicted_at": "2026-07-29T07:13:46.479627"
+  },
+  {
+    "prediction_id": 2,
+    "appointment_id": 2,
+    "model_name": "no_show_xgboost",
+    "model_version": "2.1",
+    "prediction_score": 0.067,
+    "prediction_label": "show",
+    "feature_snapshot": {
+      "age": 41,
+      "day_of_week": "friday",
+      "distance_km": 6.8,
+      "has_insurance": 1,
+      "reminder_sent": 1,
+      "lead_time_days": 10,
+      "prior_no_shows": 0,
+      "treatment_category": "restorative"
+    },
+    "predicted_at": "2026-07-29T07:13:46.479627"
+  },
+  {
+    "prediction_id": 3,
+    "appointment_id": 3,
+    "model_name": "no_show_xgboost",
+    "model_version": "2.1",
+    "prediction_score": 0.051,
+    "prediction_label": "show",
+    "feature_snapshot": {
+      "age": 26,
+      "day_of_week": "tuesday",
+      "distance_km": 2.1,
+      "has_insurance": 0,
+      "reminder_sent": 1,
+      "lead_time_days": 14,
+      "prior_no_shows": 0,
+      "treatment_category": "orthodontic"
+    },
+    "predicted_at": "2026-07-29T07:13:46.479627"
+  }
+]
