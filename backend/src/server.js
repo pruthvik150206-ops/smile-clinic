@@ -41,16 +41,33 @@ app.use('/api', rateLimit({
   message:  { success: false, error: { code: 'RATE_LIMITED', message: 'Too many requests.' } }
 }));
 
-const staticPath = path.join(__dirname, '../../frontend/static');
+const fs = require('fs');
+
+const candidatePaths = [
+  path.join(process.cwd(), 'frontend/static'),
+  path.join(__dirname, '../../frontend/static'),
+  path.join(__dirname, '../frontend/static'),
+  path.join(process.cwd(), 'public')
+];
+const staticPath = candidatePaths.find(p => fs.existsSync(path.join(p, 'dms.html'))) || candidatePaths[0];
+
 app.use(express.static(staticPath));
 
 app.get(['/dms', '/dms.html', '/portal', '/portal.html', '/login', '/login.html'], (req, res) => {
-  res.sendFile(path.join(staticPath, 'dms.html'));
+  const dmsFile = path.join(staticPath, 'dms.html');
+  if (fs.existsSync(dmsFile)) {
+    return res.sendFile(dmsFile);
+  }
+  return res.status(404).send('DMS Portal page file not found');
 });
 
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api/') || req.path.startsWith('/json/') || req.path === '/favicon.ico') return next();
-  res.sendFile(path.join(staticPath, 'index.html'));
+  const idxFile = path.join(staticPath, 'index.html');
+  if (fs.existsSync(idxFile)) {
+    return res.sendFile(idxFile);
+  }
+  return next();
 });
 
 app.get('/api/health', async (req, res) => {

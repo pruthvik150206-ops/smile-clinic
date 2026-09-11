@@ -6,7 +6,9 @@
       "use": "@vercel/node",
       "config": {
         "includeFiles": [
-          "frontend/static/**"
+          "frontend/static/**",
+          "public/**",
+          "database/**"
         ]
       }
     }
@@ -15,6 +17,18 @@
     {
       "src": "/api/(.*)",
       "dest": "/api/index.js"
+    },
+    {
+      "src": "/dms",
+      "dest": "/dms.html"
+    },
+    {
+      "src": "/portal",
+      "dest": "/dms.html"
+    },
+    {
+      "src": "/login",
+      "dest": "/dms.html"
     },
     {
       "src": "/(.*)",
