@@ -1284,6 +1284,13 @@
       if (res[5]?.success) STATE.prescriptions = toArr(res[5].data);
       if (res[6]?.success) STATE.invoices = toArr(res[6].data);
       if (role() === 'patient' && res[7]?.success) STATE.myPatientProfile = res[7].data;
+      try {
+        localStorage.setItem('sc_state_cache', JSON.stringify({
+          patients: STATE.patients, doctors: STATE.doctors,
+          appointments: STATE.appointments, treatments: STATE.treatments,
+          stats: STATE.stats, prescriptions: STATE.prescriptions, invoices: STATE.invoices
+        }));
+      } catch (e) {}
     }
 
     // ═══════════════════════════════════════════════════════════
@@ -4273,13 +4280,30 @@
     // ═══════════════════════════════════════════════════════════
     //  BOOT
     // ═══════════════════════════════════════════════════════════
+    // Load local state cache synchronously for 0ms instant UI rendering
+    try {
+      const storedUser = localStorage.getItem('sc_user');
+      if (storedUser) STATE.user = JSON.parse(storedUser);
+      const storedCache = localStorage.getItem('sc_state_cache');
+      if (storedCache) {
+        const parsed = JSON.parse(storedCache);
+        if (parsed.patients) STATE.patients = parsed.patients;
+        if (parsed.doctors) STATE.doctors = parsed.doctors;
+        if (parsed.appointments) STATE.appointments = parsed.appointments;
+        if (parsed.treatments) STATE.treatments = parsed.treatments;
+        if (parsed.stats) STATE.stats = parsed.stats;
+        if (parsed.prescriptions) STATE.prescriptions = parsed.prescriptions;
+        if (parsed.invoices) STATE.invoices = parsed.invoices;
+      }
+    } catch (e) {}
+
     // Render UI synchronously right away
     renderPage();
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', renderPage);
     }
 
-    // Background token check if user was logged in
+    // Background token check & fresh data sync
     (async () => {
       try {
         const token = localStorage.getItem('sc_token');
@@ -4287,10 +4311,13 @@
           const r = await api('GET', '/auth/me');
           if (r.success && r.data) {
             STATE.user = r.data;
+            try { localStorage.setItem('sc_user', JSON.stringify(r.data)); } catch (e) {}
             try { await loadData(); } catch (err) { console.error('Data load error:', err); }
             renderPage();
           } else {
             localStorage.removeItem('sc_token');
+            localStorage.removeItem('sc_user');
+            localStorage.removeItem('sc_state_cache');
           }
         }
       } catch (e) {

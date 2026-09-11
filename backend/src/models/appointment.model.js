@@ -4,13 +4,20 @@ const { execSync } = require('child_process');
 
 const sqliteDbPath = path.join(__dirname, '../../../database/clinic.db');
 
+const sqliteCache = new Map();
 function querySqlite(sql) {
+  const cached = sqliteCache.get(sql);
+  if (cached && (Date.now() - cached.ts < 3000)) {
+    return cached.data;
+  }
   try {
     const cmd = `sqlite3 -json "${sqliteDbPath}" "${sql.replace(/"/g, '\\"')}"`;
-    const output = execSync(cmd, { encoding: 'utf8', timeout: 3000 });
-    return JSON.parse(output || '[]');
+    const output = execSync(cmd, { encoding: 'utf8', timeout: 1500 });
+    const data = JSON.parse(output || '[]');
+    sqliteCache.set(sql, { ts: Date.now(), data });
+    return data;
   } catch (err) {
-    return [];
+    return cached ? cached.data : [];
   }
 }
 
