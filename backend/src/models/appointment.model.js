@@ -53,7 +53,7 @@ const AppointmentModel = {
                 COALESCE(a.booking_source, 'Call Booking') AS booking_source
          FROM appointments a
          JOIN patients p ON p.patient_id = a.patient_id
-         LEFT JOIN doctors d ON d.doctor_id = a.doctor_id ${where} ORDER BY a.scheduled_at DESC LIMIT $${idx} OFFSET $${idx + 1}`,
+         LEFT JOIN doctors d ON d.doctor_id = a.doctor_id ${where} ORDER BY a.appointment_id DESC LIMIT $${idx} OFFSET $${idx + 1}`,
         params
       ).catch(() => ({ rows: [] }));
       if (rows && rows.length > 0) return rows;
@@ -66,7 +66,7 @@ const AppointmentModel = {
              COALESCE(a.booking_source, 'Call Booking') AS booking_source
       FROM appointments a
       JOIN patients p ON p.patient_id = a.patient_id
-      LEFT JOIN doctors d ON d.doctor_id = a.doctor_id ORDER BY a.scheduled_at DESC;
+      LEFT JOIN doctors d ON d.doctor_id = a.doctor_id ORDER BY a.appointment_id DESC;
     `);
     if (sqliteRows && sqliteRows.length > 0) return sqliteRows;
 
