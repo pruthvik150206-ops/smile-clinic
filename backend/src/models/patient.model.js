@@ -94,12 +94,53 @@ const PatientModel = {
   },
 
   async create(data, client = db) {
+    const fName = data.first_name || 'Guest';
+    const lName = data.last_name || 'Patient';
+    const ph = data.phone || '0000000000';
+    const em = data.email || `patient_${Date.now()}@smileclinic.in`;
+    const genInput = (data.gender || 'other').toLowerCase();
+    const gen = ['male', 'female', 'other', 'prefer_not_to_say'].includes(genInput) ? genInput : 'other';
+    const med = data.medical_history || data.medical_notes || '';
+
+    try {
+      let userId = data.user_id;
+      if (!userId) {
+        const uExist = await db.query('SELECT user_id FROM users WHERE email = $1', [em]).catch(() => ({ rows: [] }));
+        if (uExist.rows && uExist.rows[0]) {
+          userId = uExist.rows[0].user_id;
+        } else {
+          const uname = 'guest_' + Math.random().toString(36).substring(2, 8);
+          const uNew = await db.query(
+            `INSERT INTO users (username, email, password_hash, role) VALUES ($1, $2, $3, 'patient') RETURNING user_id`,
+            [uname, em, 'guest_auth_hash']
+          ).catch(() => ({ rows: [] }));
+          if (uNew.rows && uNew.rows[0]) userId = uNew.rows[0].user_id;
+        }
+      }
+
+      if (userId) {
+        const { rows } = await db.query(
+          `INSERT INTO patients (user_id, first_name, last_name, phone, gender, medical_notes)
+           VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+          [userId, fName, lName, ph, gen, med]
+        ).catch(() => ({ rows: [] }));
+
+        if (rows && rows[0]) {
+          const created = { ...rows[0], email: em };
+          seedPatients.unshift(created);
+          return created;
+        }
+      }
+    } catch (e) {}
+
     const newP = {
       patient_id: Math.floor(100 + Math.random() * 900),
-      first_name: data.first_name,
-      last_name: data.last_name,
-      phone: data.phone,
-      email: data.email || 'patient@clinic.in'
+      first_name: fName,
+      last_name: lName,
+      phone: ph,
+      email: em,
+      gender: gen,
+      medical_notes: med
     };
     seedPatients.unshift(newP);
     return newP;

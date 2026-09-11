@@ -104,18 +104,59 @@ const AppointmentModel = {
 
   async create(data) {
     sqliteCache.clear();
-    const newA = {
+    const pid = data.patient_id ? parseInt(data.patient_id) : 1;
+    const did = data.doctor_id ? parseInt(data.doctor_id) : null;
+    const schAt = data.scheduled_at || new Date().toISOString();
+    const st = data.status || 'scheduled';
+    const rsn = data.reason || 'General Consultation';
+    const nts = data.notes || rsn;
+    const src = data.booking_source || 'Call Booking';
+    const pri = data.priority || 'normal';
+
+    try {
+      const { rows } = await db.query(
+        `INSERT INTO appointments (patient_id, doctor_id, scheduled_at, status, reason, notes, booking_source, priority)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+        [pid, did, schAt, st, rsn, nts, src, pri]
+      ).catch(() => ({ rows: [] }));
+
+      if (rows && rows[0]) {
+        const created = rows[0];
+        try {
+          const fullRes = await db.query(
+            `SELECT a.*, p.first_name || ' ' || p.last_name AS patient_name,
+                    COALESCE(d.first_name || ' ' || d.last_name, 'Unassigned') AS doctor_name,
+                    COALESCE(a.booking_source, 'Call Booking') AS booking_source
+             FROM appointments a
+             JOIN patients p ON p.patient_id = a.patient_id
+             LEFT JOIN doctors d ON d.doctor_id = a.doctor_id
+             WHERE a.appointment_id = $1`,
+            [created.appointment_id]
+          ).catch(() => ({ rows: [] }));
+          if (fullRes.rows && fullRes.rows[0]) {
+            seedAppointments.unshift(fullRes.rows[0]);
+            return fullRes.rows[0];
+          }
+        } catch (e) {}
+        seedAppointments.unshift(created);
+        return created;
+      }
+    } catch (e) {}
+
+    const fallbackA = {
       appointment_id: Math.floor(1000 + Math.random() * 9000),
-      patient_id: data.patient_id || 1,
-      doctor_id: data.doctor_id || null,
-      doctor_name: data.doctor_id ? 'Assigned Doctor' : 'Unassigned',
-      scheduled_at: data.scheduled_at || new Date().toISOString(),
-      status: 'scheduled',
-      reason: data.reason || 'General Consultation',
-      booking_source: data.booking_source || 'Call Booking'
+      patient_id: pid,
+      doctor_id: did,
+      doctor_name: did ? 'Assigned Doctor' : 'Unassigned',
+      scheduled_at: schAt,
+      status: st,
+      reason: rsn,
+      notes: nts,
+      booking_source: src,
+      priority: pri
     };
-    seedAppointments.unshift(newA);
-    return newA;
+    seedAppointments.unshift(fallbackA);
+    return fallbackA;
   },
 
   async update(appointmentId, data) {

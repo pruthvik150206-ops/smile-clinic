@@ -145,11 +145,8 @@ const AppointmentController = {
       let patient = null;
       if (email || phone) {
         try {
-          const query = email && phone
-            ? 'SELECT * FROM patients WHERE email=$1 OR phone=$2'
-            : (email ? 'SELECT * FROM patients WHERE email=$1' : 'SELECT * FROM patients WHERE phone=$1');
-          const params = email && phone ? [email, phone] : [email || phone];
-          const existing = await db.query(query, params).catch(() => ({ rows: [] }));
+          const query = 'SELECT p.* FROM patients p LEFT JOIN users u ON u.user_id = p.user_id WHERE ($1::text IS NOT NULL AND u.email = $1) OR ($2::text IS NOT NULL AND p.phone = $2)';
+          const existing = await db.query(query, [email || null, phone || null]).catch(() => ({ rows: [] }));
           patient = existing.rows && existing.rows[0];
         } catch (e) {}
       }
