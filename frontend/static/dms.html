@@ -1235,6 +1235,30 @@
       return `<span class="badge ${m[s] || 'bg-gray'}">${esc(s)}</span>`;
     }
 
+    function getAppointmentOverrides() {
+      try { return JSON.parse(localStorage.getItem('sc_appointment_overrides') || '{}'); }
+      catch (e) { return {}; }
+    }
+    function setAppointmentOverride(id, patch) {
+      try {
+        const overrides = getAppointmentOverrides();
+        overrides[id] = Object.assign(overrides[id] || {}, patch);
+        localStorage.setItem('sc_appointment_overrides', JSON.stringify(overrides));
+      } catch (e) {}
+    }
+    function applyAppointmentOverrides(appts) {
+      if (!Array.isArray(appts)) return appts;
+      const overrides = getAppointmentOverrides();
+      return appts.map(a => {
+        const ov = overrides[a.appointment_id];
+        if (ov) {
+          if (ov._deleted) return null;
+          return { ...a, ...ov };
+        }
+        return a;
+      }).filter(Boolean);
+    }
+
     // ═══════════════════════════════════════════════════════════
     //  API CLIENT
     // ═══════════════════════════════════════════════════════════
@@ -1278,7 +1302,7 @@
       const toArr = val => Array.isArray(val) ? val : (val?.items || []);
       if (res[0]?.success) STATE.patients = toArr(res[0].data);
       if (res[1]?.success) STATE.doctors = toArr(res[1].data);
-      if (res[2]?.success) STATE.appointments = toArr(res[2].data);
+      if (res[2]?.success) STATE.appointments = applyAppointmentOverrides(toArr(res[2].data));
       if (res[3]?.success) STATE.treatments = toArr(res[3].data);
       if (res[4]?.success) STATE.stats = res[4].data || {};
       if (res[5]?.success) STATE.prescriptions = toArr(res[5].data);
@@ -2570,6 +2594,7 @@
     async function confirmAppt(id) {
       const appt = (STATE.appointments || []).find(a => Number(a.appointment_id) === Number(id));
       if (appt) appt.status = 'confirmed';
+      setAppointmentOverride(id, { status: 'confirmed' });
       renderPage();
       toast('Confirmed');
       try {
@@ -2582,6 +2607,7 @@
       const r = await api('PATCH', `/appointments/${id}`, { status: 'confirmed' });
       if (r.success && r.data && appt) {
         Object.assign(appt, r.data);
+        setAppointmentOverride(id, { status: appt.status });
         renderPage();
       } else if (!r.success) {
         toast(r.error?.message || 'Error confirming', 'er');
@@ -2591,6 +2617,7 @@
       if (!confirm('Cancel this appointment?')) return;
       const appt = (STATE.appointments || []).find(a => Number(a.appointment_id) === Number(id));
       if (appt) appt.status = 'cancelled';
+      setAppointmentOverride(id, { status: 'cancelled' });
       renderPage();
       toast('Cancelled', 'in');
       try {
@@ -2608,6 +2635,7 @@
     async function deleteAppt(id) {
       if (!confirm('Delete this appointment permanently? This will remove related invoice/payment records.')) return;
       STATE.appointments = (STATE.appointments || []).filter(a => Number(a.appointment_id) !== Number(id));
+      setAppointmentOverride(id, { _deleted: true });
       renderPage();
       toast('Deleted', 'in');
       try {
@@ -2625,6 +2653,10 @@
     async function reopenAppt(id) {
       if (!isAdmin()) { toast('Only Admin can re-open completed appointments', 'er'); return; }
       if (!confirm('Re-open this consultation? Status will be reset to scheduled so notes & prescriptions can be edited.')) return;
+      const appt = (STATE.appointments || []).find(a => Number(a.appointment_id) === Number(id));
+      if (appt) appt.status = 'scheduled';
+      setAppointmentOverride(id, { status: 'scheduled' });
+      renderPage();
       const r = await api('PATCH', `/appointments/${id}`, { status: 'scheduled' });
       if (r.success) {
         toast('Consultation re-opened for editing');
@@ -2741,6 +2773,7 @@
       if (appt && docObj) {
         appt.doctor_id = docId;
         appt.doctor_name = (docObj.first_name + ' ' + docObj.last_name).trim();
+        setAppointmentOverride(aid, { doctor_id: docId, doctor_name: appt.doctor_name });
       }
       closeModal();
       renderPage();
@@ -2755,6 +2788,7 @@
       const r = await api('PATCH', `/appointments/${aid}`, { doctor_id: docId });
       if (r.success && r.data && appt) {
         Object.assign(appt, r.data);
+        setAppointmentOverride(aid, { doctor_id: docId, doctor_name: appt.doctor_name });
         renderPage();
       } else if (!r.success) {
         toast(r.error?.message || 'Failed to assign doctor', 'er');
@@ -3842,6 +3876,11 @@
       });
 
       // Update appointment status & notes
+      if (appt) {
+        appt.status = status;
+        appt.notes = notes;
+        setAppointmentOverride(appointmentId, { status: status, notes: notes });
+      }
       const apptRes = await api('PATCH', `/appointments/${appointmentId}`, {
         status: status,
         notes: notes
@@ -4352,7 +4391,7 @@
         const parsed = JSON.parse(storedCache);
         if (parsed.patients) STATE.patients = parsed.patients;
         if (parsed.doctors) STATE.doctors = parsed.doctors;
-        if (parsed.appointments) STATE.appointments = parsed.appointments;
+        if (parsed.appointments) STATE.appointments = applyAppointmentOverrides(parsed.parsedAppointments || parsed.appointments);
         if (parsed.treatments) STATE.treatments = parsed.treatments;
         if (parsed.stats) STATE.stats = parsed.stats;
         if (parsed.prescriptions) STATE.prescriptions = parsed.prescriptions;
@@ -4409,7 +4448,7 @@
       try {
         const r = await api('GET', '/appointments');
         if (r.success && Array.isArray(r.data)) {
-          const freshAppts = r.data;
+          const freshAppts = applyAppointmentOverrides(r.data);
           const knownIds = new Set((STATE.appointments || []).map(a => Number(a.appointment_id)));
           const newBookings = freshAppts.filter(a => !knownIds.has(Number(a.appointment_id)));
 
