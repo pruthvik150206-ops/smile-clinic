@@ -2572,14 +2572,20 @@
       if (appt) appt.status = 'confirmed';
       renderPage();
       toast('Confirmed');
+      try {
+        localStorage.setItem('sc_state_cache', JSON.stringify({
+          patients: STATE.patients, doctors: STATE.doctors,
+          appointments: STATE.appointments, treatments: STATE.treatments,
+          stats: STATE.stats, prescriptions: STATE.prescriptions, invoices: STATE.invoices
+        }));
+      } catch (e) {}
       const r = await api('PATCH', `/appointments/${id}`, { status: 'confirmed' });
-      if (r.success) {
-        if (r.data && appt) Object.assign(appt, r.data);
-      } else {
+      if (r.success && r.data && appt) {
+        Object.assign(appt, r.data);
+        renderPage();
+      } else if (!r.success) {
         toast(r.error?.message || 'Error confirming', 'er');
       }
-      await loadData();
-      renderPage();
     }
     async function cancelAppt(id) {
       if (!confirm('Cancel this appointment?')) return;
@@ -2587,24 +2593,34 @@
       if (appt) appt.status = 'cancelled';
       renderPage();
       toast('Cancelled', 'in');
+      try {
+        localStorage.setItem('sc_state_cache', JSON.stringify({
+          patients: STATE.patients, doctors: STATE.doctors,
+          appointments: STATE.appointments, treatments: STATE.treatments,
+          stats: STATE.stats, prescriptions: STATE.prescriptions, invoices: STATE.invoices
+        }));
+      } catch (e) {}
       const r = await api('POST', `/appointments/${id}/cancel`);
       if (!r.success) {
         toast(r.error?.message || 'Error cancelling', 'er');
       }
-      await loadData();
-      renderPage();
     }
     async function deleteAppt(id) {
       if (!confirm('Delete this appointment permanently? This will remove related invoice/payment records.')) return;
       STATE.appointments = (STATE.appointments || []).filter(a => Number(a.appointment_id) !== Number(id));
       renderPage();
       toast('Deleted', 'in');
+      try {
+        localStorage.setItem('sc_state_cache', JSON.stringify({
+          patients: STATE.patients, doctors: STATE.doctors,
+          appointments: STATE.appointments, treatments: STATE.treatments,
+          stats: STATE.stats, prescriptions: STATE.prescriptions, invoices: STATE.invoices
+        }));
+      } catch (e) {}
       const r = await api('DELETE', `/appointments/${id}`);
       if (!r.success) {
         toast(r.error?.message || 'Error deleting', 'er');
       }
-      await loadData();
-      renderPage();
     }
     async function reopenAppt(id) {
       if (!isAdmin()) { toast('Only Admin can re-open completed appointments', 'er'); return; }
@@ -2718,18 +2734,29 @@
     }
 
     async function saveDoctorAssignment(aid) {
-      const docId = document.getElementById('asgn-doc-id').value;
+      const docId = parseInt(document.getElementById('asgn-doc-id').value);
       if (!docId) { toast('Please select a doctor to assign', 'er'); return; }
-      const btn = document.querySelector('.modal-foot .btn-primary');
-      if (btn) { btn.textContent = 'Saving…'; btn.disabled = true; }
-      const r = await api('PATCH', `/appointments/${aid}`, { doctor_id: parseInt(docId) });
-      if (r.success) {
-        toast('Doctor assigned successfully');
-        closeModal();
-        await loadData();
+      const docObj = (STATE.doctors || []).find(d => Number(d.doctor_id) === Number(docId));
+      const appt = (STATE.appointments || []).find(a => Number(a.appointment_id) === Number(aid));
+      if (appt && docObj) {
+        appt.doctor_id = docId;
+        appt.doctor_name = (docObj.first_name + ' ' + docObj.last_name).trim();
+      }
+      closeModal();
+      renderPage();
+      toast('Doctor assigned successfully');
+      try {
+        localStorage.setItem('sc_state_cache', JSON.stringify({
+          patients: STATE.patients, doctors: STATE.doctors,
+          appointments: STATE.appointments, treatments: STATE.treatments,
+          stats: STATE.stats, prescriptions: STATE.prescriptions, invoices: STATE.invoices
+        }));
+      } catch (e) {}
+      const r = await api('PATCH', `/appointments/${aid}`, { doctor_id: docId });
+      if (r.success && r.data && appt) {
+        Object.assign(appt, r.data);
         renderPage();
-      } else {
-        if (btn) { btn.textContent = 'Confirm Assignment'; btn.disabled = false; }
+      } else if (!r.success) {
         toast(r.error?.message || 'Failed to assign doctor', 'er');
       }
     }
@@ -4339,6 +4366,76 @@
       document.addEventListener('DOMContentLoaded', renderPage);
     }
 
+    // ═══════════════════════════════════════════════════════════
+    //  LIVE WEBSITE BOOKING POPUP & SYNC
+    // ═══════════════════════════════════════════════════════════
+    function showNewBookingBanner(appt) {
+      const isWebsite = (appt.booking_source || '').toLowerCase().includes('website');
+      const banner = document.createElement('div');
+      banner.id = `booking-popup-${appt.appointment_id}`;
+      banner.style.cssText = `
+        position: fixed; top: 20px; right: 20px; z-index: 10000;
+        background: #0F172A; color: #FFFFFF; padding: 16px 20px; border-radius: 12px;
+        box-shadow: 0 12px 35px rgba(0,0,0,0.35); border: 1.5px solid #0EA5E9;
+        display: flex; align-items: center; gap: 14px; max-width: 440px;
+        font-family: var(--font); transition: all 0.3s ease;
+      `;
+      banner.innerHTML = `
+        <div style="width:42px;height:42px;border-radius:10px;background:#0EA5E9;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">
+          🔔
+        </div>
+        <div style="flex:1">
+          <div style="font-weight:800;font-size:14px;color:#FFFFFF;margin-bottom:2px">
+            New ${isWebsite ? '🌐 Website' : '📞 Call'} Booking Received!
+          </div>
+          <div style="font-size:13px;color:#E2E8F0;font-weight:600">
+            ${esc(appt.patient_name || 'Guest Patient')}
+          </div>
+          <div style="font-size:12px;color:#94A3B8;margin-top:2px">
+            Issue: ${esc(appt.reason || 'General Consultation')}
+          </div>
+          <div style="font-size:11px;color:#38BDF8;margin-top:3px;font-weight:700">Ref: #${appt.appointment_id} · ${fmtDT(appt.scheduled_at)}</div>
+        </div>
+        <button style="background:transparent;border:none;color:#94A3B8;cursor:pointer;font-size:18px;padding:4px;line-height:1" onclick="this.parentElement.remove()">✕</button>
+      `;
+      document.body.appendChild(banner);
+      setTimeout(() => { if (banner.parentNode) banner.remove(); }, 12000);
+    }
+
+    let isPollingAppts = false;
+    async function pollWebsiteBookings() {
+      if (isPollingAppts || !localStorage.getItem('sc_token')) return;
+      isPollingAppts = true;
+      try {
+        const r = await api('GET', '/appointments');
+        if (r.success && Array.isArray(r.data)) {
+          const freshAppts = r.data;
+          const knownIds = new Set((STATE.appointments || []).map(a => Number(a.appointment_id)));
+          const newBookings = freshAppts.filter(a => !knownIds.has(Number(a.appointment_id)));
+
+          if (newBookings.length > 0) {
+            STATE.appointments = freshAppts;
+            try {
+              localStorage.setItem('sc_state_cache', JSON.stringify({
+                patients: STATE.patients, doctors: STATE.doctors,
+                appointments: STATE.appointments, treatments: STATE.treatments,
+                stats: STATE.stats, prescriptions: STATE.prescriptions, invoices: STATE.invoices
+              }));
+            } catch (e) {}
+            
+            newBookings.forEach(a => showNewBookingBanner(a));
+
+            if (['dashboard', 'appointments'].includes(STATE.page)) {
+              renderPage();
+            }
+          }
+        }
+      } catch (e) {
+      } finally {
+        isPollingAppts = false;
+      }
+    }
+
     // Background token check & fresh data sync
     (async () => {
       try {
@@ -4350,6 +4447,9 @@
             try { localStorage.setItem('sc_user', JSON.stringify(r.data)); } catch (e) {}
             try { await loadData(); } catch (err) { console.error('Data load error:', err); }
             renderPage();
+
+            // Start live booking poller every 6 seconds
+            setInterval(pollWebsiteBookings, 6000);
           } else {
             localStorage.removeItem('sc_token');
             localStorage.removeItem('sc_user');
