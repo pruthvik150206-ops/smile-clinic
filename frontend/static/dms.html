@@ -2490,11 +2490,35 @@
       const showNoShow = !isDoc && !isPat;
       const showActions = !isPat;
 
-      const rows = appts.map(a => `<tr style="${isPat ? 'cursor:pointer' : ''}" onclick="${isPat ? `openConsultationAndRx(${a.appointment_id})` : ''}">
+      const showNoShow = !isDoc && !isPat;
+      const showActions = !isPat;
+
+      const rows = appts.map(a => {
+        const isUnassigned = !a.doctor_id || !a.doctor_name || a.doctor_name === 'Unassigned';
+        const isWebsite = (a.booking_source || '').toLowerCase().includes('website');
+        return `<tr style="${isPat ? 'cursor:pointer' : ''}" onclick="${isPat ? `openConsultationAndRx(${a.appointment_id})` : ''}">
     <td style="cursor:pointer" onclick="${isPat ? '' : `openPatientProfile(${a.patient_id || 0},'${esc(a.patient_name)}')`}">
       <div class="td-main" style="color:var(--green);text-decoration:underline">${esc(a.patient_name)}</div>
     </td>
-    <td><span style="font-size:13px;color:var(--text2)">Dr. ${esc(a.doctor_name)}</span></td>
+    <td>
+      ${isUnassigned ? `
+        <button class="btn btn-sm" style="background:#FEF3C7;color:#D97706;border:1px solid #FCD34D;font-weight:700;font-size:11px;padding:3px 8px;border-radius:6px;display:inline-flex;align-items:center;gap:4px" onclick="event.stopPropagation();openAssignDoctorModal(${a.appointment_id})" title="Click to assign doctor">
+          ⚠️ Assign Doctor
+        </button>
+      ` : `
+        <div style="display:flex;align-items:center;gap:6px">
+          <span style="font-size:13px;color:var(--text2)">Dr. ${esc(a.doctor_name)}</span>
+          ${canEdit() ? `<button class="btn btn-xs btn-ghost" style="font-size:10px;padding:1px 5px;color:var(--text3)" onclick="event.stopPropagation();openAssignDoctorModal(${a.appointment_id})" title="Change doctor">✏️</button>` : ''}
+        </div>
+      `}
+    </td>
+    <td>
+      ${isWebsite ? `
+        <span class="badge" style="background:#E0F2FE;color:#0369A1;border:1px solid #BAE6FD;font-weight:600;font-size:11px">🌐 Website</span>
+      ` : `
+        <span class="badge" style="background:#EEF2FF;color:#4338CA;border:1px solid #C7D2FE;font-weight:600;font-size:11px">📞 Call Booking</span>
+      `}
+    </td>
     <td><span style="font-family:monospace;font-size:12px">${fmtDT(a.scheduled_at)}</span></td>
     <td><span style="color:var(--text2)">${esc(a.reason || '—')}</span></td>
     <td>${priorityBadge(a.priority || 'normal')}</td>
@@ -2507,17 +2531,18 @@
       ${['scheduled', 'confirmed'].includes(a.status) && canEdit() ? `<button class="btn btn-sm btn-ghost" style="background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bd)" onclick="cancelAppt(${a.appointment_id})">Cancel</button>` : ''}
       ${isAdmin() ? `<button class="btn btn-sm btn-danger" onclick="deleteAppt(${a.appointment_id})">Delete</button>` : ''}
     </div></td>` : ''}
-  </tr>`).join('');
+  </tr>`;
+      }).join('');
 
-      const totalCols = 6 + (showNoShow ? 1 : 0) + (showActions ? 1 : 0);
+      const totalCols = 7 + (showNoShow ? 1 : 0) + (showActions ? 1 : 0);
 
       return `
   <div style="background:var(--green-bg);border:1px solid var(--green-bd);border-radius:8px;padding:8px 14px;margin-bottom:14px;font-size:12px;color:var(--green)">
-    ${isPat ? 'Tip: Click any appointment row to view your consultation summary & digital prescription.' : 'Tip: Click any patient name to open their full profile and medical history.'}
+    ${isPat ? 'Tip: Click any appointment row to view your consultation summary & digital prescription.' : 'Tip: Website bookings without an assigned doctor are highlighted with ⚠️ Assign Doctor.'}
   </div>
   <div class="toolbar">
     <div class="search">
-      <input id="ap-s" placeholder="Search by patient or reason…" oninput="filterTable('ap-s','ap-body',0,1,3)"/>
+      <input id="ap-s" placeholder="Search by patient or reason…" oninput="filterTable('ap-s','ap-body',0,1,4)"/>
     </div>
     <button class="btn btn-sm btn-ghost" onclick="filterByPriority('')" id="pf-all" style="border-color:var(--green);color:var(--green)">All</button>
     <button class="btn btn-sm btn-ghost" onclick="filterByPriority('urgent')" id="pf-urgent">Urgent</button>
@@ -2531,7 +2556,7 @@
       <span class="badge bg-blue">${appts.filter(a => a.status === 'scheduled').length} upcoming</span>
     </div>
     <div class="tbl"><table>
-      <thead><tr><th>Patient</th><th>Doctor</th><th>Date & Time</th><th>Reason</th><th>Priority</th><th>Status</th>${showNoShow ? '<th>No-Show Rate</th>' : ''}${showActions ? '<th>Actions</th>' : ''}</tr></thead>
+      <thead><tr><th>Patient</th><th>Doctor</th><th>Source</th><th>Date & Time</th><th>Reason</th><th>Priority</th><th>Status</th>${showNoShow ? '<th>No-Show Rate</th>' : ''}${showActions ? '<th>Actions</th>' : ''}</tr></thead>
       <tbody id="ap-body">
       ${rows || `<tr><td colspan="${totalCols}" class="empty"><div class="empty-icon"></div>No appointments.</td></tr>`}
       </tbody>
@@ -2603,12 +2628,70 @@
         return;
       }
       const btn = document.querySelector('.modal-foot .btn-primary'); btn.textContent = 'Scheduling…'; btn.disabled = true;
-      const r = await api('POST', '/appointments', { patient_id: pid, doctor_id: did, scheduled_at: dt, duration_mins: parseInt(document.getElementById('af-du').value) || 30, treatment_id: parseInt(document.getElementById('af-tx').value) || 1, reason: document.getElementById('af-re').value, priority: document.getElementById('af-pri').value });
+      const r = await api('POST', '/appointments', { patient_id: pid, doctor_id: did, scheduled_at: dt, duration_mins: parseInt(document.getElementById('af-du').value) || 30, treatment_id: parseInt(document.getElementById('af-tx').value) || 1, reason: document.getElementById('af-re').value, priority: document.getElementById('af-pri').value, booking_source: 'Call Booking' });
       btn.textContent = 'Schedule + Score'; btn.disabled = false;
       if (!r.success) { toast(r.error?.message || 'Error scheduling', 'er'); return; }
       const d = r.data;
-      toast('Appointment scheduled successfully');
+      toast('Appointment scheduled successfully (Call Booking)');
       closeModal(); await loadData(); renderPage();
+    }
+
+    function openAssignDoctorModal(aid) {
+      const appt = (STATE.appointments || []).find(a => Number(a.appointment_id) === Number(aid));
+      if (!appt) { toast('Appointment not found', 'er'); return; }
+      const docs = STATE.doctors || [];
+      const docOptions = docs.length ? docs.map(d => `<option value="${d.doctor_id}" ${!d.is_available ? 'disabled style="color:var(--text3)"' : ''} ${Number(d.doctor_id) === Number(appt.doctor_id) ? 'selected' : ''}>Dr. ${esc(d.first_name + ' ' + d.last_name)} (${esc(d.specialisation || 'Specialist')}) ${d.is_available ? '— On Duty' : '— Off Duty'}</option>`).join('') : '<option value="">No doctors available</option>';
+
+      const isWebsite = (appt.booking_source || '').toLowerCase().includes('website');
+
+      openModal(`
+        <div class="modal-head">
+          <h3>Assign Specialist to Appointment #${aid}</h3>
+          <button class="close-btn" onclick="closeModal()">✕</button>
+        </div>
+        <div style="background:var(--surface2);padding:14px;border-radius:10px;margin-bottom:16px;font-size:13px;line-height:1.6">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+            <strong>Patient:</strong> <span>${esc(appt.patient_name || 'Guest')}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+            <strong>Reason / Issue:</strong> <span>${esc(appt.reason || 'General Consultation')}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+            <strong>Scheduled Date:</strong> <span>${fmtDT(appt.scheduled_at)}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between">
+            <strong>Booking Origin:</strong> <span class="badge ${isWebsite ? 'bg-blue' : 'bg-green'}">${isWebsite ? '🌐 Website Booking' : '📞 Call Booking'}</span>
+          </div>
+        </div>
+        <div class="fg">
+          <label>Select Doctor / Specialist *</label>
+          <select id="asgn-doc-id" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border)">
+            <option value="">-- Select Specialist --</option>
+            ${docOptions}
+          </select>
+        </div>
+        <div class="modal-foot" style="margin-top:20px;display:flex;justify-content:flex-end;gap:10px">
+          <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-primary" onclick="saveDoctorAssignment(${aid})">Confirm Assignment</button>
+        </div>
+      `, true);
+    }
+
+    async function saveDoctorAssignment(aid) {
+      const docId = document.getElementById('asgn-doc-id').value;
+      if (!docId) { toast('Please select a doctor to assign', 'er'); return; }
+      const btn = document.querySelector('.modal-foot .btn-primary');
+      if (btn) { btn.textContent = 'Saving…'; btn.disabled = true; }
+      const r = await api('PATCH', `/appointments/${aid}`, { doctor_id: parseInt(docId) });
+      if (r.success) {
+        toast('Doctor assigned successfully');
+        closeModal();
+        await loadData();
+        renderPage();
+      } else {
+        if (btn) { btn.textContent = 'Confirm Assignment'; btn.disabled = false; }
+        toast(r.error?.message || 'Failed to assign doctor', 'er');
+      }
     }
 
     // ═══════════════════════════════════════════════════════════

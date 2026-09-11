@@ -149,7 +149,7 @@ CREATE INDEX idx_treatments_category ON treatments(category);
 CREATE TABLE appointments (
     appointment_id      SERIAL              PRIMARY KEY,
     patient_id          INT                 NOT NULL REFERENCES patients(patient_id)  ON DELETE RESTRICT,
-    doctor_id           INT                 NOT NULL REFERENCES doctors(doctor_id)    ON DELETE RESTRICT,
+    doctor_id           INT                 REFERENCES doctors(doctor_id)             ON DELETE SET NULL,
     scheduled_at        TIMESTAMP           NOT NULL,
     duration_mins       INT                 NOT NULL DEFAULT 30,
     status              appointment_status  NOT NULL DEFAULT 'scheduled',
@@ -158,6 +158,7 @@ CREATE TABLE appointments (
     no_show_probability DECIMAL(5,4)        DEFAULT NULL,
     risk_level          VARCHAR(10)         DEFAULT NULL,
     recommended_action  TEXT                DEFAULT NULL,
+    booking_source      VARCHAR(30)         NOT NULL DEFAULT 'Call Booking',
     reminder_sent       BOOLEAN             NOT NULL DEFAULT FALSE,
     created_at          TIMESTAMP           NOT NULL DEFAULT NOW(),
     updated_at          TIMESTAMP           NOT NULL DEFAULT NOW(),

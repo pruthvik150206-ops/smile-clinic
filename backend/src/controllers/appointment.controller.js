@@ -41,22 +41,26 @@ const AppointmentController = {
   },
 
   async create(req, res) {
-    const { patient_id, doctor_id, scheduled_at, treatment_id } = req.body;
-    if (!patient_id || !doctor_id || !scheduled_at)
-      return badRequest(res, 'patient_id, doctor_id and scheduled_at are required');
+    const { patient_id, doctor_id, scheduled_at, treatment_id, booking_source } = req.body;
+    if (!patient_id || !scheduled_at)
+      return badRequest(res, 'patient_id and scheduled_at are required');
 
-    const [patient, doctor] = await Promise.all([
-      PatientModel.findById(patient_id),
-      DoctorModel.findById(doctor_id),
-    ]);
+    const patient = await PatientModel.findById(patient_id);
     if (!patient) return notFound(res, 'Patient');
-    if (!doctor)  return notFound(res, 'Doctor');
 
-    const conflict = await AppointmentModel.hasConflict(doctor_id, scheduled_at, req.body.duration_mins || 30);
-    if (conflict) return res.status(409).json({ success: false, error: { code: 'SCHEDULE_CONFLICT', message: 'Doctor already has an appointment at that time.' } });
+    if (doctor_id) {
+      const doctor = await DoctorModel.findById(doctor_id);
+      if (!doctor) return notFound(res, 'Doctor');
+      const conflict = await AppointmentModel.hasConflict(doctor_id, scheduled_at, req.body.duration_mins || 30);
+      if (conflict) return res.status(409).json({ success: false, error: { code: 'SCHEDULE_CONFLICT', message: 'Doctor already has an appointment at that time.' } });
+    }
 
     // Create appointment
-    const appt = await AppointmentModel.create(req.body);
+    const apptPayload = {
+      ...req.body,
+      booking_source: booking_source || 'Call Booking'
+    };
+    const appt = await AppointmentModel.create(apptPayload);
 
     // Add treatment if given
     if (treatment_id) {
@@ -169,7 +173,7 @@ const AppointmentController = {
         });
       }
 
-      const docId = parseInt(doctor_id) || 1;
+      const docId = doctor_id ? parseInt(doctor_id) : null;
       const apptDate = scheduled_at || new Date(Date.now() + 86400000 * 2).toISOString().slice(0, 16);
 
       const appt = await AppointmentModel.create({
@@ -177,7 +181,9 @@ const AppointmentController = {
         doctor_id: docId,
         scheduled_at: apptDate,
         status: 'scheduled',
-        notes: reason || notes || 'Website Online Booking'
+        reason: reason || notes || 'Website Online Booking',
+        notes: reason || notes || 'Website Online Booking',
+        booking_source: req.body.booking_source || 'Website Booking'
       });
 
       return success(res, {

@@ -368,6 +368,10 @@ footer{
     <a href="#contact">Contact</a>
   </div>
   <div class="nav-actions">
+    <a href="/dms" class="btn-nav-outline" style="color:var(--text2);font-weight:600;font-size:13.5px;padding:9px 16px;border-radius:10px;text-decoration:none;border:1px solid var(--border);transition:all .2s;display:inline-flex;align-items:center;gap:6px" title="Access Doctor & Staff Dental Management Portal">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Staff Portal / DMS
+    </a>
     <button onclick="openBookingModal()" class="btn-nav">Book Appointment</button>
   </div>
 </nav>
@@ -645,7 +649,7 @@ footer{
     <div style="margin-bottom:24px;text-align:left">
       <div class="section-eyebrow"><span class="eyebrow-line"></span>Online Booking</div>
       <h3 style="font-size:22px;font-weight:800;margin-top:4px;color:var(--dark-slate)">Schedule Appointment</h3>
-      <p style="color:var(--text2);font-size:13.5px;margin-top:4px">Select your doctor and time. Our clinic will confirm your request.</p>
+      <p style="color:var(--text2);font-size:13.5px;margin-top:4px">Select preferred date & time. Our clinic receptionist will review your issue and assign a specialist.</p>
     </div>
     <form id="publicBookingForm" onsubmit="handlePublicBooking(event)">
       <div class="form-group">
@@ -662,23 +666,13 @@ footer{
           <input type="email" id="bkEmail" placeholder="ananya@example.com" />
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Select Specialist *</label>
-          <select id="bkDoctor" required>
-            <option value="1">Dr. Priya Sharma — General Dentistry</option>
-            <option value="2">Dr. Arjun Nair — Orthodontics</option>
-            <option value="4">Dr. Vijay Rathod — Orthodontics</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Preferred Date & Time *</label>
-          <input type="datetime-local" id="bkDate" required />
-        </div>
+      <div class="form-group">
+        <label>Preferred Date & Time *</label>
+        <input type="datetime-local" id="bkDate" required />
       </div>
       <div class="form-group">
-        <label>Reason for Visit</label>
-        <textarea id="bkNotes" rows="2" placeholder="e.g. Consultation, Scaling, Root Canal, Orthodontic Evaluation..."></textarea>
+        <label>Reason for Visit / Dental Issue *</label>
+        <textarea id="bkNotes" rows="2" placeholder="e.g. Tooth pain, Scaling, Root Canal, Orthodontic Evaluation..." required></textarea>
       </div>
       <div id="bkMsg" style="margin-bottom:14px;font-size:13px;display:none;padding:12px;border-radius:10px;background:var(--surface2)"></div>
       <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:14px;font-size:15px">Confirm Booking</button>
@@ -723,10 +717,11 @@ footer{
       </ul>
     </div>
     <div>
-      <div class="footer-col-title">Appointments</div>
+      <div class="footer-col-title">Clinic Staff & Portal</div>
       <ul class="footer-links">
+        <li><a href="/dms" style="color:var(--primary);font-weight:700">🏥 DMS Staff Portal</a></li>
+        <li><a href="/login">Doctor & Staff Login</a></li>
         <li><a href="#" onclick="openBookingModal(); return false;">Book Appointment</a></li>
-        <li><a href="#doctors">Consult Specialists</a></li>
         <li><a href="#contact">Location & Hours</a></li>
       </ul>
     </div>
@@ -805,9 +800,9 @@ async function handlePublicBooking(e) {
     name: document.getElementById('bkName').value,
     phone: document.getElementById('bkPhone').value,
     email: document.getElementById('bkEmail').value,
-    doctor_id: document.getElementById('bkDoctor').value,
     scheduled_at: document.getElementById('bkDate').value,
-    reason: document.getElementById('bkNotes').value
+    reason: document.getElementById('bkNotes').value,
+    booking_source: 'Website Booking'
   };
 
   try {
