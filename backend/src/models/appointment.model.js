@@ -103,6 +103,7 @@ const AppointmentModel = {
   },
 
   async create(data) {
+    sqliteCache.clear();
     const newA = {
       appointment_id: Math.floor(1000 + Math.random() * 9000),
       patient_id: data.patient_id || 1,
@@ -117,8 +118,47 @@ const AppointmentModel = {
     return newA;
   },
 
-  async update(appointmentId, data) { return { appointment_id: appointmentId, ...data }; },
-  async cancel(appointmentId) { return { appointment_id: appointmentId, status: 'cancelled' }; },
+  async update(appointmentId, data) {
+    const aid = parseInt(appointmentId);
+    sqliteCache.clear();
+    const found = seedAppointments.find(a => a.appointment_id === aid);
+    if (found) Object.assign(found, data);
+
+    try {
+      const sets = [];
+      const params = [];
+      let idx = 1;
+      for (const [k, v] of Object.entries(data)) {
+        sets.push(`${k} = $${idx++}`);
+        params.push(v);
+      }
+      if (sets.length > 0) {
+        params.push(aid);
+        const { rows } = await db.query(
+          `UPDATE appointments SET ${sets.join(', ')}, updated_at = NOW() WHERE appointment_id = $${idx} RETURNING *`,
+          params
+        ).catch(() => ({ rows: [] }));
+        if (rows && rows[0]) return rows[0];
+      }
+    } catch (e) {}
+
+    try {
+      const sets = [];
+      for (const [k, v] of Object.entries(data)) {
+        const val = typeof v === 'string' ? `'${v.replace(/'/g, "''")}'` : (v === null ? 'NULL' : v);
+        sets.push(`${k} = ${val}`);
+      }
+      if (sets.length > 0) {
+        querySqlite(`UPDATE appointments SET ${sets.join(', ')}, updated_at = datetime('now') WHERE appointment_id = ${aid};`);
+      }
+    } catch (e) {}
+
+    return found || { appointment_id: aid, ...data };
+  },
+
+  async cancel(appointmentId) {
+    return this.update(appointmentId, { status: 'cancelled' });
+  },
   async hasConflict() { return false; },
   async addTreatment() { return true; },
   async removeTreatment() { return true; },

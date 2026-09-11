@@ -2567,9 +2567,45 @@
     </table></div>
   </div>`;
     }
-    async function confirmAppt(id) { const r = await api('PATCH', `/appointments/${id}`, { status: 'confirmed' }); if (r.success) { toast('Confirmed'); await loadData(); renderPage(); } }
-    async function cancelAppt(id) { if (!confirm('Cancel this appointment?')) return; const r = await api('POST', `/appointments/${id}/cancel`); if (r.success) { toast('Cancelled', 'in'); await loadData(); renderPage(); } else { toast(r.error?.message || 'Error', 'er'); } }
-    async function deleteAppt(id) { if (!confirm('Delete this appointment permanently? This will remove related invoice/payment records.')) return; const r = await api('DELETE', `/appointments/${id}`); if (r.success) { toast('Deleted', 'in'); await loadData(); renderPage(); } else { toast(r.error?.message || 'Error', 'er'); } }
+    async function confirmAppt(id) {
+      const appt = (STATE.appointments || []).find(a => Number(a.appointment_id) === Number(id));
+      if (appt) appt.status = 'confirmed';
+      renderPage();
+      toast('Confirmed');
+      const r = await api('PATCH', `/appointments/${id}`, { status: 'confirmed' });
+      if (r.success) {
+        if (r.data && appt) Object.assign(appt, r.data);
+      } else {
+        toast(r.error?.message || 'Error confirming', 'er');
+      }
+      await loadData();
+      renderPage();
+    }
+    async function cancelAppt(id) {
+      if (!confirm('Cancel this appointment?')) return;
+      const appt = (STATE.appointments || []).find(a => Number(a.appointment_id) === Number(id));
+      if (appt) appt.status = 'cancelled';
+      renderPage();
+      toast('Cancelled', 'in');
+      const r = await api('POST', `/appointments/${id}/cancel`);
+      if (!r.success) {
+        toast(r.error?.message || 'Error cancelling', 'er');
+      }
+      await loadData();
+      renderPage();
+    }
+    async function deleteAppt(id) {
+      if (!confirm('Delete this appointment permanently? This will remove related invoice/payment records.')) return;
+      STATE.appointments = (STATE.appointments || []).filter(a => Number(a.appointment_id) !== Number(id));
+      renderPage();
+      toast('Deleted', 'in');
+      const r = await api('DELETE', `/appointments/${id}`);
+      if (!r.success) {
+        toast(r.error?.message || 'Error deleting', 'er');
+      }
+      await loadData();
+      renderPage();
+    }
     async function reopenAppt(id) {
       if (!isAdmin()) { toast('Only Admin can re-open completed appointments', 'er'); return; }
       if (!confirm('Re-open this consultation? Status will be reset to scheduled so notes & prescriptions can be edited.')) return;
