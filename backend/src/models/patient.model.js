@@ -94,30 +94,63 @@ const PatientModel = {
   },
 
   async create(data, client = db) {
-    const fName = data.first_name || 'Guest';
-    const lName = data.last_name || 'Patient';
-    const ph = data.phone || '0000000000';
-    const em = data.email || `patient_${Date.now()}@smileclinic.in`;
+    const fName = (data.first_name || 'Guest').trim();
+    const lName = (data.last_name || 'Patient').trim();
+    const ph = (data.phone || '0000000000').trim();
+    let em = (data.email || '').trim().toLowerCase();
     const genInput = (data.gender || 'other').toLowerCase();
     const gen = ['male', 'female', 'other', 'prefer_not_to_say'].includes(genInput) ? genInput : 'other';
     const med = data.medical_history || data.medical_notes || '';
 
     try {
+      // 1. Check if patient already exists by email or phone
+      if (em || (ph && ph !== '0000000000')) {
+        const pExist = await db.query(
+          `SELECT p.*, u.email
+           FROM patients p
+           LEFT JOIN users u ON u.user_id = p.user_id
+           WHERE (NULLIF($1, '') IS NOT NULL AND LOWER(u.email) = LOWER($1))
+              OR (NULLIF($2, '0000000000') IS NOT NULL AND p.phone = $2)
+           LIMIT 1`,
+          [em || '', ph]
+        ).catch(() => ({ rows: [] }));
+
+        if (pExist.rows && pExist.rows[0]) {
+          const found = pExist.rows[0];
+          seedPatients.unshift(found);
+          return found;
+        }
+      }
+
+      // 2. Ensure we have a valid, unique user_id
       let userId = data.user_id;
       if (!userId) {
-        const uExist = await db.query('SELECT user_id FROM users WHERE email = $1', [em]).catch(() => ({ rows: [] }));
-        if (uExist.rows && uExist.rows[0]) {
-          userId = uExist.rows[0].user_id;
-        } else {
-          const uname = 'guest_' + Math.random().toString(36).substring(2, 8);
+        if (em) {
+          const uExist = await db.query('SELECT user_id FROM users WHERE LOWER(email) = LOWER($1)', [em]).catch(() => ({ rows: [] }));
+          if (uExist.rows && uExist.rows[0]) {
+            userId = uExist.rows[0].user_id;
+          }
+        }
+        if (!userId) {
+          // Fallback unique email for users table if empty or duplicate
+          const safeEmail = em || `patient_${Date.now()}_${Math.floor(Math.random() * 10000)}@smileclinic.in`;
+          const uname = 'guest_' + Math.random().toString(36).substring(2, 10);
           const uNew = await db.query(
             `INSERT INTO users (username, email, password_hash, role) VALUES ($1, $2, $3, 'patient') RETURNING user_id`,
-            [uname, em, 'guest_auth_hash']
-          ).catch(() => ({ rows: [] }));
+            [uname, safeEmail, 'guest_auth_hash']
+          ).catch(async () => {
+            const randEmail = `guest_${Date.now()}_${Math.floor(Math.random() * 10000)}@smileclinic.in`;
+            const retry = await db.query(
+              `INSERT INTO users (username, email, password_hash, role) VALUES ($1, $2, $3, 'patient') RETURNING user_id`,
+              ['guest_' + Date.now(), randEmail, 'guest_auth_hash']
+            ).catch(() => ({ rows: [] }));
+            return retry;
+          });
           if (uNew.rows && uNew.rows[0]) userId = uNew.rows[0].user_id;
         }
       }
 
+      // 3. Create patient record in PostgreSQL
       if (userId) {
         const { rows } = await db.query(
           `INSERT INTO patients (user_id, first_name, last_name, phone, gender, medical_notes)
@@ -126,7 +159,7 @@ const PatientModel = {
         ).catch(() => ({ rows: [] }));
 
         if (rows && rows[0]) {
-          const created = { ...rows[0], email: em };
+          const created = { ...rows[0], email: em || `patient_${rows[0].patient_id}@smileclinic.in` };
           seedPatients.unshift(created);
           return created;
         }
@@ -138,7 +171,7 @@ const PatientModel = {
       first_name: fName,
       last_name: lName,
       phone: ph,
-      email: em,
+      email: em || 'patient@smileclinic.in',
       gender: gen,
       medical_notes: med
     };
