@@ -2490,9 +2490,6 @@
       const showNoShow = !isDoc && !isPat;
       const showActions = !isPat;
 
-      const showNoShow = !isDoc && !isPat;
-      const showActions = !isPat;
-
       const rows = appts.map(a => {
         const isUnassigned = !a.doctor_id || !a.doctor_name || a.doctor_name === 'Unassigned';
         const isWebsite = (a.booking_source || '').toLowerCase().includes('website');
