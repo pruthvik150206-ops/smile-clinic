@@ -79,9 +79,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
 @keyframes gradientShift { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
 
 /* ─── REACT BITS: RIPPLE BUTTON CLICK EFFECT ─────────────────── */
-.ripple-btn {
-  position: relative; overflow: hidden;
-}
+.ripple-btn { position: relative; overflow: hidden; }
 .ripple-wave {
   position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.4);
   transform: scale(0); animation: rippleAnim 0.6s linear; pointer-events: none;
@@ -117,9 +115,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
   background: var(--brass); color: #fff; box-shadow: 0 4px 20px rgba(181, 139, 85, 0.25);
 }
 .btn-primary:hover { background: var(--brass-lt); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(181, 139, 85, 0.35); }
-.btn-outline {
-  border: 1px solid currentColor; color: var(--teal);
-}
+.btn-outline { border: 1px solid currentColor; color: var(--teal); }
 .btn-outline:hover { background: var(--teal); color: #fff; transform: translateY(-2px); }
 .btn-ghost {
   color: rgba(255,255,255,.9); border: 1px solid rgba(255,255,255,.25);
@@ -128,13 +124,6 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
 .btn-ghost:hover { background: rgba(255,255,255,.15); color: #fff; transform: translateY(-2px); }
 .btn-arrow::after { content: '→'; transition: transform .25s var(--ease); }
 .btn-arrow:hover::after { transform: translateX(5px); }
-
-/* ─── REVEAL ANIMATION ───────────────────────────────────────── */
-[data-reveal] {
-  opacity: 0; transform: translateY(24px);
-  transition: opacity .9s var(--ease-out), transform .9s var(--ease-out);
-}
-[data-reveal].revealed { opacity: 1; transform: none; }
 
 /* ─── NAVIGATION ─────────────────────────────────────────────── */
 .nav {
@@ -157,15 +146,13 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
 .nav.pinned .nav-links a { color: var(--text-mid); }
 .nav-links a:hover, .nav.pinned .nav-links a:hover { color: var(--brass); }
 
-/* ─── HERO & CANVAS PARTICLES (React Bits) ───────────────────── */
+/* ─── HERO & CANVAS PARTICLES ───────────────────────────────── */
 .hero {
   min-height: 100vh; background: var(--teal);
   display: flex; flex-direction: column; justify-content: flex-end;
   position: relative; overflow: hidden;
 }
-#particleCanvas {
-  position: absolute; inset: 0; z-index: 1; pointer-events: none;
-}
+#particleCanvas { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 .hero-ambient {
   position: absolute; inset: 0; z-index: 0;
   background:
@@ -187,14 +174,11 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
 .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--brass); animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)} }
 
-/* Hero Visual Showcase Frame */
 .hero-image-frame {
   position: relative; border-radius: 12px; overflow: hidden;
   box-shadow: 0 20px 50px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15);
 }
-.hero-image-frame img {
-  width: 100%; height: 480px; object-fit: cover; transition: transform 0.8s var(--ease);
-}
+.hero-image-frame img { width: 100%; height: 480px; object-fit: cover; transition: transform 0.8s var(--ease); }
 .hero-image-frame:hover img { transform: scale(1.05); }
 
 .hero-visual-chip {
@@ -204,7 +188,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
   display: flex; align-items: center; gap: 16px; color: var(--porcelain);
 }
 
-/* ─── REACT BITS: ANIMATED STATS COUNTER STRIP ───────────────── */
+/* ─── COUNTER STATS STRIP ───────────────────────────────────── */
 .stats-strip {
   background: var(--teal-mid); border-top: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08);
   padding: 40px 80px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; color: var(--porcelain);
@@ -213,60 +197,98 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
 .stat-num { font-family: var(--serif); font-size: 3rem; font-weight: 600; color: var(--brass-lt); display: block; }
 .stat-label { font-size: 0.82rem; color: rgba(255,255,255,0.65); letter-spacing: 0.04em; margin-top: 4px; }
 
-/* ─── TABBED SERVICES FILTER (React Bits Interactive) ────────── */
+/* ─── TABBED SERVICES FILTER ────────────────────────────────── */
 .services-section { padding: 120px 0; background: var(--porcelain); }
-.filter-tabs {
-  display: flex; align-items: center; justify-content: center; gap: 12px;
-  margin-bottom: 56px; flex-wrap: wrap;
-}
+.filter-tabs { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 56px; flex-wrap: wrap; }
 .filter-tab {
   padding: 10px 24px; border-radius: 30px; font-size: 0.85rem; font-weight: 600;
-  color: var(--text-mid); background: var(--mist); transition: all 0.3s var(--ease);
-  cursor: pointer; border: 1px solid transparent;
+  color: var(--text-mid); background: var(--mist); transition: all 0.3s var(--ease); cursor: pointer;
 }
-.filter-tab.active, .filter-tab:hover {
-  background: var(--teal); color: var(--porcelain); border-color: var(--teal-light);
-}
+.filter-tab.active, .filter-tab:hover { background: var(--teal); color: var(--porcelain); }
 
 .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .service-card {
   background: var(--warm-white); border: 1px solid var(--mist-dk); border-radius: 8px;
-  padding: 36px 30px; transition: all 0.35s var(--ease); display: flex; flex-direction: column; justify-content: space-between;
+  padding: 30px; transition: all 0.35s var(--ease); display: flex; flex-direction: column; justify-content: space-between;
 }
-.service-card:hover {
-  transform: translateY(-6px); border-color: var(--brass); box-shadow: 0 16px 40px rgba(16, 43, 53, 0.08);
+.service-card:hover { transform: translateY(-6px); border-color: var(--brass); box-shadow: 0 16px 40px rgba(16, 43, 53, 0.08); }
+.service-card-media {
+  width: 100%; height: 170px; border-radius: 6px; overflow: hidden; margin-bottom: 20px;
 }
+.service-card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+.service-card:hover .service-card-media img { transform: scale(1.06); }
 .service-tag {
   font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--brass); background: rgba(181, 139, 85, 0.1); padding: 4px 10px; border-radius: 4px;
-  display: inline-block; margin-bottom: 16px;
+  color: var(--brass); background: rgba(181, 139, 85, 0.1); padding: 4px 10px; border-radius: 4px; display: inline-block; margin-bottom: 12px;
 }
 .service-name { font-family: var(--serif); font-size: 1.35rem; font-weight: 500; color: var(--teal); margin-bottom: 10px; }
 .service-desc { font-size: 0.88rem; color: var(--text-mid); line-height: 1.65; font-weight: 300; margin-bottom: 20px; }
 .service-footer { font-size: 0.8rem; font-weight: 600; color: var(--eucalyptus); display: flex; align-items: center; justify-content: space-between; }
 
-/* ─── BEFORE / AFTER TRANSFORM SLIDER ───────────────────────── */
+/* ─── REAL TEETH WHITENING BEFORE / AFTER TRANSFORM SLIDER ─── */
 .transform-section { padding: 100px 0; background: var(--warm-white); border-top: 1px solid var(--mist); border-bottom: 1px solid var(--mist); }
 .comparison-wrapper {
-  position: relative; width: 100%; max-width: 800px; height: 420px; margin: 40px auto 0;
-  border-radius: 12px; overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+  position: relative; width: 100%; max-width: 860px; height: 460px; margin: 40px auto 0;
+  border-radius: 12px; overflow: hidden; box-shadow: 0 20px 50px rgba(16,43,53,0.18); border: 2px solid var(--mist-dk);
 }
+.badge-before, .badge-after {
+  position: absolute; top: 16px; z-index: 12;
+  padding: 6px 14px; border-radius: 4px; font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; backdrop-filter: blur(8px);
+}
+.badge-before { left: 16px; background: rgba(16, 43, 53, 0.82); color: rgba(255,255,255,0.9); border: 1px solid rgba(255,255,255,0.2); }
+.badge-after { right: 16px; background: rgba(181, 139, 85, 0.92); color: #fff; border: 1px solid rgba(255,255,255,0.4); }
+
 .comparison-image { position: absolute; inset: 0; width: 100%; height: 100%; }
-.before-image { background: linear-gradient(135deg, #2A3B3E, #102B35); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.7); font-family: var(--serif); font-size: 1.6rem; }
+.before-image img { width: 100%; height: 100%; object-fit: cover; }
 .after-image {
-  background: linear-gradient(135deg, #102B35, #789B92); display: flex; align-items: center; justify-content: center; color: #fff; font-family: var(--serif); font-size: 1.6rem;
-  width: 50%; overflow: hidden; border-right: 3px solid var(--brass);
+  width: 50%; overflow: hidden; border-right: 3px solid var(--brass); transition: width 0.05s ease-out;
 }
+.after-image img { width: 860px; height: 460px; object-fit: cover; max-width: none; }
 .slider-handle {
-  position: absolute; top: 0; bottom: 0; left: 50%; width: 40px; margin-left: -20px;
+  position: absolute; top: 0; bottom: 0; left: 50%; width: 44px; margin-left: -22px;
   display: flex; align-items: center; justify-content: center; cursor: ew-resize; z-index: 10;
 }
 .handle-circle {
-  width: 40px; height: 40px; border-radius: 50%; background: var(--brass); color: #fff;
-  display: flex; align-items: center; justify-content: center; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  width: 44px; height: 44px; border-radius: 50%; background: var(--brass); color: #fff;
+  display: flex; align-items: center; justify-content: center; font-weight: 700; box-shadow: 0 4px 16px rgba(0,0,0,0.35);
 }
 
-/* ─── DOCTORS SHOWCASE (Real Generated Photos) ─────────── */
+/* Whitening Highlights Strip */
+.whitening-highlights {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+  max-width: 860px; margin: 30px auto 0; text-align: left;
+}
+.whitening-chip {
+  background: var(--porcelain); border: 1px solid var(--mist-dk); border-radius: 8px;
+  padding: 16px; display: flex; align-items: center; gap: 12px;
+}
+.chip-icon { font-size: 1.5rem; }
+.chip-title { font-weight: 600; font-size: 0.9rem; color: var(--teal); }
+.chip-sub { font-size: 0.72rem; color: var(--text-mid); }
+
+/* Interactive Shade Picker */
+.shade-visualizer-card {
+  background: var(--porcelain); border: 1px solid var(--mist-dk); border-radius: 12px;
+  padding: 32px; max-width: 860px; margin: 40px auto 0; text-align: left;
+}
+.shade-buttons { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+.shade-btn {
+  padding: 10px 18px; border-radius: 6px; border: 1px solid var(--mist-dk);
+  background: var(--warm-white); color: var(--teal); font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: all 0.25s ease;
+}
+.shade-btn.active, .shade-btn:hover { background: var(--teal); color: var(--porcelain); border-color: var(--teal-mid); }
+.shade-preview-box {
+  background: var(--warm-white); border: 1px solid var(--mist-dk); border-radius: 8px;
+  padding: 20px 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+}
+.shade-tooth-icon {
+  font-size: 2.8rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+  transition: all 0.4s ease;
+}
+
+/* ─── DOCTORS SHOWCASE ───────────────────────────────────────── */
 .team-section { padding: 120px 0; background: var(--porcelain); }
 .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 56px; }
 .doctor-card {
@@ -293,21 +315,16 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
   padding: 16px 20px; border-radius: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
   cursor: pointer; transition: all 0.25s ease; display: flex; align-items: center; justify-content: space-between;
 }
-.calc-option.selected, .calc-option:hover {
-  background: rgba(181, 139, 85, 0.25); border-color: var(--brass);
-}
+.calc-option.selected, .calc-option:hover { background: rgba(181, 139, 85, 0.25); border-color: var(--brass); }
 .calc-price { font-family: var(--serif); font-size: 1.2rem; color: var(--euclid-lt); }
 
-/* ─── REACT BITS: INTERACTIVE FAQ ACCORDION ───────────────────── */
+/* ─── INTERACTIVE FAQ ACCORDION ───────────────────── */
 .faq-section { padding: 100px 0; background: var(--warm-white); }
 .faq-container { max-width: 800px; margin: 40px auto 0; }
-.faq-item {
-  border-bottom: 1px solid var(--mist-dk); padding: 20px 0; transition: all 0.3s ease;
-}
+.faq-item { border-bottom: 1px solid var(--mist-dk); padding: 20px 0; transition: all 0.3s ease; }
 .faq-question {
   display: flex; align-items: center; justify-content: space-between;
-  font-family: var(--serif); font-size: 1.35rem; font-weight: 500; color: var(--teal);
-  cursor: pointer; user-select: none;
+  font-family: var(--serif); font-size: 1.35rem; font-weight: 500; color: var(--teal); cursor: pointer;
 }
 .faq-answer {
   max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.4s var(--ease), opacity 0.4s var(--ease), margin-top 0.3s ease;
@@ -316,6 +333,25 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
 .faq-item.active .faq-answer { max-height: 200px; opacity: 1; margin-top: 12px; }
 .faq-icon { font-size: 1.4rem; color: var(--brass); transition: transform 0.3s ease; }
 .faq-item.active .faq-icon { transform: rotate(45deg); }
+
+/* ─── REACT BITS: LIVE SLOT BOOKER MODAL ─────────────────────── */
+#slotModal {
+  position: fixed; inset: 0; background: rgba(16, 43, 53, 0.85); backdrop-filter: blur(12px);
+  z-index: 9000; display: flex; align-items: center; justify-content: center; padding: 20px;
+  opacity: 0; pointer-events: none; transition: all 0.35s ease;
+}
+#slotModal.open { opacity: 1; pointer-events: auto; }
+.modal-card {
+  background: var(--warm-white); border-radius: 12px; padding: 36px; max-width: 540px; width: 100%;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.3); position: relative; border: 1px solid var(--mist-dk);
+}
+.close-modal { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; color: var(--text-mid); cursor: pointer; }
+.slot-pill-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
+.slot-pill {
+  padding: 10px; text-align: center; border-radius: 6px; border: 1px solid var(--mist-dk);
+  font-size: 0.85rem; font-weight: 600; color: var(--teal); cursor: pointer; transition: all 0.2s;
+}
+.slot-pill.selected, .slot-pill:hover { background: var(--teal); color: var(--porcelain); border-color: var(--teal-light); }
 
 /* ─── CONTACT FORM ───────────────────────────────────────────── */
 .contact-section { padding: 120px 0; background: var(--porcelain); }
@@ -327,11 +363,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
 .form-field label { font-size: .7rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: rgba(247,244,238,.6); }
 .form-field input, .form-field select, .form-field textarea {
   background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.15);
-  color: var(--porcelain); font-family: var(--sans); font-size: .9rem;
-  padding: 12px 16px; border-radius: 6px; transition: border-color .25s;
-}
-.form-field input:focus, .form-field select:focus, .form-field textarea:focus {
-  outline: none; border-color: var(--brass); background: rgba(255,255,255,.12);
+  color: var(--porcelain); font-family: var(--sans); font-size: .9rem; padding: 12px 16px; border-radius: 6px;
 }
 
 /* ─── FOOTER ─────────────────────────────────────────────────── */
@@ -343,7 +375,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
 
 @media (max-width: 900px) {
   .hero-inner { grid-template-columns: 1fr; padding: 100px 20px 60px; }
-  .stats-strip, .services-grid, .team-grid, .calc-option-grid, .contact-grid { grid-template-columns: 1fr; }
+  .stats-strip, .services-grid, .team-grid, .calc-option-grid, .contact-grid, .whitening-highlights { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -365,7 +397,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
 
     <div class="nav-links">
       <a href="#services">Specialties</a>
-      <a href="#transform">Transformations</a>
+      <a href="#transform">Whitening Transformation</a>
       <a href="#calculator">Estimator</a>
       <a href="#team">Specialists</a>
       <a href="#faq">FAQ</a>
@@ -373,7 +405,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
     </div>
 
     <div class="nav-cta-wrap">
-      <a href="#contact" class="btn btn-primary ripple-btn">Book Consultation</a>
+      <button onclick="openModal()" class="btn btn-primary ripple-btn">Book Consultation</button>
     </div>
   </nav>
 </header>
@@ -394,7 +426,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
         Specialist dental and ENT care delivered with clinical precision, state-of-the-art technology, and unhurried attention.
       </p>
       <div style="display:flex;gap:16px;margin-top:36px">
-        <a href="#contact" class="btn btn-primary btn-arrow ripple-btn">Book Appointment</a>
+        <button onclick="openModal()" class="btn btn-primary btn-arrow ripple-btn">Book Appointment</button>
         <a href="#services" class="btn btn-ghost ripple-btn">Explore Specialties</a>
       </div>
     </div>
@@ -433,15 +465,14 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
   </div>
 </div>
 
-<!-- ─── SERVICES TABBED FILTER SECTION (React Bits Style) ───── -->
+<!-- ─── TABBED SERVICES FILTER & SPOTLIGHT CARDS ────────────── -->
 <section class="services-section" id="services">
   <div class="container">
     <div style="text-align:center;max-width:600px;margin:0 auto 40px">
-      <div class="t-label">Clinical Excellence</div>
-      <h2 class="t-heading" style="color:var(--teal);margin-top:12px">Comprehensive Care Across Specialties</h2>
+      <div class="t-label">Comprehensive Care</div>
+      <h2 class="t-heading" style="color:var(--teal);margin-top:12px">Specialist Services</h2>
     </div>
 
-    <!-- Interactive Filter Pills -->
     <div class="filter-tabs">
       <div class="filter-tab active" onclick="filterServices('all', this)">All Care</div>
       <div class="filter-tab" onclick="filterServices('dental', this)">Dental Care</div>
@@ -450,55 +481,73 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
 
     <div class="services-grid" id="servicesGrid">
       <div class="service-card spotlight-card" data-cat="dental">
-        <div>
-          <span class="service-tag">Dental</span>
-          <h3 class="service-name">Preventive Hygiene & Scaling</h3>
-          <p class="service-desc">Ultrasonic scaling, enamel polishing, and comprehensive periodontal screening to safeguard your oral foundation.</p>
+        <div class="service-card-media">
+          <img src="/assets/whitening_after.jpg" alt="Laser Teeth Whitening"/>
         </div>
-        <div class="service-footer"><span>Duration: 45 mins</span><span>From ₹1,200</span></div>
-      </div>
-
-      <div class="service-card spotlight-card" data-cat="dental">
         <div>
           <span class="service-tag">Dental</span>
-          <h3 class="service-name">Teeth Whitening</h3>
-          <p class="service-desc">In-office laser teeth whitening delivering 2–3 shades brighter results in a single session with minimal sensitivity.</p>
+          <h3 class="service-name">Laser Teeth Whitening</h3>
+          <p class="service-desc">In-office 810nm diode laser teeth whitening delivering up to 3.5 shades brighter results in a single session with zero enamel sensitivity.</p>
         </div>
         <div class="service-footer"><span>Duration: 60 mins</span><span>From ₹4,500</span></div>
       </div>
 
       <div class="service-card spotlight-card" data-cat="dental">
+        <div class="service-card-media">
+          <img src="/assets/aligners.jpg" alt="Orthodontics & Aligners"/>
+        </div>
         <div>
           <span class="service-tag">Dental</span>
-          <h3 class="service-name">Root Canal & Restorations</h3>
-          <p class="service-desc">Rotary endodontics for painless root canal therapy, finished with custom porcelain ceramic crowns.</p>
+          <h3 class="service-name">Clear Aligners & Braces</h3>
+          <p class="service-desc">Virtually invisible US-FDA approved clear aligner systems and ceramic braces designed for precise, comfortable bite alignment.</p>
+        </div>
+        <div class="service-footer"><span>Custom Plan</span><span>From ₹22,000</span></div>
+      </div>
+
+      <div class="service-card spotlight-card" data-cat="dental">
+        <div class="service-card-media">
+          <img src="/assets/implants.jpg" alt="Implants & Restorations"/>
+        </div>
+        <div>
+          <span class="service-tag">Dental</span>
+          <h3 class="service-name">Implants & Root Canals</h3>
+          <p class="service-desc">Rotary painless endodontics and medical-grade titanium dental implants finished with handcrafted porcelain ceramic crowns.</p>
         </div>
         <div class="service-footer"><span>Duration: 2 Visits</span><span>From ₹6,500</span></div>
       </div>
 
       <div class="service-card spotlight-card" data-cat="dental">
+        <div class="service-card-media">
+          <img src="/assets/hero_clinic.jpg" alt="Preventive Hygiene"/>
+        </div>
         <div>
           <span class="service-tag">Dental</span>
-          <h3 class="service-name">Orthodontics & Aligners</h3>
-          <p class="service-desc">Metal braces, ceramic braces, and clear aligner systems for children and adults to achieve ideal bite alignment.</p>
+          <h3 class="service-name">Preventive Hygiene & Scaling</h3>
+          <p class="service-desc">Ultrasonic scaling, air-polishing, and full digital periodontal screening to maintain a healthy gum foundation.</p>
         </div>
-        <div class="service-footer"><span>Custom Plan</span><span>From ₹22,000</span></div>
+        <div class="service-footer"><span>Duration: 45 mins</span><span>From ₹1,200</span></div>
       </div>
 
       <div class="service-card spotlight-card" data-cat="ent">
+        <div class="service-card-media">
+          <img src="/assets/doctor_ent.jpg" alt="Ear & Hearing Care"/>
+        </div>
         <div>
           <span class="service-tag" style="color:var(--eucalyptus);background:rgba(120,155,146,0.15)">ENT</span>
           <h3 class="service-name">Ear & Hearing Care</h3>
-          <p class="service-desc">Diagnostic audiometry, micro-suction wax removal, and management of tinnitus and chronic ear infections.</p>
+          <p class="service-desc">Diagnostic audiometry, painless micro-suction ear wax removal, and expert management of tinnitus and chronic ear infections.</p>
         </div>
         <div class="service-footer"><span>Duration: 30 mins</span><span>From ₹1,500</span></div>
       </div>
 
       <div class="service-card spotlight-card" data-cat="ent">
+        <div class="service-card-media">
+          <img src="/assets/hero_clinic.jpg" alt="Sinus & Allergy Care"/>
+        </div>
         <div>
           <span class="service-tag" style="color:var(--eucalyptus);background:rgba(120,155,146,0.15)">ENT</span>
           <h3 class="service-name">Nasal & Sinus Surgery</h3>
-          <p class="service-desc">Endoscopic sinus surgery (FESS), septoplasty, and long-term allergic rhinitis management by senior surgeons.</p>
+          <p class="service-desc">Functional Endoscopic Sinus Surgery (FESS), septoplasty, and long-term allergic rhinitis treatment by senior ENT surgeons.</p>
         </div>
         <div class="service-footer"><span>Consultation</span><span>From ₹1,800</span></div>
       </div>
@@ -506,22 +555,84 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
   </div>
 </section>
 
-<!-- ─── BEFORE / AFTER TRANSFORM SLIDER COMPONENT ───────────── -->
+<!-- ─── REAL GENERATED TEETH WHITENING BEFORE / AFTER SLIDER & SHADE PICKER ─── -->
 <section class="transform-section" id="transform">
   <div class="container" style="text-align:center">
-    <div class="t-label">Proven Outcomes</div>
-    <h2 class="t-heading" style="color:var(--teal);margin-top:12px">Real Patient Transformations</h2>
-    <p class="t-body" style="max-width:500px;margin:12px auto 0">Drag the interactive slider below to see the impact of our clinical whitening & smile restoration treatment.</p>
+    <div class="t-label">Laser Teeth Whitening</div>
+    <h2 class="t-heading" style="color:var(--teal);margin-top:12px">Real Patient Whitening Results</h2>
+    <p class="t-body" style="max-width:620px;margin:12px auto 0">
+      Drag the interactive slider below to compare clinical results before and after 60-minute laser whitening at SmileClinic.
+    </p>
 
-    <div class="comparison-wrapper" id="comparisonSlider">
+    <!-- REAL GENERATED BEFORE / AFTER PHOTOS SLIDER WITH BADGES -->
+    <div class="comparison-wrapper spotlight-card" id="comparisonSlider">
+      <span class="badge-before">BEFORE WHITENING</span>
+      <span class="badge-after">AFTER 60-MIN LASER</span>
+
       <div class="comparison-image before-image">
-        <div>Before Treatment</div>
+        <img src="/assets/whitening_before.jpg" alt="Teeth Before Whitening"/>
       </div>
       <div class="comparison-image after-image" id="afterImage">
-        <div>After Whitening & Restorative Care ✨</div>
+        <img src="/assets/whitening_after.jpg" alt="Teeth After Whitening"/>
       </div>
       <div class="slider-handle" id="sliderHandle">
         <div class="handle-circle">↔</div>
+      </div>
+    </div>
+
+    <!-- WHITENING CLINICAL HIGHLIGHTS -->
+    <div class="whitening-highlights">
+      <div class="whitening-chip">
+        <div class="chip-icon">⚡</div>
+        <div>
+          <div class="chip-title">60 Mins</div>
+          <div class="chip-sub">Single Express Session</div>
+        </div>
+      </div>
+      <div class="whitening-chip">
+        <div class="chip-icon">✨</div>
+        <div>
+          <div class="chip-title">+3.5 Shades</div>
+          <div class="chip-sub">Brighter Smile Guarantee</div>
+        </div>
+      </div>
+      <div class="whitening-chip">
+        <div class="chip-icon">🛡️</div>
+        <div>
+          <div class="chip-title">Zero Pain</div>
+          <div class="chip-sub">Desensitizing Guard Tech</div>
+        </div>
+      </div>
+      <div class="whitening-chip">
+        <div class="chip-icon">💎</div>
+        <div>
+          <div class="chip-title">12+ Months</div>
+          <div class="chip-sub">Long-Lasting Radiance</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTERACTIVE TOOTH SHADE MATCHER VISUALIZER -->
+    <div class="shade-visualizer-card spotlight-card">
+      <h3 style="font-family:var(--serif);font-size:1.5rem;color:var(--teal);margin-bottom:8px">Interactive Tooth Shade Matcher</h3>
+      <p style="font-size:0.85rem;color:var(--text-mid);margin-bottom:20px">Click shades below to see how stained enamel brightens under 810nm laser whitening.</p>
+
+      <div class="shade-buttons">
+        <button class="shade-btn" onclick="selectShade('C4', '#D4B886', 'Severe Stains / Coffee & Tobacco', 'Requires 2 Laser Sessions', this)">C4 Deep Stain</button>
+        <button class="shade-btn" onclick="selectShade('B3', '#E3CBA0', 'Moderate Tea / Coffee Stains', 'Recommended 60-min Laser Session', this)">B3 Mild Stain</button>
+        <button class="shade-btn" onclick="selectShade('A3', '#F2E3C6', 'Natural Untreated Enamel', '1–2 Shade Boost', this)">A3 Natural</button>
+        <button class="shade-btn active" onclick="selectShade('A1', '#FFFFFF', 'Hollywood Pearl White', 'Achieved Post-Laser Treatment at SmileClinic', this)">A1 Pearl White</button>
+      </div>
+
+      <div class="shade-preview-box">
+        <div class="shade-tooth-icon" id="toothIcon" style="filter: drop-shadow(0 0 16px #FFFFFF) drop-shadow(0 4px 10px rgba(0,0,0,0.25))">🦷</div>
+        <div>
+          <div style="font-size:1.1rem;font-weight:600;color:var(--teal)" id="shadeName">A1 Pearl White</div>
+          <div style="font-size:0.8rem;color:var(--eucalyptus)" id="shadeDesc">Achieved Post-Laser Treatment at SmileClinic</div>
+        </div>
+        <button onclick="openModal('Laser Whitening Special')" class="btn btn-primary ripple-btn" style="margin-left:auto;padding:12px 24px">
+          Book Whitening Special · ₹4,500
+        </button>
       </div>
     </div>
   </div>
@@ -557,7 +668,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
         <div class="calc-option" onclick="toggleCalcOption(this, 6500)">
           <div>
             <div style="font-weight:600">Root Canal & Porcelain Crown</div>
-            <div style="font-size:0.75rem;color:rgba(255,255,255,0.5)">Full tooth restoration</div>
+            <div style="font-size:0.75rem;color:rgba(255,255,255,0.5)">Painless endodontic therapy</div>
           </div>
           <div class="calc-price">₹6,500</div>
         </div>
@@ -576,7 +687,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
           <div style="font-size:0.8rem;color:rgba(255,255,255,0.6)">Estimated Investment Total:</div>
           <div style="font-family:var(--serif);font-size:2.2rem;font-weight:600;color:var(--brass-lt)" id="calcTotal">₹1,200</div>
         </div>
-        <a href="#contact" class="btn btn-primary ripple-btn">Book Consultation</a>
+        <button onclick="openModal()" class="btn btn-primary ripple-btn">Book Consultation</button>
       </div>
     </div>
   </div>
@@ -600,6 +711,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
           <h3 class="doctor-name">Dr. Priya Sharma</h3>
           <div class="doctor-spec">General & Restorative Dentistry</div>
           <p class="doctor-bio">BDS, MDS — 8+ years specialising in painless restorative care, laser cosmetic whitening, and preventive oral health.</p>
+          <button onclick="openModal('Dr. Priya Sharma')" class="btn btn-outline" style="margin-top:16px;width:100%;justify-content:center">Select Time Slot</button>
         </div>
       </div>
 
@@ -612,6 +724,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
           <h3 class="doctor-name">Dr. Arjun Nair</h3>
           <div class="doctor-spec">Orthodontics & Aligners</div>
           <p class="doctor-bio">BDS, MDS (Orthodontics) — 10+ years specialising in fixed appliances and certified clear aligner treatments.</p>
+          <button onclick="openModal('Dr. Arjun Nair')" class="btn btn-outline" style="margin-top:16px;width:100%;justify-content:center">Select Time Slot</button>
         </div>
       </div>
 
@@ -624,6 +737,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
           <h3 class="doctor-name">Dr. Rajesh Kulkarni</h3>
           <div class="doctor-spec">Senior ENT Surgeon</div>
           <p class="doctor-bio">MS (ENT) — 12+ years expertise in endoscopic sinus surgery, hearing restoration, and micro-otology procedures.</p>
+          <button onclick="openModal('Dr. Rajesh Kulkarni')" class="btn btn-outline" style="margin-top:16px;width:100%;justify-content:center">Select Time Slot</button>
         </div>
       </div>
     </div>
@@ -649,10 +763,10 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
 
       <div class="faq-item" onclick="toggleFaq(this)">
         <div class="faq-question">
-          <span>Are root canals and dental extractions painful?</span>
+          <span>Are root canals and teeth whitening painful?</span>
           <span class="faq-icon">+</span>
         </div>
-        <div class="faq-answer">At SmileClinic, we use rotary endodontic systems and modern local anesthetics to ensure procedures are virtually painless and comfortable throughout.</div>
+        <div class="faq-answer">At SmileClinic, we use laser whitening technology with built-in desensitizing agents and rotary endodontics for root canals to ensure 100% comfort.</div>
       </div>
 
       <div class="faq-item" onclick="toggleFaq(this)">
@@ -682,7 +796,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
         </div>
       </div>
 
-      <form class="appt-form">
+      <form class="appt-form" onsubmit="event.preventDefault(); alert('Appointment Request Submitted Successfully! Our team will call you to confirm.');">
         <div style="font-family:var(--serif);font-size:1.6rem;color:var(--porcelain);margin-bottom:8px">Request an Appointment</div>
         <div style="font-size:0.8rem;color:rgba(255,255,255,0.6);margin-bottom:28px">Fill in your details below:</div>
 
@@ -700,8 +814,8 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
           <label>Specialty Needed</label>
           <select required>
             <option value="">Select Specialty</option>
+            <option>Dental — Laser Teeth Whitening</option>
             <option>Dental — Preventive & Scaling</option>
-            <option>Dental — Whitening</option>
             <option>Dental — Root Canal & Crown</option>
             <option>Dental — Orthodontics & Aligners</option>
             <option>ENT — Ear & Hearing</option>
@@ -709,37 +823,51 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
           </select>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-arrow ripple-btn" style="width:100%;justify-content:center;margin-top:16px">Submit Booking Request</button>
+        <div class="form-field">
+          <label>Preferred Date</label>
+          <input type="date" required/>
+        </div>
+
+        <button type="submit" class="btn btn-primary ripple-btn" style="width:100%;justify-content:center;margin-top:16px">
+          Submit Booking Request
+        </button>
       </form>
     </div>
   </div>
 </section>
 </main>
 
+<!-- ─── FOOTER ─────────────────────────────────────────────────── -->
 <footer class="footer">
   <div class="container">
     <div class="footer-top">
       <div>
-        <div style="font-family:var(--serif);font-size:1.4rem;font-weight:500;margin-bottom:12px">SmileClinic Bengaluru</div>
-        <p style="font-size:0.85rem;color:rgba(255,255,255,0.5);max-width:280px">Advanced dental and ENT clinical care. Built for patient comfort and surgical excellence.</p>
+        <div style="font-family:var(--serif);font-size:1.5rem;margin-bottom:16px">SmileClinic</div>
+        <p style="font-size:0.85rem;color:rgba(255,255,255,0.5);max-width:320px;line-height:1.7">
+          Advanced dental and ENT care in Koramangala, Bengaluru. Delivering exceptional patient experiences through modern technology.
+        </p>
       </div>
+
       <div>
-        <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--brass);margin-bottom:16px">Dental Care</div>
+        <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--brass);margin-bottom:16px">Specialties</div>
         <ul class="footer-links">
-          <li><a href="#services">Scaling & Cleaning</a></li>
-          <li><a href="#services">Teeth Whitening</a></li>
-          <li><a href="#services">Root Canal Therapy</a></li>
+          <li><a href="#services">Laser Whitening</a></li>
           <li><a href="#services">Clear Aligners</a></li>
+          <li><a href="#services">Root Canals</a></li>
+          <li><a href="#services">ENT Endoscopy</a></li>
         </ul>
       </div>
+
       <div>
-        <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--brass);margin-bottom:16px">ENT Care</div>
+        <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--brass);margin-bottom:16px">Clinic</div>
         <ul class="footer-links">
-          <li><a href="#services">Ear & Hearing</a></li>
-          <li><a href="#services">Sinus Evaluation</a></li>
-          <li><a href="#services">Endoscopic Surgery</a></li>
+          <li><a href="#team">Our Specialists</a></li>
+          <li><a href="#calculator">Cost Estimator</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contact">Koramangala Clinic</a></li>
         </ul>
       </div>
+
       <div>
         <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--brass);margin-bottom:16px">Portal</div>
         <ul class="footer-links">
@@ -755,85 +883,84 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
   </div>
 </footer>
 
+<!-- ─── REACT BITS: LIVE SLOT SELECTOR MODAL ──────────────────────────────── -->
+<div id="slotModal">
+  <div class="modal-card spotlight-card">
+    <span class="close-modal" onclick="closeModal()">×</span>
+    <h3 style="font-family:var(--serif);font-size:1.6rem;color:var(--teal);margin-bottom:6px" id="modalDoctorTitle">Book Consultation</h3>
+    <p style="font-size:0.85rem;color:var(--text-mid)">Select an available slot for today at our Koramangala Clinic:</p>
+
+    <div class="slot-pill-grid">
+      <div class="slot-pill selected" onclick="selectSlot(this)">09:30 AM</div>
+      <div class="slot-pill" onclick="selectSlot(this)">11:00 AM</div>
+      <div class="slot-pill" onclick="selectSlot(this)">02:15 PM</div>
+      <div class="slot-pill" onclick="selectSlot(this)">04:30 PM</div>
+      <div class="slot-pill" onclick="selectSlot(this)">06:00 PM</div>
+      <div class="slot-pill" onclick="selectSlot(this)">07:15 PM</div>
+    </div>
+
+    <button onclick="confirmSlot()" class="btn btn-primary ripple-btn" style="width:100%;justify-content:center;margin-top:12px">
+      Confirm Selected Slot
+    </button>
+  </div>
+</div>
+
 <script>
-// ── 1. TRAILING CURSOR RING (React Bits) ──────────────────────
+// ── 1. TRAILING CURSOR RING ──────────────────────────────────
 const cursor = document.getElementById('cursorRing');
 let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
-
-window.addEventListener('mousemove', e => {
-  mouseX = e.clientX; mouseY = e.clientY;
-});
+window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
 
 function renderCursor() {
-  ringX += (mouseX - ringX) * 0.18;
-  ringY += (mouseY - ringY) * 0.18;
-  if (cursor) {
-    cursor.style.left = `${ringX}px`;
-    cursor.style.top = `${ringY}px`;
-  }
+  ringX += (mouseX - ringX) * 0.18; ringY += (mouseY - ringY) * 0.18;
+  if (cursor) { cursor.style.left = `${ringX}px`; cursor.style.top = `${ringY}px`; }
   requestAnimationFrame(renderCursor);
 }
 renderCursor();
 
-document.querySelectorAll('a, button, .spotlight-card, .filter-tab, .calc-option').forEach(el => {
+document.querySelectorAll('a, button, .spotlight-card, .filter-tab, .calc-option, .slot-pill, .shade-btn').forEach(el => {
   el.addEventListener('mouseenter', () => cursor?.classList.add('hovering'));
   el.addEventListener('mouseleave', () => cursor?.classList.remove('hovering'));
 });
 
-// ── 2. SPOTLIGHT & 3D TILT CARD EFFECT (React Bits) ───────────
+// ── 2. SPOTLIGHT & 3D TILT CARD EFFECT ───────────────────────
 document.querySelectorAll('.spotlight-card').forEach(card => {
   card.addEventListener('mousemove', e => {
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    card.style.setProperty('--mouse-x', `${x}px`);
-    card.style.setProperty('--mouse-y', `${y}px`);
+    card.style.setProperty('--mouse-x', `${x}px`); card.style.setProperty('--mouse-y', `${y}px`);
 
-    // 3D Tilt calculations
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
+    const centerX = rect.width / 2; const centerY = rect.height / 2;
     const rotateX = ((y - centerY) / centerY) * -5;
     const rotateY = ((x - centerX) / centerX) * 5;
     card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
   });
-
   card.addEventListener('mouseleave', () => {
     card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
   });
 });
 
-// ── 3. HERO CANVAS INTERACTIVE PARTICLES (React Bits) ────────
+// ── 3. HERO CANVAS PARTICLES ─────────────────────────────────
 const canvas = document.getElementById('particleCanvas');
 if (canvas) {
   const ctx = canvas.getContext('2d');
   let width = canvas.width = window.innerWidth;
   let height = canvas.height = window.innerHeight;
-
   const particles = Array.from({ length: 45 }, () => ({
-    x: Math.random() * width,
-    y: Math.random() * height,
-    radius: Math.random() * 2 + 1,
-    vx: (Math.random() - 0.5) * 0.4,
-    vy: (Math.random() - 0.5) * 0.4,
+    x: Math.random() * width, y: Math.random() * height,
+    radius: Math.random() * 2 + 1, vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
     alpha: Math.random() * 0.5 + 0.2
   }));
-
-  window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-  });
-
+  window.addEventListener('resize', () => { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; });
   function drawParticles() {
     ctx.clearRect(0, 0, width, height);
     particles.forEach(p => {
       p.x += p.vx; p.y += p.vy;
       if (p.x < 0 || p.x > width) p.vx *= -1;
       if (p.y < 0 || p.y > height) p.vy *= -1;
-
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(168, 196, 187, ${p.alpha})`;
-      ctx.fill();
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(168, 196, 187, ${p.alpha})`; ctx.fill();
     });
     requestAnimationFrame(drawParticles);
   }
@@ -862,20 +989,12 @@ const statsObserver = new IntersectionObserver((entries) => {
       entry.target.querySelectorAll('.stat-num').forEach(el => {
         const target = parseInt(el.dataset.target, 10);
         const suffix = el.dataset.suffix || '';
-        let start = 0;
-        const duration = 1600;
-        const stepTime = 20;
-        const steps = duration / stepTime;
-        const increment = target / steps;
-
+        let start = 0; const duration = 1600; const stepTime = 20;
+        const steps = duration / stepTime; const increment = target / steps;
         const timer = setInterval(() => {
           start += increment;
-          if (start >= target) {
-            el.textContent = `${target}${suffix}`;
-            clearInterval(timer);
-          } else {
-            el.textContent = `${Math.floor(start)}${suffix}`;
-          }
+          if (start >= target) { el.textContent = `${target}${suffix}`; clearInterval(timer); }
+          else { el.textContent = `${Math.floor(start)}${suffix}`; }
         }, stepTime);
       });
       statsObserver.unobserve(entry.target);
@@ -885,30 +1004,12 @@ const statsObserver = new IntersectionObserver((entries) => {
 const statsStrip = document.querySelector('.stats-strip');
 if (statsStrip) statsObserver.observe(statsStrip);
 
-// ── 6. INTERACTIVE FAQ ACCORDION ──────────────────────────────
-function toggleFaq(item) {
-  const isActive = item.classList.contains('active');
-  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
-  if (!isActive) item.classList.add('active');
-}
-
-// ── 7. NAV PIN & TAB FILTERING ────────────────────────────────
-const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => { nav.classList.toggle('pinned', window.scrollY > 50); });
-
-function filterServices(category, element) {
-  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-  element.classList.add('active');
-  document.querySelectorAll('#servicesGrid .service-card').forEach(card => {
-    card.style.display = (category === 'all' || card.dataset.cat === category) ? 'flex' : 'none';
-  });
-}
-
-// ── 8. BEFORE / AFTER TRANSFORM SLIDER ────────────────────────
+// ── 6. REAL BEFORE / AFTER TEETH WHITENING SLIDER ─────────────
 const slider = document.getElementById('comparisonSlider');
 const afterImg = document.getElementById('afterImage');
 const handle = document.getElementById('sliderHandle');
 let isSliding = false;
+
 if (slider && afterImg && handle) {
   const updateSlider = (x) => {
     const rect = slider.getBoundingClientRect();
@@ -921,7 +1022,56 @@ if (slider && afterImg && handle) {
   window.addEventListener('mousemove', e => { if (isSliding) updateSlider(e.clientX); });
 }
 
-// ── 9. INTERACTIVE COST CALCULATOR ────────────────────────────
+// ── 7. INTERACTIVE SHADE SELECTOR VISUALIZER ──────────────────
+function selectShade(code, color, desc, hint, btn) {
+  document.querySelectorAll('.shade-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const tooth = document.getElementById('toothIcon');
+  const shadeName = document.getElementById('shadeName');
+  const shadeDesc = document.getElementById('shadeDesc');
+  
+  if (tooth) {
+    tooth.style.filter = `drop-shadow(0 0 16px ${color}) drop-shadow(0 4px 10px rgba(0,0,0,0.25))`;
+  }
+  if (shadeName) shadeName.textContent = `${code} Tooth Shade`;
+  if (shadeDesc) shadeDesc.textContent = `${desc} — ${hint}`;
+}
+
+// ── 8. LIVE MODAL & SLOT SELECTOR ─────────────────────────────
+function openModal(doctorName = '') {
+  document.getElementById('modalDoctorTitle').textContent = doctorName ? `Book Slot for ${doctorName}` : 'Book Consultation';
+  document.getElementById('slotModal').classList.add('open');
+}
+function closeModal() { document.getElementById('slotModal').classList.remove('open'); }
+function selectSlot(el) {
+  document.querySelectorAll('.slot-pill').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function confirmSlot() {
+  const selected = document.querySelector('.slot-pill.selected')?.textContent || '09:30 AM';
+  alert(`Slot Confirmed for ${selected}! Our clinic team will reach out to confirm your booking.`);
+  closeModal();
+}
+
+// ── 9. FAQ ACCORDION & NAV ─────────────────────────────────────
+function toggleFaq(item) {
+  const isActive = item.classList.contains('active');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+  if (!isActive) item.classList.add('active');
+}
+
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => { nav.classList.toggle('pinned', window.scrollY > 50); });
+
+function filterServices(category, element) {
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  element.classList.add('active');
+  document.querySelectorAll('#servicesGrid .service-card').forEach(card => {
+    card.style.display = (category === 'all' || card.dataset.cat === category) ? 'flex' : 'none';
+  });
+}
+
+// ── 10. COST CALCULATOR ───────────────────────────────────────
 let selectedTotal = 1200;
 function toggleCalcOption(element, price) {
   if (element.classList.contains('selected')) {
