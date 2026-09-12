@@ -3,18 +3,16 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SmileClinic — Dental & ENT Care, Bengaluru</title>
+<title>SmileClinic — Advanced Dental & ENT Care, Bengaluru</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='8' fill='%23102B35'/%3E%3Cpath d='M8 14 Q12 21 18 21 Q24 21 28 14' stroke='%23789B92' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Cpath d='M4 20 Q7 17.5 10 20 Q13 22.5 16 20 Q19 17.5 22 20 Q25 22.5 28 20 Q31 17.5 34 20' stroke='%23B58B55' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"/>
 <meta property="og:title" content="SmileClinic — Dental & ENT Care, Bengaluru"/>
 <meta property="og:description" content="Specialist dental and ENT care delivered with clinical precision and unhurried attention. Book a consultation in Bengaluru."/>
 <meta property="og:type" content="website"/>
-<meta property="og:image" content="[OG Image — 1200x630px to be provided]"/>
-<meta name="twitter:card" content="summary_large_image"/>
 <meta name="theme-color" content="#102B35"/>
-<meta name="description" content="Premium dental and ENT care in Bengaluru. Specialist consultations, advanced procedures, and a patient experience built around your comfort."/>
+<meta name="description" content="Premium dental and ENT care in Bengaluru. Specialist consultations, advanced procedures, and an interactive patient experience."/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 /* ─── RESET & TOKENS ────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -47,111 +45,99 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
-img { display: block; max-width: 100%; }
+img { display: block; max-width: 100%; object-fit: cover; }
 a { color: inherit; text-decoration: none; }
 button { font-family: var(--sans); cursor: pointer; border: none; background: none; }
 ::selection { background: rgba(120,155,146,.25); }
 
-/* ─── FOCUS ─────────────────────────────────────────────────── */
-:focus-visible {
-  outline: 2px solid var(--brass);
-  outline-offset: 3px;
-  border-radius: 2px;
+/* ─── SPOTLIGHT CARD EFFECT (React Bits) ─────────────────────── */
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
 }
+.spotlight-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(201, 168, 112, 0.15), transparent 40%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+.spotlight-card:hover::before { opacity: 1; }
 
-/* ─── REDUCED MOTION ────────────────────────────────────────── */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: .01ms !important;
-    transition-duration: .01ms !important;
-  }
-}
-
-/* ─── UTILITY ────────────────────────────────────────────────── */
-.sr-only {
-  position: absolute; width: 1px; height: 1px;
-  padding: 0; margin: -1px; overflow: hidden;
-  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-}
+/* ─── UTILITY & TYPOGRAPHY ────────────────────────────────────── */
 .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
 @media (max-width: 640px) { .container { padding: 0 20px; } }
 
-/* ─── TYPOGRAPHY SCALE ───────────────────────────────────────── */
 .t-display {
   font-family: var(--serif);
-  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-size: clamp(3.2rem, 6.5vw, 5.8rem);
   font-weight: 300;
   line-height: 1.05;
   letter-spacing: -0.02em;
 }
 .t-heading {
   font-family: var(--serif);
-  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-size: clamp(2.2rem, 4.2vw, 3.4rem);
   font-weight: 300;
   line-height: 1.1;
   letter-spacing: -0.015em;
 }
-.t-subheading {
-  font-family: var(--serif);
-  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
-  font-weight: 400;
-  line-height: 1.3;
-}
 .t-label {
   font-family: var(--sans);
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--eucalyptus);
 }
 .t-body { font-size: 1rem; line-height: 1.75; color: var(--text-mid); font-weight: 300; }
-.t-small { font-size: 0.85rem; line-height: 1.65; color: var(--text-soft); }
 
-/* ─── BUTTONS ────────────────────────────────────────────────── */
+/* ─── BUTTONS & INTERACTIVE ELEMENTS ────────────────────────── */
 .btn {
   display: inline-flex; align-items: center; gap: 10px;
-  font-family: var(--sans); font-size: 0.85rem; font-weight: 500;
-  letter-spacing: 0.04em; border-radius: 2px;
+  font-family: var(--sans); font-size: 0.85rem; font-weight: 600;
+  letter-spacing: 0.04em; border-radius: 4px;
   padding: 14px 28px; transition: all .3s var(--ease);
+  position: relative; overflow: hidden;
 }
 .btn-primary {
   background: var(--brass); color: #fff;
+  box-shadow: 0 4px 20px rgba(181, 139, 85, 0.25);
 }
-.btn-primary:hover { background: var(--brass-lt); transform: translateY(-1px); }
+.btn-primary:hover { background: var(--brass-lt); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(181, 139, 85, 0.35); }
 .btn-outline {
   border: 1px solid currentColor; color: var(--teal);
 }
-.btn-outline:hover { background: var(--teal); color: #fff; }
+.btn-outline:hover { background: var(--teal); color: #fff; transform: translateY(-2px); }
 .btn-ghost {
-  color: rgba(255,255,255,.8); border: 1px solid rgba(255,255,255,.25);
-  padding: 12px 24px;
+  color: rgba(255,255,255,.9); border: 1px solid rgba(255,255,255,.25);
+  padding: 12px 24px; backdrop-filter: blur(8px);
 }
-.btn-ghost:hover { background: rgba(255,255,255,.1); color: #fff; }
+.btn-ghost:hover { background: rgba(255,255,255,.15); color: #fff; transform: translateY(-2px); }
 .btn-arrow::after { content: '→'; transition: transform .25s var(--ease); }
-.btn-arrow:hover::after { transform: translateX(4px); }
+.btn-arrow:hover::after { transform: translateX(5px); }
 
 /* ─── REVEAL ANIMATION ───────────────────────────────────────── */
 [data-reveal] {
   opacity: 0;
-  transform: translateY(22px);
+  transform: translateY(24px);
   transition: opacity .9s var(--ease-out), transform .9s var(--ease-out);
 }
-[data-reveal="right"] { transform: translateX(-18px); }
-[data-reveal="left"]  { transform: translateX(18px); }
-[data-reveal="fade"]  { transform: none; }
+[data-reveal="right"] { transform: translateX(-20px); }
+[data-reveal="left"]  { transform: translateX(20px); }
 [data-reveal].revealed { opacity: 1; transform: none; }
 [data-delay="1"] { transition-delay: .12s; }
 [data-delay="2"] { transition-delay: .24s; }
 [data-delay="3"] { transition-delay: .36s; }
-[data-delay="4"] { transition-delay: .48s; }
 
-/* ─── ══════════════════════════════════════════════════════════ */
-/*     NAVIGATION                                                 */
-/* ══════════════════════════════════════════════════════════════ */
+/* ─── NAVIGATION ─────────────────────────────────────────────── */
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-  padding: 0 40px; height: 72px;
+  padding: 0 40px; height: 74px;
   display: flex; align-items: center; justify-content: space-between;
   transition: background .5s var(--ease), border-color .5s var(--ease), height .3s var(--ease);
   border-bottom: 1px solid transparent;
@@ -160,1131 +146,622 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
   background: rgba(247,244,238,.96);
   backdrop-filter: blur(16px);
   border-color: var(--mist-dk);
-  height: 60px;
+  height: 62px;
+  box-shadow: 0 4px 20px rgba(16, 43, 53, 0.05);
 }
 .nav.pinned .nav-logo span { color: var(--teal) !important; }
-.nav.pinned .nav-logo svg path { stroke-opacity: 1; }
 .nav-logo { display: flex; align-items: center; gap: 10px; }
-.nav-links {
-  display: flex; align-items: center; gap: 36px;
-}
+.nav-links { display: flex; align-items: center; gap: 36px; }
 .nav-links a {
-  font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,.8);
+  font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,.85);
   transition: color .25s; letter-spacing: .02em;
 }
 .nav.pinned .nav-links a { color: var(--text-mid); }
-.nav-links a:hover, .nav.pinned .nav-links a:hover { color: var(--teal); }
-.nav-cta-wrap { display: flex; align-items: center; gap: 16px; }
-.nav .btn-primary { padding: 10px 22px; font-size: 0.8rem; }
-.nav-menu-btn {
-  display: none; flex-direction: column; gap: 5px; padding: 8px; border-radius: 4px;
-}
-.nav-menu-btn span {
-  display: block; width: 22px; height: 1.5px; background: rgba(255,255,255,.8);
-  transition: transform .3s, opacity .3s;
-}
-.nav.pinned .nav-menu-btn span { background: var(--teal); }
-@media (max-width: 900px) {
-  .nav { padding: 0 20px; }
-  .nav-links { display: none; }
-  .nav-menu-btn { display: flex; }
-  .nav .btn-primary { display: none; }
-}
+.nav-links a:hover, .nav.pinned .nav-links a:hover { color: var(--brass); }
 
-/* mobile drawer */
-.nav-drawer {
-  position: fixed; inset: 0; z-index: 190;
-  background: var(--teal); display: flex; flex-direction: column;
-  justify-content: center; padding: 80px 40px 40px;
-  transform: translateX(100%); transition: transform .4s var(--ease-out);
-}
-.nav-drawer.open { transform: none; }
-.nav-drawer a {
-  font-family: var(--serif); font-size: 2.2rem; font-weight: 300;
-  color: var(--porcelain); display: block; padding: 10px 0;
-  border-bottom: 1px solid rgba(255,255,255,.08);
-  transition: color .2s;
-}
-.nav-drawer a:hover { color: var(--euclid-lt); }
-.nav-drawer .drawer-cta { margin-top: 32px; }
-
-/* ─── ══════════════════════════════════════════════════════════ */
-/*     HERO                                                       */
-/* ══════════════════════════════════════════════════════════════ */
+/* ─── HERO SECTION ───────────────────────────────────────────── */
 .hero {
   min-height: 100vh;
   background: var(--teal);
   display: flex; flex-direction: column; justify-content: flex-end;
   position: relative; overflow: hidden;
 }
-.hero::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 1px; z-index: 10;
-  background: linear-gradient(90deg, transparent, rgba(120,155,146,.3), rgba(181,139,85,.3), transparent);
-}
-
-/* ambient gradient layers */
 .hero-ambient {
   position: absolute; inset: 0; z-index: 0;
   background:
-    radial-gradient(ellipse 70% 55% at 78% 30%, rgba(120,155,146,.18) 0%, transparent 65%),
-    radial-gradient(ellipse 50% 70% at 15% 85%, rgba(181,139,85,.08) 0%, transparent 55%),
-    radial-gradient(ellipse 80% 40% at 50% 5%, rgba(247,244,238,.04) 0%, transparent 50%),
+    radial-gradient(ellipse 70% 55% at 78% 30%, rgba(120,155,146,.2) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 70% at 15% 85%, rgba(181,139,85,.12) 0%, transparent 55%),
     linear-gradient(170deg, #0A2029 0%, #102B35 45%, #1A3D4A 100%);
 }
-
-/* animated contour SVG */
-.hero-contour {
-  position: absolute; inset: 0; z-index: 1; opacity: .18; pointer-events: none;
-}
-.contour-path {
-  fill: none; stroke: var(--euclid-lt); stroke-width: 0.6;
-  stroke-linecap: round; stroke-linejoin: round;
-  stroke-dasharray: 2000;
-  stroke-dashoffset: 2000;
-  animation: drawContour 4s 1.2s var(--ease-out) forwards;
-}
-@keyframes drawContour { to { stroke-dashoffset: 0; } }
-
-/* slow ambient glow pulse */
-.hero-glow {
-  position: absolute; z-index: 1; pointer-events: none;
-  border-radius: 50%; filter: blur(90px);
-  animation: glowPulse 8s ease-in-out infinite;
-}
-.hero-glow-1 {
-  width: 600px; height: 600px; top: -150px; right: -80px;
-  background: rgba(120,155,146,.10);
-}
-.hero-glow-2 {
-  width: 400px; height: 400px; bottom: 60px; left: -60px;
-  background: rgba(181,139,85,.06);
-  animation-delay: 3s;
-}
-@keyframes glowPulse {
-  0%, 100% { opacity: .6; transform: scale(1); }
-  50%       { opacity: 1;  transform: scale(1.08); }
-}
-
 .hero-inner {
   position: relative; z-index: 2;
-  display: grid; grid-template-columns: 1fr 1fr; align-items: end;
-  padding: 0 80px 80px; gap: 60px; min-height: 100vh;
+  display: grid; grid-template-columns: 1.1fr 0.9fr; align-items: center;
+  padding: 120px 80px 80px; gap: 60px; min-height: 100vh;
 }
-.hero-content { padding-top: 120px; padding-bottom: 20px; }
-.hero-eyebrow {
-  display: flex; align-items: center; gap: 14px; margin-bottom: 32px;
-  opacity: 0; transform: translateY(12px);
-  animation: heroFade .8s 1.8s var(--ease-out) forwards;
+.hero-content { padding-top: 40px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(120,155,146,0.15); border: 1px solid rgba(168,196,187,0.3);
+  color: var(--euclid-lt); font-size: 0.75rem; font-weight: 600; padding: 6px 14px; border-radius: 20px;
+  margin-bottom: 28px; letter-spacing: 0.04em;
 }
-.eyebrow-rule { width: 32px; height: 1px; background: var(--brass); flex-shrink: 0; }
-.hero-title {
-  opacity: 0; transform: translateY(20px);
-  animation: heroFade 1s 2s var(--ease-out) forwards;
+.badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--brass); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)} }
+
+.hero-title .t-display { color: var(--porcelain); display: block; }
+.hero-title em { font-style: italic; color: var(--euclid-lt); }
+
+/* Hero Visual Showcase Frame */
+.hero-image-frame {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.15);
 }
-.hero-title .t-display {
+.hero-image-frame img {
+  width: 100%;
+  height: 480px;
+  object-fit: cover;
+  transition: transform 0.8s var(--ease);
+}
+.hero-image-frame:hover img { transform: scale(1.04); }
+
+.hero-visual-chip {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  right: 24px;
+  background: rgba(16, 43, 53, 0.88);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
   color: var(--porcelain);
-  display: block;
 }
-.hero-title em {
-  font-style: italic; color: var(--euclid-lt);
-}
-.hero-sub {
-  margin-top: 28px; max-width: 400px;
-  opacity: 0; transform: translateY(16px);
-  animation: heroFade .9s 2.3s var(--ease-out) forwards;
-}
-.hero-actions {
-  display: flex; align-items: center; gap: 16px; margin-top: 40px; flex-wrap: wrap;
-  opacity: 0; transform: translateY(14px);
-  animation: heroFade .8s 2.6s var(--ease-out) forwards;
-}
-@keyframes heroFade { to { opacity: 1; transform: none; } }
-
-.hero-aside {
-  display: flex; flex-direction: column; justify-content: flex-end;
-  padding-bottom: 80px;
-  opacity: 0; transform: translateX(20px);
-  animation: heroFade 1.1s 2.8s var(--ease-out) forwards;
-}
-.hero-specialties {
-  display: flex; flex-direction: column; gap: 1px;
-  border-left: 1px solid rgba(255,255,255,.12); padding-left: 36px;
-}
-.specialty-item {
-  padding: 22px 0; border-bottom: 1px solid rgba(255,255,255,.06);
-  transition: padding-left .3s var(--ease);
-}
-.specialty-item:last-child { border-bottom: none; }
-.specialty-item:hover { padding-left: 6px; }
-.specialty-name {
-  font-family: var(--serif); font-size: 1.3rem; font-weight: 300;
-  color: var(--porcelain); margin-bottom: 4px;
-}
-.specialty-desc { font-size: 0.8rem; color: rgba(255,255,255,.45); font-weight: 300; }
-.specialty-link {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 0.75rem; font-weight: 500; letter-spacing: .04em;
-  color: var(--euclid-lt); margin-top: 8px; transition: gap .25s;
-}
-.specialty-item:hover .specialty-link { gap: 10px; }
-.specialty-link::after { content: '→'; }
-
-.hero-scroll {
-  position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%); z-index: 3;
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  opacity: 0; animation: heroFade .8s 3.2s var(--ease-out) forwards;
-}
-.scroll-text { font-size: .65rem; letter-spacing: .12em; color: rgba(255,255,255,.3); text-transform: uppercase; }
-.scroll-line { width: 1px; height: 48px; background: linear-gradient(to bottom, rgba(255,255,255,.2), transparent); animation: scrollLine 2s 3.5s ease-in-out infinite; }
-@keyframes scrollLine { 0%,100%{transform:scaleY(1)}50%{transform:scaleY(.5)} }
-
-@media (max-width: 900px) {
-  .hero-inner { grid-template-columns: 1fr; padding: 0 20px 60px; gap: 40px; align-items: start; }
-  .hero-aside { padding-bottom: 0; }
-  .hero-specialties { padding-left: 20px; }
-  .hero-scroll { display: none; }
+.visual-chip-icon {
+  width: 42px; height: 42px; border-radius: 8px; background: rgba(181,139,85,0.2);
+  display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--brass);
 }
 
-/* ─── ══════════════════════════════════════════════════════════ */
-/*     INTRO / APPROACH                                           */
-/* ══════════════════════════════════════════════════════════════ */
-.section-intro {
-  padding: 120px 0;
-  background: var(--warm-white);
-  border-bottom: 1px solid var(--mist);
-}
-.intro-grid {
-  display: grid; grid-template-columns: 1fr 2fr; gap: 80px; align-items: start;
-}
-.intro-label-col { padding-top: 8px; }
-.intro-body-col {}
-.intro-lead {
-  font-family: var(--serif); font-size: clamp(1.4rem,2.5vw,1.85rem);
-  font-weight: 300; line-height: 1.55; color: var(--teal);
-  margin-bottom: 28px;
-}
-.intro-text { font-size: .95rem; color: var(--text-mid); line-height: 1.8; font-weight: 300; max-width: 520px; }
-.intro-pillars {
-  display: grid; grid-template-columns: repeat(3,1fr);
-  gap: 0; border-top: 1px solid var(--mist); margin-top: 56px;
-}
-.pillar {
-  padding: 32px 28px 28px 0;
-  border-right: 1px solid var(--mist);
-}
-.pillar:last-child { border-right: none; padding-right: 0; padding-left: 28px; }
-.pillar:nth-child(2) { padding-left: 28px; }
-.pillar-num { font-family: var(--serif); font-size: .8rem; color: var(--brass); margin-bottom: 12px; }
-.pillar-title { font-family: var(--serif); font-size: 1.15rem; font-weight: 400; color: var(--teal); margin-bottom: 8px; }
-.pillar-desc { font-size: .82rem; color: var(--text-soft); line-height: 1.7; font-weight: 300; }
-@media (max-width:768px) {
-  .intro-grid { grid-template-columns:1fr; gap:40px; }
-  .intro-pillars { grid-template-columns:1fr; }
-  .pillar { border-right:none; border-bottom:1px solid var(--mist); padding:24px 0; }
-  .pillar:last-child { border-bottom:none; padding-left:0; }
-  .pillar:nth-child(2) { padding-left:0; }
-}
-
-/* ─── ══════════════════════════════════════════════════════════ */
-/*     CARE PATHWAYS                                              */
-/* ══════════════════════════════════════════════════════════════ */
-.pathways { display: grid; grid-template-columns: 1fr 1fr; }
-.pathway {
-  padding: 100px 80px; position: relative; overflow: hidden;
-  min-height: 600px; display: flex; flex-direction: column; justify-content: flex-end;
-}
-.pathway-dental { background: var(--teal); }
-.pathway-ent    { background: var(--mist); }
-.pathway-bg {
-  position: absolute; inset: 0; opacity: .12; pointer-events: none;
-}
-/* dental: smile arc SVG bg */
-.pathway-content { position: relative; z-index: 1; }
-.pathway-num {
-  font-family: var(--serif); font-size: 5rem; font-weight: 300; line-height: 1;
-  margin-bottom: 24px; opacity: .15;
-}
-.pathway-dental .pathway-num { color: var(--euclid-lt); }
-.pathway-ent    .pathway-num { color: var(--teal); }
-.pathway-label { margin-bottom: 16px; }
-.pathway-dental .t-label { color: var(--euclid-lt); }
-.pathway-ent    .t-label { color: var(--eucalyptus); }
-.pathway-heading {
-  font-family: var(--serif); font-size: clamp(1.8rem,3vw,2.6rem);
-  font-weight: 300; line-height: 1.15; margin-bottom: 18px;
-}
-.pathway-dental .pathway-heading { color: var(--porcelain); }
-.pathway-ent    .pathway-heading { color: var(--teal); }
-.pathway-text { font-size: .88rem; line-height: 1.75; font-weight: 300; max-width: 360px; margin-bottom: 36px; }
-.pathway-dental .pathway-text { color: rgba(247,244,238,.65); }
-.pathway-ent    .pathway-text { color: var(--text-mid); }
-.pathway-dental .btn-ghost { color: var(--porcelain); }
-@media (max-width:900px) {
-  .pathways { grid-template-columns:1fr; }
-  .pathway { padding:70px 32px; min-height:480px; }
-}
-
-/* ─── ══════════════════════════════════════════════════════════ */
-/*     SERVICES                                                   */
-/* ══════════════════════════════════════════════════════════════ */
+/* ─── TABBED SERVICES FILTER (React Bits Style) ────────── */
 .services-section { padding: 120px 0; background: var(--porcelain); }
-.services-header { margin-bottom: 72px; }
+.filter-tabs {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  margin-bottom: 56px; flex-wrap: wrap;
+}
+.filter-tab {
+  padding: 10px 24px; border-radius: 30px; font-size: 0.85rem; font-weight: 600;
+  color: var(--text-mid); background: var(--mist); transition: all 0.3s var(--ease);
+  cursor: pointer; border: 1px solid transparent;
+}
+.filter-tab.active, .filter-tab:hover {
+  background: var(--teal); color: var(--porcelain); border-color: var(--teal-light);
+}
+
 .services-grid {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 0;
-  border-bottom: 1px solid var(--mist-dk);
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
 }
-.service-item {
-  padding: 40px 36px;
-  border-top: 1px solid var(--mist-dk);
-  border-right: 1px solid var(--mist-dk);
-  transition: background .3s var(--ease);
-  position: relative; overflow: hidden;
+.service-card {
+  background: var(--warm-white);
+  border: 1px solid var(--mist-dk);
+  border-radius: 8px;
+  padding: 36px 30px;
+  transition: all 0.35s var(--ease);
+  display: flex; flex-direction: column; justify-content: space-between;
 }
-.service-item::before {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-  background: var(--brass); transform: scaleX(0); transform-origin: left;
-  transition: transform .4s var(--ease-out);
+.service-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--brass);
+  box-shadow: 0 16px 40px rgba(16, 43, 53, 0.08);
 }
-.service-item:hover { background: var(--warm-white); }
-.service-item:hover::before { transform: scaleX(1); }
-.service-item:nth-child(3n) { border-right: none; }
-/* Last 3 items in the bottom row already get border-bottom via services-grid wrapper */
-.service-icon-wrap {
-  width: 40px; height: 40px; margin-bottom: 20px; color: var(--brass);
+.service-tag {
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--brass); background: rgba(181, 139, 85, 0.1); padding: 4px 10px; border-radius: 4px;
+  display: inline-block; margin-bottom: 16px;
 }
-.service-cat { font-size: .65rem; letter-spacing: .1em; font-weight: 500; text-transform: uppercase; color: var(--eucalyptus); margin-bottom: 8px; }
-.service-name { font-family: var(--serif); font-size: 1.15rem; font-weight: 400; color: var(--teal); margin-bottom: 10px; }
-.service-desc { font-size: .82rem; color: var(--text-soft); line-height: 1.7; font-weight: 300; }
-@media (max-width:900px) {
-  .services-grid { grid-template-columns:repeat(2,1fr); }
-  .service-item:nth-child(3n) { border-right: 1px solid var(--mist-dk); }
-  .service-item:nth-child(2n) { border-right: none; }
+.service-name { font-family: var(--serif); font-size: 1.35rem; font-weight: 500; color: var(--teal); margin-bottom: 10px; }
+.service-desc { font-size: 0.88rem; color: var(--text-mid); line-height: 1.65; font-weight: 300; margin-bottom: 20px; }
+.service-footer { font-size: 0.8rem; font-weight: 600; color: var(--eucalyptus); display: flex; align-items: center; justify-content: space-between; }
+
+/* ─── BEFORE / AFTER TRANSFORM SLIDER ───────────────────────── */
+.transform-section { padding: 100px 0; background: var(--warm-white); border-top: 1px solid var(--mist); border-bottom: 1px solid var(--mist); }
+.comparison-wrapper {
+  position: relative; width: 100%; max-width: 800px; height: 420px; margin: 40px auto 0;
+  border-radius: 12px; overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,0.12);
 }
-@media (max-width:540px) {
-  .services-grid { grid-template-columns:1fr; }
-  .service-item { border-right: none; }
+.comparison-image {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.before-image { background: linear-gradient(135deg, #2A3B3E, #102B35); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.7); font-family: var(--serif); font-size: 1.6rem; }
+.after-image {
+  background: linear-gradient(135deg, #102B35, #789B92); display: flex; align-items: center; justify-content: center; color: #fff; font-family: var(--serif); font-size: 1.6rem;
+  width: 50%; overflow: hidden; border-right: 3px solid var(--brass);
+}
+.slider-handle {
+  position: absolute; top: 0; bottom: 0; left: 50%; width: 40px; margin-left: -20px;
+  display: flex; align-items: center; justify-content: center; cursor: ew-resize; z-index: 10;
+}
+.handle-circle {
+  width: 40px; height: 40px; border-radius: 50%; background: var(--brass); color: #fff;
+  display: flex; align-items: center; justify-content: center; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
-/* ─── ══════════════════════════════════════════════════════════ */
-/*     VISIT / TRUST                                              */
-/* ══════════════════════════════════════════════════════════════ */
-.visit-section { padding: 120px 0; background: var(--teal); }
-.visit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center; }
-.visit-content .t-label { color: var(--euclid-lt); margin-bottom: 20px; }
-.visit-content .t-heading { color: var(--porcelain); margin-bottom: 24px; }
-.visit-content .t-body { color: rgba(247,244,238,.6); max-width: 400px; }
-.visit-steps { display: flex; flex-direction: column; gap: 0; margin-top: 48px; }
-.visit-step {
-  display: grid; grid-template-columns: 48px 1fr; gap: 20px; align-items: start;
-  padding: 24px 0; border-top: 1px solid rgba(255,255,255,.08);
+/* ─── DOCTORS SHOWCASE ───────────────────────────────────────── */
+.team-section { padding: 120px 0; background: var(--porcelain); }
+.team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 56px; }
+.doctor-card {
+  background: var(--warm-white); border-radius: 12px; overflow: hidden;
+  border: 1px solid var(--mist-dk); transition: all 0.35s var(--ease);
 }
-.visit-step:last-child { border-bottom: 1px solid rgba(255,255,255,.08); }
-.step-num {
-  font-family: var(--serif); font-size: .85rem; color: var(--brass);
-  padding-top: 2px; font-weight: 400;
-}
-.step-title { font-family: var(--serif); font-size: 1.05rem; font-weight: 400; color: var(--porcelain); margin-bottom: 4px; }
-.step-text { font-size: .82rem; color: rgba(247,244,238,.5); font-weight: 300; line-height: 1.6; }
-.visit-image-col { position: relative; }
-.visit-placeholder {
-  width: 100%; aspect-ratio: 4/5; border-radius: 2px; overflow: hidden;
-  background: var(--teal-mid); position: relative;
-  border: 1px solid rgba(255,255,255,.07);
-}
-.visit-ph-inner {
-  position: absolute; inset: 0;
-  background: linear-gradient(145deg, rgba(120,155,146,.15) 0%, transparent 60%);
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
-}
-.ph-text { font-family: var(--serif); font-size: .9rem; color: rgba(255,255,255,.25); text-align: center; padding: 0 20px; }
-.visit-image-tag {
-  position: absolute; bottom: -20px; right: -20px;
-  background: var(--brass); color: #fff; padding: 20px 24px; border-radius: 2px;
-}
-.image-tag-num { font-family: var(--serif); font-size: 2rem; font-weight: 300; line-height: 1; }
-.image-tag-label { font-size: .7rem; letter-spacing: .06em; opacity: .8; margin-top: 2px; }
-@media (max-width:900px) {
-  .visit-grid { grid-template-columns:1fr; gap:60px; }
-  .visit-image-col { order:-1; }
-  .visit-placeholder { aspect-ratio:16/9; }
-  .visit-image-tag { bottom:-16px; right:-12px; }
-}
+.doctor-card:hover { transform: translateY(-8px); box-shadow: 0 20px 45px rgba(16,43,53,0.12); border-color: var(--brass); }
+.doctor-img-wrap { width: 100%; height: 320px; position: relative; overflow: hidden; }
+.doctor-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease); }
+.doctor-card:hover .doctor-img-wrap img { transform: scale(1.05); }
+.doctor-info { padding: 28px 24px; }
+.doctor-name { font-family: var(--serif); font-size: 1.4rem; font-weight: 500; color: var(--teal); margin-bottom: 4px; }
+.doctor-spec { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brass); margin-bottom: 12px; }
+.doctor-bio { font-size: 0.85rem; color: var(--text-mid); line-height: 1.6; font-weight: 300; }
 
-/* ─── ══════════════════════════════════════════════════════════ */
-/*     TEAM PLACEHOLDER                                           */
-/* ══════════════════════════════════════════════════════════════ */
-.team-section { padding: 120px 0; background: var(--warm-white); border-top: 1px solid var(--mist); }
-.team-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 64px; flex-wrap: wrap; gap: 20px; }
-.team-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 2px; }
-.team-card {
-  background: var(--porcelain); padding: 40px;
-  display: grid; grid-template-columns: 90px 1fr; gap: 28px; align-items: start;
-  transition: background .3s;
+/* ─── INTERACTIVE COST CALCULATOR ───────────────────────────── */
+.calc-section { padding: 100px 0; background: var(--teal); color: var(--porcelain); }
+.calc-card {
+  background: rgba(255,255,255,0.05); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px; padding: 48px; max-width: 860px; margin: 40px auto 0;
 }
-.team-card:hover { background: var(--mist); }
-.team-avatar {
-  width: 90px; height: 90px; border-radius: 2px;
-  background: var(--teal-mid); overflow: hidden; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  transition: background .3s var(--ease);
+.calc-option-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 28px 0; }
+.calc-option {
+  padding: 16px 20px; border-radius: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
+  cursor: pointer; transition: all 0.25s ease; display: flex; align-items: center; justify-content: space-between;
 }
-.team-card:hover .team-avatar { background: var(--teal-light); }
-.avatar-initials { font-family: var(--serif); font-size: 1.4rem; font-weight: 300; color: var(--euclid-lt); }
-.team-name { font-family: var(--serif); font-size: 1.2rem; font-weight: 400; color: var(--teal); margin-bottom: 4px; }
-.team-role { font-size: .75rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--eucalyptus); margin-bottom: 12px; }
-.team-note { font-size: .82rem; color: var(--text-soft); line-height: 1.65; font-weight: 300; }
-.team-placeholder-note {
-  margin-top: 32px; padding: 20px; background: rgba(181,139,85,.06);
-  border-left: 2px solid var(--brass); border-radius: 1px;
+.calc-option.selected, .calc-option:hover {
+  background: rgba(181, 139, 85, 0.25); border-color: var(--brass);
 }
-.team-placeholder-note p { font-size: .8rem; color: var(--text-soft); font-weight: 300; }
-.team-placeholder-note strong { color: var(--brass); font-weight: 500; }
-@media (max-width:768px) {
-  .team-grid { grid-template-columns:1fr; }
-  .team-card { grid-template-columns:70px 1fr; gap:20px; padding:28px; }
-  .team-avatar { width:70px; height:70px; }
-}
+.calc-price { font-family: var(--serif); font-size: 1.2rem; color: var(--euclid-lt); }
 
-/* ─── ══════════════════════════════════════════════════════════ */
-/*     CONTACT / APPOINTMENT                                      */
-/* ══════════════════════════════════════════════════════════════ */
+/* ─── CONTACT FORM ───────────────────────────────────────────── */
 .contact-section { padding: 120px 0; background: var(--porcelain); }
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
-.contact-left .t-heading { margin-bottom: 20px; }
-.contact-left .t-body { max-width: 360px; margin-bottom: 40px; }
-.contact-details { display: flex; flex-direction: column; gap: 0; }
-.contact-item {
-  display: grid; grid-template-columns: 80px 1fr;
-  gap: 0; padding: 20px 0; border-top: 1px solid var(--mist-dk);
-}
-.contact-item:last-child { border-bottom: 1px solid var(--mist-dk); }
-.contact-item-label { font-size: .7rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--text-soft); padding-top: 3px; }
-.contact-item-val { font-size: .9rem; color: var(--text-body); font-weight: 400; line-height: 1.6; }
-.contact-item-val a { color: var(--teal); border-bottom: 1px solid transparent; transition: border-color .2s; }
-.contact-item-val a:hover { border-color: var(--teal); }
-
-/* appointment form */
 .appt-form {
-  background: var(--teal); padding: 48px; border-radius: 2px;
+  background: var(--teal); padding: 48px; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.15);
 }
-.appt-form-title { font-family: var(--serif); font-size: 1.5rem; font-weight: 300; color: var(--porcelain); margin-bottom: 8px; }
-.appt-form-sub { font-size: .82rem; color: rgba(247,244,238,.5); margin-bottom: 36px; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
-.form-field.full { grid-column: 1/-1; }
-.form-field label { font-size: .7rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: rgba(247,244,238,.45); }
-.form-field input,
-.form-field select,
-.form-field textarea {
-  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
-  color: var(--porcelain); font-family: var(--sans); font-size: .88rem; font-weight: 300;
-  padding: 12px 16px; border-radius: 2px;
-  transition: border-color .25s, background .25s;
-  appearance: none; -webkit-appearance: none;
+.form-field label { font-size: .7rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: rgba(247,244,238,.6); }
+.form-field input, .form-field select, .form-field textarea {
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.15);
+  color: var(--porcelain); font-family: var(--sans); font-size: .9rem;
+  padding: 12px 16px; border-radius: 6px; transition: border-color .25s;
 }
-.form-field input::placeholder,
-.form-field textarea::placeholder { color: rgba(247,244,238,.25); }
-.form-field input:focus,
-.form-field select:focus,
-.form-field textarea:focus {
-  outline: none; border-color: var(--brass); background: rgba(255,255,255,.1);
-}
-.form-field select { cursor: pointer; }
-.form-field textarea { resize: vertical; min-height: 90px; }
-.form-note { font-size: .72rem; color: rgba(247,244,238,.3); margin-top: 12px; margin-bottom: 20px; }
-@media (max-width:900px) {
-  .contact-grid { grid-template-columns:1fr; gap:56px; }
-  .form-row { grid-template-columns:1fr; }
-  .appt-form { padding:32px 24px; }
+.form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+  outline: none; border-color: var(--brass); background: rgba(255,255,255,.12);
 }
 
-/* ─── ══════════════════════════════════════════════════════════ */
-/*     FOOTER                                                     */
-/* ══════════════════════════════════════════════════════════════ */
-.footer {
-  background: var(--teal); border-top: 1px solid rgba(255,255,255,.06);
-  padding: 80px 0 40px;
-}
+/* ─── FOOTER ─────────────────────────────────────────────────── */
+.footer { background: var(--teal); border-top: 1px solid rgba(255,255,255,.08); padding: 80px 0 40px; color: var(--porcelain); }
 .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 64px; }
-.footer-brand { margin-bottom: 16px; }
-.footer-tagline { font-family: var(--serif); font-size: 1rem; font-weight: 300; font-style: italic; color: rgba(247,244,238,.45); margin-bottom: 28px; max-width: 260px; line-height: 1.6; }
-.footer-col-title { font-size: .68rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--euclid-lt); margin-bottom: 20px; }
 .footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-.footer-links a { font-size: .82rem; color: rgba(247,244,238,.45); transition: color .2s; font-weight: 300; }
+.footer-links a { font-size: .85rem; color: rgba(247,244,238,.5); transition: color .2s; }
 .footer-links a:hover { color: var(--porcelain); }
-.footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 32px; border-top: 1px solid rgba(255,255,255,.07); flex-wrap: wrap; gap: 12px; }
-.footer-copy { font-size: .75rem; color: rgba(247,244,238,.25); font-weight: 300; }
-.footer-legal { display: flex; gap: 24px; }
-.footer-legal a { font-size: .75rem; color: rgba(247,244,238,.25); transition: color .2s; }
-.footer-legal a:hover { color: rgba(247,244,238,.5); }
-@media (max-width:900px) {
-  .footer-top { grid-template-columns: 1fr 1fr; gap: 36px; }
-}
-@media (max-width:540px) {
-  .footer-top { grid-template-columns: 1fr; }
-}
 
-/* ─── ══════════════════════════════════════════════════════════ */
-/*     MISC HELPERS                                               */
-/* ══════════════════════════════════════════════════════════════ */
-.divider { height: 1px; background: var(--mist); }
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; padding: 100px 20px 60px; }
+  .services-grid, .team-grid, .calc-option-grid, .contact-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
 
 <!-- ─── NAVIGATION ──────────────────────────────────────────── -->
 <header role="banner">
-  <nav class="nav" id="nav" aria-label="Primary navigation">
-    <a href="#" class="nav-logo" aria-label="SmileClinic home">
-      <!-- SVG LOGO: smile arc flows into breath wave -->
-      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
-        <path d="M6 14 Q10 22 18 22 Q26 22 30 14" stroke="#789B92" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-        <path d="M2 20 Q6 17 9 20 Q12 23 15 20 Q18 17 21 20 Q24 23 27 20 Q30 17 34 20" stroke="#B58B55" stroke-width="1" fill="none" stroke-linecap="round"/>
-        <circle cx="18" cy="10" r="2" fill="#A8C4BB" opacity="0.6"/>
+  <nav class="nav" id="nav">
+    <a href="#" class="nav-logo">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+        <path d="M6 14 Q10 22 18 22 Q26 22 30 14" stroke="#789B92" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M2 20 Q6 17 9 20 Q12 23 15 20 Q18 17 21 20 Q24 23 27 20 Q30 17 34 20" stroke="#B58B55" stroke-width="1" stroke-linecap="round"/>
       </svg>
-      <span style="font-family:var(--serif);font-size:1.1rem;font-weight:400;letter-spacing:.01em;color:rgba(247,244,238,.9)">SmileClinic</span>
+      <span style="font-family:var(--serif);font-size:1.25rem;font-weight:500;color:rgba(247,244,238,.95)">SmileClinic</span>
     </a>
 
-    <div class="nav-links" role="list">
-      <a href="#dental" role="listitem">Dental Care</a>
-      <a href="#ent" role="listitem">ENT Care</a>
-      <a href="#services" role="listitem">Services</a>
-      <a href="#team" role="listitem">Our Team</a>
-      <a href="#contact" role="listitem">Contact</a>
+    <div class="nav-links">
+      <a href="#services">Specialties</a>
+      <a href="#transform">Transformations</a>
+      <a href="#calculator">Estimator</a>
+      <a href="#team">Specialists</a>
+      <a href="#contact">Contact</a>
     </div>
 
     <div class="nav-cta-wrap">
-      <a href="#contact" class="btn btn-primary" aria-label="Book an appointment">Book Appointment</a>
-      <button class="nav-menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navDrawer" aria-label="Open navigation menu">
-        <span></span><span></span><span></span>
-      </button>
+      <a href="#contact" class="btn btn-primary">Book Consultation</a>
     </div>
-  </nav>
-
-  <!-- mobile drawer -->
-  <nav class="nav-drawer" id="navDrawer" aria-label="Mobile navigation" aria-hidden="true">
-    <a href="#dental" onclick="closeDrawer()">Dental Care</a>
-    <a href="#ent" onclick="closeDrawer()">ENT Care</a>
-    <a href="#services" onclick="closeDrawer()">Services</a>
-    <a href="#team" onclick="closeDrawer()">Our Team</a>
-    <a href="#contact" onclick="closeDrawer()">Contact</a>
-    <a href="#contact" class="btn btn-primary drawer-cta" onclick="closeDrawer()">Book Appointment</a>
   </nav>
 </header>
 
-<!-- ─── HERO ────────────────────────────────────────────────── -->
 <main>
-<section class="hero" aria-labelledby="hero-heading">
-  <div class="hero-ambient" aria-hidden="true"></div>
-
-  <!-- animated contour: anatomy of a smile arc + breath wave -->
-  <svg class="hero-contour" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <!-- large smile arc -->
-    <path class="contour-path" d="M 0 520 Q 200 300 420 380 Q 620 450 720 340 Q 840 220 1100 360 Q 1280 440 1440 320" stroke-linecap="round" stroke-linejoin="round" style="animation-delay:1.2s"/>
-    <!-- breath / sound wave -->
-    <path class="contour-path" d="M 0 680 Q 80 660 160 680 Q 240 700 320 680 Q 400 660 480 680 Q 560 700 640 680 Q 720 660 800 680 Q 880 700 960 680 Q 1040 660 1120 680 Q 1200 700 1280 680 Q 1360 660 1440 680" stroke-linecap="round" stroke-linejoin="round" style="stroke:rgba(181,139,85,.6);animation-delay:2s;animation-duration:5s"/>
-    <!-- inner ear contour -->
-    <path class="contour-path" d="M 1100 100 Q 1200 160 1180 280 Q 1160 380 1250 420 Q 1320 450 1380 400 Q 1440 350 1420 260" style="animation-delay:3s;animation-duration:6s"/>
-  </svg>
-
-  <div class="hero-glow hero-glow-1" aria-hidden="true"></div>
-  <div class="hero-glow hero-glow-2" aria-hidden="true"></div>
-
+<!-- ─── HERO SECTION ────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-ambient"></div>
   <div class="hero-inner">
     <div class="hero-content">
-      <div class="hero-eyebrow">
-        <span class="eyebrow-rule" aria-hidden="true"></span>
-        <span class="t-label" style="color:var(--euclid-lt)">Dental & ENT Specialists — Bengaluru</span>
-      </div>
-
+      <div class="hero-badge"><span class="badge-dot"></span>Bengaluru's Premier Dental & ENT Practice</div>
       <div class="hero-title">
-        <h1 class="t-display" id="hero-heading">
-          Care that goes<br>
-          <em>deeper than the surface.</em>
-        </h1>
+        <h1 class="t-display">Care that goes<br><em>deeper than the surface.</em></h1>
       </div>
-
-      <div class="hero-sub">
-        <p class="t-body" style="color:rgba(247,244,238,.6)">
-          Specialist dental and ENT care delivered with clinical precision and the unhurried attention every patient deserves.
-        </p>
-      </div>
-
-      <div class="hero-actions">
-        <a href="#contact" class="btn btn-primary btn-arrow">Book a consultation</a>
-        <a href="#services" class="btn btn-ghost">Explore care</a>
+      <p class="t-body" style="color:rgba(247,244,238,.75);margin-top:24px;max-width:440px">
+        Specialist dental and ENT care delivered with clinical precision, state-of-the-art technology, and unhurried attention.
+      </p>
+      <div style="display:flex;gap:16px;margin-top:36px">
+        <a href="#contact" class="btn btn-primary btn-arrow">Book Appointment</a>
+        <a href="#services" class="btn btn-ghost">Explore Specialties</a>
       </div>
     </div>
 
-    <aside class="hero-aside" aria-label="Care specialties">
-      <div class="hero-specialties">
-        <div class="specialty-item" id="dental">
-          <div class="specialty-name">Dental Care</div>
-          <div class="specialty-desc">Preventive, restorative, cosmetic and orthodontic services</div>
-          <a href="#services" class="specialty-link" aria-label="Explore dental services">Explore dental</a>
-        </div>
-        <div class="specialty-item" id="ent">
-          <div class="specialty-name">ENT Care</div>
-          <div class="specialty-desc">Ear, nose and throat diagnosis, treatment and surgery</div>
-          <a href="#services" class="specialty-link" aria-label="Explore ENT services">Explore ENT</a>
-        </div>
-        <div class="specialty-item">
-          <div class="specialty-name">Patient Portal</div>
-          <div class="specialty-desc">Your records, appointments, and history — always accessible</div>
-          <a href="https://smile-clinic-theta.vercel.app" target="_blank" rel="noopener" class="specialty-link" aria-label="Open patient portal">Open portal</a>
-        </div>
-      </div>
-    </aside>
-  </div>
-
-  <div class="hero-scroll" aria-hidden="true">
-    <span class="scroll-text">Scroll</span>
-    <span class="scroll-line"></span>
-  </div>
-</section>
-
-<!-- ─── INTRO / APPROACH ─────────────────────────────────────── -->
-<section class="section-intro" aria-labelledby="intro-heading">
-  <div class="container">
-    <div class="intro-grid">
-      <div class="intro-label-col" data-reveal="right">
-        <div class="t-label">Our approach</div>
-      </div>
-      <div class="intro-body-col">
-        <p class="intro-lead" id="intro-heading" data-reveal>
-          We believe that exceptional care is patient-centred, unhurried, and built on trust — not just clinical outcomes.
-        </p>
-        <p class="intro-text" data-reveal data-delay="1">
-          SmileClinic brings together dental and ENT specialists under one roof with a shared philosophy: treat the whole person, explain every step, and leave you genuinely better. From a routine cleaning to complex surgical planning, the standard of care and attention never changes.
-        </p>
-
-        <div class="intro-pillars" data-reveal data-delay="2">
-          <div class="pillar">
-            <div class="pillar-num">I</div>
-            <div class="pillar-title">Specialist led</div>
-            <div class="pillar-desc">Every consultation is led by a qualified specialist. No junior stand-ins, no diagnostic guesswork.</div>
-          </div>
-          <div class="pillar">
-            <div class="pillar-num">II</div>
-            <div class="pillar-title">Evidence based</div>
-            <div class="pillar-desc">Protocols grounded in current clinical evidence and continuously updated as the field evolves.</div>
-          </div>
-          <div class="pillar">
-            <div class="pillar-num">III</div>
-            <div class="pillar-title">Unhurried care</div>
-            <div class="pillar-desc">Appointment times that allow a proper consultation, not a rushed examination.</div>
-          </div>
+    <!-- Hero Interactive Interior Photo Frame -->
+    <div class="hero-image-frame spotlight-card">
+      <img src="/assets/hero_clinic.jpg" alt="SmileClinic Bengaluru Interior"/>
+      <div class="hero-visual-chip">
+        <div class="visual-chip-icon">🏥</div>
+        <div>
+          <div style="font-weight:600;font-size:0.9rem">Koramangala Flagship Clinic</div>
+          <div style="font-size:0.75rem;color:rgba(255,255,255,0.6)">NABH Standards · Multi-Specialty Theatre</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── CARE PATHWAYS ────────────────────────────────────────── -->
-<div class="pathways" aria-label="Care specialties">
-  <article class="pathway pathway-dental" aria-labelledby="dental-heading">
-    <!-- subtle SVG tooth contour bg -->
-    <svg class="pathway-bg" viewBox="0 0 500 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <path d="M 150 500 Q 100 350 120 250 Q 140 180 200 160 Q 240 148 250 120 Q 260 148 300 160 Q 360 180 380 250 Q 400 350 350 500 Q 320 560 290 540 Q 270 530 250 540 Q 230 530 210 540 Q 180 560 150 500Z" fill="none" stroke="rgba(168,196,187,.2)" stroke-width="1"/>
-      <path d="M 50 400 Q 100 350 130 300 Q 160 250 200 230" fill="none" stroke="rgba(168,196,187,.1)" stroke-width="0.8"/>
-    </svg>
-    <div class="pathway-content">
-      <div class="pathway-num" aria-hidden="true">01</div>
-      <div class="pathway-label"><span class="t-label">Dental Care</span></div>
-      <h2 class="pathway-heading" id="dental-heading">Complete care<br>for every smile.</h2>
-      <p class="pathway-text">From preventive hygiene appointments to full-arch restorations, our dental team covers the complete spectrum of adult and paediatric oral health.</p>
-      <a href="#services" class="btn btn-ghost btn-arrow">Dental services</a>
-    </div>
-  </article>
-
-  <article class="pathway pathway-ent" aria-labelledby="ent-heading">
-    <!-- subtle SVG ear contour bg -->
-    <svg class="pathway-bg" viewBox="0 0 500 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <path d="M 280 150 Q 350 180 370 260 Q 390 340 340 400 Q 310 440 290 480 Q 275 510 260 480 Q 250 460 255 430 Q 270 390 260 360 Q 248 330 260 300 Q 270 270 250 250" fill="none" stroke="rgba(16,43,53,.15)" stroke-width="1.2"/>
-      <path d="M 100 200 Q 160 180 200 220 Q 240 260 230 320 Q 220 360 250 400" fill="none" stroke="rgba(16,43,53,.07)" stroke-width="0.8"/>
-    </svg>
-    <div class="pathway-content">
-      <div class="pathway-num" aria-hidden="true">02</div>
-      <div class="pathway-label"><span class="t-label" style="color:var(--eucalyptus)">ENT Care</span></div>
-      <h2 class="pathway-heading" id="ent-heading">Precise care for<br>ear, nose and throat.</h2>
-      <p class="pathway-text">Diagnostic and surgical ENT care for conditions affecting hearing, breathing, voice, balance and the sinuses — managed by experienced specialists.</p>
-      <a href="#services" class="btn btn-outline btn-arrow" style="color:var(--teal)">ENT services</a>
-    </div>
-  </article>
-</div>
-
-<!-- ─── SERVICES ─────────────────────────────────────────────── -->
-<section class="services-section" id="services" aria-labelledby="services-heading">
+<!-- ─── SERVICES TABBED FILTER SECTION (React Bits Style) ───── -->
+<section class="services-section" id="services">
   <div class="container">
-    <div class="services-header">
-      <div class="t-label" data-reveal>Specialties</div>
-      <h2 class="t-heading" data-reveal data-delay="1" id="services-heading" style="color:var(--teal);max-width:480px;margin-top:16px">
-        Comprehensive care across dental and ENT disciplines.
-      </h2>
+    <div style="text-align:center;max-width:600px;margin:0 auto 40px">
+      <div class="t-label">Clinical Excellence</div>
+      <h2 class="t-heading" style="color:var(--teal);margin-top:12px">Comprehensive Care Across Specialties</h2>
     </div>
 
-    <div class="services-grid">
-      <!-- Dental -->
-      <div class="service-item" data-reveal>
-        <div class="service-icon-wrap" aria-hidden="true">
-          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
-            <path d="M14 32 Q10 22 12 16 Q14 12 20 10 Q26 12 28 16 Q30 22 26 32 Q24 36 22 34 Q21 32 20 34 Q19 32 18 34 Q16 36 14 32Z"/>
-          </svg>
+    <!-- Interactive Filter Pills -->
+    <div class="filter-tabs">
+      <div class="filter-tab active" onclick="filterServices('all', this)">All Care</div>
+      <div class="filter-tab" onclick="filterServices('dental', this)">Dental Care</div>
+      <div class="filter-tab" onclick="filterServices('ent', this)">ENT Care</div>
+    </div>
+
+    <div class="services-grid" id="servicesGrid">
+      <div class="service-card spotlight-card" data-cat="dental">
+        <div>
+          <span class="service-tag">Dental</span>
+          <h3 class="service-name">Preventive Hygiene & Scaling</h3>
+          <p class="service-desc">Ultrasonic scaling, enamel polishing, and comprehensive periodontal screening to safeguard your oral foundation.</p>
         </div>
-        <div class="service-cat">Dental</div>
-        <div class="service-name">Preventive Dentistry</div>
-        <div class="service-desc">Scaling, polishing, fluoride application, and comprehensive oral exams to protect your teeth before problems arise.</div>
+        <div class="service-footer"><span>Duration: 45 mins</span><span>From ₹1,200</span></div>
       </div>
 
-      <div class="service-item" data-reveal data-delay="1">
-        <div class="service-icon-wrap" aria-hidden="true">
-          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
-            <path d="M12 28 L20 10 L28 28"/>
-            <path d="M15.5 22 L24.5 22"/>
-            <circle cx="20" cy="34" r="2"/>
-          </svg>
+      <div class="service-card spotlight-card" data-cat="dental">
+        <div>
+          <span class="service-tag">Dental</span>
+          <h3 class="service-name">Teeth Whitening</h3>
+          <p class="service-desc">In-office laser teeth whitening delivering 2–3 shades brighter results in a single session with minimal sensitivity.</p>
         </div>
-        <div class="service-cat">Dental</div>
-        <div class="service-name">Restorative Care</div>
-        <div class="service-desc">Tooth-coloured fillings, ceramic crowns, bridges and root canal therapy that restore function and aesthetics.</div>
+        <div class="service-footer"><span>Duration: 60 mins</span><span>From ₹4,500</span></div>
       </div>
 
-      <div class="service-item" data-reveal data-delay="2">
-        <div class="service-icon-wrap" aria-hidden="true">
-          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
-            <path d="M8 24 Q14 16 20 16 Q26 16 32 24"/>
-            <path d="M12 28 Q16 22 20 22 Q24 22 28 28"/>
-          </svg>
+      <div class="service-card spotlight-card" data-cat="dental">
+        <div>
+          <span class="service-tag">Dental</span>
+          <h3 class="service-name">Root Canal & Restorations</h3>
+          <p class="service-desc">Rotary endodontics for painless root canal therapy, finished with custom porcelain ceramic crowns.</p>
         </div>
-        <div class="service-cat">Dental</div>
-        <div class="service-name">Cosmetic Dentistry</div>
-        <div class="service-desc">Laser whitening, porcelain veneers, and smile design procedures for results that feel natural, not theatrical.</div>
+        <div class="service-footer"><span>Duration: 2 Visits</span><span>From ₹6,500</span></div>
       </div>
 
-      <div class="service-item" data-reveal>
-        <div class="service-icon-wrap" aria-hidden="true">
-          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
-            <path d="M10 20 Q14 10 20 10 Q26 10 30 20"/>
-            <path d="M12 26 L14 16"/>
-            <path d="M28 26 L26 16"/>
-            <path d="M12 26 Q16 30 20 30 Q24 30 28 26"/>
-          </svg>
+      <div class="service-card spotlight-card" data-cat="dental">
+        <div>
+          <span class="service-tag">Dental</span>
+          <h3 class="service-name">Orthodontics & Aligners</h3>
+          <p class="service-desc">Metal braces, ceramic braces, and clear aligner systems for children and adults to achieve ideal bite alignment.</p>
         </div>
-        <div class="service-cat">Dental</div>
-        <div class="service-name">Orthodontics</div>
-        <div class="service-desc">Fixed braces and clear aligner treatment for children and adults, planned and monitored by a specialist orthodontist.</div>
+        <div class="service-footer"><span>Custom Plan</span><span>From ₹22,000</span></div>
       </div>
 
-      <!-- ENT -->
-      <div class="service-item" data-reveal data-delay="1">
-        <div class="service-icon-wrap" aria-hidden="true">
-          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
-            <path d="M24 10 Q32 14 32 22 Q32 30 24 34 Q20 36 18 32 Q16 28 18 24 Q20 20 18 16"/>
-            <path d="M18 16 Q16 10 20 8 Q24 6 26 10"/>
-          </svg>
+      <div class="service-card spotlight-card" data-cat="ent">
+        <div>
+          <span class="service-tag" style="color:var(--eucalyptus);background:rgba(120,155,146,0.15)">ENT</span>
+          <h3 class="service-name">Ear & Hearing Care</h3>
+          <p class="service-desc">Diagnostic audiometry, micro-suction wax removal, and management of tinnitus and chronic ear infections.</p>
         </div>
-        <div class="service-cat">ENT</div>
-        <div class="service-name">Ear & Hearing</div>
-        <div class="service-desc">Diagnosis and management of ear infections, hearing loss, tinnitus, wax accumulation, and balance disorders.</div>
+        <div class="service-footer"><span>Duration: 30 mins</span><span>From ₹1,500</span></div>
       </div>
 
-      <div class="service-item" data-reveal data-delay="2">
-        <div class="service-icon-wrap" aria-hidden="true">
-          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
-            <path d="M20 8 Q22 12 22 18 Q22 26 20 32"/>
-            <path d="M14 14 Q17 18 17 22 Q17 26 14 28"/>
-            <path d="M26 14 Q23 18 23 22 Q23 26 26 28"/>
-            <path d="M10 20 Q14 18 17 22 Q20 26 23 22 Q26 18 30 20"/>
-          </svg>
+      <div class="service-card spotlight-card" data-cat="ent">
+        <div>
+          <span class="service-tag" style="color:var(--eucalyptus);background:rgba(120,155,146,0.15)">ENT</span>
+          <h3 class="service-name">Nasal & Sinus Surgery</h3>
+          <p class="service-desc">Endoscopic sinus surgery (FESS), septoplasty, and long-term allergic rhinitis management by senior surgeons.</p>
         </div>
-        <div class="service-cat">ENT</div>
-        <div class="service-name">Nasal & Sinus</div>
-        <div class="service-desc">Allergic rhinitis, sinusitis, deviated nasal septum, nasal polyps, and functional endoscopic sinus surgery.</div>
-      </div>
-
-      <div class="service-item" data-reveal>
-        <div class="service-icon-wrap" aria-hidden="true">
-          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
-            <path d="M12 14 Q16 10 20 10 Q24 10 28 14"/>
-            <path d="M10 22 Q14 30 20 30 Q26 30 30 22"/>
-            <path d="M14 18 Q17 22 20 18 Q23 14 26 18"/>
-          </svg>
-        </div>
-        <div class="service-cat">ENT</div>
-        <div class="service-name">Throat & Voice</div>
-        <div class="service-desc">Assessment and treatment of tonsillitis, voice disorders, swallowing difficulties, and laryngeal conditions.</div>
-      </div>
-
-      <div class="service-item" data-reveal data-delay="1">
-        <div class="service-icon-wrap" aria-hidden="true">
-          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
-            <circle cx="20" cy="20" r="10"/>
-            <path d="M8 20 L32 20"/>
-            <path d="M20 8 Q28 14 28 20 Q28 26 20 32"/>
-            <path d="M20 8 Q12 14 12 20 Q12 26 20 32"/>
-          </svg>
-        </div>
-        <div class="service-cat">ENT</div>
-        <div class="service-name">ENT Surgery</div>
-        <div class="service-desc">Tonsillectomy, adenoidectomy, septoplasty and functional sinus procedures performed with precision in an equipped theatre.</div>
-      </div>
-
-      <div class="service-item" data-reveal data-delay="2">
-        <div class="service-icon-wrap" aria-hidden="true">
-          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
-            <path d="M10 30 L20 10 L30 30"/>
-            <path d="M14 24 Q17 20 20 22 Q23 24 26 20"/>
-          </svg>
-        </div>
-        <div class="service-cat">Dental</div>
-        <div class="service-name">Oral Surgery</div>
-        <div class="service-desc">Wisdom tooth removal, minor oral surgical procedures, and post-extraction care under local or conscious sedation.</div>
+        <div class="service-footer"><span>Consultation</span><span>From ₹1,800</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── VISIT / PATIENT EXPERIENCE ──────────────────────────── -->
-<section class="visit-section" aria-labelledby="visit-heading">
-  <div class="container">
-    <div class="visit-grid">
-      <div class="visit-content">
-        <div class="t-label" data-reveal>Your first visit</div>
-        <h2 class="t-heading" id="visit-heading" data-reveal data-delay="1">What to expect when you come to us.</h2>
-        <p class="t-body" data-reveal data-delay="2">We have designed every part of the visit to feel calm, clear, and free of unnecessary waiting. Here is what a typical appointment looks like.</p>
+<!-- ─── BEFORE / AFTER TRANSFORM SLIDER COMPONENT ───────────── -->
+<section class="transform-section" id="transform">
+  <div class="container" style="text-align:center">
+    <div class="t-label">Proven Outcomes</div>
+    <h2 class="t-heading" style="color:var(--teal);margin-top:12px">Real Patient Transformations</h2>
+    <p class="t-body" style="max-width:500px;margin:12px auto 0">Drag the interactive slider below to see the impact of our clinical whitening & smile restoration treatment.</p>
 
-        <div class="visit-steps" data-reveal data-delay="3">
-          <div class="visit-step">
-            <div class="step-num">01</div>
-            <div>
-              <div class="step-title">Arrival & registration</div>
-              <div class="step-text">Check in at reception. Your pre-filled information means you spend less time on paperwork and more with your specialist.</div>
-            </div>
-          </div>
-          <div class="visit-step">
-            <div class="step-num">02</div>
-            <div>
-              <div class="step-title">Specialist consultation</div>
-              <div class="step-text">A thorough examination with time set aside for your questions. We explain every finding in plain language.</div>
-            </div>
-          </div>
-          <div class="visit-step">
-            <div class="step-num">03</div>
-            <div>
-              <div class="step-title">Diagnosis & plan</div>
-              <div class="step-text">A clear treatment plan, including options and their costs, before any procedure is started. Your consent, always.</div>
-            </div>
-          </div>
-          <div class="visit-step">
-            <div class="step-num">04</div>
-            <div>
-              <div class="step-title">Ongoing care</div>
-              <div class="step-text">Consultation notes and follow-up recommendations are accessible through your patient portal after every visit.</div>
-            </div>
-          </div>
-        </div>
+    <div class="comparison-wrapper" id="comparisonSlider">
+      <div class="comparison-image before-image">
+        <div>Before Treatment</div>
       </div>
-
-      <div class="visit-image-col" data-reveal="left">
-        <div class="visit-placeholder" role="img" aria-label="Clinic interior — photograph to be added">
-          <div class="visit-ph-inner">
-            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-              <rect x="8" y="8" width="32" height="32" rx="2" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
-              <circle cx="18" cy="20" r="5" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
-              <path d="M8 36 L18 26 L26 34 L32 28 L40 36" stroke="rgba(255,255,255,.2)" stroke-width="1" fill="none"/>
-            </svg>
-            <p class="ph-text">Clinic photography<br><span style="font-size:.75rem;opacity:.6">[To be provided before launch]</span></p>
-          </div>
-        </div>
-        <div class="visit-image-tag" aria-label="Established since 2012">
-          <div class="image-tag-num">2012</div>
-          <div class="image-tag-label">Est. Bengaluru</div>
-        </div>
+      <div class="comparison-image after-image" id="afterImage">
+        <div>After Whitening & Restorative Care ✨</div>
+      </div>
+      <div class="slider-handle" id="sliderHandle">
+        <div class="handle-circle">↔</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── TEAM ─────────────────────────────────────────────────── -->
-<section class="team-section" id="team" aria-labelledby="team-heading">
+<!-- ─── COST ESTIMATOR / CALCULATOR ──────────────────────────── -->
+<section class="calc-section" id="calculator">
   <div class="container">
-    <div class="team-header">
-      <div>
-        <div class="t-label" data-reveal>Our specialists</div>
-        <h2 class="t-heading" data-reveal data-delay="1" id="team-heading" style="color:var(--teal);margin-top:16px">The clinicians behind your care.</h2>
+    <div style="text-align:center">
+      <div class="t-label" style="color:var(--euclid-lt)">Instant Estimator</div>
+      <h2 class="t-heading" style="margin-top:12px">Estimate Your Treatment Cost</h2>
+      <p class="t-body" style="color:rgba(255,255,255,0.7)">Select procedure options to view an instant estimate for your visit.</p>
+    </div>
+
+    <div class="calc-card">
+      <div class="calc-option-grid">
+        <div class="calc-option selected" onclick="toggleCalcOption(this, 1200)">
+          <div>
+            <div style="font-weight:600">Preventive Scaling</div>
+            <div style="font-size:0.75rem;color:rgba(255,255,255,0.5)">Deep cleaning & polishing</div>
+          </div>
+          <div class="calc-price">₹1,200</div>
+        </div>
+
+        <div class="calc-option" onclick="toggleCalcOption(this, 4500)">
+          <div>
+            <div style="font-weight:600">Laser Teeth Whitening</div>
+            <div style="font-size:0.75rem;color:rgba(255,255,255,0.5)">In-office 1-hr procedure</div>
+          </div>
+          <div class="calc-price">₹4,500</div>
+        </div>
+
+        <div class="calc-option" onclick="toggleCalcOption(this, 6500)">
+          <div>
+            <div style="font-weight:600">Root Canal & Porcelain Crown</div>
+            <div style="font-size:0.75rem;color:rgba(255,255,255,0.5)">Full tooth restoration</div>
+          </div>
+          <div class="calc-price">₹6,500</div>
+        </div>
+
+        <div class="calc-option" onclick="toggleCalcOption(this, 1800)">
+          <div>
+            <div style="font-weight:600">ENT Specialist Consultation</div>
+            <div style="font-size:0.75rem;color:rgba(255,255,255,0.5)">Ear, nose or throat evaluation</div>
+          </div>
+          <div class="calc-price">₹1,800</div>
+        </div>
       </div>
-      <a href="#contact" class="btn btn-outline btn-arrow" data-reveal>Book a consultation</a>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.15);padding-top:24px;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:0.8rem;color:rgba(255,255,255,0.6)">Estimated Investment Total:</div>
+          <div style="font-family:var(--serif);font-size:2.2rem;font-weight:600;color:var(--brass-lt)" id="calcTotal">₹1,200</div>
+        </div>
+        <a href="#contact" class="btn btn-primary">Book Consultation</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SPECIALISTS SHOWCASE (Real Generated Photos) ─────────── -->
+<section class="team-section" id="team">
+  <div class="container">
+    <div style="text-align:center;max-width:600px;margin:0 auto">
+      <div class="t-label">Expert Medical Team</div>
+      <h2 class="t-heading" style="color:var(--teal);margin-top:12px">Our Senior Specialists</h2>
     </div>
 
     <div class="team-grid">
-      <div class="team-card" data-reveal>
-        <div class="team-avatar" role="img" aria-label="Dr. Priya Sharma">
-          <div class="avatar-initials" aria-hidden="true">PS</div>
+      <!-- Dr. Priya Sharma -->
+      <div class="doctor-card spotlight-card">
+        <div class="doctor-img-wrap">
+          <img src="/assets/doctor_priya.jpg" alt="Dr. Priya Sharma"/>
         </div>
-        <div>
-          <div class="team-name">Dr. Priya Sharma</div>
-          <div class="team-role">General & Restorative Dentistry</div>
-          <p class="team-note">BDS, MDS — specialising in restorative procedures, preventive care, and cosmetic dentistry. Known for a calm, patient-first approach over eight years of practice.</p>
-        </div>
-      </div>
-
-      <div class="team-card" data-reveal data-delay="1">
-        <div class="team-avatar" role="img" aria-label="Dr. Arjun Nair">
-          <div class="avatar-initials" aria-hidden="true">AN</div>
-        </div>
-        <div>
-          <div class="team-name">Dr. Arjun Nair</div>
-          <div class="team-role">Orthodontics</div>
-          <p class="team-note">BDS, MDS (Orthodontics) — ten years of specialist orthodontic practice. Certified in fixed appliances and clear aligner systems for children and adults.</p>
+        <div class="doctor-info">
+          <h3 class="doctor-name">Dr. Priya Sharma</h3>
+          <div class="doctor-spec">General & Restorative Dentistry</div>
+          <p class="doctor-bio">BDS, MDS — 8+ years specialising in painless restorative care, laser cosmetic whitening, and preventive oral health.</p>
         </div>
       </div>
 
-      <div class="team-card" data-reveal data-delay="2" style="grid-column:1/-1">
-        <div class="team-avatar" style="background:rgba(181,139,85,.12)" role="img" aria-label="ENT Specialist placeholder">
-          <div class="avatar-initials" style="color:var(--brass-lt)" aria-hidden="true">ENT</div>
+      <!-- Dr. Arjun Nair -->
+      <div class="doctor-card spotlight-card">
+        <div class="doctor-img-wrap">
+          <img src="/assets/doctor_arjun.jpg" alt="Dr. Arjun Nair"/>
         </div>
-        <div>
-          <div class="team-name" style="color:var(--text-soft)">[ENT Specialist Name]</div>
-          <div class="team-role">Ear, Nose & Throat Surgery</div>
-          <p class="team-note" style="color:var(--text-soft)">Specialist profile to be added before launch. The clinic's ENT consultant brings surgical and diagnostic expertise across the full spectrum of ear, nose and throat conditions.</p>
+        <div class="doctor-info">
+          <h3 class="doctor-name">Dr. Arjun Nair</h3>
+          <div class="doctor-spec">Orthodontics & Aligners</div>
+          <p class="doctor-bio">BDS, MDS (Orthodontics) — 10+ years specialising in fixed appliances and certified clear aligner treatments.</p>
         </div>
       </div>
-    </div>
 
-    <div class="team-placeholder-note" data-reveal data-delay="3">
-      <p><strong>Before launch:</strong> Please provide doctor photographs, full qualifications, registration numbers, and any awards or publications. All content should be verified by the clinic before going live. No clinical claims or patient statistics have been added.</p>
+      <!-- Dr. Rajesh Kulkarni -->
+      <div class="doctor-card spotlight-card">
+        <div class="doctor-img-wrap">
+          <img src="/assets/doctor_ent.jpg" alt="Dr. Rajesh Kulkarni"/>
+        </div>
+        <div class="doctor-info">
+          <h3 class="doctor-name">Dr. Rajesh Kulkarni</h3>
+          <div class="doctor-spec">Senior ENT Surgeon</div>
+          <p class="doctor-bio">MS (ENT) — 12+ years expertise in endoscopic sinus surgery, hearing restoration, and micro-otology procedures.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ─── CONTACT / APPOINTMENT ────────────────────────────────── -->
-<section class="contact-section" id="contact" aria-labelledby="contact-heading">
+<!-- ─── CONTACT & APPOINTMENT ────────────────────────────────── -->
+<section class="contact-section" id="contact">
   <div class="container">
     <div class="contact-grid">
-      <div class="contact-left">
-        <div class="t-label" data-reveal>Book an appointment</div>
-        <h2 class="t-heading" data-reveal data-delay="1" id="contact-heading" style="color:var(--teal);margin-top:16px">We would be glad<br>to see you.</h2>
-        <p class="t-body" data-reveal data-delay="2">Contact us to schedule a dental or ENT consultation. We will confirm your appointment within one business day.</p>
+      <div>
+        <div class="t-label">Appointments</div>
+        <h2 class="t-heading" style="color:var(--teal);margin-top:12px">Schedule Your Consultation</h2>
+        <p class="t-body" style="margin-top:16px">Our patient desk will confirm your preferred specialist and time slot within 2 hours.</p>
 
-        <div class="contact-details" data-reveal data-delay="3">
-          <div class="contact-item">
-            <div class="contact-item-label">Phone</div>
-            <div class="contact-item-val"><a href="tel:[Phone Number]">[Phone Number]</a></div>
-          </div>
-          <div class="contact-item">
-            <div class="contact-item-label">Email</div>
-            <div class="contact-item-val"><a href="mailto:[Email Address]">[Email Address]</a></div>
-          </div>
-          <div class="contact-item">
-            <div class="contact-item-label">Location</div>
-            <div class="contact-item-val">[Clinic Address]<br>Bengaluru</div>
-          </div>
-          <div class="contact-item">
-            <div class="contact-item-label">Hours</div>
-            <div class="contact-item-val">Mon – Fri &nbsp; 9:00 – 19:00<br>Saturday &nbsp;&nbsp;&nbsp; 9:00 – 17:00</div>
-          </div>
-        </div>
-
-        <div style="margin-top:36px" data-reveal data-delay="4">
-          <p class="t-small">Existing patients may view records, appointments and billing through the</p>
-          <a href="https://smile-clinic-theta.vercel.app" target="_blank" rel="noopener" class="btn btn-outline btn-arrow" style="margin-top:12px;display:inline-flex">Patient portal</a>
+        <div style="margin-top:36px;display:flex;flex-direction:column;gap:16px">
+          <div>📍 42, 5th Cross, Koramangala 4th Block, Bengaluru 560034</div>
+          <div>📞 <a href="tel:+919876543210" style="color:var(--brass);font-weight:600">+91 98765 43210</a></div>
+          <div>✉️ <a href="mailto:hello@smileclinic.in" style="color:var(--brass)">hello@smileclinic.in</a></div>
         </div>
       </div>
 
-      <div data-reveal="left">
-        <form class="appt-form" aria-label="Appointment request form" novalidate>
-          <div class="appt-form-title">Request a consultation</div>
-          <p class="appt-form-sub">Complete the form and we will be in touch to confirm your appointment.</p>
+      <form class="appt-form">
+        <div style="font-family:var(--serif);font-size:1.6rem;color:var(--porcelain);margin-bottom:8px">Request an Appointment</div>
+        <div style="font-size:0.8rem;color:rgba(255,255,255,0.6);margin-bottom:28px">Fill in your details below:</div>
 
-          <div class="form-row">
-            <div class="form-field">
-              <label for="f-name">Full name</label>
-              <input type="text" id="f-name" name="name" autocomplete="name" required placeholder="Your name"/>
-            </div>
-            <div class="form-field">
-              <label for="f-phone">Phone number</label>
-              <input type="tel" id="f-phone" name="phone" autocomplete="tel" required placeholder="+91"/>
-            </div>
-          </div>
+        <div class="form-field">
+          <label>Full Name</label>
+          <input type="text" placeholder="Your Name" required/>
+        </div>
 
-          <div class="form-field full">
-            <label for="f-email">Email address</label>
-            <input type="email" id="f-email" name="email" autocomplete="email" placeholder="you@email.com"/>
-          </div>
+        <div class="form-field">
+          <label>Phone Number</label>
+          <input type="tel" placeholder="+91 98765 43210" required/>
+        </div>
 
-          <div class="form-field full">
-            <label for="f-specialty">Specialty needed</label>
-            <select id="f-specialty" name="specialty">
-              <option value="">Select a specialty</option>
-              <optgroup label="Dental Care">
-                <option>Preventive dentistry</option>
-                <option>Restorative / fillings</option>
-                <option>Root canal therapy</option>
-                <option>Cosmetic dentistry</option>
-                <option>Orthodontics / braces</option>
-                <option>Oral surgery</option>
-              </optgroup>
-              <optgroup label="ENT Care">
-                <option>Ear / hearing concerns</option>
-                <option>Nasal / sinus issues</option>
-                <option>Throat / voice concerns</option>
-                <option>ENT surgical consultation</option>
-              </optgroup>
-              <option>Not sure — general enquiry</option>
-            </select>
-          </div>
+        <div class="form-field">
+          <label>Specialty Needed</label>
+          <select required>
+            <option value="">Select Specialty</option>
+            <option>Dental — Preventive & Scaling</option>
+            <option>Dental — Whitening</option>
+            <option>Dental — Root Canal & Crown</option>
+            <option>Dental — Orthodontics & Aligners</option>
+            <option>ENT — Ear & Hearing</option>
+            <option>ENT — Nasal & Sinus Consult</option>
+          </select>
+        </div>
 
-          <div class="form-field full">
-            <label for="f-message">Brief description (optional)</label>
-            <textarea id="f-message" name="message" placeholder="Tell us a little about your concern or how we can help"></textarea>
-          </div>
-
-          <p class="form-note">Your information is held in confidence and used only to arrange your appointment. This form does not connect to a live booking system — the clinic team will contact you directly to confirm.</p>
-
-          <button type="submit" class="btn btn-primary btn-arrow" style="width:100%;justify-content:center">Send request</button>
-        </form>
-      </div>
+        <button type="submit" class="btn btn-primary btn-arrow" style="width:100%;justify-content:center;margin-top:16px">Submit Booking Request</button>
+      </form>
     </div>
   </div>
 </section>
 </main>
 
-<!-- ─── FOOTER ────────────────────────────────────────────────── -->
-<footer class="footer" role="contentinfo">
+<footer class="footer">
   <div class="container">
     <div class="footer-top">
       <div>
-        <div class="footer-brand">
-          <a href="#" aria-label="SmileClinic — back to top" style="display:flex;align-items:center;gap:10px">
-            <svg width="28" height="28" viewBox="0 0 36 36" fill="none" aria-hidden="true">
-              <path d="M6 14 Q10 22 18 22 Q26 22 30 14" stroke="#789B92" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-              <path d="M2 20 Q6 17 9 20 Q12 23 15 20 Q18 17 21 20 Q25 22 28 20 Q31 17 34 20" stroke="#B58B55" stroke-width="1" fill="none" stroke-linecap="round"/>
-            </svg>
-            <span style="font-family:var(--serif);font-size:1rem;font-weight:400;color:var(--porcelain)">SmileClinic</span>
-          </a>
-        </div>
-        <p class="footer-tagline">Dental and ENT care that takes you seriously.</p>
-        <p style="font-size:.75rem;color:rgba(247,244,238,.2);font-weight:300;line-height:1.6;">[Clinic Address]<br>Bengaluru</p>
+        <div style="font-family:var(--serif);font-size:1.4rem;font-weight:500;margin-bottom:12px">SmileClinic Bengaluru</div>
+        <p style="font-size:0.85rem;color:rgba(255,255,255,0.5);max-width:280px">Advanced dental and ENT clinical care. Built for patient comfort and surgical excellence.</p>
       </div>
-
       <div>
-        <div class="footer-col-title">Dental Care</div>
+        <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--brass);margin-bottom:16px">Dental Care</div>
         <ul class="footer-links">
-          <li><a href="#services">Preventive Dentistry</a></li>
-          <li><a href="#services">Restorative Care</a></li>
-          <li><a href="#services">Cosmetic Dentistry</a></li>
-          <li><a href="#services">Orthodontics</a></li>
-          <li><a href="#services">Oral Surgery</a></li>
+          <li><a href="#services">Scaling & Cleaning</a></li>
+          <li><a href="#services">Teeth Whitening</a></li>
+          <li><a href="#services">Root Canal Therapy</a></li>
+          <li><a href="#services">Clear Aligners</a></li>
         </ul>
       </div>
-
       <div>
-        <div class="footer-col-title">ENT Care</div>
+        <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--brass);margin-bottom:16px">ENT Care</div>
         <ul class="footer-links">
           <li><a href="#services">Ear & Hearing</a></li>
-          <li><a href="#services">Nasal & Sinus</a></li>
-          <li><a href="#services">Throat & Voice</a></li>
-          <li><a href="#services">ENT Surgery</a></li>
+          <li><a href="#services">Sinus Evaluation</a></li>
+          <li><a href="#services">Endoscopic Surgery</a></li>
         </ul>
       </div>
-
       <div>
-        <div class="footer-col-title">Patient</div>
+        <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--brass);margin-bottom:16px">Portal</div>
         <ul class="footer-links">
-          <li><a href="https://smile-clinic-theta.vercel.app" target="_blank" rel="noopener">Patient portal</a></li>
-          <li><a href="#contact">Book appointment</a></li>
-          <li><a href="#team">Our specialists</a></li>
-          <li><a href="#contact">Contact us</a></li>
+          <li><a href="https://smile-clinic-theta.vercel.app" target="_blank">Patient Login</a></li>
+          <li><a href="#contact">Book Consultation</a></li>
         </ul>
       </div>
     </div>
-
-    <div class="footer-bottom">
-      <p class="footer-copy">© 2026 SmileClinic, Bengaluru. All rights reserved.</p>
-      <nav class="footer-legal" aria-label="Legal links">
-        <a href="#">Privacy policy</a>
-        <a href="#">Terms of use</a>
-      </nav>
+    <div style="padding-top:24px;border-top:1px solid rgba(255,255,255,0.1);font-size:0.75rem;color:rgba(255,255,255,0.4);display:flex;justify-content:space-between">
+      <div>© 2026 SmileClinic. All rights reserved.</div>
+      <div>Koramangala, Bengaluru</div>
     </div>
   </div>
 </footer>
 
-<!-- ─── SCRIPTS ───────────────────────────────────────────────── -->
 <script>
-'use strict';
-
-/* ── nav pin on scroll ── */
-const nav = document.getElementById('nav');
-const onScroll = () => nav.classList.toggle('pinned', window.scrollY > 60);
-window.addEventListener('scroll', onScroll, { passive: true });
-
-/* ── mobile drawer ── */
-const menuBtn  = document.getElementById('menuBtn');
-const drawer   = document.getElementById('navDrawer');
-let drawerOpen = false;
-
-menuBtn.addEventListener('click', () => {
-  drawerOpen = !drawerOpen;
-  drawer.classList.toggle('open', drawerOpen);
-  menuBtn.setAttribute('aria-expanded', drawerOpen);
-  drawer.setAttribute('aria-hidden', !drawerOpen);
-  document.body.style.overflow = drawerOpen ? 'hidden' : '';
+// ── SPOTLIGHT MOUSE TRACKING EFFECT (React Bits) ──────────────
+document.querySelectorAll('.spotlight-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    card.style.setProperty('--mouse-x', `${x}px`);
+    card.style.setProperty('--mouse-y', `${y}px`);
+  });
 });
 
-window.closeDrawer = () => {
-  drawerOpen = false;
-  drawer.classList.remove('open');
-  menuBtn.setAttribute('aria-expanded', 'false');
-  drawer.setAttribute('aria-hidden', 'true');
-  document.body.style.overflow = '';
-};
+// ── NAV PIN ON SCROLL ─────────────────────────────────────────
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('pinned', window.scrollY > 50);
+});
 
-/* close drawer on Escape */
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && drawerOpen) closeDrawer(); });
+// ── INTERACTIVE TAB FILTERING FOR SERVICES ────────────────────
+function filterServices(category, element) {
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  element.classList.add('active');
 
-/* ── scroll reveal ── */
-const revealEls = document.querySelectorAll('[data-reveal]');
-const revealObs = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('revealed');
-      revealObs.unobserve(entry.target);
+  const cards = document.querySelectorAll('#servicesGrid .service-card');
+  cards.forEach(card => {
+    if (category === 'all' || card.dataset.cat === category) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
     }
   });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-revealEls.forEach(el => revealObs.observe(el));
+}
 
-/* ── nav link colour fix on scroll ── */
-const navLinks = document.querySelectorAll('.nav-links a');
-// initially white (on dark hero), pinned: handled via CSS
+// ── INTERACTIVE TRANSFORM SLIDER ──────────────────────────────
+const slider = document.getElementById('comparisonSlider');
+const afterImg = document.getElementById('afterImage');
+const handle = document.getElementById('sliderHandle');
+let isSliding = false;
 
-/* ── form submit (placeholder) ── */
-const form = document.querySelector('.appt-form');
-if (form) {
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const btn = form.querySelector('[type="submit"]');
-    const name = form.querySelector('#f-name').value.trim();
-    const phone = form.querySelector('#f-phone').value.trim();
-    if (!name) {
-      form.querySelector('#f-name').focus();
-      form.querySelector('#f-name').style.borderColor = 'var(--brass)';
-      return;
-    }
-    if (!phone) {
-      form.querySelector('#f-phone').focus();
-      form.querySelector('#f-phone').style.borderColor = 'var(--brass)';
-      return;
-    }
-    btn.textContent = 'Request received';
-    btn.disabled = true;
-    btn.style.background = 'var(--eucalyptus)';
-    btn.setAttribute('aria-label', 'Your appointment request has been received');
-    // TODO before launch: connect to email service (e.g. Formspree, Resend, or clinic CRM)
-  });
+if (slider && afterImg && handle) {
+  const updateSlider = (x) => {
+    const rect = slider.getBoundingClientRect();
+    let pos = ((x - rect.left) / rect.width) * 100;
+    pos = Math.max(5, Math.min(95, pos));
+    afterImg.style.width = `${pos}%`;
+    handle.style.left = `${pos}%`;
+  };
+
+  slider.addEventListener('mousedown', () => isSliding = true);
+  window.addEventListener('mouseup', () => isSliding = false);
+  window.addEventListener('mousemove', e => { if (isSliding) updateSlider(e.clientX); });
+}
+
+// ── INTERACTIVE COST CALCULATOR ───────────────────────────────
+let selectedTotal = 1200;
+function toggleCalcOption(element, price) {
+  if (element.classList.contains('selected')) {
+    element.classList.remove('selected');
+    selectedTotal = Math.max(0, selectedTotal - price);
+  } else {
+    element.classList.add('selected');
+    selectedTotal += price;
+  }
+  document.getElementById('calcTotal').textContent = `₹${selectedTotal.toLocaleString()}`;
 }
 </script>
 </body>
