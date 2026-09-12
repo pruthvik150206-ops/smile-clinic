@@ -5,11 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>SmileClinic — Advanced Dental & ENT Care, Bengaluru</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='8' fill='%23102B35'/%3E%3Cpath d='M8 14 Q12 21 18 21 Q24 21 28 14' stroke='%23789B92' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Cpath d='M4 20 Q7 17.5 10 20 Q13 22.5 16 20 Q19 17.5 22 20 Q25 22.5 28 20 Q31 17.5 34 20' stroke='%23B58B55' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"/>
-<meta property="og:title" content="SmileClinic — Dental & ENT Care, Bengaluru"/>
-<meta property="og:description" content="Specialist dental and ENT care delivered with clinical precision and unhurried attention. Book a consultation in Bengaluru."/>
-<meta property="og:type" content="website"/>
 <meta name="theme-color" content="#102B35"/>
-<meta name="description" content="Premium dental and ENT care in Bengaluru. Specialist consultations, advanced procedures, and an interactive patient experience."/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
@@ -48,65 +44,77 @@ body {
 img { display: block; max-width: 100%; object-fit: cover; }
 a { color: inherit; text-decoration: none; }
 button { font-family: var(--sans); cursor: pointer; border: none; background: none; }
-::selection { background: rgba(120,155,146,.25); }
 
-/* ─── SPOTLIGHT CARD EFFECT (React Bits) ─────────────────────── */
+/* ─── REACT BITS: TRAILING CURSOR RING ───────────────────────── */
+#cursorRing {
+  position: fixed; width: 32px; height: 32px; border: 1.5px solid var(--brass);
+  border-radius: 50%; pointer-events: none; z-index: 9999;
+  transform: translate(-50%, -50%); transition: width 0.25s, height 0.25s, border-color 0.25s, background 0.25s;
+  mix-blend-mode: difference;
+}
+#cursorRing.hovering {
+  width: 54px; height: 54px; background: rgba(181, 139, 85, 0.2); border-color: var(--euclid-lt);
+}
+
+/* ─── REACT BITS: SPOTLIGHT CARD EFFECT ─────────────────────── */
 .spotlight-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 4px;
+  position: relative; overflow: hidden; border-radius: 8px;
+  transform-style: preserve-3d; transition: transform 0.15s ease-out;
 }
 .spotlight-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(201, 168, 112, 0.15), transparent 40%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-  z-index: 2;
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(201, 168, 112, 0.18), transparent 40%);
+  opacity: 0; transition: opacity 0.4s ease; pointer-events: none; z-index: 3;
 }
 .spotlight-card:hover::before { opacity: 1; }
+
+/* ─── REACT BITS: ANIMATED GRADIENT TEXT ─────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--porcelain) 0%, var(--euclid-lt) 50%, var(--brass-lt) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 6s ease infinite alternate;
+}
+@keyframes gradientShift { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+
+/* ─── REACT BITS: RIPPLE BUTTON CLICK EFFECT ─────────────────── */
+.ripple-btn {
+  position: relative; overflow: hidden;
+}
+.ripple-wave {
+  position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.4);
+  transform: scale(0); animation: rippleAnim 0.6s linear; pointer-events: none;
+}
+@keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
 
 /* ─── UTILITY & TYPOGRAPHY ────────────────────────────────────── */
 .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
 @media (max-width: 640px) { .container { padding: 0 20px; } }
 
 .t-display {
-  font-family: var(--serif);
-  font-size: clamp(3.2rem, 6.5vw, 5.8rem);
-  font-weight: 300;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
+  font-family: var(--serif); font-size: clamp(3.2rem, 6.5vw, 5.8rem);
+  font-weight: 300; line-height: 1.05; letter-spacing: -0.02em;
 }
 .t-heading {
-  font-family: var(--serif);
-  font-size: clamp(2.2rem, 4.2vw, 3.4rem);
-  font-weight: 300;
-  line-height: 1.1;
-  letter-spacing: -0.015em;
+  font-family: var(--serif); font-size: clamp(2.2rem, 4.2vw, 3.4rem);
+  font-weight: 300; line-height: 1.1; letter-spacing: -0.015em;
 }
 .t-label {
-  font-family: var(--sans);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--eucalyptus);
+  font-family: var(--sans); font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--eucalyptus);
 }
 .t-body { font-size: 1rem; line-height: 1.75; color: var(--text-mid); font-weight: 300; }
 
-/* ─── BUTTONS & INTERACTIVE ELEMENTS ────────────────────────── */
+/* ─── BUTTONS ────────────────────────────────────────────────── */
 .btn {
   display: inline-flex; align-items: center; gap: 10px;
   font-family: var(--sans); font-size: 0.85rem; font-weight: 600;
-  letter-spacing: 0.04em; border-radius: 4px;
-  padding: 14px 28px; transition: all .3s var(--ease);
-  position: relative; overflow: hidden;
+  letter-spacing: 0.04em; border-radius: 6px; padding: 14px 28px;
+  transition: all .3s var(--ease); position: relative; overflow: hidden;
 }
 .btn-primary {
-  background: var(--brass); color: #fff;
-  box-shadow: 0 4px 20px rgba(181, 139, 85, 0.25);
+  background: var(--brass); color: #fff; box-shadow: 0 4px 20px rgba(181, 139, 85, 0.25);
 }
 .btn-primary:hover { background: var(--brass-lt); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(181, 139, 85, 0.35); }
 .btn-outline {
@@ -123,31 +131,21 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
 
 /* ─── REVEAL ANIMATION ───────────────────────────────────────── */
 [data-reveal] {
-  opacity: 0;
-  transform: translateY(24px);
+  opacity: 0; transform: translateY(24px);
   transition: opacity .9s var(--ease-out), transform .9s var(--ease-out);
 }
-[data-reveal="right"] { transform: translateX(-20px); }
-[data-reveal="left"]  { transform: translateX(20px); }
 [data-reveal].revealed { opacity: 1; transform: none; }
-[data-delay="1"] { transition-delay: .12s; }
-[data-delay="2"] { transition-delay: .24s; }
-[data-delay="3"] { transition-delay: .36s; }
 
 /* ─── NAVIGATION ─────────────────────────────────────────────── */
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-  padding: 0 40px; height: 74px;
-  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; height: 74px; display: flex; align-items: center; justify-content: space-between;
   transition: background .5s var(--ease), border-color .5s var(--ease), height .3s var(--ease);
   border-bottom: 1px solid transparent;
 }
 .nav.pinned {
-  background: rgba(247,244,238,.96);
-  backdrop-filter: blur(16px);
-  border-color: var(--mist-dk);
-  height: 62px;
-  box-shadow: 0 4px 20px rgba(16, 43, 53, 0.05);
+  background: rgba(247,244,238,.96); backdrop-filter: blur(16px);
+  border-color: var(--mist-dk); height: 62px; box-shadow: 0 4px 20px rgba(16, 43, 53, 0.05);
 }
 .nav.pinned .nav-logo span { color: var(--teal) !important; }
 .nav-logo { display: flex; align-items: center; gap: 10px; }
@@ -159,18 +157,20 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
 .nav.pinned .nav-links a { color: var(--text-mid); }
 .nav-links a:hover, .nav.pinned .nav-links a:hover { color: var(--brass); }
 
-/* ─── HERO SECTION ───────────────────────────────────────────── */
+/* ─── HERO & CANVAS PARTICLES (React Bits) ───────────────────── */
 .hero {
-  min-height: 100vh;
-  background: var(--teal);
+  min-height: 100vh; background: var(--teal);
   display: flex; flex-direction: column; justify-content: flex-end;
   position: relative; overflow: hidden;
+}
+#particleCanvas {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
 }
 .hero-ambient {
   position: absolute; inset: 0; z-index: 0;
   background:
-    radial-gradient(ellipse 70% 55% at 78% 30%, rgba(120,155,146,.2) 0%, transparent 65%),
-    radial-gradient(ellipse 50% 70% at 15% 85%, rgba(181,139,85,.12) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 55% at 78% 30%, rgba(120,155,146,.22) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 70% at 15% 85%, rgba(181,139,85,.14) 0%, transparent 55%),
     linear-gradient(170deg, #0A2029 0%, #102B35 45%, #1A3D4A 100%);
 }
 .hero-inner {
@@ -178,7 +178,6 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
   display: grid; grid-template-columns: 1.1fr 0.9fr; align-items: center;
   padding: 120px 80px 80px; gap: 60px; min-height: 100vh;
 }
-.hero-content { padding-top: 40px; }
 .hero-badge {
   display: inline-flex; align-items: center; gap: 8px;
   background: rgba(120,155,146,0.15); border: 1px solid rgba(168,196,187,0.3);
@@ -188,46 +187,33 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
 .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--brass); animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)} }
 
-.hero-title .t-display { color: var(--porcelain); display: block; }
-.hero-title em { font-style: italic; color: var(--euclid-lt); }
-
 /* Hero Visual Showcase Frame */
 .hero-image-frame {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-  border: 1px solid rgba(255,255,255,0.15);
+  position: relative; border-radius: 12px; overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15);
 }
 .hero-image-frame img {
-  width: 100%;
-  height: 480px;
-  object-fit: cover;
-  transition: transform 0.8s var(--ease);
+  width: 100%; height: 480px; object-fit: cover; transition: transform 0.8s var(--ease);
 }
-.hero-image-frame:hover img { transform: scale(1.04); }
+.hero-image-frame:hover img { transform: scale(1.05); }
 
 .hero-visual-chip {
-  position: absolute;
-  bottom: 24px;
-  left: 24px;
-  right: 24px;
-  background: rgba(16, 43, 53, 0.88);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 8px;
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  color: var(--porcelain);
-}
-.visual-chip-icon {
-  width: 42px; height: 42px; border-radius: 8px; background: rgba(181,139,85,0.2);
-  display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--brass);
+  position: absolute; bottom: 24px; left: 24px; right: 24px;
+  background: rgba(16, 43, 53, 0.88); backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 16px 20px;
+  display: flex; align-items: center; gap: 16px; color: var(--porcelain);
 }
 
-/* ─── TABBED SERVICES FILTER (React Bits Style) ────────── */
+/* ─── REACT BITS: ANIMATED STATS COUNTER STRIP ───────────────── */
+.stats-strip {
+  background: var(--teal-mid); border-top: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 40px 80px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; color: var(--porcelain);
+}
+.stat-box { text-align: center; }
+.stat-num { font-family: var(--serif); font-size: 3rem; font-weight: 600; color: var(--brass-lt); display: block; }
+.stat-label { font-size: 0.82rem; color: rgba(255,255,255,0.65); letter-spacing: 0.04em; margin-top: 4px; }
+
+/* ─── TABBED SERVICES FILTER (React Bits Interactive) ────────── */
 .services-section { padding: 120px 0; background: var(--porcelain); }
 .filter-tabs {
   display: flex; align-items: center; justify-content: center; gap: 12px;
@@ -242,21 +228,13 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
   background: var(--teal); color: var(--porcelain); border-color: var(--teal-light);
 }
 
-.services-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
-}
+.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .service-card {
-  background: var(--warm-white);
-  border: 1px solid var(--mist-dk);
-  border-radius: 8px;
-  padding: 36px 30px;
-  transition: all 0.35s var(--ease);
-  display: flex; flex-direction: column; justify-content: space-between;
+  background: var(--warm-white); border: 1px solid var(--mist-dk); border-radius: 8px;
+  padding: 36px 30px; transition: all 0.35s var(--ease); display: flex; flex-direction: column; justify-content: space-between;
 }
 .service-card:hover {
-  transform: translateY(-6px);
-  border-color: var(--brass);
-  box-shadow: 0 16px 40px rgba(16, 43, 53, 0.08);
+  transform: translateY(-6px); border-color: var(--brass); box-shadow: 0 16px 40px rgba(16, 43, 53, 0.08);
 }
 .service-tag {
   font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
@@ -273,9 +251,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
   position: relative; width: 100%; max-width: 800px; height: 420px; margin: 40px auto 0;
   border-radius: 12px; overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,0.12);
 }
-.comparison-image {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-}
+.comparison-image { position: absolute; inset: 0; width: 100%; height: 100%; }
 .before-image { background: linear-gradient(135deg, #2A3B3E, #102B35); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.7); font-family: var(--serif); font-size: 1.6rem; }
 .after-image {
   background: linear-gradient(135deg, #102B35, #789B92); display: flex; align-items: center; justify-content: center; color: #fff; font-family: var(--serif); font-size: 1.6rem;
@@ -290,7 +266,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
   display: flex; align-items: center; justify-content: center; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
-/* ─── DOCTORS SHOWCASE ───────────────────────────────────────── */
+/* ─── DOCTORS SHOWCASE (Real Generated Photos) ─────────── */
 .team-section { padding: 120px 0; background: var(--porcelain); }
 .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 56px; }
 .doctor-card {
@@ -306,7 +282,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
 .doctor-spec { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brass); margin-bottom: 12px; }
 .doctor-bio { font-size: 0.85rem; color: var(--text-mid); line-height: 1.6; font-weight: 300; }
 
-/* ─── INTERACTIVE COST CALCULATOR ───────────────────────────── */
+/* ─── COST ESTIMATOR / CALCULATOR ──────────────────────────── */
 .calc-section { padding: 100px 0; background: var(--teal); color: var(--porcelain); }
 .calc-card {
   background: rgba(255,255,255,0.05); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.12);
@@ -321,6 +297,25 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
   background: rgba(181, 139, 85, 0.25); border-color: var(--brass);
 }
 .calc-price { font-family: var(--serif); font-size: 1.2rem; color: var(--euclid-lt); }
+
+/* ─── REACT BITS: INTERACTIVE FAQ ACCORDION ───────────────────── */
+.faq-section { padding: 100px 0; background: var(--warm-white); }
+.faq-container { max-width: 800px; margin: 40px auto 0; }
+.faq-item {
+  border-bottom: 1px solid var(--mist-dk); padding: 20px 0; transition: all 0.3s ease;
+}
+.faq-question {
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--serif); font-size: 1.35rem; font-weight: 500; color: var(--teal);
+  cursor: pointer; user-select: none;
+}
+.faq-answer {
+  max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.4s var(--ease), opacity 0.4s var(--ease), margin-top 0.3s ease;
+  font-size: 0.9rem; color: var(--text-mid); line-height: 1.7; font-weight: 300;
+}
+.faq-item.active .faq-answer { max-height: 200px; opacity: 1; margin-top: 12px; }
+.faq-icon { font-size: 1.4rem; color: var(--brass); transition: transform 0.3s ease; }
+.faq-item.active .faq-icon { transform: rotate(45deg); }
 
 /* ─── CONTACT FORM ───────────────────────────────────────────── */
 .contact-section { padding: 120px 0; background: var(--porcelain); }
@@ -348,11 +343,14 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
 
 @media (max-width: 900px) {
   .hero-inner { grid-template-columns: 1fr; padding: 100px 20px 60px; }
-  .services-grid, .team-grid, .calc-option-grid, .contact-grid { grid-template-columns: 1fr; }
+  .stats-strip, .services-grid, .team-grid, .calc-option-grid, .contact-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
+
+<!-- Custom Trailing Cursor Ring -->
+<div id="cursorRing"></div>
 
 <!-- ─── NAVIGATION ──────────────────────────────────────────── -->
 <header role="banner">
@@ -360,7 +358,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
     <a href="#" class="nav-logo">
       <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
         <path d="M6 14 Q10 22 18 22 Q26 22 30 14" stroke="#789B92" stroke-width="1.5" stroke-linecap="round"/>
-        <path d="M2 20 Q6 17 9 20 Q12 23 15 20 Q18 17 21 20 Q24 23 27 20 Q30 17 34 20" stroke="#B58B55" stroke-width="1" stroke-linecap="round"/>
+        <path d="M2 20 Q6 17 9 20 Q12 23 15 20 Q18 17 21 20 Q25 22 28 20 Q31 17 34 20" stroke="#B58B55" stroke-width="1" stroke-linecap="round"/>
       </svg>
       <span style="font-family:var(--serif);font-size:1.25rem;font-weight:500;color:rgba(247,244,238,.95)">SmileClinic</span>
     </a>
@@ -370,39 +368,42 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
       <a href="#transform">Transformations</a>
       <a href="#calculator">Estimator</a>
       <a href="#team">Specialists</a>
+      <a href="#faq">FAQ</a>
       <a href="#contact">Contact</a>
     </div>
 
     <div class="nav-cta-wrap">
-      <a href="#contact" class="btn btn-primary">Book Consultation</a>
+      <a href="#contact" class="btn btn-primary ripple-btn">Book Consultation</a>
     </div>
   </nav>
 </header>
 
 <main>
-<!-- ─── HERO SECTION ────────────────────────────────────────── -->
+<!-- ─── HERO SECTION WITH CANVAS PARTICLES ──────────────────── -->
 <section class="hero">
   <div class="hero-ambient"></div>
+  <canvas id="particleCanvas"></canvas>
+
   <div class="hero-inner">
     <div class="hero-content">
       <div class="hero-badge"><span class="badge-dot"></span>Bengaluru's Premier Dental & ENT Practice</div>
       <div class="hero-title">
-        <h1 class="t-display">Care that goes<br><em>deeper than the surface.</em></h1>
+        <h1 class="t-display">Care that goes<br><em class="gradient-text">deeper than the surface.</em></h1>
       </div>
       <p class="t-body" style="color:rgba(247,244,238,.75);margin-top:24px;max-width:440px">
         Specialist dental and ENT care delivered with clinical precision, state-of-the-art technology, and unhurried attention.
       </p>
       <div style="display:flex;gap:16px;margin-top:36px">
-        <a href="#contact" class="btn btn-primary btn-arrow">Book Appointment</a>
-        <a href="#services" class="btn btn-ghost">Explore Specialties</a>
+        <a href="#contact" class="btn btn-primary btn-arrow ripple-btn">Book Appointment</a>
+        <a href="#services" class="btn btn-ghost ripple-btn">Explore Specialties</a>
       </div>
     </div>
 
-    <!-- Hero Interactive Interior Photo Frame -->
+    <!-- Hero Interactive Spotlight 3D Card Frame -->
     <div class="hero-image-frame spotlight-card">
       <img src="/assets/hero_clinic.jpg" alt="SmileClinic Bengaluru Interior"/>
       <div class="hero-visual-chip">
-        <div class="visual-chip-icon">🏥</div>
+        <div style="font-size:24px;color:var(--brass)">🏥</div>
         <div>
           <div style="font-weight:600;font-size:0.9rem">Koramangala Flagship Clinic</div>
           <div style="font-size:0.75rem;color:rgba(255,255,255,0.6)">NABH Standards · Multi-Specialty Theatre</div>
@@ -411,6 +412,26 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
     </div>
   </div>
 </section>
+
+<!-- ─── ANIMATED COUNTER STATS STRIP ────────────────────────── -->
+<div class="stats-strip">
+  <div class="stat-box">
+    <span class="stat-num" data-target="4800" data-suffix="+">0</span>
+    <div class="stat-label">Patients Treated</div>
+  </div>
+  <div class="stat-box">
+    <span class="stat-num" data-target="98" data-suffix="%">0</span>
+    <div class="stat-label">Patient Satisfaction</div>
+  </div>
+  <div class="stat-box">
+    <span class="stat-num" data-target="12" data-suffix="+ Yrs">0</span>
+    <div class="stat-label">Clinical Excellence</div>
+  </div>
+  <div class="stat-box">
+    <span class="stat-num" data-target="15" data-suffix="+">0</span>
+    <div class="stat-label">Senior Specialists</div>
+  </div>
+</div>
 
 <!-- ─── SERVICES TABBED FILTER SECTION (React Bits Style) ───── -->
 <section class="services-section" id="services">
@@ -555,7 +576,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
           <div style="font-size:0.8rem;color:rgba(255,255,255,0.6)">Estimated Investment Total:</div>
           <div style="font-family:var(--serif);font-size:2.2rem;font-weight:600;color:var(--brass-lt)" id="calcTotal">₹1,200</div>
         </div>
-        <a href="#contact" class="btn btn-primary">Book Consultation</a>
+        <a href="#contact" class="btn btn-primary ripple-btn">Book Consultation</a>
       </div>
     </div>
   </div>
@@ -609,6 +630,42 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
   </div>
 </section>
 
+<!-- ─── REACT BITS: INTERACTIVE FAQ ACCORDION ───────────────────── -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="t-label">Got Questions?</div>
+      <h2 class="t-heading" style="color:var(--teal);margin-top:12px">Frequently Asked Questions</h2>
+    </div>
+
+    <div class="faq-container">
+      <div class="faq-item active" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <span>What should I bring for my first consultation?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">Please bring a valid photo ID, details of any existing medical conditions or allergies, and any past dental/ENT X-rays or diagnostic reports if available.</div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <span>Are root canals and dental extractions painful?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">At SmileClinic, we use rotary endodontic systems and modern local anesthetics to ensure procedures are virtually painless and comfortable throughout.</div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <span>How do I access my patient records and prescriptions?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">All diagnostic notes, X-rays, prescriptions, and billing invoices are automatically uploaded to your secure Patient Portal at smile-clinic-theta.vercel.app.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ─── CONTACT & APPOINTMENT ────────────────────────────────── -->
 <section class="contact-section" id="contact">
   <div class="container">
@@ -652,7 +709,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
           </select>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-arrow" style="width:100%;justify-content:center;margin-top:16px">Submit Booking Request</button>
+        <button type="submit" class="btn btn-primary btn-arrow ripple-btn" style="width:100%;justify-content:center;margin-top:16px">Submit Booking Request</button>
       </form>
     </div>
   </div>
@@ -699,7 +756,31 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
 </footer>
 
 <script>
-// ── SPOTLIGHT MOUSE TRACKING EFFECT (React Bits) ──────────────
+// ── 1. TRAILING CURSOR RING (React Bits) ──────────────────────
+const cursor = document.getElementById('cursorRing');
+let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+window.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+});
+
+function renderCursor() {
+  ringX += (mouseX - ringX) * 0.18;
+  ringY += (mouseY - ringY) * 0.18;
+  if (cursor) {
+    cursor.style.left = `${ringX}px`;
+    cursor.style.top = `${ringY}px`;
+  }
+  requestAnimationFrame(renderCursor);
+}
+renderCursor();
+
+document.querySelectorAll('a, button, .spotlight-card, .filter-tab, .calc-option').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor?.classList.add('hovering'));
+  el.addEventListener('mouseleave', () => cursor?.classList.remove('hovering'));
+});
+
+// ── 2. SPOTLIGHT & 3D TILT CARD EFFECT (React Bits) ───────────
 document.querySelectorAll('.spotlight-card').forEach(card => {
   card.addEventListener('mousemove', e => {
     const rect = card.getBoundingClientRect();
@@ -707,59 +788,146 @@ document.querySelectorAll('.spotlight-card').forEach(card => {
     const y = e.clientY - rect.top;
     card.style.setProperty('--mouse-x', `${x}px`);
     card.style.setProperty('--mouse-y', `${y}px`);
+
+    // 3D Tilt calculations
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -5;
+    const rotateY = ((x - centerX) / centerX) * 5;
+    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+  });
+
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
   });
 });
 
-// ── NAV PIN ON SCROLL ─────────────────────────────────────────
-const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => {
-  nav.classList.toggle('pinned', window.scrollY > 50);
+// ── 3. HERO CANVAS INTERACTIVE PARTICLES (React Bits) ────────
+const canvas = document.getElementById('particleCanvas');
+if (canvas) {
+  const ctx = canvas.getContext('2d');
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = window.innerHeight;
+
+  const particles = Array.from({ length: 45 }, () => ({
+    x: Math.random() * width,
+    y: Math.random() * height,
+    radius: Math.random() * 2 + 1,
+    vx: (Math.random() - 0.5) * 0.4,
+    vy: (Math.random() - 0.5) * 0.4,
+    alpha: Math.random() * 0.5 + 0.2
+  }));
+
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  });
+
+  function drawParticles() {
+    ctx.clearRect(0, 0, width, height);
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0 || p.x > width) p.vx *= -1;
+      if (p.y < 0 || p.y > height) p.vy *= -1;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(168, 196, 187, ${p.alpha})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(drawParticles);
+  }
+  drawParticles();
+}
+
+// ── 4. RIPPLE BUTTON CLICK EFFECT ─────────────────────────────
+document.querySelectorAll('.ripple-btn').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    const rect = this.getBoundingClientRect();
+    const wave = document.createElement('span');
+    wave.className = 'ripple-wave';
+    const size = Math.max(rect.width, rect.height);
+    wave.style.width = wave.style.height = `${size}px`;
+    wave.style.left = `${e.clientX - rect.left - size/2}px`;
+    wave.style.top = `${e.clientY - rect.top - size/2}px`;
+    this.appendChild(wave);
+    setTimeout(() => wave.remove(), 600);
+  });
 });
 
-// ── INTERACTIVE TAB FILTERING FOR SERVICES ────────────────────
+// ── 5. ANIMATED STATS COUNTER ON SCROLL ───────────────────────
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.stat-num').forEach(el => {
+        const target = parseInt(el.dataset.target, 10);
+        const suffix = el.dataset.suffix || '';
+        let start = 0;
+        const duration = 1600;
+        const stepTime = 20;
+        const steps = duration / stepTime;
+        const increment = target / steps;
+
+        const timer = setInterval(() => {
+          start += increment;
+          if (start >= target) {
+            el.textContent = `${target}${suffix}`;
+            clearInterval(timer);
+          } else {
+            el.textContent = `${Math.floor(start)}${suffix}`;
+          }
+        }, stepTime);
+      });
+      statsObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.4 });
+const statsStrip = document.querySelector('.stats-strip');
+if (statsStrip) statsObserver.observe(statsStrip);
+
+// ── 6. INTERACTIVE FAQ ACCORDION ──────────────────────────────
+function toggleFaq(item) {
+  const isActive = item.classList.contains('active');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+  if (!isActive) item.classList.add('active');
+}
+
+// ── 7. NAV PIN & TAB FILTERING ────────────────────────────────
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => { nav.classList.toggle('pinned', window.scrollY > 50); });
+
 function filterServices(category, element) {
   document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
   element.classList.add('active');
-
-  const cards = document.querySelectorAll('#servicesGrid .service-card');
-  cards.forEach(card => {
-    if (category === 'all' || card.dataset.cat === category) {
-      card.style.display = 'flex';
-    } else {
-      card.style.display = 'none';
-    }
+  document.querySelectorAll('#servicesGrid .service-card').forEach(card => {
+    card.style.display = (category === 'all' || card.dataset.cat === category) ? 'flex' : 'none';
   });
 }
 
-// ── INTERACTIVE TRANSFORM SLIDER ──────────────────────────────
+// ── 8. BEFORE / AFTER TRANSFORM SLIDER ────────────────────────
 const slider = document.getElementById('comparisonSlider');
 const afterImg = document.getElementById('afterImage');
 const handle = document.getElementById('sliderHandle');
 let isSliding = false;
-
 if (slider && afterImg && handle) {
   const updateSlider = (x) => {
     const rect = slider.getBoundingClientRect();
-    let pos = ((x - rect.left) / rect.width) * 100;
-    pos = Math.max(5, Math.min(95, pos));
+    let pos = Math.max(5, Math.min(95, ((x - rect.left) / rect.width) * 100));
     afterImg.style.width = `${pos}%`;
     handle.style.left = `${pos}%`;
   };
-
   slider.addEventListener('mousedown', () => isSliding = true);
   window.addEventListener('mouseup', () => isSliding = false);
   window.addEventListener('mousemove', e => { if (isSliding) updateSlider(e.clientX); });
 }
 
-// ── INTERACTIVE COST CALCULATOR ───────────────────────────────
+// ── 9. INTERACTIVE COST CALCULATOR ────────────────────────────
 let selectedTotal = 1200;
 function toggleCalcOption(element, price) {
   if (element.classList.contains('selected')) {
-    element.classList.remove('selected');
-    selectedTotal = Math.max(0, selectedTotal - price);
+    element.classList.remove('selected'); selectedTotal = Math.max(0, selectedTotal - price);
   } else {
-    element.classList.add('selected');
-    selectedTotal += price;
+    element.classList.add('selected'); selectedTotal += price;
   }
   document.getElementById('calcTotal').textContent = `₹${selectedTotal.toLocaleString()}`;
 }
