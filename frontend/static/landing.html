@@ -45,16 +45,7 @@ img { display: block; max-width: 100%; object-fit: cover; }
 a { color: inherit; text-decoration: none; }
 button { font-family: var(--sans); cursor: pointer; border: none; background: none; }
 
-/* ─── REACT BITS: TRAILING CURSOR RING ───────────────────────── */
-#cursorRing {
-  position: fixed; width: 32px; height: 32px; border: 1.5px solid var(--brass);
-  border-radius: 50%; pointer-events: none; z-index: 9999;
-  transform: translate(-50%, -50%); transition: width 0.25s, height 0.25s, border-color 0.25s, background 0.25s;
-  mix-blend-mode: difference;
-}
-#cursorRing.hovering {
-  width: 54px; height: 54px; background: rgba(181, 139, 85, 0.2); border-color: var(--euclid-lt);
-}
+
 
 /* ─── REACT BITS: SPOTLIGHT CARD EFFECT ─────────────────────── */
 .spotlight-card {
@@ -381,8 +372,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
 </head>
 <body>
 
-<!-- Custom Trailing Cursor Ring -->
-<div id="cursorRing"></div>
+
 
 <!-- ─── NAVIGATION ──────────────────────────────────────────── -->
 <header role="banner">
@@ -906,22 +896,7 @@ button { font-family: var(--sans); cursor: pointer; border: none; background: no
 </div>
 
 <script>
-// ── 1. TRAILING CURSOR RING ──────────────────────────────────
-const cursor = document.getElementById('cursorRing');
-let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
-window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
 
-function renderCursor() {
-  ringX += (mouseX - ringX) * 0.18; ringY += (mouseY - ringY) * 0.18;
-  if (cursor) { cursor.style.left = `${ringX}px`; cursor.style.top = `${ringY}px`; }
-  requestAnimationFrame(renderCursor);
-}
-renderCursor();
-
-document.querySelectorAll('a, button, .spotlight-card, .filter-tab, .calc-option, .slot-pill, .shade-btn').forEach(el => {
-  el.addEventListener('mouseenter', () => cursor?.classList.add('hovering'));
-  el.addEventListener('mouseleave', () => cursor?.classList.remove('hovering'));
-});
 
 // ── 2. SPOTLIGHT & 3D TILT CARD EFFECT ───────────────────────
 document.querySelectorAll('.spotlight-card').forEach(card => {
