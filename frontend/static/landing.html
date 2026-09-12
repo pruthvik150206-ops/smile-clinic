@@ -3,720 +3,1289 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SmileClinic — Advanced Dental Care in Bengaluru</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<title>SmileClinic — Dental & ENT Care, Bengaluru</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='8' fill='%23102B35'/%3E%3Cpath d='M8 14 Q12 21 18 21 Q24 21 28 14' stroke='%23789B92' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Cpath d='M4 20 Q7 17.5 10 20 Q13 22.5 16 20 Q19 17.5 22 20 Q25 22.5 28 20 Q31 17.5 34 20' stroke='%23B58B55' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"/>
+<meta property="og:title" content="SmileClinic — Dental & ENT Care, Bengaluru"/>
+<meta property="og:description" content="Specialist dental and ENT care delivered with clinical precision and unhurried attention. Book a consultation in Bengaluru."/>
+<meta property="og:type" content="website"/>
+<meta property="og:image" content="[OG Image — 1200x630px to be provided]"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="theme-color" content="#102B35"/>
+<meta name="description" content="Premium dental and ENT care in Bengaluru. Specialist consultations, advanced procedures, and a patient experience built around your comfort."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --navy:#0B1628;--navy2:#0F1E38;--navy3:#162440;
-  --mint:#00E5C3;--mint2:#00C4A7;--mint3:rgba(0,229,195,.12);
-  --white:#F7F9FC;--text:#C8D4E8;--text2:#8A9BBB;
-  --gold:#F4C542;
-  --font:'Inter',sans-serif;--serif:'Syne',sans-serif;
+/* ─── RESET & TOKENS ────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --porcelain:  #F7F4EE;
+  --teal:       #102B35;
+  --teal-mid:   #1A3D4A;
+  --teal-light: #2A5566;
+  --eucalyptus: #789B92;
+  --euclid-lt:  #A8C4BB;
+  --mist:       #DDE7E3;
+  --mist-dk:    #C4D4CF;
+  --brass:      #B58B55;
+  --brass-lt:   #C9A870;
+  --warm-white: #FDFBF7;
+  --text-body:  #2A3B3E;
+  --text-mid:   #556B6F;
+  --text-soft:  #8A9F9C;
+  --serif:      'Cormorant Garamond', Georgia, serif;
+  --sans:       'DM Sans', system-ui, sans-serif;
+  --ease:       cubic-bezier(.25,.46,.45,.94);
+  --ease-out:   cubic-bezier(.16,1,.3,1);
+}
+html { scroll-behavior: smooth; font-size: 16px; scroll-padding-top: 80px; }
+body {
+  font-family: var(--sans);
+  background: var(--porcelain);
+  color: var(--text-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font-family: var(--sans); cursor: pointer; border: none; background: none; }
+::selection { background: rgba(120,155,146,.25); }
+
+/* ─── FOCUS ─────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
 
-html{scroll-behavior:smooth}
-body{background:var(--navy);color:var(--white);font-family:var(--font);overflow-x:hidden}
-
-/* ── LOADER ─────────────────────────────────────────────────── */
-#loader{
-  position:fixed;inset:0;background:var(--navy);z-index:9999;
-  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;
-  transition:opacity .6s ease,visibility .6s ease;
-}
-#loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
-.loader-logo{font-family:var(--serif);font-size:36px;font-weight:800;color:var(--white);
-  letter-spacing:-1px;opacity:0;transform:translateY(20px);animation:loaderFade .8s .3s forwards}
-.loader-bar-wrap{width:200px;height:2px;background:rgba(255,255,255,.1);border-radius:1px;overflow:hidden}
-.loader-bar{height:100%;background:var(--mint);border-radius:1px;width:0;animation:loaderBar 1.4s .5s ease forwards}
-.loader-sub{font-size:13px;color:var(--text2);opacity:0;animation:loaderFade .8s .8s forwards}
-@keyframes loaderFade{to{opacity:1;transform:translateY(0)}}
-@keyframes loaderBar{to{width:100%}}
-
-/* ── NAV ────────────────────────────────────────────────────── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  padding:20px 60px;display:flex;align-items:center;justify-content:space-between;
-  transition:all .4s ease;
-}
-nav.scrolled{
-  background:rgba(11,22,40,.92);backdrop-filter:blur(20px);
-  padding:14px 60px;border-bottom:1px solid rgba(0,229,195,.1);
-}
-.nav-logo{font-family:var(--serif);font-weight:800;font-size:22px;color:var(--white);text-decoration:none;
-  display:flex;align-items:center;gap:8px}
-.nav-logo-dot{width:8px;height:8px;border-radius:50%;background:var(--mint);display:inline-block}
-.nav-links{display:flex;align-items:center;gap:36px}
-.nav-links a{color:var(--text);font-size:14px;font-weight:500;text-decoration:none;transition:color .2s}
-.nav-links a:hover{color:var(--white)}
-.nav-cta{background:var(--mint);color:var(--navy);font-weight:600;font-size:14px;padding:10px 22px;
-  border-radius:8px;text-decoration:none;transition:all .2s;border:none;cursor:pointer}
-.nav-cta:hover{background:var(--mint2);transform:translateY(-1px)}
-
-/* ── HERO ───────────────────────────────────────────────────── */
-.hero{
-  min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;
-  padding:140px 60px 80px;
-}
-.hero-bg{
-  position:absolute;inset:0;
-  background:radial-gradient(ellipse 80% 60% at 70% 40%, rgba(0,229,195,.08) 0%, transparent 60%),
-             radial-gradient(ellipse 60% 80% at 20% 80%, rgba(0,100,200,.1) 0%, transparent 60%),
-             linear-gradient(135deg, #0B1628 0%, #0F1E38 50%, #0B1628 100%);
-}
-/* animated gradient orbs */
-.orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
-.orb1{width:500px;height:500px;background:rgba(0,229,195,.06);top:-100px;right:-100px;animation:orbFloat 8s ease-in-out infinite}
-.orb2{width:300px;height:300px;background:rgba(0,100,255,.08);bottom:100px;left:100px;animation:orbFloat 6s 2s ease-in-out infinite reverse}
-@keyframes orbFloat{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,-30px)}}
-
-/* grid lines */
-.hero-grid{
-  position:absolute;inset:0;opacity:.04;
-  background-image:linear-gradient(rgba(255,255,255,1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,1) 1px,transparent 1px);
-  background-size:60px 60px;
+/* ─── REDUCED MOTION ────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
 }
 
-.hero-content{position:relative;z-index:1;max-width:650px}
-.hero-badge{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(0,229,195,.1);border:1px solid rgba(0,229,195,.2);
-  color:var(--mint);font-size:12px;font-weight:600;padding:6px 14px;border-radius:20px;
-  margin-bottom:28px;letter-spacing:.04em;
+/* ─── UTILITY ────────────────────────────────────────────────── */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
 }
-.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--mint);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+@media (max-width: 640px) { .container { padding: 0 20px; } }
 
-.hero h1{
-  font-family:var(--serif);font-size:clamp(48px,7vw,80px);font-weight:800;
-  line-height:1.05;letter-spacing:-2px;margin-bottom:24px;
+/* ─── TYPOGRAPHY SCALE ───────────────────────────────────────── */
+.t-display {
+  font-family: var(--serif);
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
 }
-.hero h1 em{
-  font-style:normal;
-  background:linear-gradient(90deg,var(--mint),#00B4FF);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+.t-heading {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
 }
-.hero-sub{font-size:18px;color:var(--text);line-height:1.7;max-width:480px;margin-bottom:40px;font-weight:300}
-.hero-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.btn-primary{
-  background:var(--mint);color:var(--navy);font-weight:700;font-size:15px;
-  padding:14px 30px;border-radius:10px;text-decoration:none;border:none;cursor:pointer;
-  transition:all .25s;display:inline-flex;align-items:center;gap:8px;font-family:var(--font);
+.t-subheading {
+  font-family: var(--serif);
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 400;
+  line-height: 1.3;
 }
-.btn-primary:hover{background:var(--mint2);transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,229,195,.25)}
-.btn-ghost{
-  color:var(--white);font-weight:500;font-size:15px;padding:14px 30px;border-radius:10px;
-  text-decoration:none;border:1px solid rgba(255,255,255,.15);transition:all .25s;
-  display:inline-flex;align-items:center;gap:8px;
+.t-label {
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--eucalyptus);
 }
-.btn-ghost:hover{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.05)}
+.t-body { font-size: 1rem; line-height: 1.75; color: var(--text-mid); font-weight: 300; }
+.t-small { font-size: 0.85rem; line-height: 1.65; color: var(--text-soft); }
 
-/* floating visual */
-.hero-visual{
-  position:absolute;right:60px;top:50%;transform:translateY(-50%);
-  width:420px;z-index:1;opacity:.95;
+/* ─── BUTTONS ────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--sans); font-size: 0.85rem; font-weight: 500;
+  letter-spacing: 0.04em; border-radius: 2px;
+  padding: 14px 28px; transition: all .3s var(--ease);
 }
-.hero-card{
-  background:rgba(15,30,56,.8);backdrop-filter:blur(20px);
-  border:1px solid rgba(0,229,195,.15);border-radius:20px;padding:28px;
-  animation:cardFloat 5s ease-in-out infinite;
+.btn-primary {
+  background: var(--brass); color: #fff;
 }
-@keyframes cardFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-.card-head{display:flex;align-items:center;gap:12px;margin-bottom:20px}
-.card-av{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--mint),#00B4FF);
-  display:flex;align-items:center;justify-content:center;font-size:20px}
-.card-name{font-weight:600;font-size:15px}
-.card-role{font-size:12px;color:var(--text2)}
-.card-stat-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
-.card-stat{background:rgba(0,229,195,.07);border:1px solid rgba(0,229,195,.12);border-radius:10px;padding:12px}
-.card-stat-num{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--mint)}
-.card-stat-label{font-size:11px;color:var(--text2);margin-top:2px}
-.card-appt{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.04);border-radius:8px;margin-bottom:8px}
-.appt-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.appt-name{font-size:13px;font-weight:500}
-.appt-time{font-size:11px;color:var(--text2)}
-.appt-badge{margin-left:auto;font-size:10px;padding:3px 8px;border-radius:10px}
-.appt-badge.confirmed{background:rgba(0,229,195,.15);color:var(--mint)}
-.appt-badge.upcoming{background:rgba(244,197,66,.12);color:var(--gold)}
+.btn-primary:hover { background: var(--brass-lt); transform: translateY(-1px); }
+.btn-outline {
+  border: 1px solid currentColor; color: var(--teal);
+}
+.btn-outline:hover { background: var(--teal); color: #fff; }
+.btn-ghost {
+  color: rgba(255,255,255,.8); border: 1px solid rgba(255,255,255,.25);
+  padding: 12px 24px;
+}
+.btn-ghost:hover { background: rgba(255,255,255,.1); color: #fff; }
+.btn-arrow::after { content: '→'; transition: transform .25s var(--ease); }
+.btn-arrow:hover::after { transform: translateX(4px); }
 
-/* floating chips */
-.chip{
-  position:absolute;background:rgba(15,30,56,.9);backdrop-filter:blur(10px);
-  border:1px solid rgba(0,229,195,.15);border-radius:12px;padding:10px 16px;
-  font-size:13px;font-weight:500;white-space:nowrap;
+/* ─── REVEAL ANIMATION ───────────────────────────────────────── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity .9s var(--ease-out), transform .9s var(--ease-out);
 }
-.chip1{top:15%;right:440px;animation:chipFloat 4s 1s ease-in-out infinite}
-.chip2{bottom:20%;right:450px;animation:chipFloat 4s ease-in-out infinite}
-@keyframes chipFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+[data-reveal="right"] { transform: translateX(-18px); }
+[data-reveal="left"]  { transform: translateX(18px); }
+[data-reveal="fade"]  { transform: none; }
+[data-reveal].revealed { opacity: 1; transform: none; }
+[data-delay="1"] { transition-delay: .12s; }
+[data-delay="2"] { transition-delay: .24s; }
+[data-delay="3"] { transition-delay: .36s; }
+[data-delay="4"] { transition-delay: .48s; }
 
-/* ── STATS STRIP ─────────────────────────────────────────────── */
-.stats-strip{
-  background:rgba(0,229,195,.05);border-top:1px solid rgba(0,229,195,.1);border-bottom:1px solid rgba(0,229,195,.1);
-  padding:40px 60px;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;
+/* ─── ══════════════════════════════════════════════════════════ */
+/*     NAVIGATION                                                 */
+/* ══════════════════════════════════════════════════════════════ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  padding: 0 40px; height: 72px;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: background .5s var(--ease), border-color .5s var(--ease), height .3s var(--ease);
+  border-bottom: 1px solid transparent;
 }
-.stat-item{text-align:center}
-.stat-num{font-family:var(--serif);font-size:40px;font-weight:800;color:var(--mint);display:block}
-.stat-label{font-size:13px;color:var(--text2);margin-top:4px}
+.nav.pinned {
+  background: rgba(247,244,238,.96);
+  backdrop-filter: blur(16px);
+  border-color: var(--mist-dk);
+  height: 60px;
+}
+.nav.pinned .nav-logo span { color: var(--teal) !important; }
+.nav.pinned .nav-logo svg path { stroke-opacity: 1; }
+.nav-logo { display: flex; align-items: center; gap: 10px; }
+.nav-links {
+  display: flex; align-items: center; gap: 36px;
+}
+.nav-links a {
+  font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,.8);
+  transition: color .25s; letter-spacing: .02em;
+}
+.nav.pinned .nav-links a { color: var(--text-mid); }
+.nav-links a:hover, .nav.pinned .nav-links a:hover { color: var(--teal); }
+.nav-cta-wrap { display: flex; align-items: center; gap: 16px; }
+.nav .btn-primary { padding: 10px 22px; font-size: 0.8rem; }
+.nav-menu-btn {
+  display: none; flex-direction: column; gap: 5px; padding: 8px; border-radius: 4px;
+}
+.nav-menu-btn span {
+  display: block; width: 22px; height: 1.5px; background: rgba(255,255,255,.8);
+  transition: transform .3s, opacity .3s;
+}
+.nav.pinned .nav-menu-btn span { background: var(--teal); }
+@media (max-width: 900px) {
+  .nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .nav-menu-btn { display: flex; }
+  .nav .btn-primary { display: none; }
+}
 
-/* ── SECTION SHARED ──────────────────────────────────────────── */
-section{padding:100px 60px}
-.section-eyebrow{
-  display:inline-flex;align-items:center;gap:8px;
-  font-size:12px;font-weight:600;color:var(--mint);letter-spacing:.08em;
-  margin-bottom:16px;
+/* mobile drawer */
+.nav-drawer {
+  position: fixed; inset: 0; z-index: 190;
+  background: var(--teal); display: flex; flex-direction: column;
+  justify-content: center; padding: 80px 40px 40px;
+  transform: translateX(100%); transition: transform .4s var(--ease-out);
 }
-.eyebrow-line{width:28px;height:1.5px;background:var(--mint)}
-h2{font-family:var(--serif);font-size:clamp(34px,4vw,52px);font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin-bottom:20px}
-.section-sub{font-size:17px;color:var(--text);line-height:1.7;max-width:520px}
+.nav-drawer.open { transform: none; }
+.nav-drawer a {
+  font-family: var(--serif); font-size: 2.2rem; font-weight: 300;
+  color: var(--porcelain); display: block; padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  transition: color .2s;
+}
+.nav-drawer a:hover { color: var(--euclid-lt); }
+.nav-drawer .drawer-cta { margin-top: 32px; }
 
-/* ── SERVICES ────────────────────────────────────────────────── */
-.services{background:var(--navy2)}
-.services-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
-  border:1px solid rgba(255,255,255,.06);border-radius:20px;overflow:hidden;margin-top:56px;
+/* ─── ══════════════════════════════════════════════════════════ */
+/*     HERO                                                       */
+/* ══════════════════════════════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  background: var(--teal);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  position: relative; overflow: hidden;
 }
-.service-card{
-  background:var(--navy);padding:36px 32px;transition:background .3s;cursor:default;position:relative;overflow:hidden;
-}
-.service-card::before{
-  content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,229,195,.08) 0%,transparent 60%);
-  opacity:0;transition:opacity .3s;
-}
-.service-card:hover{background:var(--navy3)}
-.service-card:hover::before{opacity:1}
-.service-icon{font-size:36px;margin-bottom:20px;display:block}
-.service-title{font-family:var(--serif);font-size:20px;font-weight:700;margin-bottom:10px}
-.service-desc{font-size:14px;color:var(--text);line-height:1.65}
-.service-tag{
-  display:inline-block;margin-top:14px;font-size:11px;font-weight:600;
-  color:var(--mint);background:rgba(0,229,195,.1);padding:4px 10px;border-radius:6px;
+.hero::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px; z-index: 10;
+  background: linear-gradient(90deg, transparent, rgba(120,155,146,.3), rgba(181,139,85,.3), transparent);
 }
 
-/* ── DOCTORS ─────────────────────────────────────────────────── */
-.doctors-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:52px}
-.doctors-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
-.doctor-card{
-  background:var(--navy2);border:1px solid rgba(255,255,255,.06);border-radius:20px;
-  padding:28px;display:flex;gap:22px;align-items:flex-start;transition:all .3s;
+/* ambient gradient layers */
+.hero-ambient {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 55% at 78% 30%, rgba(120,155,146,.18) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 70% at 15% 85%, rgba(181,139,85,.08) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 40% at 50% 5%, rgba(247,244,238,.04) 0%, transparent 50%),
+    linear-gradient(170deg, #0A2029 0%, #102B35 45%, #1A3D4A 100%);
 }
-.doctor-card:hover{border-color:rgba(0,229,195,.2);transform:translateY(-3px);box-shadow:0 20px 60px rgba(0,0,0,.3)}
-.doctor-av{
-  width:72px;height:72px;flex-shrink:0;border-radius:16px;
-  background:linear-gradient(135deg,var(--navy3),var(--navy));
-  border:1px solid rgba(0,229,195,.15);display:flex;align-items:center;justify-content:center;
-  font-family:var(--serif);font-size:24px;font-weight:800;color:var(--mint);
-}
-.doctor-name{font-family:var(--serif);font-size:19px;font-weight:700;margin-bottom:4px}
-.doctor-spec{font-size:13px;color:var(--mint);font-weight:500;margin-bottom:10px}
-.doctor-bio{font-size:13px;color:var(--text);line-height:1.6;margin-bottom:14px}
-.doctor-tags{display:flex;flex-wrap:wrap;gap:6px}
-.doctor-tag{font-size:11px;color:var(--text2);background:rgba(255,255,255,.05);padding:4px 10px;border-radius:6px}
-.available-badge{
-  display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--mint);
-  background:rgba(0,229,195,.1);padding:4px 10px;border-radius:6px;margin-top:8px;
-}
-.avail-dot{width:6px;height:6px;border-radius:50%;background:var(--mint);animation:pulse 2s infinite}
 
-/* ── HOW IT WORKS ────────────────────────────────────────────── */
-.how{background:var(--navy2)}
-.how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:56px;position:relative}
-.how-grid::before{
-  content:'';position:absolute;top:36px;left:calc(12.5% + 20px);right:calc(12.5% + 20px);
-  height:1px;background:linear-gradient(90deg,var(--mint),rgba(0,180,255,.5),var(--mint));
-  z-index:0;
+/* animated contour SVG */
+.hero-contour {
+  position: absolute; inset: 0; z-index: 1; opacity: .18; pointer-events: none;
 }
-.how-step{text-align:center;padding:0 20px;position:relative;z-index:1}
-.how-icon{
-  width:72px;height:72px;border-radius:20px;margin:0 auto 20px;
-  background:var(--navy3);border:1px solid rgba(0,229,195,.2);
-  display:flex;align-items:center;justify-content:center;font-size:28px;position:relative;
-  transition:all .3s;
+.contour-path {
+  fill: none; stroke: var(--euclid-lt); stroke-width: 0.6;
+  stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
+  animation: drawContour 4s 1.2s var(--ease-out) forwards;
 }
-.how-step:hover .how-icon{background:rgba(0,229,195,.1);border-color:var(--mint);transform:translateY(-4px)}
-.how-num{
-  position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;
-  background:var(--mint);color:var(--navy);font-size:11px;font-weight:700;
-  display:flex;align-items:center;justify-content:center;
-}
-.how-title{font-family:var(--serif);font-size:17px;font-weight:700;margin-bottom:8px}
-.how-desc{font-size:13px;color:var(--text);line-height:1.6}
+@keyframes drawContour { to { stroke-dashoffset: 0; } }
 
-/* ── TESTIMONIALS ────────────────────────────────────────────── */
-.testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:52px}
-.testi-card{
-  background:var(--navy2);border:1px solid rgba(255,255,255,.06);border-radius:20px;padding:28px;
-  position:relative;transition:all .3s;
+/* slow ambient glow pulse */
+.hero-glow {
+  position: absolute; z-index: 1; pointer-events: none;
+  border-radius: 50%; filter: blur(90px);
+  animation: glowPulse 8s ease-in-out infinite;
 }
-.testi-card:hover{border-color:rgba(0,229,195,.15);transform:translateY(-3px)}
-.testi-quote{font-size:48px;color:var(--mint);opacity:.2;font-family:Georgia,serif;line-height:.8;margin-bottom:14px}
-.testi-text{font-size:15px;color:var(--text);line-height:1.75;margin-bottom:20px;font-style:italic}
-.testi-author{display:flex;align-items:center;gap:12px}
-.testi-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--mint),#00B4FF);
-  display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--navy);font-size:14px}
-.testi-name{font-weight:600;font-size:14px}
-.testi-loc{font-size:12px;color:var(--text2)}
-.stars{color:var(--gold);font-size:13px;margin-bottom:12px;letter-spacing:2px}
+.hero-glow-1 {
+  width: 600px; height: 600px; top: -150px; right: -80px;
+  background: rgba(120,155,146,.10);
+}
+.hero-glow-2 {
+  width: 400px; height: 400px; bottom: 60px; left: -60px;
+  background: rgba(181,139,85,.06);
+  animation-delay: 3s;
+}
+@keyframes glowPulse {
+  0%, 100% { opacity: .6; transform: scale(1); }
+  50%       { opacity: 1;  transform: scale(1.08); }
+}
 
-/* ── CTA SECTION ────────────────────────────────────────────── */
-.cta-section{
-  margin:0 60px 80px;border-radius:28px;padding:80px;
-  background:linear-gradient(135deg,rgba(0,229,195,.12) 0%,rgba(0,180,255,.08) 50%,rgba(0,229,195,.06) 100%);
-  border:1px solid rgba(0,229,195,.2);text-align:center;position:relative;overflow:hidden;
+.hero-inner {
+  position: relative; z-index: 2;
+  display: grid; grid-template-columns: 1fr 1fr; align-items: end;
+  padding: 0 80px 80px; gap: 60px; min-height: 100vh;
 }
-.cta-section::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(0,229,195,.05) 0%,transparent 70%);
+.hero-content { padding-top: 120px; padding-bottom: 20px; }
+.hero-eyebrow {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 32px;
+  opacity: 0; transform: translateY(12px);
+  animation: heroFade .8s 1.8s var(--ease-out) forwards;
 }
-.cta-section h2{margin:0 auto 16px;max-width:520px}
-.cta-section p{color:var(--text);margin:0 auto 36px;max-width:420px;font-size:16px}
-.cta-actions{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;position:relative}
+.eyebrow-rule { width: 32px; height: 1px; background: var(--brass); flex-shrink: 0; }
+.hero-title {
+  opacity: 0; transform: translateY(20px);
+  animation: heroFade 1s 2s var(--ease-out) forwards;
+}
+.hero-title .t-display {
+  color: var(--porcelain);
+  display: block;
+}
+.hero-title em {
+  font-style: italic; color: var(--euclid-lt);
+}
+.hero-sub {
+  margin-top: 28px; max-width: 400px;
+  opacity: 0; transform: translateY(16px);
+  animation: heroFade .9s 2.3s var(--ease-out) forwards;
+}
+.hero-actions {
+  display: flex; align-items: center; gap: 16px; margin-top: 40px; flex-wrap: wrap;
+  opacity: 0; transform: translateY(14px);
+  animation: heroFade .8s 2.6s var(--ease-out) forwards;
+}
+@keyframes heroFade { to { opacity: 1; transform: none; } }
 
-/* ── FOOTER ──────────────────────────────────────────────────── */
-footer{
-  padding:60px 60px 40px;border-top:1px solid rgba(255,255,255,.06);
+.hero-aside {
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding-bottom: 80px;
+  opacity: 0; transform: translateX(20px);
+  animation: heroFade 1.1s 2.8s var(--ease-out) forwards;
 }
-.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px}
-.footer-brand{font-family:var(--serif);font-size:22px;font-weight:800;margin-bottom:12px;
-  display:flex;align-items:center;gap:8px}
-.footer-desc{font-size:13px;color:var(--text2);line-height:1.7;max-width:260px;margin-bottom:20px}
-.footer-contact{font-size:13px;color:var(--text2);line-height:1.8}
-.footer-contact a{color:var(--mint);text-decoration:none}
-.footer-col-title{font-weight:600;font-size:13px;margin-bottom:16px;color:var(--white)}
-.footer-links{list-style:none;display:flex;flex-direction:column;gap:10px}
-.footer-links a{font-size:13px;color:var(--text2);text-decoration:none;transition:color .2s}
-.footer-links a:hover{color:var(--mint)}
-.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:28px;border-top:1px solid rgba(255,255,255,.05)}
-.footer-copy{font-size:12px;color:var(--text2)}
-.footer-badge{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:6px}
-.footer-badge span{color:var(--mint);font-weight:600}
-
-/* ── SCROLL ANIMATIONS ────────────────────────────────────────── */
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
-.reveal.visible{opacity:1;transform:translateY(0)}
-.reveal-delay-1{transition-delay:.1s}
-.reveal-delay-2{transition-delay:.2s}
-.reveal-delay-3{transition-delay:.3s}
-.reveal-delay-4{transition-delay:.4s}
-
-/* ── MOBILE ───────────────────────────────────────────────────── */
-@media(max-width:900px){
-  nav,section,.stats-strip,.cta-section,footer{padding-left:24px;padding-right:24px}
-  nav.scrolled{padding-left:24px;padding-right:24px}
-  .hero{padding:120px 24px 60px}
-  .hero-visual,.chip1,.chip2{display:none}
-  .services-grid,.doctors-grid{grid-template-columns:1fr}
-  .how-grid{grid-template-columns:1fr 1fr;gap:24px}
-  .how-grid::before{display:none}
-  .testimonials-grid{grid-template-columns:1fr}
-  .stats-strip{grid-template-columns:1fr 1fr}
-  .footer-top{grid-template-columns:1fr 1fr}
-  .cta-section{margin:0 24px 60px;padding:48px 28px}
-  .nav-links{display:none}
+.hero-specialties {
+  display: flex; flex-direction: column; gap: 1px;
+  border-left: 1px solid rgba(255,255,255,.12); padding-left: 36px;
 }
+.specialty-item {
+  padding: 22px 0; border-bottom: 1px solid rgba(255,255,255,.06);
+  transition: padding-left .3s var(--ease);
+}
+.specialty-item:last-child { border-bottom: none; }
+.specialty-item:hover { padding-left: 6px; }
+.specialty-name {
+  font-family: var(--serif); font-size: 1.3rem; font-weight: 300;
+  color: var(--porcelain); margin-bottom: 4px;
+}
+.specialty-desc { font-size: 0.8rem; color: rgba(255,255,255,.45); font-weight: 300; }
+.specialty-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.75rem; font-weight: 500; letter-spacing: .04em;
+  color: var(--euclid-lt); margin-top: 8px; transition: gap .25s;
+}
+.specialty-item:hover .specialty-link { gap: 10px; }
+.specialty-link::after { content: '→'; }
+
+.hero-scroll {
+  position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%); z-index: 3;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  opacity: 0; animation: heroFade .8s 3.2s var(--ease-out) forwards;
+}
+.scroll-text { font-size: .65rem; letter-spacing: .12em; color: rgba(255,255,255,.3); text-transform: uppercase; }
+.scroll-line { width: 1px; height: 48px; background: linear-gradient(to bottom, rgba(255,255,255,.2), transparent); animation: scrollLine 2s 3.5s ease-in-out infinite; }
+@keyframes scrollLine { 0%,100%{transform:scaleY(1)}50%{transform:scaleY(.5)} }
+
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; padding: 0 20px 60px; gap: 40px; align-items: start; }
+  .hero-aside { padding-bottom: 0; }
+  .hero-specialties { padding-left: 20px; }
+  .hero-scroll { display: none; }
+}
+
+/* ─── ══════════════════════════════════════════════════════════ */
+/*     INTRO / APPROACH                                           */
+/* ══════════════════════════════════════════════════════════════ */
+.section-intro {
+  padding: 120px 0;
+  background: var(--warm-white);
+  border-bottom: 1px solid var(--mist);
+}
+.intro-grid {
+  display: grid; grid-template-columns: 1fr 2fr; gap: 80px; align-items: start;
+}
+.intro-label-col { padding-top: 8px; }
+.intro-body-col {}
+.intro-lead {
+  font-family: var(--serif); font-size: clamp(1.4rem,2.5vw,1.85rem);
+  font-weight: 300; line-height: 1.55; color: var(--teal);
+  margin-bottom: 28px;
+}
+.intro-text { font-size: .95rem; color: var(--text-mid); line-height: 1.8; font-weight: 300; max-width: 520px; }
+.intro-pillars {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 0; border-top: 1px solid var(--mist); margin-top: 56px;
+}
+.pillar {
+  padding: 32px 28px 28px 0;
+  border-right: 1px solid var(--mist);
+}
+.pillar:last-child { border-right: none; padding-right: 0; padding-left: 28px; }
+.pillar:nth-child(2) { padding-left: 28px; }
+.pillar-num { font-family: var(--serif); font-size: .8rem; color: var(--brass); margin-bottom: 12px; }
+.pillar-title { font-family: var(--serif); font-size: 1.15rem; font-weight: 400; color: var(--teal); margin-bottom: 8px; }
+.pillar-desc { font-size: .82rem; color: var(--text-soft); line-height: 1.7; font-weight: 300; }
+@media (max-width:768px) {
+  .intro-grid { grid-template-columns:1fr; gap:40px; }
+  .intro-pillars { grid-template-columns:1fr; }
+  .pillar { border-right:none; border-bottom:1px solid var(--mist); padding:24px 0; }
+  .pillar:last-child { border-bottom:none; padding-left:0; }
+  .pillar:nth-child(2) { padding-left:0; }
+}
+
+/* ─── ══════════════════════════════════════════════════════════ */
+/*     CARE PATHWAYS                                              */
+/* ══════════════════════════════════════════════════════════════ */
+.pathways { display: grid; grid-template-columns: 1fr 1fr; }
+.pathway {
+  padding: 100px 80px; position: relative; overflow: hidden;
+  min-height: 600px; display: flex; flex-direction: column; justify-content: flex-end;
+}
+.pathway-dental { background: var(--teal); }
+.pathway-ent    { background: var(--mist); }
+.pathway-bg {
+  position: absolute; inset: 0; opacity: .12; pointer-events: none;
+}
+/* dental: smile arc SVG bg */
+.pathway-content { position: relative; z-index: 1; }
+.pathway-num {
+  font-family: var(--serif); font-size: 5rem; font-weight: 300; line-height: 1;
+  margin-bottom: 24px; opacity: .15;
+}
+.pathway-dental .pathway-num { color: var(--euclid-lt); }
+.pathway-ent    .pathway-num { color: var(--teal); }
+.pathway-label { margin-bottom: 16px; }
+.pathway-dental .t-label { color: var(--euclid-lt); }
+.pathway-ent    .t-label { color: var(--eucalyptus); }
+.pathway-heading {
+  font-family: var(--serif); font-size: clamp(1.8rem,3vw,2.6rem);
+  font-weight: 300; line-height: 1.15; margin-bottom: 18px;
+}
+.pathway-dental .pathway-heading { color: var(--porcelain); }
+.pathway-ent    .pathway-heading { color: var(--teal); }
+.pathway-text { font-size: .88rem; line-height: 1.75; font-weight: 300; max-width: 360px; margin-bottom: 36px; }
+.pathway-dental .pathway-text { color: rgba(247,244,238,.65); }
+.pathway-ent    .pathway-text { color: var(--text-mid); }
+.pathway-dental .btn-ghost { color: var(--porcelain); }
+@media (max-width:900px) {
+  .pathways { grid-template-columns:1fr; }
+  .pathway { padding:70px 32px; min-height:480px; }
+}
+
+/* ─── ══════════════════════════════════════════════════════════ */
+/*     SERVICES                                                   */
+/* ══════════════════════════════════════════════════════════════ */
+.services-section { padding: 120px 0; background: var(--porcelain); }
+.services-header { margin-bottom: 72px; }
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 0;
+  border-bottom: 1px solid var(--mist-dk);
+}
+.service-item {
+  padding: 40px 36px;
+  border-top: 1px solid var(--mist-dk);
+  border-right: 1px solid var(--mist-dk);
+  transition: background .3s var(--ease);
+  position: relative; overflow: hidden;
+}
+.service-item::before {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: var(--brass); transform: scaleX(0); transform-origin: left;
+  transition: transform .4s var(--ease-out);
+}
+.service-item:hover { background: var(--warm-white); }
+.service-item:hover::before { transform: scaleX(1); }
+.service-item:nth-child(3n) { border-right: none; }
+/* Last 3 items in the bottom row already get border-bottom via services-grid wrapper */
+.service-icon-wrap {
+  width: 40px; height: 40px; margin-bottom: 20px; color: var(--brass);
+}
+.service-cat { font-size: .65rem; letter-spacing: .1em; font-weight: 500; text-transform: uppercase; color: var(--eucalyptus); margin-bottom: 8px; }
+.service-name { font-family: var(--serif); font-size: 1.15rem; font-weight: 400; color: var(--teal); margin-bottom: 10px; }
+.service-desc { font-size: .82rem; color: var(--text-soft); line-height: 1.7; font-weight: 300; }
+@media (max-width:900px) {
+  .services-grid { grid-template-columns:repeat(2,1fr); }
+  .service-item:nth-child(3n) { border-right: 1px solid var(--mist-dk); }
+  .service-item:nth-child(2n) { border-right: none; }
+}
+@media (max-width:540px) {
+  .services-grid { grid-template-columns:1fr; }
+  .service-item { border-right: none; }
+}
+
+/* ─── ══════════════════════════════════════════════════════════ */
+/*     VISIT / TRUST                                              */
+/* ══════════════════════════════════════════════════════════════ */
+.visit-section { padding: 120px 0; background: var(--teal); }
+.visit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center; }
+.visit-content .t-label { color: var(--euclid-lt); margin-bottom: 20px; }
+.visit-content .t-heading { color: var(--porcelain); margin-bottom: 24px; }
+.visit-content .t-body { color: rgba(247,244,238,.6); max-width: 400px; }
+.visit-steps { display: flex; flex-direction: column; gap: 0; margin-top: 48px; }
+.visit-step {
+  display: grid; grid-template-columns: 48px 1fr; gap: 20px; align-items: start;
+  padding: 24px 0; border-top: 1px solid rgba(255,255,255,.08);
+}
+.visit-step:last-child { border-bottom: 1px solid rgba(255,255,255,.08); }
+.step-num {
+  font-family: var(--serif); font-size: .85rem; color: var(--brass);
+  padding-top: 2px; font-weight: 400;
+}
+.step-title { font-family: var(--serif); font-size: 1.05rem; font-weight: 400; color: var(--porcelain); margin-bottom: 4px; }
+.step-text { font-size: .82rem; color: rgba(247,244,238,.5); font-weight: 300; line-height: 1.6; }
+.visit-image-col { position: relative; }
+.visit-placeholder {
+  width: 100%; aspect-ratio: 4/5; border-radius: 2px; overflow: hidden;
+  background: var(--teal-mid); position: relative;
+  border: 1px solid rgba(255,255,255,.07);
+}
+.visit-ph-inner {
+  position: absolute; inset: 0;
+  background: linear-gradient(145deg, rgba(120,155,146,.15) 0%, transparent 60%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+}
+.ph-text { font-family: var(--serif); font-size: .9rem; color: rgba(255,255,255,.25); text-align: center; padding: 0 20px; }
+.visit-image-tag {
+  position: absolute; bottom: -20px; right: -20px;
+  background: var(--brass); color: #fff; padding: 20px 24px; border-radius: 2px;
+}
+.image-tag-num { font-family: var(--serif); font-size: 2rem; font-weight: 300; line-height: 1; }
+.image-tag-label { font-size: .7rem; letter-spacing: .06em; opacity: .8; margin-top: 2px; }
+@media (max-width:900px) {
+  .visit-grid { grid-template-columns:1fr; gap:60px; }
+  .visit-image-col { order:-1; }
+  .visit-placeholder { aspect-ratio:16/9; }
+  .visit-image-tag { bottom:-16px; right:-12px; }
+}
+
+/* ─── ══════════════════════════════════════════════════════════ */
+/*     TEAM PLACEHOLDER                                           */
+/* ══════════════════════════════════════════════════════════════ */
+.team-section { padding: 120px 0; background: var(--warm-white); border-top: 1px solid var(--mist); }
+.team-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 64px; flex-wrap: wrap; gap: 20px; }
+.team-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 2px; }
+.team-card {
+  background: var(--porcelain); padding: 40px;
+  display: grid; grid-template-columns: 90px 1fr; gap: 28px; align-items: start;
+  transition: background .3s;
+}
+.team-card:hover { background: var(--mist); }
+.team-avatar {
+  width: 90px; height: 90px; border-radius: 2px;
+  background: var(--teal-mid); overflow: hidden; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .3s var(--ease);
+}
+.team-card:hover .team-avatar { background: var(--teal-light); }
+.avatar-initials { font-family: var(--serif); font-size: 1.4rem; font-weight: 300; color: var(--euclid-lt); }
+.team-name { font-family: var(--serif); font-size: 1.2rem; font-weight: 400; color: var(--teal); margin-bottom: 4px; }
+.team-role { font-size: .75rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--eucalyptus); margin-bottom: 12px; }
+.team-note { font-size: .82rem; color: var(--text-soft); line-height: 1.65; font-weight: 300; }
+.team-placeholder-note {
+  margin-top: 32px; padding: 20px; background: rgba(181,139,85,.06);
+  border-left: 2px solid var(--brass); border-radius: 1px;
+}
+.team-placeholder-note p { font-size: .8rem; color: var(--text-soft); font-weight: 300; }
+.team-placeholder-note strong { color: var(--brass); font-weight: 500; }
+@media (max-width:768px) {
+  .team-grid { grid-template-columns:1fr; }
+  .team-card { grid-template-columns:70px 1fr; gap:20px; padding:28px; }
+  .team-avatar { width:70px; height:70px; }
+}
+
+/* ─── ══════════════════════════════════════════════════════════ */
+/*     CONTACT / APPOINTMENT                                      */
+/* ══════════════════════════════════════════════════════════════ */
+.contact-section { padding: 120px 0; background: var(--porcelain); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+.contact-left .t-heading { margin-bottom: 20px; }
+.contact-left .t-body { max-width: 360px; margin-bottom: 40px; }
+.contact-details { display: flex; flex-direction: column; gap: 0; }
+.contact-item {
+  display: grid; grid-template-columns: 80px 1fr;
+  gap: 0; padding: 20px 0; border-top: 1px solid var(--mist-dk);
+}
+.contact-item:last-child { border-bottom: 1px solid var(--mist-dk); }
+.contact-item-label { font-size: .7rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--text-soft); padding-top: 3px; }
+.contact-item-val { font-size: .9rem; color: var(--text-body); font-weight: 400; line-height: 1.6; }
+.contact-item-val a { color: var(--teal); border-bottom: 1px solid transparent; transition: border-color .2s; }
+.contact-item-val a:hover { border-color: var(--teal); }
+
+/* appointment form */
+.appt-form {
+  background: var(--teal); padding: 48px; border-radius: 2px;
+}
+.appt-form-title { font-family: var(--serif); font-size: 1.5rem; font-weight: 300; color: var(--porcelain); margin-bottom: 8px; }
+.appt-form-sub { font-size: .82rem; color: rgba(247,244,238,.5); margin-bottom: 36px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.form-field.full { grid-column: 1/-1; }
+.form-field label { font-size: .7rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: rgba(247,244,238,.45); }
+.form-field input,
+.form-field select,
+.form-field textarea {
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+  color: var(--porcelain); font-family: var(--sans); font-size: .88rem; font-weight: 300;
+  padding: 12px 16px; border-radius: 2px;
+  transition: border-color .25s, background .25s;
+  appearance: none; -webkit-appearance: none;
+}
+.form-field input::placeholder,
+.form-field textarea::placeholder { color: rgba(247,244,238,.25); }
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  outline: none; border-color: var(--brass); background: rgba(255,255,255,.1);
+}
+.form-field select { cursor: pointer; }
+.form-field textarea { resize: vertical; min-height: 90px; }
+.form-note { font-size: .72rem; color: rgba(247,244,238,.3); margin-top: 12px; margin-bottom: 20px; }
+@media (max-width:900px) {
+  .contact-grid { grid-template-columns:1fr; gap:56px; }
+  .form-row { grid-template-columns:1fr; }
+  .appt-form { padding:32px 24px; }
+}
+
+/* ─── ══════════════════════════════════════════════════════════ */
+/*     FOOTER                                                     */
+/* ══════════════════════════════════════════════════════════════ */
+.footer {
+  background: var(--teal); border-top: 1px solid rgba(255,255,255,.06);
+  padding: 80px 0 40px;
+}
+.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 64px; }
+.footer-brand { margin-bottom: 16px; }
+.footer-tagline { font-family: var(--serif); font-size: 1rem; font-weight: 300; font-style: italic; color: rgba(247,244,238,.45); margin-bottom: 28px; max-width: 260px; line-height: 1.6; }
+.footer-col-title { font-size: .68rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--euclid-lt); margin-bottom: 20px; }
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.footer-links a { font-size: .82rem; color: rgba(247,244,238,.45); transition: color .2s; font-weight: 300; }
+.footer-links a:hover { color: var(--porcelain); }
+.footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 32px; border-top: 1px solid rgba(255,255,255,.07); flex-wrap: wrap; gap: 12px; }
+.footer-copy { font-size: .75rem; color: rgba(247,244,238,.25); font-weight: 300; }
+.footer-legal { display: flex; gap: 24px; }
+.footer-legal a { font-size: .75rem; color: rgba(247,244,238,.25); transition: color .2s; }
+.footer-legal a:hover { color: rgba(247,244,238,.5); }
+@media (max-width:900px) {
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 36px; }
+}
+@media (max-width:540px) {
+  .footer-top { grid-template-columns: 1fr; }
+}
+
+/* ─── ══════════════════════════════════════════════════════════ */
+/*     MISC HELPERS                                               */
+/* ══════════════════════════════════════════════════════════════ */
+.divider { height: 1px; background: var(--mist); }
 </style>
 </head>
 <body>
 
-<!-- ── LOADER ────────────────────────────────────────────────── -->
-<div id="loader">
-  <div class="loader-logo">😁 SmileClinic</div>
-  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
-  <div class="loader-sub">Advanced Dental Care · Bengaluru</div>
-</div>
+<!-- ─── NAVIGATION ──────────────────────────────────────────── -->
+<header role="banner">
+  <nav class="nav" id="nav" aria-label="Primary navigation">
+    <a href="#" class="nav-logo" aria-label="SmileClinic home">
+      <!-- SVG LOGO: smile arc flows into breath wave -->
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+        <path d="M6 14 Q10 22 18 22 Q26 22 30 14" stroke="#789B92" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M2 20 Q6 17 9 20 Q12 23 15 20 Q18 17 21 20 Q24 23 27 20 Q30 17 34 20" stroke="#B58B55" stroke-width="1" fill="none" stroke-linecap="round"/>
+        <circle cx="18" cy="10" r="2" fill="#A8C4BB" opacity="0.6"/>
+      </svg>
+      <span style="font-family:var(--serif);font-size:1.1rem;font-weight:400;letter-spacing:.01em;color:rgba(247,244,238,.9)">SmileClinic</span>
+    </a>
 
-<!-- ── NAV ──────────────────────────────────────────────────── -->
-<nav id="nav">
-  <a href="#" class="nav-logo"><span class="nav-logo-dot"></span>SmileClinic</a>
-  <div class="nav-links">
-    <a href="#services">Services</a>
-    <a href="#doctors">Doctors</a>
-    <a href="#how">Process</a>
-    <a href="#testimonials">Reviews</a>
-    <a href="#contact">Contact</a>
-  </div>
-  <a href="https://smile-clinic-theta.vercel.app" target="_blank" class="nav-cta">Patient Login →</a>
-</nav>
-
-<!-- ── HERO ──────────────────────────────────────────────────── -->
-<section class="hero" id="home">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="orb orb1"></div>
-  <div class="orb orb2"></div>
-
-  <div class="hero-content">
-    <div class="hero-badge"><span class="badge-dot"></span>Now accepting new patients</div>
-    <h1>Your smile,<br><em>reimagined.</em></h1>
-    <p class="hero-sub">Bengaluru's most advanced dental practice — combining clinical expertise with intelligent care management to give you the best experience in dentistry.</p>
-    <div class="hero-actions">
-      <a href="https://smile-clinic-theta.vercel.app" target="_blank" class="btn-primary">Book appointment ↗</a>
-      <a href="#services" class="btn-ghost">Our services</a>
+    <div class="nav-links" role="list">
+      <a href="#dental" role="listitem">Dental Care</a>
+      <a href="#ent" role="listitem">ENT Care</a>
+      <a href="#services" role="listitem">Services</a>
+      <a href="#team" role="listitem">Our Team</a>
+      <a href="#contact" role="listitem">Contact</a>
     </div>
-  </div>
 
-  <!-- floating dashboard card -->
-  <div class="hero-visual">
-    <div class="hero-card">
-      <div class="card-head">
-        <div class="card-av">🩺</div>
-        <div>
-          <div class="card-name">Today's Overview</div>
-          <div class="card-role">SmileClinic Dashboard</div>
-        </div>
+    <div class="nav-cta-wrap">
+      <a href="#contact" class="btn btn-primary" aria-label="Book an appointment">Book Appointment</a>
+      <button class="nav-menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navDrawer" aria-label="Open navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- mobile drawer -->
+  <nav class="nav-drawer" id="navDrawer" aria-label="Mobile navigation" aria-hidden="true">
+    <a href="#dental" onclick="closeDrawer()">Dental Care</a>
+    <a href="#ent" onclick="closeDrawer()">ENT Care</a>
+    <a href="#services" onclick="closeDrawer()">Services</a>
+    <a href="#team" onclick="closeDrawer()">Our Team</a>
+    <a href="#contact" onclick="closeDrawer()">Contact</a>
+    <a href="#contact" class="btn btn-primary drawer-cta" onclick="closeDrawer()">Book Appointment</a>
+  </nav>
+</header>
+
+<!-- ─── HERO ────────────────────────────────────────────────── -->
+<main>
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="hero-ambient" aria-hidden="true"></div>
+
+  <!-- animated contour: anatomy of a smile arc + breath wave -->
+  <svg class="hero-contour" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <!-- large smile arc -->
+    <path class="contour-path" d="M 0 520 Q 200 300 420 380 Q 620 450 720 340 Q 840 220 1100 360 Q 1280 440 1440 320" stroke-linecap="round" stroke-linejoin="round" style="animation-delay:1.2s"/>
+    <!-- breath / sound wave -->
+    <path class="contour-path" d="M 0 680 Q 80 660 160 680 Q 240 700 320 680 Q 400 660 480 680 Q 560 700 640 680 Q 720 660 800 680 Q 880 700 960 680 Q 1040 660 1120 680 Q 1200 700 1280 680 Q 1360 660 1440 680" stroke-linecap="round" stroke-linejoin="round" style="stroke:rgba(181,139,85,.6);animation-delay:2s;animation-duration:5s"/>
+    <!-- inner ear contour -->
+    <path class="contour-path" d="M 1100 100 Q 1200 160 1180 280 Q 1160 380 1250 420 Q 1320 450 1380 400 Q 1440 350 1420 260" style="animation-delay:3s;animation-duration:6s"/>
+  </svg>
+
+  <div class="hero-glow hero-glow-1" aria-hidden="true"></div>
+  <div class="hero-glow hero-glow-2" aria-hidden="true"></div>
+
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="eyebrow-rule" aria-hidden="true"></span>
+        <span class="t-label" style="color:var(--euclid-lt)">Dental & ENT Specialists — Bengaluru</span>
       </div>
-      <div class="card-stat-row">
-        <div class="card-stat">
-          <div class="card-stat-num">12</div>
-          <div class="card-stat-label">Appointments today</div>
-        </div>
-        <div class="card-stat">
-          <div class="card-stat-num">98%</div>
-          <div class="card-stat-label">Satisfaction rate</div>
-        </div>
+
+      <div class="hero-title">
+        <h1 class="t-display" id="hero-heading">
+          Care that goes<br>
+          <em>deeper than the surface.</em>
+        </h1>
       </div>
-      <div class="card-appt">
-        <div class="appt-dot" style="background:var(--mint)"></div>
-        <div>
-          <div class="appt-name">Meera Patel</div>
-          <div class="appt-time">09:00 AM · Root Canal</div>
-        </div>
-        <div class="appt-badge confirmed">Confirmed</div>
+
+      <div class="hero-sub">
+        <p class="t-body" style="color:rgba(247,244,238,.6)">
+          Specialist dental and ENT care delivered with clinical precision and the unhurried attention every patient deserves.
+        </p>
       </div>
-      <div class="card-appt">
-        <div class="appt-dot" style="background:var(--gold)"></div>
-        <div>
-          <div class="appt-name">Rahul Verma</div>
-          <div class="appt-time">10:30 AM · Whitening</div>
-        </div>
-        <div class="appt-badge upcoming">Upcoming</div>
-      </div>
-      <div class="card-appt">
-        <div class="appt-dot" style="background:#00B4FF"></div>
-        <div>
-          <div class="appt-name">Sunita Rao</div>
-          <div class="appt-time">12:00 PM · Braces</div>
-        </div>
-        <div class="appt-badge confirmed">Confirmed</div>
+
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary btn-arrow">Book a consultation</a>
+        <a href="#services" class="btn btn-ghost">Explore care</a>
       </div>
     </div>
+
+    <aside class="hero-aside" aria-label="Care specialties">
+      <div class="hero-specialties">
+        <div class="specialty-item" id="dental">
+          <div class="specialty-name">Dental Care</div>
+          <div class="specialty-desc">Preventive, restorative, cosmetic and orthodontic services</div>
+          <a href="#services" class="specialty-link" aria-label="Explore dental services">Explore dental</a>
+        </div>
+        <div class="specialty-item" id="ent">
+          <div class="specialty-name">ENT Care</div>
+          <div class="specialty-desc">Ear, nose and throat diagnosis, treatment and surgery</div>
+          <a href="#services" class="specialty-link" aria-label="Explore ENT services">Explore ENT</a>
+        </div>
+        <div class="specialty-item">
+          <div class="specialty-name">Patient Portal</div>
+          <div class="specialty-desc">Your records, appointments, and history — always accessible</div>
+          <a href="https://smile-clinic-theta.vercel.app" target="_blank" rel="noopener" class="specialty-link" aria-label="Open patient portal">Open portal</a>
+        </div>
+      </div>
+    </aside>
   </div>
 
-  <div class="chip chip1">🤖 ML Risk Score: Low ✅</div>
-  <div class="chip chip2">📋 3 consultations updated today</div>
+  <div class="hero-scroll" aria-hidden="true">
+    <span class="scroll-text">Scroll</span>
+    <span class="scroll-line"></span>
+  </div>
 </section>
 
-<!-- ── STATS ──────────────────────────────────────────────────── -->
-<div class="stats-strip reveal">
-  <div class="stat-item">
-    <span class="stat-num">4,800+</span>
-    <div class="stat-label">Patients treated</div>
-  </div>
-  <div class="stat-item">
-    <span class="stat-num">98%</span>
-    <div class="stat-label">Patient satisfaction</div>
-  </div>
-  <div class="stat-item">
-    <span class="stat-num">12 yrs</span>
-    <div class="stat-label">Of clinical excellence</div>
-  </div>
-  <div class="stat-item">
-    <span class="stat-num">2 min</span>
-    <div class="stat-label">Average booking time</div>
-  </div>
-</div>
+<!-- ─── INTRO / APPROACH ─────────────────────────────────────── -->
+<section class="section-intro" aria-labelledby="intro-heading">
+  <div class="container">
+    <div class="intro-grid">
+      <div class="intro-label-col" data-reveal="right">
+        <div class="t-label">Our approach</div>
+      </div>
+      <div class="intro-body-col">
+        <p class="intro-lead" id="intro-heading" data-reveal>
+          We believe that exceptional care is patient-centred, unhurried, and built on trust — not just clinical outcomes.
+        </p>
+        <p class="intro-text" data-reveal data-delay="1">
+          SmileClinic brings together dental and ENT specialists under one roof with a shared philosophy: treat the whole person, explain every step, and leave you genuinely better. From a routine cleaning to complex surgical planning, the standard of care and attention never changes.
+        </p>
 
-<!-- ── SERVICES ───────────────────────────────────────────────── -->
-<section id="services" class="services">
-  <div class="reveal">
-    <div class="section-eyebrow"><span class="eyebrow-line"></span>What we offer</div>
-    <h2>Comprehensive dental care, <br>under one roof</h2>
-    <p class="section-sub">From preventive scaling to advanced orthodontics, our specialists handle every aspect of your oral health.</p>
-  </div>
-  <div class="services-grid reveal reveal-delay-2">
-    <div class="service-card">
-      <span class="service-icon">🦷</span>
-      <div class="service-title">General Dentistry</div>
-      <div class="service-desc">Routine cleanings, fillings, extractions and comprehensive oral exams. Your foundation for lifelong dental health.</div>
-      <span class="service-tag">From ₹800</span>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">✨</span>
-      <div class="service-title">Teeth Whitening</div>
-      <div class="service-desc">In-office laser whitening that delivers 2–3 shades brighter in a single 60-minute session. No sensitivity, maximum impact.</div>
-      <span class="service-tag">From ₹3,500</span>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">🔬</span>
-      <div class="service-title">Root Canal Therapy</div>
-      <div class="service-desc">Modern, nearly pain-free root canal treatment with rotary endodontics. Save your natural tooth, eliminate infection.</div>
-      <span class="service-tag">From ₹5,500</span>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">😁</span>
-      <div class="service-title">Orthodontics</div>
-      <div class="service-desc">Metal braces and clear aligner systems for children and adults. Beautifully aligned teeth for life.</div>
-      <span class="service-tag">From ₹18,000</span>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">👑</span>
-      <div class="service-title">Crowns & Bridges</div>
-      <div class="service-desc">Full ceramic porcelain crowns fabricated to match your natural tooth — indistinguishable, durable, and beautiful.</div>
-      <span class="service-tag">From ₹7,500</span>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">🛡️</span>
-      <div class="service-title">Preventive Care</div>
-      <div class="service-desc">Pit and fissure sealants, fluoride treatments, and OPG X-rays to catch problems before they become costly.</div>
-      <span class="service-tag">From ₹400</span>
+        <div class="intro-pillars" data-reveal data-delay="2">
+          <div class="pillar">
+            <div class="pillar-num">I</div>
+            <div class="pillar-title">Specialist led</div>
+            <div class="pillar-desc">Every consultation is led by a qualified specialist. No junior stand-ins, no diagnostic guesswork.</div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-num">II</div>
+            <div class="pillar-title">Evidence based</div>
+            <div class="pillar-desc">Protocols grounded in current clinical evidence and continuously updated as the field evolves.</div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-num">III</div>
+            <div class="pillar-title">Unhurried care</div>
+            <div class="pillar-desc">Appointment times that allow a proper consultation, not a rushed examination.</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ── DOCTORS ─────────────────────────────────────────────────── -->
-<section id="doctors">
-  <div class="doctors-header reveal">
-    <div>
-      <div class="section-eyebrow"><span class="eyebrow-line"></span>Our team</div>
-      <h2>Specialists who put<br>you first</h2>
+<!-- ─── CARE PATHWAYS ────────────────────────────────────────── -->
+<div class="pathways" aria-label="Care specialties">
+  <article class="pathway pathway-dental" aria-labelledby="dental-heading">
+    <!-- subtle SVG tooth contour bg -->
+    <svg class="pathway-bg" viewBox="0 0 500 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path d="M 150 500 Q 100 350 120 250 Q 140 180 200 160 Q 240 148 250 120 Q 260 148 300 160 Q 360 180 380 250 Q 400 350 350 500 Q 320 560 290 540 Q 270 530 250 540 Q 230 530 210 540 Q 180 560 150 500Z" fill="none" stroke="rgba(168,196,187,.2)" stroke-width="1"/>
+      <path d="M 50 400 Q 100 350 130 300 Q 160 250 200 230" fill="none" stroke="rgba(168,196,187,.1)" stroke-width="0.8"/>
+    </svg>
+    <div class="pathway-content">
+      <div class="pathway-num" aria-hidden="true">01</div>
+      <div class="pathway-label"><span class="t-label">Dental Care</span></div>
+      <h2 class="pathway-heading" id="dental-heading">Complete care<br>for every smile.</h2>
+      <p class="pathway-text">From preventive hygiene appointments to full-arch restorations, our dental team covers the complete spectrum of adult and paediatric oral health.</p>
+      <a href="#services" class="btn btn-ghost btn-arrow">Dental services</a>
     </div>
-    <a href="https://smile-clinic-theta.vercel.app" target="_blank" class="btn-ghost">Book now →</a>
+  </article>
+
+  <article class="pathway pathway-ent" aria-labelledby="ent-heading">
+    <!-- subtle SVG ear contour bg -->
+    <svg class="pathway-bg" viewBox="0 0 500 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path d="M 280 150 Q 350 180 370 260 Q 390 340 340 400 Q 310 440 290 480 Q 275 510 260 480 Q 250 460 255 430 Q 270 390 260 360 Q 248 330 260 300 Q 270 270 250 250" fill="none" stroke="rgba(16,43,53,.15)" stroke-width="1.2"/>
+      <path d="M 100 200 Q 160 180 200 220 Q 240 260 230 320 Q 220 360 250 400" fill="none" stroke="rgba(16,43,53,.07)" stroke-width="0.8"/>
+    </svg>
+    <div class="pathway-content">
+      <div class="pathway-num" aria-hidden="true">02</div>
+      <div class="pathway-label"><span class="t-label" style="color:var(--eucalyptus)">ENT Care</span></div>
+      <h2 class="pathway-heading" id="ent-heading">Precise care for<br>ear, nose and throat.</h2>
+      <p class="pathway-text">Diagnostic and surgical ENT care for conditions affecting hearing, breathing, voice, balance and the sinuses — managed by experienced specialists.</p>
+      <a href="#services" class="btn btn-outline btn-arrow" style="color:var(--teal)">ENT services</a>
+    </div>
+  </article>
+</div>
+
+<!-- ─── SERVICES ─────────────────────────────────────────────── -->
+<section class="services-section" id="services" aria-labelledby="services-heading">
+  <div class="container">
+    <div class="services-header">
+      <div class="t-label" data-reveal>Specialties</div>
+      <h2 class="t-heading" data-reveal data-delay="1" id="services-heading" style="color:var(--teal);max-width:480px;margin-top:16px">
+        Comprehensive care across dental and ENT disciplines.
+      </h2>
+    </div>
+
+    <div class="services-grid">
+      <!-- Dental -->
+      <div class="service-item" data-reveal>
+        <div class="service-icon-wrap" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+            <path d="M14 32 Q10 22 12 16 Q14 12 20 10 Q26 12 28 16 Q30 22 26 32 Q24 36 22 34 Q21 32 20 34 Q19 32 18 34 Q16 36 14 32Z"/>
+          </svg>
+        </div>
+        <div class="service-cat">Dental</div>
+        <div class="service-name">Preventive Dentistry</div>
+        <div class="service-desc">Scaling, polishing, fluoride application, and comprehensive oral exams to protect your teeth before problems arise.</div>
+      </div>
+
+      <div class="service-item" data-reveal data-delay="1">
+        <div class="service-icon-wrap" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+            <path d="M12 28 L20 10 L28 28"/>
+            <path d="M15.5 22 L24.5 22"/>
+            <circle cx="20" cy="34" r="2"/>
+          </svg>
+        </div>
+        <div class="service-cat">Dental</div>
+        <div class="service-name">Restorative Care</div>
+        <div class="service-desc">Tooth-coloured fillings, ceramic crowns, bridges and root canal therapy that restore function and aesthetics.</div>
+      </div>
+
+      <div class="service-item" data-reveal data-delay="2">
+        <div class="service-icon-wrap" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+            <path d="M8 24 Q14 16 20 16 Q26 16 32 24"/>
+            <path d="M12 28 Q16 22 20 22 Q24 22 28 28"/>
+          </svg>
+        </div>
+        <div class="service-cat">Dental</div>
+        <div class="service-name">Cosmetic Dentistry</div>
+        <div class="service-desc">Laser whitening, porcelain veneers, and smile design procedures for results that feel natural, not theatrical.</div>
+      </div>
+
+      <div class="service-item" data-reveal>
+        <div class="service-icon-wrap" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+            <path d="M10 20 Q14 10 20 10 Q26 10 30 20"/>
+            <path d="M12 26 L14 16"/>
+            <path d="M28 26 L26 16"/>
+            <path d="M12 26 Q16 30 20 30 Q24 30 28 26"/>
+          </svg>
+        </div>
+        <div class="service-cat">Dental</div>
+        <div class="service-name">Orthodontics</div>
+        <div class="service-desc">Fixed braces and clear aligner treatment for children and adults, planned and monitored by a specialist orthodontist.</div>
+      </div>
+
+      <!-- ENT -->
+      <div class="service-item" data-reveal data-delay="1">
+        <div class="service-icon-wrap" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+            <path d="M24 10 Q32 14 32 22 Q32 30 24 34 Q20 36 18 32 Q16 28 18 24 Q20 20 18 16"/>
+            <path d="M18 16 Q16 10 20 8 Q24 6 26 10"/>
+          </svg>
+        </div>
+        <div class="service-cat">ENT</div>
+        <div class="service-name">Ear & Hearing</div>
+        <div class="service-desc">Diagnosis and management of ear infections, hearing loss, tinnitus, wax accumulation, and balance disorders.</div>
+      </div>
+
+      <div class="service-item" data-reveal data-delay="2">
+        <div class="service-icon-wrap" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+            <path d="M20 8 Q22 12 22 18 Q22 26 20 32"/>
+            <path d="M14 14 Q17 18 17 22 Q17 26 14 28"/>
+            <path d="M26 14 Q23 18 23 22 Q23 26 26 28"/>
+            <path d="M10 20 Q14 18 17 22 Q20 26 23 22 Q26 18 30 20"/>
+          </svg>
+        </div>
+        <div class="service-cat">ENT</div>
+        <div class="service-name">Nasal & Sinus</div>
+        <div class="service-desc">Allergic rhinitis, sinusitis, deviated nasal septum, nasal polyps, and functional endoscopic sinus surgery.</div>
+      </div>
+
+      <div class="service-item" data-reveal>
+        <div class="service-icon-wrap" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+            <path d="M12 14 Q16 10 20 10 Q24 10 28 14"/>
+            <path d="M10 22 Q14 30 20 30 Q26 30 30 22"/>
+            <path d="M14 18 Q17 22 20 18 Q23 14 26 18"/>
+          </svg>
+        </div>
+        <div class="service-cat">ENT</div>
+        <div class="service-name">Throat & Voice</div>
+        <div class="service-desc">Assessment and treatment of tonsillitis, voice disorders, swallowing difficulties, and laryngeal conditions.</div>
+      </div>
+
+      <div class="service-item" data-reveal data-delay="1">
+        <div class="service-icon-wrap" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+            <circle cx="20" cy="20" r="10"/>
+            <path d="M8 20 L32 20"/>
+            <path d="M20 8 Q28 14 28 20 Q28 26 20 32"/>
+            <path d="M20 8 Q12 14 12 20 Q12 26 20 32"/>
+          </svg>
+        </div>
+        <div class="service-cat">ENT</div>
+        <div class="service-name">ENT Surgery</div>
+        <div class="service-desc">Tonsillectomy, adenoidectomy, septoplasty and functional sinus procedures performed with precision in an equipped theatre.</div>
+      </div>
+
+      <div class="service-item" data-reveal data-delay="2">
+        <div class="service-icon-wrap" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+            <path d="M10 30 L20 10 L30 30"/>
+            <path d="M14 24 Q17 20 20 22 Q23 24 26 20"/>
+          </svg>
+        </div>
+        <div class="service-cat">Dental</div>
+        <div class="service-name">Oral Surgery</div>
+        <div class="service-desc">Wisdom tooth removal, minor oral surgical procedures, and post-extraction care under local or conscious sedation.</div>
+      </div>
+    </div>
   </div>
-  <div class="doctors-grid">
-    <div class="doctor-card reveal reveal-delay-1">
-      <div class="doctor-av">PS</div>
+</section>
+
+<!-- ─── VISIT / PATIENT EXPERIENCE ──────────────────────────── -->
+<section class="visit-section" aria-labelledby="visit-heading">
+  <div class="container">
+    <div class="visit-grid">
+      <div class="visit-content">
+        <div class="t-label" data-reveal>Your first visit</div>
+        <h2 class="t-heading" id="visit-heading" data-reveal data-delay="1">What to expect when you come to us.</h2>
+        <p class="t-body" data-reveal data-delay="2">We have designed every part of the visit to feel calm, clear, and free of unnecessary waiting. Here is what a typical appointment looks like.</p>
+
+        <div class="visit-steps" data-reveal data-delay="3">
+          <div class="visit-step">
+            <div class="step-num">01</div>
+            <div>
+              <div class="step-title">Arrival & registration</div>
+              <div class="step-text">Check in at reception. Your pre-filled information means you spend less time on paperwork and more with your specialist.</div>
+            </div>
+          </div>
+          <div class="visit-step">
+            <div class="step-num">02</div>
+            <div>
+              <div class="step-title">Specialist consultation</div>
+              <div class="step-text">A thorough examination with time set aside for your questions. We explain every finding in plain language.</div>
+            </div>
+          </div>
+          <div class="visit-step">
+            <div class="step-num">03</div>
+            <div>
+              <div class="step-title">Diagnosis & plan</div>
+              <div class="step-text">A clear treatment plan, including options and their costs, before any procedure is started. Your consent, always.</div>
+            </div>
+          </div>
+          <div class="visit-step">
+            <div class="step-num">04</div>
+            <div>
+              <div class="step-title">Ongoing care</div>
+              <div class="step-text">Consultation notes and follow-up recommendations are accessible through your patient portal after every visit.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="visit-image-col" data-reveal="left">
+        <div class="visit-placeholder" role="img" aria-label="Clinic interior — photograph to be added">
+          <div class="visit-ph-inner">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+              <rect x="8" y="8" width="32" height="32" rx="2" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+              <circle cx="18" cy="20" r="5" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+              <path d="M8 36 L18 26 L26 34 L32 28 L40 36" stroke="rgba(255,255,255,.2)" stroke-width="1" fill="none"/>
+            </svg>
+            <p class="ph-text">Clinic photography<br><span style="font-size:.75rem;opacity:.6">[To be provided before launch]</span></p>
+          </div>
+        </div>
+        <div class="visit-image-tag" aria-label="Established since 2012">
+          <div class="image-tag-num">2012</div>
+          <div class="image-tag-label">Est. Bengaluru</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TEAM ─────────────────────────────────────────────────── -->
+<section class="team-section" id="team" aria-labelledby="team-heading">
+  <div class="container">
+    <div class="team-header">
       <div>
-        <div class="doctor-name">Dr. Priya Sharma</div>
-        <div class="doctor-spec">General Dentistry · BDS, MDS</div>
-        <div class="doctor-bio">8 years of experience in comprehensive dental care. Specialises in restorative procedures and preventive dentistry. Known for a gentle, patient-first approach.</div>
-        <div class="doctor-tags">
-          <span class="doctor-tag">Root Canal</span>
-          <span class="doctor-tag">Fillings</span>
-          <span class="doctor-tag">Scaling</span>
-          <span class="doctor-tag">Extractions</span>
+        <div class="t-label" data-reveal>Our specialists</div>
+        <h2 class="t-heading" data-reveal data-delay="1" id="team-heading" style="color:var(--teal);margin-top:16px">The clinicians behind your care.</h2>
+      </div>
+      <a href="#contact" class="btn btn-outline btn-arrow" data-reveal>Book a consultation</a>
+    </div>
+
+    <div class="team-grid">
+      <div class="team-card" data-reveal>
+        <div class="team-avatar" role="img" aria-label="Dr. Priya Sharma">
+          <div class="avatar-initials" aria-hidden="true">PS</div>
         </div>
-        <div class="available-badge"><span class="avail-dot"></span>Accepting patients</div>
+        <div>
+          <div class="team-name">Dr. Priya Sharma</div>
+          <div class="team-role">General & Restorative Dentistry</div>
+          <p class="team-note">BDS, MDS — specialising in restorative procedures, preventive care, and cosmetic dentistry. Known for a calm, patient-first approach over eight years of practice.</p>
+        </div>
+      </div>
+
+      <div class="team-card" data-reveal data-delay="1">
+        <div class="team-avatar" role="img" aria-label="Dr. Arjun Nair">
+          <div class="avatar-initials" aria-hidden="true">AN</div>
+        </div>
+        <div>
+          <div class="team-name">Dr. Arjun Nair</div>
+          <div class="team-role">Orthodontics</div>
+          <p class="team-note">BDS, MDS (Orthodontics) — ten years of specialist orthodontic practice. Certified in fixed appliances and clear aligner systems for children and adults.</p>
+        </div>
+      </div>
+
+      <div class="team-card" data-reveal data-delay="2" style="grid-column:1/-1">
+        <div class="team-avatar" style="background:rgba(181,139,85,.12)" role="img" aria-label="ENT Specialist placeholder">
+          <div class="avatar-initials" style="color:var(--brass-lt)" aria-hidden="true">ENT</div>
+        </div>
+        <div>
+          <div class="team-name" style="color:var(--text-soft)">[ENT Specialist Name]</div>
+          <div class="team-role">Ear, Nose & Throat Surgery</div>
+          <p class="team-note" style="color:var(--text-soft)">Specialist profile to be added before launch. The clinic's ENT consultant brings surgical and diagnostic expertise across the full spectrum of ear, nose and throat conditions.</p>
+        </div>
       </div>
     </div>
-    <div class="doctor-card reveal reveal-delay-2">
-      <div class="doctor-av">AN</div>
+
+    <div class="team-placeholder-note" data-reveal data-delay="3">
+      <p><strong>Before launch:</strong> Please provide doctor photographs, full qualifications, registration numbers, and any awards or publications. All content should be verified by the clinic before going live. No clinical claims or patient statistics have been added.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT / APPOINTMENT ────────────────────────────────── -->
+<section class="contact-section" id="contact" aria-labelledby="contact-heading">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-left">
+        <div class="t-label" data-reveal>Book an appointment</div>
+        <h2 class="t-heading" data-reveal data-delay="1" id="contact-heading" style="color:var(--teal);margin-top:16px">We would be glad<br>to see you.</h2>
+        <p class="t-body" data-reveal data-delay="2">Contact us to schedule a dental or ENT consultation. We will confirm your appointment within one business day.</p>
+
+        <div class="contact-details" data-reveal data-delay="3">
+          <div class="contact-item">
+            <div class="contact-item-label">Phone</div>
+            <div class="contact-item-val"><a href="tel:[Phone Number]">[Phone Number]</a></div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-label">Email</div>
+            <div class="contact-item-val"><a href="mailto:[Email Address]">[Email Address]</a></div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-label">Location</div>
+            <div class="contact-item-val">[Clinic Address]<br>Bengaluru</div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-label">Hours</div>
+            <div class="contact-item-val">Mon – Fri &nbsp; 9:00 – 19:00<br>Saturday &nbsp;&nbsp;&nbsp; 9:00 – 17:00</div>
+          </div>
+        </div>
+
+        <div style="margin-top:36px" data-reveal data-delay="4">
+          <p class="t-small">Existing patients may view records, appointments and billing through the</p>
+          <a href="https://smile-clinic-theta.vercel.app" target="_blank" rel="noopener" class="btn btn-outline btn-arrow" style="margin-top:12px;display:inline-flex">Patient portal</a>
+        </div>
+      </div>
+
+      <div data-reveal="left">
+        <form class="appt-form" aria-label="Appointment request form" novalidate>
+          <div class="appt-form-title">Request a consultation</div>
+          <p class="appt-form-sub">Complete the form and we will be in touch to confirm your appointment.</p>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="f-name">Full name</label>
+              <input type="text" id="f-name" name="name" autocomplete="name" required placeholder="Your name"/>
+            </div>
+            <div class="form-field">
+              <label for="f-phone">Phone number</label>
+              <input type="tel" id="f-phone" name="phone" autocomplete="tel" required placeholder="+91"/>
+            </div>
+          </div>
+
+          <div class="form-field full">
+            <label for="f-email">Email address</label>
+            <input type="email" id="f-email" name="email" autocomplete="email" placeholder="you@email.com"/>
+          </div>
+
+          <div class="form-field full">
+            <label for="f-specialty">Specialty needed</label>
+            <select id="f-specialty" name="specialty">
+              <option value="">Select a specialty</option>
+              <optgroup label="Dental Care">
+                <option>Preventive dentistry</option>
+                <option>Restorative / fillings</option>
+                <option>Root canal therapy</option>
+                <option>Cosmetic dentistry</option>
+                <option>Orthodontics / braces</option>
+                <option>Oral surgery</option>
+              </optgroup>
+              <optgroup label="ENT Care">
+                <option>Ear / hearing concerns</option>
+                <option>Nasal / sinus issues</option>
+                <option>Throat / voice concerns</option>
+                <option>ENT surgical consultation</option>
+              </optgroup>
+              <option>Not sure — general enquiry</option>
+            </select>
+          </div>
+
+          <div class="form-field full">
+            <label for="f-message">Brief description (optional)</label>
+            <textarea id="f-message" name="message" placeholder="Tell us a little about your concern or how we can help"></textarea>
+          </div>
+
+          <p class="form-note">Your information is held in confidence and used only to arrange your appointment. This form does not connect to a live booking system — the clinic team will contact you directly to confirm.</p>
+
+          <button type="submit" class="btn btn-primary btn-arrow" style="width:100%;justify-content:center">Send request</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ─── FOOTER ────────────────────────────────────────────────── -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-top">
       <div>
-        <div class="doctor-name">Dr. Arjun Nair</div>
-        <div class="doctor-spec">Orthodontics · BDS, MDS (Ortho)</div>
-        <div class="doctor-bio">10 years specialising in orthodontic treatment for children and adults. Certified in both traditional braces and modern clear aligner systems.</div>
-        <div class="doctor-tags">
-          <span class="doctor-tag">Braces</span>
-          <span class="doctor-tag">Clear Aligners</span>
-          <span class="doctor-tag">Retainers</span>
-          <span class="doctor-tag">Jaw Alignment</span>
+        <div class="footer-brand">
+          <a href="#" aria-label="SmileClinic — back to top" style="display:flex;align-items:center;gap:10px">
+            <svg width="28" height="28" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+              <path d="M6 14 Q10 22 18 22 Q26 22 30 14" stroke="#789B92" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <path d="M2 20 Q6 17 9 20 Q12 23 15 20 Q18 17 21 20 Q24 23 27 20 Q30 17 34 20" stroke="#B58B55" stroke-width="1" fill="none" stroke-linecap="round"/>
+            </svg>
+            <span style="font-family:var(--serif);font-size:1rem;font-weight:400;color:var(--porcelain)">SmileClinic</span>
+          </a>
         </div>
-        <div class="available-badge"><span class="avail-dot"></span>Accepting patients</div>
+        <p class="footer-tagline">Dental and ENT care that takes you seriously.</p>
+        <p style="font-size:.75rem;color:rgba(247,244,238,.2);font-weight:300;line-height:1.6;">[Clinic Address]<br>Bengaluru</p>
       </div>
-    </div>
-  </div>
-</section>
 
-<!-- ── HOW IT WORKS ────────────────────────────────────────────── -->
-<section id="how" class="how">
-  <div class="reveal" style="text-align:center;max-width:560px;margin:0 auto 0">
-    <div class="section-eyebrow"><span class="eyebrow-line"></span>Our process</div>
-    <h2>From booking to<br>better smile</h2>
-  </div>
-  <div class="how-grid">
-    <div class="how-step reveal reveal-delay-1">
-      <div class="how-icon">📱<span class="how-num">1</span></div>
-      <div class="how-title">Book online</div>
-      <div class="how-desc">Schedule in under 2 minutes through our patient portal — pick your doctor, date, and treatment.</div>
-    </div>
-    <div class="how-step reveal reveal-delay-2">
-      <div class="how-icon">📋<span class="how-num">2</span></div>
-      <div class="how-title">Share history</div>
-      <div class="how-desc">Your medical notes, allergies, and previous treatments are stored securely and shared with your doctor.</div>
-    </div>
-    <div class="how-step reveal reveal-delay-3">
-      <div class="how-icon">🩺<span class="how-num">3</span></div>
-      <div class="how-title">Get treated</div>
-      <div class="how-desc">Arrive, get seen, and receive world-class treatment from a specialist who already knows your history.</div>
-    </div>
-    <div class="how-step reveal reveal-delay-4">
-      <div class="how-icon">📊<span class="how-num">4</span></div>
-      <div class="how-title">Track progress</div>
-      <div class="how-desc">Log into your patient portal anytime to review consultation notes, upcoming visits, and invoices.</div>
-    </div>
-  </div>
-</section>
+      <div>
+        <div class="footer-col-title">Dental Care</div>
+        <ul class="footer-links">
+          <li><a href="#services">Preventive Dentistry</a></li>
+          <li><a href="#services">Restorative Care</a></li>
+          <li><a href="#services">Cosmetic Dentistry</a></li>
+          <li><a href="#services">Orthodontics</a></li>
+          <li><a href="#services">Oral Surgery</a></li>
+        </ul>
+      </div>
 
-<!-- ── TESTIMONIALS ────────────────────────────────────────────── -->
-<section id="testimonials">
-  <div class="reveal">
-    <div class="section-eyebrow"><span class="eyebrow-line"></span>Patient stories</div>
-    <h2>Real results, real smiles</h2>
-  </div>
-  <div class="testimonials-grid">
-    <div class="testi-card reveal reveal-delay-1">
-      <div class="stars">★★★★★</div>
-      <div class="testi-quote">"</div>
-      <div class="testi-text">Dr. Priya completely transformed my fear of dentists. The entire root canal procedure was painless and I was in and out in 90 minutes. The online system made booking and tracking everything effortless.</div>
-      <div class="testi-author">
-        <div class="testi-av">MP</div>
-        <div>
-          <div class="testi-name">Meera P.</div>
-          <div class="testi-loc">Koramangala, Bengaluru</div>
-        </div>
+      <div>
+        <div class="footer-col-title">ENT Care</div>
+        <ul class="footer-links">
+          <li><a href="#services">Ear & Hearing</a></li>
+          <li><a href="#services">Nasal & Sinus</a></li>
+          <li><a href="#services">Throat & Voice</a></li>
+          <li><a href="#services">ENT Surgery</a></li>
+        </ul>
       </div>
-    </div>
-    <div class="testi-card reveal reveal-delay-2">
-      <div class="stars">★★★★★</div>
-      <div class="testi-quote">"</div>
-      <div class="testi-text">Dr. Arjun's orthodontic expertise is exceptional. 18 months of braces treatment and my teeth are perfectly aligned. What I loved most was being able to see my treatment history in the patient portal.</div>
-      <div class="testi-author">
-        <div class="testi-av">SR</div>
-        <div>
-          <div class="testi-name">Sunita R.</div>
-          <div class="testi-loc">HSR Layout, Bengaluru</div>
-        </div>
-      </div>
-    </div>
-    <div class="testi-card reveal reveal-delay-3">
-      <div class="stars">★★★★★</div>
-      <div class="testi-quote">"</div>
-      <div class="testi-text">The clinic's technology is impressive. Got an SMS reminder, my appointment was on time, and the doctor already knew about my penicillin allergy before I said anything. That attention to detail builds real trust.</div>
-      <div class="testi-author">
-        <div class="testi-av">RV</div>
-        <div>
-          <div class="testi-name">Rahul V.</div>
-          <div class="testi-loc">Indiranagar, Bengaluru</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ── CTA ────────────────────────────────────────────────────── -->
-<div class="cta-section reveal" id="contact">
-  <div class="section-eyebrow" style="justify-content:center"><span class="eyebrow-line"></span>Get started</div>
-  <h2>Ready for your best smile?</h2>
-  <p>Book your first appointment online or call us directly. New patients always welcome.</p>
-  <div class="cta-actions">
-    <a href="https://smile-clinic-theta.vercel.app" target="_blank" class="btn-primary">Book appointment →</a>
-    <a href="tel:+919876543210" class="btn-ghost">📞 +91 98765 43210</a>
-  </div>
-  <div style="margin-top:28px;font-size:13px;color:var(--text2)">
-    Mon–Fri 9am–7pm &nbsp;·&nbsp; Sat 9am–5pm &nbsp;·&nbsp; Koramangala, Bengaluru
-  </div>
-</div>
-
-<!-- ── FOOTER ─────────────────────────────────────────────────── -->
-<footer>
-  <div class="footer-top">
-    <div>
-      <div class="footer-brand"><span class="nav-logo-dot"></span>SmileClinic</div>
-      <div class="footer-desc">Advanced dental care powered by intelligent clinic management. Serving Bengaluru since 2012.</div>
-      <div class="footer-contact">
-        📍 42, 5th Cross, Koramangala, Bengaluru 560034<br>
-        📞 <a href="tel:+919876543210">+91 98765 43210</a><br>
-        ✉️ <a href="mailto:hello@smileclinic.in">hello@smileclinic.in</a>
+      <div>
+        <div class="footer-col-title">Patient</div>
+        <ul class="footer-links">
+          <li><a href="https://smile-clinic-theta.vercel.app" target="_blank" rel="noopener">Patient portal</a></li>
+          <li><a href="#contact">Book appointment</a></li>
+          <li><a href="#team">Our specialists</a></li>
+          <li><a href="#contact">Contact us</a></li>
+        </ul>
       </div>
     </div>
-    <div>
-      <div class="footer-col-title">Services</div>
-      <ul class="footer-links">
-        <li><a href="#services">General Dentistry</a></li>
-        <li><a href="#services">Teeth Whitening</a></li>
-        <li><a href="#services">Root Canal</a></li>
-        <li><a href="#services">Orthodontics</a></li>
-        <li><a href="#services">Crowns & Bridges</a></li>
-      </ul>
+
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 SmileClinic, Bengaluru. All rights reserved.</p>
+      <nav class="footer-legal" aria-label="Legal links">
+        <a href="#">Privacy policy</a>
+        <a href="#">Terms of use</a>
+      </nav>
     </div>
-    <div>
-      <div class="footer-col-title">Clinic</div>
-      <ul class="footer-links">
-        <li><a href="#doctors">Our Doctors</a></li>
-        <li><a href="#how">How it works</a></li>
-        <li><a href="#testimonials">Patient stories</a></li>
-        <li><a href="#contact">Contact us</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="footer-col-title">Patient Portal</div>
-      <ul class="footer-links">
-        <li><a href="https://smile-clinic-theta.vercel.app" target="_blank">Login</a></li>
-        <li><a href="https://smile-clinic-theta.vercel.app" target="_blank">Book appointment</a></li>
-        <li><a href="https://smile-clinic-theta.vercel.app" target="_blank">View records</a></li>
-        <li><a href="https://smile-clinic-theta.vercel.app" target="_blank">Billing</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div class="footer-copy">© 2026 SmileClinic. All rights reserved.</div>
-    <div class="footer-badge">Powered by <span>SmileClinic DMS</span> · Built with ❤️ in Bengaluru</div>
   </div>
 </footer>
 
+<!-- ─── SCRIPTS ───────────────────────────────────────────────── -->
 <script>
-// ── LOADER ────────────────────────────────────────────────────
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    document.getElementById('loader').classList.add('hidden');
-  }, 1800);
-});
+'use strict';
 
-// ── NAV SCROLL ────────────────────────────────────────────────
+/* ── nav pin on scroll ── */
 const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => {
-  nav.classList.toggle('scrolled', window.scrollY > 40);
+const onScroll = () => nav.classList.toggle('pinned', window.scrollY > 60);
+window.addEventListener('scroll', onScroll, { passive: true });
+
+/* ── mobile drawer ── */
+const menuBtn  = document.getElementById('menuBtn');
+const drawer   = document.getElementById('navDrawer');
+let drawerOpen = false;
+
+menuBtn.addEventListener('click', () => {
+  drawerOpen = !drawerOpen;
+  drawer.classList.toggle('open', drawerOpen);
+  menuBtn.setAttribute('aria-expanded', drawerOpen);
+  drawer.setAttribute('aria-hidden', !drawerOpen);
+  document.body.style.overflow = drawerOpen ? 'hidden' : '';
 });
 
-// ── SCROLL REVEAL ─────────────────────────────────────────────
-const reveals = document.querySelectorAll('.reveal');
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      observer.unobserve(e.target);
+window.closeDrawer = () => {
+  drawerOpen = false;
+  drawer.classList.remove('open');
+  menuBtn.setAttribute('aria-expanded', 'false');
+  drawer.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+};
+
+/* close drawer on Escape */
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && drawerOpen) closeDrawer(); });
+
+/* ── scroll reveal ── */
+const revealEls = document.querySelectorAll('[data-reveal]');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('revealed');
+      revealObs.unobserve(entry.target);
     }
   });
-}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-reveals.forEach(el => observer.observe(el));
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+revealEls.forEach(el => revealObs.observe(el));
 
-// ── SMOOTH NAV LINKS ──────────────────────────────────────────
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const target = document.querySelector(a.getAttribute('href'));
-    if (target) {
-      e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+/* ── nav link colour fix on scroll ── */
+const navLinks = document.querySelectorAll('.nav-links a');
+// initially white (on dark hero), pinned: handled via CSS
+
+/* ── form submit (placeholder) ── */
+const form = document.querySelector('.appt-form');
+if (form) {
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const btn = form.querySelector('[type="submit"]');
+    const name = form.querySelector('#f-name').value.trim();
+    const phone = form.querySelector('#f-phone').value.trim();
+    if (!name) {
+      form.querySelector('#f-name').focus();
+      form.querySelector('#f-name').style.borderColor = 'var(--brass)';
+      return;
     }
+    if (!phone) {
+      form.querySelector('#f-phone').focus();
+      form.querySelector('#f-phone').style.borderColor = 'var(--brass)';
+      return;
+    }
+    btn.textContent = 'Request received';
+    btn.disabled = true;
+    btn.style.background = 'var(--eucalyptus)';
+    btn.setAttribute('aria-label', 'Your appointment request has been received');
+    // TODO before launch: connect to email service (e.g. Formspree, Resend, or clinic CRM)
   });
-});
-
-// ── COUNT-UP ANIMATION ────────────────────────────────────────
-function countUp(el, target, suffix='', duration=1500) {
-  const isFloat = target % 1 !== 0;
-  let start = null;
-  const step = ts => {
-    if (!start) start = ts;
-    const p = Math.min((ts - start) / duration, 1);
-    const ease = 1 - Math.pow(1 - p, 3);
-    const val = ease * target;
-    el.textContent = (isFloat ? val.toFixed(1) : Math.floor(val)) + suffix;
-    if (p < 1) requestAnimationFrame(step);
-  };
-  requestAnimationFrame(step);
 }
-
-const statsObserver = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      const nums = e.target.querySelectorAll('.stat-num');
-      const targets = [4800, 98, 12, 2];
-      const suffixes = ['+', '%', ' yrs', ' min'];
-      nums.forEach((el, i) => countUp(el, targets[i], suffixes[i]));
-      statsObserver.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.5 });
-const strip = document.querySelector('.stats-strip');
-if (strip) statsObserver.observe(strip);
 </script>
 </body>
 </html>
