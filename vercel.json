@@ -20,15 +20,15 @@
     },
     {
       "src": "/dms",
-      "dest": "/dms.html"
+      "dest": "/index.html"
     },
     {
       "src": "/portal",
-      "dest": "/dms.html"
+      "dest": "/index.html"
     },
     {
       "src": "/login",
-      "dest": "/dms.html"
+      "dest": "/index.html"
     },
     {
       "src": "/(.*)",
