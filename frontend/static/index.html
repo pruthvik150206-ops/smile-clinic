@@ -1064,7 +1064,7 @@
     // ═══════════════════════════════════════════════════════════
     //  CONFIG
     // ═══════════════════════════════════════════════════════════
-    const API_BASE = 'http://localhost:8080/api';
+    const API_BASE = '/api';
 
     // ═══════════════════════════════════════════════════════════
     //  STATE
@@ -1123,7 +1123,7 @@
         if (!j.success && res.status === 401) { localStorage.removeItem('sc_token'); STATE.user = null; renderPage(); }
         return j;
       } catch (e) {
-        toast('Cannot reach server. Make sure server.py is running on port 8080.', 'er');
+        toast('Cannot reach server. Make sure backend server is running.', 'er');
         return { success: false, error: { message: e.message } };
       }
     }
@@ -1266,7 +1266,6 @@
     <div class="auth-form">
       <div class="auth-box">
         <h2>Sign in</h2>
-        <p class="sub">Enter your credentials — your role is detected automatically.</p>
         <div id="auth-err" style="display:none" class="err-msg"></div>
         <div class="fg"><label for="a-email">Email</label>
           <input id="a-email" type="email" autocomplete="email" placeholder="your@email.com"/>
