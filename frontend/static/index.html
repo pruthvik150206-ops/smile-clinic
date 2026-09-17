@@ -1141,12 +1141,12 @@
       if (canSeeBilling()) calls.push(api('GET', '/invoices'));
 
       const [p, d, a, t, s, i] = await Promise.all(calls);
-      if (p.success) STATE.patients = p.data;
-      if (d.success) STATE.doctors = d.data;
-      if (a.success) STATE.appointments = a.data;
-      if (t.success) STATE.treatments = t.data;
-      if (s.success) STATE.stats = s.data;
-      if (i?.success) STATE.invoices = i.data;
+      if (p.success) STATE.patients = Array.isArray(p.data) ? p.data : (p.data?.items || []);
+      if (d.success) STATE.doctors = Array.isArray(d.data) ? d.data : (d.data?.items || []);
+      if (a.success) STATE.appointments = Array.isArray(a.data) ? a.data : (a.data?.items || []);
+      if (t.success) STATE.treatments = Array.isArray(t.data) ? t.data : (t.data?.items || []);
+      if (s.success) STATE.stats = s.data || {};
+      if (i?.success) STATE.invoices = Array.isArray(i.data) ? i.data : (i.data?.items || []);
     }
 
     // ═══════════════════════════════════════════════════════════
@@ -1245,20 +1245,6 @@
       <div class="auth-hl">
         <h1>Better care,<br><em>better smiles.</em></h1>
         <p>Dental clinic management — appointments, patients, billing, and ML-powered insights in one place.</p>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
-        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(168,196,187,.1);border:1px solid rgba(168,196,187,.2);border-radius:2px">
-          <div style="font-size:.65rem;font-weight:500;letter-spacing:.08em;color:rgba(247,244,238,.4);min-width:80px">ADMIN</div>
-          <div style="font-size:.8rem;color:rgba(247,244,238,.6);font-weight:300">admin@smile.in / admin123</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(168,196,187,.1);border:1px solid rgba(168,196,187,.2);border-radius:2px">
-          <div style="font-size:.65rem;font-weight:500;letter-spacing:.08em;color:rgba(247,244,238,.4);min-width:80px">DOCTOR</div>
-          <div style="font-size:.8rem;color:rgba(247,244,238,.6);font-weight:300">doctor@smile.in / doctor123</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(168,196,187,.1);border:1px solid rgba(168,196,187,.2);border-radius:2px">
-          <div style="font-size:.65rem;font-weight:500;letter-spacing:.08em;color:rgba(247,244,238,.4);min-width:80px">RECEPT</div>
-          <div style="font-size:.8rem;color:rgba(247,244,238,.6);font-weight:300">recept@smile.in / recept123</div>
-        </div>
       </div>
       <div class="auth-copy">© 2026 SmileClinic DMS</div>
     </div>
