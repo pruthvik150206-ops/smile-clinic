@@ -11,7 +11,7 @@ Run:  python3 server.py
 Open: http://localhost:5000
 """
 
-import http.server, json, sqlite3, hashlib, hmac, base64, time, threading, sys
+import http.server, json, sqlite3, hashlib, hmac, base64, time, threading
 import pathlib, os, re, struct, random, math
 from urllib.parse import urlparse, parse_qs, unquote
 
@@ -79,9 +79,9 @@ def ml_predict(features: dict) -> dict:
     label = "no_show" if prob >= THRESHOLD else "show"
     risk  = "High" if prob >= 0.60 else ("Medium" if prob >= 0.35 else "Low")
     action = {
-        "High":   "Call patient to confirm — consider double-booking",
-        "Medium": "Send SMS reminder 24 h before appointment",
-        "Low":    "Standard automated reminder is sufficient",
+        "High":   "📞 Call patient to confirm — consider double-booking",
+        "Medium": "💬 Send SMS reminder 24 h before appointment",
+        "Low":    "✅ Standard automated reminder is sufficient",
     }[risk]
     margin = abs(prob - THRESHOLD)
     confidence = "high" if margin >= 0.20 else ("medium" if margin >= 0.08 else "low")
@@ -111,7 +111,7 @@ def jwt_sign(payload: dict, exp_secs: int = 3600 * 8) -> str:
     sig     = _b64url(hmac.new(SECRET.encode(), f"{header}.{body}".encode(), hashlib.sha256).digest())
     return f"{header}.{body}.{sig}"
 
-def jwt_verify(token: str):
+def jwt_verify(token: str) -> dict | None:
     try:
         h, b, s = token.split(".")
         expected = _b64url(hmac.new(SECRET.encode(), f"{h}.{b}".encode(), hashlib.sha256).digest())
@@ -147,17 +147,8 @@ def init_db():
         password_hash TEXT NOT NULL,
         role TEXT NOT NULL DEFAULT 'patient',
         is_active INTEGER NOT NULL DEFAULT 1,
-        otp_code TEXT,
-        otp_expires_at TEXT,
-        otp_purpose TEXT,
-        is_2fa_enabled INTEGER DEFAULT 0,
         created_at TEXT DEFAULT (datetime('now'))
     );
-    """)
-    for col in [("otp_code","TEXT"), ("otp_expires_at","TEXT"), ("otp_purpose","TEXT"), ("is_2fa_enabled","INTEGER DEFAULT 0")]:
-        try: con.execute(f"ALTER TABLE users ADD COLUMN {col[0]} {col[1]}")
-        except: pass
-    con.executescript("""
     CREATE TABLE IF NOT EXISTS patients (
         patient_id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER REFERENCES users(user_id),
@@ -179,7 +170,6 @@ def init_db():
         first_name TEXT NOT NULL,
         last_name TEXT NOT NULL,
         specialisation TEXT NOT NULL,
-        qualification TEXT DEFAULT 'BDS',
         license_number TEXT NOT NULL UNIQUE,
         phone TEXT NOT NULL,
         consultation_fee REAL DEFAULT 0,
@@ -198,7 +188,7 @@ def init_db():
     CREATE TABLE IF NOT EXISTS appointments (
         appointment_id INTEGER PRIMARY KEY AUTOINCREMENT,
         patient_id INTEGER NOT NULL REFERENCES patients(patient_id),
-        doctor_id INTEGER REFERENCES doctors(doctor_id),
+        doctor_id INTEGER NOT NULL REFERENCES doctors(doctor_id),
         scheduled_at TEXT NOT NULL,
         duration_mins INTEGER DEFAULT 30,
         status TEXT DEFAULT 'scheduled',
@@ -208,7 +198,6 @@ def init_db():
         risk_level TEXT,
         recommended_action TEXT,
         priority TEXT DEFAULT 'normal',
-        booking_source TEXT DEFAULT 'Call Booking',
         reminder_sent INTEGER DEFAULT 0,
         created_at TEXT DEFAULT (datetime('now')),
         updated_at TEXT DEFAULT (datetime('now'))
@@ -235,16 +224,6 @@ def init_db():
         prediction_label TEXT,
         predicted_at TEXT DEFAULT (datetime('now'))
     );
-    CREATE TABLE IF NOT EXISTS prescriptions (
-        prescription_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        appointment_id INTEGER REFERENCES appointments(appointment_id),
-        patient_id INTEGER NOT NULL REFERENCES patients(patient_id),
-        doctor_id INTEGER NOT NULL REFERENCES doctors(doctor_id),
-        diagnosis TEXT,
-        medications TEXT NOT NULL,
-        advice TEXT,
-        issued_at TEXT DEFAULT (datetime('now'))
-    );
     """)
     con.commit()
     # Add priority column to existing DBs (safe migration)
@@ -254,79 +233,18 @@ def init_db():
     except Exception:
         pass  # column already exists
 
-    try:
-        con.execute("ALTER TABLE appointments ADD COLUMN booking_source TEXT DEFAULT 'Call Booking'")
-        con.commit()
-    except Exception:
-        pass  # column already exists
-
-    try:
-        info = con.execute("PRAGMA table_info(appointments)").fetchall()
-        doc_col = next((c for c in info if c["name"] == "doctor_id"), None)
-        if doc_col and doc_col["notnull"] == 1:
-            con.execute("PRAGMA foreign_keys=OFF;")
-            con.execute("""
-                CREATE TABLE IF NOT EXISTS appointments_new (
-                    appointment_id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    patient_id INTEGER NOT NULL REFERENCES patients(patient_id),
-                    doctor_id INTEGER REFERENCES doctors(doctor_id),
-                    scheduled_at TEXT NOT NULL,
-                    duration_mins INTEGER DEFAULT 30,
-                    status TEXT DEFAULT 'scheduled',
-                    reason TEXT,
-                    notes TEXT,
-                    no_show_probability REAL,
-                    risk_level TEXT,
-                    recommended_action TEXT,
-                    priority TEXT DEFAULT 'normal',
-                    booking_source TEXT DEFAULT 'Call Booking',
-                    reminder_sent INTEGER DEFAULT 0,
-                    created_at TEXT DEFAULT (datetime('now')),
-                    updated_at TEXT DEFAULT (datetime('now'))
-                );
-            """)
-            con.execute("INSERT INTO appointments_new SELECT * FROM appointments;")
-            con.execute("DROP TABLE appointments;")
-            con.execute("ALTER TABLE appointments_new RENAME TO appointments;")
-            con.execute("PRAGMA foreign_keys=ON;")
-            con.commit()
-    except Exception as e:
-        pass
-
-    try:
-        con.execute("ALTER TABLE doctors ADD COLUMN qualification TEXT DEFAULT 'BDS'")
-        con.commit()
-    except Exception:
-        pass  # column already exists
-
-
-    try:
-        con.execute("ALTER TABLE users ADD COLUMN raw_password TEXT")
-        con.commit()
-    except Exception:
-        pass  # column already exists
-
-    # Populate raw_password for seed accounts if null
-    con.execute("UPDATE users SET raw_password='admin123' WHERE email='admin@smile.in' AND (raw_password IS NULL OR raw_password='')")
-    con.execute("UPDATE users SET raw_password='doctor123' WHERE email='doctor@smile.in' AND (raw_password IS NULL OR raw_password='')")
-    con.execute("UPDATE users SET raw_password='arjun123' WHERE email='arjun@smile.in' AND (raw_password IS NULL OR raw_password='')")
-    con.execute("UPDATE users SET raw_password='recept123' WHERE email='recept@smile.in' AND (raw_password IS NULL OR raw_password='')")
-    con.execute("UPDATE users SET raw_password='patient123' WHERE email='meera@patient.in' AND (raw_password IS NULL OR raw_password='')")
-    con.execute("UPDATE users SET raw_password='patient123' WHERE email='rahul@patient.in' AND (raw_password IS NULL OR raw_password='')")
-    con.execute("UPDATE users SET raw_password='patient123' WHERE role='patient' AND (raw_password IS NULL OR raw_password='')")
-    con.commit()
 
     # Seed data if empty
     if con.execute("SELECT COUNT(*) FROM users").fetchone()[0] == 0:
         users = [
-            ("admin",      "admin@smile.in",    hash_pw("admin123"),   "admin123",   "admin"),
-            ("dr_priya",   "doctor@smile.in",   hash_pw("doctor123"),  "doctor123",  "doctor"),
-            ("dr_arjun",   "arjun@smile.in",    hash_pw("arjun123"),   "arjun123",   "doctor"),
-            ("kavya_recep","recept@smile.in",   hash_pw("recept123"),  "recept123",  "receptionist"),
-            ("meera_p",    "meera@patient.in",  hash_pw("patient123"), "patient123", "patient"),
-            ("rahul_v",    "rahul@patient.in",  hash_pw("patient123"), "patient123", "patient"),
+            ("admin",      "admin@smile.in",    hash_pw("admin123"),   "admin"),
+            ("dr_priya",   "doctor@smile.in",   hash_pw("doctor123"),  "doctor"),
+            ("dr_arjun",   "arjun@smile.in",    hash_pw("arjun123"),   "doctor"),
+            ("kavya_recep","recept@smile.in",   hash_pw("recept123"),  "receptionist"),
+            ("meera_p",    "meera@patient.in",  hash_pw("patient123"), "patient"),
+            ("rahul_v",    "rahul@patient.in",  hash_pw("patient123"), "patient"),
         ]
-        con.executemany("INSERT INTO users(username,email,password_hash,raw_password,role) VALUES(?,?,?,?,?)", users)
+        con.executemany("INSERT INTO users(username,email,password_hash,role) VALUES(?,?,?,?)", users)
         con.executemany("""INSERT INTO doctors(user_id,first_name,last_name,specialisation,license_number,phone,consultation_fee)
             VALUES(?,?,?,?,?,?,?)""", [
             (2,"Priya","Sharma","General Dentistry","MCI-DEN-2018-04521","+91-9876543210",600),
@@ -367,29 +285,6 @@ def init_db():
                 (appt_id,pat_id,sub,disc,tax,tot,ps,pm))
         con.commit()
         print("✅ Database seeded with demo data")
-
-    # Seed prescriptions if none exist
-    if con.execute("SELECT COUNT(*) FROM prescriptions").fetchone()[0] == 0:
-        rx_data = [
-            (3, 1, 2, "Acute Pulpitis — Upper Left Molar", json.dumps([
-                {"name": "Amoxicillin 500mg", "dosage": "1 capsule", "frequency": "Thrice daily (after meals)", "duration": "5 days", "instructions": "Complete full antibiotic course"},
-                {"name": "Paracetamol 650mg", "dosage": "1 tablet", "frequency": "Twice daily (SOS for pain)", "duration": "3 days", "instructions": "Take after food"},
-                {"name": "Chlorhexidine 0.2% Mouthwash", "dosage": "10 ml", "frequency": "Twice daily", "duration": "7 days", "instructions": "Rinse vigorously for 60 seconds"}
-            ]), "Avoid hot/cold drinks. Maintain soft diet. Follow up for root canal step 2 next week."),
-            (2, 2, 1, "Dental Plaque & Mild Gingivitis", json.dumps([
-                {"name": "Metronidazole 400mg", "dosage": "1 tablet", "frequency": "Twice daily", "duration": "5 days", "instructions": "Take with meals"},
-                {"name": "Sensodyne Rapid Relief Toothpaste", "dosage": "Pea size", "frequency": "Twice daily", "duration": "14 days", "instructions": "Use extra soft toothbrush"}
-            ]), "Perform warm saline mouth rinse 3 times daily. Floss daily at bedtime.")
-        ]
-        for appt, pat, doc, diag, meds, adv in rx_data:
-            # Check if appointment exists
-            has_appt = con.execute("SELECT 1 FROM appointments WHERE appointment_id=?", (appt,)).fetchone()
-            appt_val = appt if has_appt else None
-            con.execute("""INSERT INTO prescriptions(appointment_id,patient_id,doctor_id,diagnosis,medications,advice)
-                VALUES(?,?,?,?,?,?)""", (appt_val, pat, doc, diag, meds, adv))
-        con.commit()
-        print("✅ Demo digital prescriptions seeded")
-
     con.close()
 
 # ── Helper ─────────────────────────────────────────────────────────────────────
@@ -514,87 +409,68 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 "time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
             })
 
-        # ── Auth ──────────────────────────────────────────────────────────
-        if path == "/api/auth/login" and method == "POST":
-            row = con.execute("SELECT * FROM users WHERE (email=? OR username=?) AND is_active=1",
-                              (body.get("email","").strip() or body.get("username","").strip(), body.get("email","").strip() or body.get("username","").strip())).fetchone()
-            pw_input = body.get("password","")
-            pw_match = row and ((row["password_hash"] == hash_pw(pw_input)) or (dict(row).get("raw_password") and dict(row)["raw_password"] == pw_input) or (row["password_hash"].startswith("a0/") and pw_input in ("admin123", "doctor123", "recept123", "patient123", "arjun123")))
-            if not row or not pw_match:
-                return error("Invalid email or password", 401, "UNAUTHORIZED")
-            
-            # Check 2FA
-            is_2fa = dict(row).get("is_2fa_enabled", 0)
-            if is_2fa:
-                import random
-                otp = str(random.randint(100000, 999999))
-                exp = time.time() + 600
-                con.execute("UPDATE users SET otp_code=?, otp_expires_at=?, otp_purpose='2fa_login' WHERE user_id=?", (otp, str(exp), row["user_id"]))
+        # ── PUBLIC: website booking (no auth required) ───────────────────
+        if path == "/api/public/book" and method == "POST":
+            import uuid as _uuid
+            b        = body
+            name     = (b.get("name") or "").strip()
+            phone    = (b.get("phone") or "").strip()
+            specialty = b.get("specialty", "General enquiry")
+            message   = b.get("message", "")
+            if not name or not phone:
+                return error("Name and phone required")
+            # find or create patient
+            existing = con.execute(
+                "SELECT patient_id FROM patients WHERE phone=?", (phone,)
+            ).fetchone()
+            if existing:
+                pid = existing["patient_id"]
+            else:
+                fname = name.split()[0]
+                lname = " ".join(name.split()[1:]) or ""
+                u_email = f"web_{_uuid.uuid4().hex[:8]}@website.local"
+                u_name  = f"web_{_uuid.uuid4().hex[:6]}"
+                ucur = con.execute(
+                    "INSERT INTO users(username,email,password_hash,role) VALUES(?,?,?,?)",
+                    (u_name, u_email, hash_pw(_uuid.uuid4().hex), "patient")
+                )
                 con.commit()
-                return success({"requires2FA": True, "email": row["email"], "message": "2FA OTP code sent", "demoOtp": otp})
+                uid = ucur.lastrowid
+                pcur = con.execute(
+                    "INSERT INTO patients(user_id,first_name,last_name,phone,allergies) VALUES(?,?,?,?,?)",
+                    (uid, fname, lname, phone, "None")
+                )
+                con.commit()
+                pid = pcur.lastrowid
+            # create appointment
+            from datetime import datetime as _dt, timedelta as _td
+            scheduled = (_dt.now() + _td(days=1)).strftime("%Y-%m-%dT10:00")
+            reason    = f"[Website booking] {specialty}" + (f" - {message[:200]}" if message else "")
+            acur = con.execute(
+                """INSERT INTO appointments(patient_id,doctor_id,scheduled_at,
+                   duration_mins,status,reason,priority)
+                   VALUES(?,?,?,?,?,?,?)""",
+                (pid, 1, scheduled, 30, "scheduled", reason, "normal")
+            )
+            con.commit()
+            return success({
+                "message": "Booking received. We will confirm your appointment shortly.",
+                "appointment_id": acur.lastrowid,
+                "patient_id": pid
+            }, 201)
 
+                # ── Auth ──────────────────────────────────────────────────────────
+        if path == "/api/auth/login" and method == "POST":
+            row = con.execute("SELECT * FROM users WHERE email=? AND is_active=1",
+                              (body.get("email",""),)).fetchone()
+            if not row or row["password_hash"] != hash_pw(body.get("password","")):
+                return error("Invalid email or password", 401, "UNAUTHORIZED")
+            con.execute("UPDATE users SET created_at=created_at WHERE user_id=?", (row["user_id"],))
             token = jwt_sign({"userId": row["user_id"], "role": row["role"], "email": row["email"]})
             return success({"token": token, "user": {
-                "userId": row["user_id"], "user_id": row["user_id"], "username": row["username"],
-                "email": row["email"], "role": row["role"], "is_2fa_enabled": bool(is_2fa)
+                "userId": row["user_id"], "username": row["username"],
+                "email": row["email"], "role": row["role"]
             }})
-
-        if path == "/api/auth/verify-2fa" and method == "POST":
-            email = body.get("email","").strip()
-            otp = body.get("otp","").strip()
-            if not email or not otp: return error("Email and OTP are required")
-            row = con.execute("SELECT * FROM users WHERE email=? AND otp_code=? AND otp_purpose='2fa_login'", (email, otp)).fetchone()
-            if not row: return error("Invalid or expired 2FA OTP code")
-            try:
-                if float(row["otp_expires_at"] or 0) < time.time():
-                    return error("OTP code has expired")
-            except: pass
-            con.execute("UPDATE users SET otp_code=NULL, otp_expires_at=NULL, otp_purpose=NULL WHERE user_id=?", (row["user_id"],))
-            con.commit()
-            token = jwt_sign({"userId": row["user_id"], "role": row["role"], "email": row["email"]})
-            return success({"token": token, "user": {
-                "userId": row["user_id"], "user_id": row["user_id"], "username": row["username"],
-                "email": row["email"], "role": row["role"], "is_2fa_enabled": True
-            }})
-
-        if path == "/api/auth/forgot-password" and method == "POST":
-            email = body.get("email","").strip()
-            if not email: return error("Email is required")
-            row = con.execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
-            if not row: return error("No account found with that email address", 404, "NOT_FOUND")
-            import random
-            otp = str(random.randint(100000, 999999))
-            exp = time.time() + 600
-            con.execute("UPDATE users SET otp_code=?, otp_expires_at=?, otp_purpose='forgot_password' WHERE user_id=?", (otp, str(exp), row["user_id"]))
-            con.commit()
-            return success({"message": "OTP verification code sent", "email": email, "demoOtp": otp})
-
-        if path == "/api/auth/verify-otp" and method == "POST":
-            email = body.get("email","").strip()
-            otp = body.get("otp","").strip()
-            row = con.execute("SELECT * FROM users WHERE email=? AND otp_code=?", (email, otp)).fetchone()
-            if not row: return error("Invalid or expired OTP code")
-            return success({"message": "OTP verified successfully"})
-
-        if path == "/api/auth/reset-password" and method == "POST":
-            email = body.get("email","").strip()
-            otp = body.get("otp","").strip()
-            npw = body.get("newPassword","").strip()
-            if not email or not otp or not npw: return error("Email, OTP and new password are required")
-            if len(npw) < 6: return error("Password must be at least 6 characters")
-            row = con.execute("SELECT * FROM users WHERE email=? AND otp_code=? AND otp_purpose='forgot_password'", (email, otp)).fetchone()
-            if not row: return error("Invalid or expired OTP code")
-            con.execute("UPDATE users SET password_hash=?, raw_password=?, otp_code=NULL, otp_expires_at=NULL, otp_purpose=NULL WHERE user_id=?",
-                        (hash_pw(npw), npw, row["user_id"]))
-            con.commit()
-            return success({"message": "Password reset successfully. You can now sign in."})
-
-        if path == "/api/auth/toggle-2fa" and method == "POST":
-            if not user: return error("Unauthorized", 401, "UNAUTHORIZED")
-            val = 1 if body.get("enabled") else 0
-            con.execute("UPDATE users SET is_2fa_enabled=? WHERE user_id=?", (val, user["userId"]))
-            con.commit()
-            return success({"is_2fa_enabled": bool(val), "message": "2FA updated successfully"})
 
         if path == "/api/auth/register" and method == "POST":
             if not body.get("email") or not body.get("password") or not body.get("username"):
@@ -608,58 +484,14 @@ class Handler(http.server.BaseHTTPRequestHandler):
             token = jwt_sign({"userId": cur.lastrowid, "role": body.get("role","patient"), "email": body["email"]})
             new_id = cur.lastrowid
             return success({"token": token, "userId": new_id, "user_id": new_id,
-                            "user": {"userId": new_id, "user_id": new_id, "username": body.get("username",""),
+                            "user": {"userId": new_id, "username": body.get("username",""),
                                      "email": body["email"], "role": body.get("role","patient")}}, 201)
 
         if path == "/api/auth/me" and method == "GET":
             if not user: return error("Unauthorized", 401, "UNAUTHORIZED")
             row = con.execute("SELECT user_id,username,email,role FROM users WHERE user_id=?",
                               (user["userId"],)).fetchone()
-            if not row: return success(None)
-            res_user = dict(row)
-            res_user["userId"] = row["user_id"]
-            res_user["user_id"] = row["user_id"]
-            return success(res_user)
-
-        if path == "/api/patients/me" and method == "GET":
-            if not user: return error("Unauthorized", 401, "UNAUTHORIZED")
-            row = con.execute("""SELECT p.*, COALESCE(u.email,'') as email FROM patients p
-                JOIN users u ON u.user_id=p.user_id WHERE p.user_id=?""", (user["userId"],)).fetchone()
             return success(dict(row) if row else None)
-
-        if path == "/api/public/book-appointment" and method == "POST":
-            name = (body.get("name") or "Guest Patient").strip()
-            phone = (body.get("phone") or "").strip()
-            email = (body.get("email") or "").strip()
-            doctor_id = body.get("doctor_id") if body.get("doctor_id") else None
-            scheduled_at = body.get("scheduled_at") or ""
-            reason = (body.get("reason") or "Online Website Booking").strip()
-            booking_source = (body.get("booking_source") or "Website Booking").strip()
-
-            if not scheduled_at:
-                return error("scheduled_at date/time is required", 400, "BAD_REQUEST")
-
-            # Split name into first and last
-            parts = name.split(" ", 1)
-            fname = parts[0]
-            lname = parts[1] if len(parts) > 1 else ""
-
-            # Check if patient exists by phone
-            pat = None
-            if phone:
-                pat = con.execute("SELECT patient_id FROM patients WHERE phone=?", (phone,)).fetchone()
-            if not pat:
-                cur_p = con.execute("INSERT INTO patients(first_name, last_name, phone) VALUES(?,?,?)", (fname, lname, phone))
-                con.commit()
-                pid = cur_p.lastrowid
-            else:
-                pid = pat["patient_id"]
-
-            cur_a = con.execute("""INSERT INTO appointments(patient_id, doctor_id, scheduled_at, duration_mins, status, reason, priority, booking_source)
-                VALUES(?,?,?,30,'scheduled',?,'normal',?)""", (pid, doctor_id, scheduled_at, reason, booking_source))
-            con.commit()
-            aid = cur_a.lastrowid
-            return success({"appointment_id": aid, "message": "Appointment requested successfully. Our clinic team will confirm your slot shortly."})
 
         # ── Guard remaining routes ─────────────────────────────────────────
         if not user:
@@ -669,7 +501,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
         if path == "/api/patients":
             if method == "GET":
                 q = f"%{params.get('search','')}%"
-                rows = con.execute("""SELECT p.*, COALESCE(u.email,'') as email, COALESCE(u.raw_password,'patient123') as password FROM patients p
+                rows = con.execute("""SELECT p.*, COALESCE(u.email,'') as email FROM patients p
                     LEFT JOIN users u ON u.user_id=p.user_id
                     WHERE p.first_name LIKE ? OR p.last_name LIKE ? OR p.phone LIKE ?
                     ORDER BY p.last_name""", (q,q,q)).fetchall()
@@ -678,22 +510,17 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 if user["role"] not in ("admin","receptionist"):
                     return error("Forbidden", 403, "FORBIDDEN")
                 b = body
-                import uuid, random
+                # Generate unique email and username using name + microsecond timestamp
+                import uuid
                 unique_id = uuid.uuid4().hex[:8]
                 fname_clean = (b.get("first_name","p") or "p").lower().replace(" ","")
                 email = b.get("email","").strip() or f"{fname_clean}_{unique_id}@clinic.local"
                 username = f"{fname_clean}_{unique_id}"
-                
-                # Auto-generate random password if empty
-                raw_pwd = b.get("password","").strip()
-                if not raw_pwd:
-                    raw_pwd = f"Smile{random.randint(1000, 9999)}"
-                
                 # keep trying until unique (extremely rare collision)
                 for attempt in range(5):
                     try:
-                        cur = con.execute("INSERT INTO users(username,email,password_hash,raw_password,role) VALUES(?,?,?,?,?)",
-                            (username, email, hash_pw(raw_pwd), raw_pwd, "patient"))
+                        cur = con.execute("INSERT INTO users(username,email,password_hash,role) VALUES(?,?,?,?)",
+                            (username, email, hash_pw("changeme"), "patient"))
                         uid = cur.lastrowid
                         break
                     except Exception:
@@ -707,16 +534,14 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     (uid, b.get("first_name",""), b.get("last_name",""), b.get("date_of_birth"),
                      b.get("gender"), b.get("phone",""), b.get("blood_group"), b.get("allergies"), b.get("medical_notes")))
                 con.commit()
-                row = dict(con.execute("SELECT p.*, COALESCE(u.email,'') as email, COALESCE(u.raw_password,'patient123') as password FROM patients p LEFT JOIN users u ON u.user_id=p.user_id WHERE p.patient_id=?", (cur2.lastrowid,)).fetchone())
-                row["raw_password"] = raw_pwd
-                row["login_email"] = email
-                return success(row, 201)
+                row = con.execute("SELECT * FROM patients WHERE patient_id=?", (cur2.lastrowid,)).fetchone()
+                return success(dict(row), 201)
 
         pat_m = re.match(r"^/api/patients/(\d+)$", path)
         if pat_m:
             pid = int(pat_m.group(1))
             if method == "GET":
-                row = con.execute("SELECT p.*, COALESCE(u.email,'') as email, COALESCE(u.raw_password,'patient123') as password FROM patients p LEFT JOIN users u ON u.user_id=p.user_id WHERE p.patient_id=?", (pid,)).fetchone()
+                row = con.execute("SELECT p.*,COALESCE(u.email,'') as email FROM patients p LEFT JOIN users u ON u.user_id=p.user_id WHERE p.patient_id=?", (pid,)).fetchone()
                 return success(dict(row)) if row else error("Patient not found", 404, "NOT_FOUND")
             if method in ("PUT","PATCH"):
                 fields = {k: body[k] for k in ("first_name","last_name","phone","address","blood_group","allergies","medical_notes","gender") if k in body}
@@ -725,7 +550,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     con.execute(f"UPDATE patients SET {sets}, updated_at=datetime('now') WHERE patient_id=?",
                                 (*fields.values(), pid))
                     con.commit()
-                row = con.execute("SELECT p.*, COALESCE(u.email,'') as email, COALESCE(u.raw_password,'patient123') as password FROM patients p LEFT JOIN users u ON u.user_id=p.user_id WHERE p.patient_id=?", (pid,)).fetchone()
+                row = con.execute("SELECT * FROM patients WHERE patient_id=?", (pid,)).fetchone()
                 return success(dict(row)) if row else error("Not found", 404, "NOT_FOUND")
             if method == "DELETE":
                 if user["role"] != "admin": return error("Forbidden", 403, "FORBIDDEN")
@@ -733,78 +558,53 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 con.commit()
                 return success({"deleted": pid})
 
-        # ── Patient password change ─────────────────────────────────────────
-        pat_pw = re.match(r"^/api/patients/(\d+)/password$", path)
-        if pat_pw and method == "PATCH":
-            if user["role"] != "admin":
-                return error("Forbidden", 403, "FORBIDDEN")
-            pid = int(pat_pw.group(1))
-            new_pw = body.get("new_password", "")
-            if len(new_pw) < 6:
-                return error("Password must be at least 6 characters")
-            pat = con.execute("SELECT * FROM patients WHERE patient_id=?", (pid,)).fetchone()
-            if not pat:
-                return error("Patient not found", 404, "NOT_FOUND")
-            
-            uid = pat["user_id"]
-            if not uid:
-                import uuid
-                fname_clean = (pat["first_name"] or "patient").lower().replace(" ", "")
-                email = pat.get("phone","") or f"{fname_clean}_{uuid.uuid4().hex[:6]}@patient.local"
-                username = f"{fname_clean}_{uuid.uuid4().hex[:6]}"
-                ucur = con.execute("INSERT INTO users(username,email,password_hash,raw_password,role) VALUES(?,?,?,?,?)",
-                    (username, email, hash_pw(new_pw), new_pw, "patient"))
-                uid = ucur.lastrowid
-                con.execute("UPDATE patients SET user_id=? WHERE patient_id=?", (uid, pid))
-            else:
-                con.execute("UPDATE users SET password_hash=?, raw_password=? WHERE user_id=?", (hash_pw(new_pw), new_pw, uid))
-            
-            con.commit()
-            return success({"message": "Patient password updated successfully"})
-
         # ── Doctors ───────────────────────────────────────────────────────
         if path == "/api/doctors":
             if method == "GET":
-                rows = con.execute("SELECT d.*, COALESCE(u.email,'') as email, COALESCE(u.raw_password,'doctor123') as password FROM doctors d LEFT JOIN users u ON u.user_id=d.user_id ORDER BY d.last_name").fetchall()
+                rows = con.execute("SELECT d.*,COALESCE(u.email,'') as email FROM doctors d LEFT JOIN users u ON u.user_id=d.user_id ORDER BY d.last_name").fetchall()
                 return success(rows_to_list(rows))
             if method == "POST":
                 if user["role"] != "admin": return error("Forbidden", 403, "FORBIDDEN")
                 b = body
 
+                # If frontend sends user_id directly (linking to existing user), use it
+                # Otherwise create a new user account right here atomically
                 provided_uid = b.get("user_id")
                 if provided_uid and int(provided_uid) > 0:
+                    # Verify the user actually exists
                     existing = con.execute("SELECT user_id FROM users WHERE user_id=?", (int(provided_uid),)).fetchone()
                     uid = existing["user_id"] if existing else None
                 else:
                     uid = None
 
                 if not uid:
+                    # Create login account from email/password in body
                     import uuid
                     email = b.get("email","").strip()
                     if not email:
                         email = f"dr_{b.get('first_name','doc').lower()}_{uuid.uuid4().hex[:6]}@clinic.local"
                     password = b.get("password","")
                     if not password:
-                        password = uuid.uuid4().hex[:10]
+                        password = uuid.uuid4().hex[:10]  # random if not provided
                     fname = (b.get("first_name","dr") or "dr").lower().replace(" ","")
                     username = f"dr_{fname}_{uuid.uuid4().hex[:5]}"
+                    # Check email not already taken
                     existing_email = con.execute("SELECT user_id FROM users WHERE email=?", (email,)).fetchone()
                     if existing_email:
                         uid = existing_email["user_id"]
                     else:
                         ucur = con.execute(
-                            "INSERT INTO users(username,email,password_hash,raw_password,role) VALUES(?,?,?,?,?)",
-                            (username, email, hash_pw(password), password, "doctor"))
+                            "INSERT INTO users(username,email,password_hash,role) VALUES(?,?,?,?)",
+                            (username, email, hash_pw(password), "doctor"))
                         con.commit()
                         uid = ucur.lastrowid
 
+                # Now insert the doctor with the confirmed uid
                 lic = b.get("license_number","").strip() or f"LIC-{int(time.time())}"
-                qual = b.get("qualification","").strip() or "BDS, MDS"
                 cur = con.execute(
-                    "INSERT INTO doctors(user_id,first_name,last_name,specialisation,qualification,license_number,phone,consultation_fee) VALUES(?,?,?,?,?,?,?,?)",
+                    "INSERT INTO doctors(user_id,first_name,last_name,specialisation,license_number,phone,consultation_fee) VALUES(?,?,?,?,?,?,?)",
                     (uid, b.get("first_name",""), b.get("last_name",""),
                      b.get("specialisation","General Dentistry"),
-                     qual,
                      lic, b.get("phone",""), float(b.get("consultation_fee",0) or 0)))
                 con.commit()
                 row = con.execute(
@@ -819,7 +619,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 row = con.execute("SELECT d.*,u.email FROM doctors d JOIN users u ON u.user_id=d.user_id WHERE d.doctor_id=?", (did,)).fetchone()
                 return success(dict(row)) if row else error("Doctor not found", 404, "NOT_FOUND")
             if method in ("PUT","PATCH"):
-                fields = {k: body[k] for k in ("first_name","last_name","phone","consultation_fee","is_available","specialisation","qualification") if k in body}
+                fields = {k: body[k] for k in ("first_name","last_name","phone","consultation_fee","is_available","specialisation") if k in body}
                 if fields:
                     sets = ", ".join(f"{k}=?" for k in fields)
                     con.execute(f"UPDATE doctors SET {sets} WHERE doctor_id=?", (*fields.values(), did))
@@ -852,7 +652,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             doc = con.execute("SELECT user_id FROM doctors WHERE doctor_id=?", (did,)).fetchone()
             if not doc:
                 return error("Doctor not found", 404, "NOT_FOUND")
-            con.execute("UPDATE users SET password_hash=?, raw_password=? WHERE user_id=?", (hash_pw(new_pw), new_pw, doc["user_id"]))
+            con.execute("UPDATE users SET password_hash=? WHERE user_id=?", (hash_pw(new_pw), doc["user_id"]))
             con.commit()
             return success({"message": "Password updated successfully"})
 
@@ -877,121 +677,104 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 if status_filter:
                     conditions.append("a.status=?")
                     args.append(status_filter)
-                patient_id = params.get("patient_id")
-                if patient_id:
-                    conditions.append("a.patient_id=?")
-                    args.append(int(patient_id))
-                doctor_id = params.get("doctor_id")
-                if doctor_id:
-                    conditions.append("a.doctor_id=?")
-                    args.append(int(doctor_id))
                 # Doctors only see their own appointments
                 if user["role"] == "doctor":
                     doc_row = con.execute("SELECT doctor_id FROM doctors WHERE user_id=?", (user["userId"],)).fetchone()
                     if doc_row:
                         conditions.append("a.doctor_id=?")
                         args.append(doc_row["doctor_id"])
-                    else:
-                        conditions.append("1=0")
-                # Patients only see their own appointments
-                if user["role"] == "patient":
-                    pat_row = con.execute("SELECT patient_id FROM patients WHERE user_id=?", (user["userId"],)).fetchone()
-                    if pat_row:
-                        conditions.append("a.patient_id=?")
-                        args.append(pat_row["patient_id"])
-                    else:
-                        conditions.append("1=0")
                 where = ("WHERE " + " AND ".join(conditions)) if conditions else ""
                 rows = con.execute(f"""
                     SELECT a.*,
                         p.first_name||' '||p.last_name AS patient_name, p.phone AS patient_phone,
-                        COALESCE(d.first_name||' '||d.last_name, 'Unassigned') AS doctor_name,
-                        COALESCE(d.specialisation, 'Pending Assignment') AS specialisation,
-                        COALESCE(a.booking_source, 'Call Booking') AS booking_source
+                        d.first_name||' '||d.last_name AS doctor_name, d.specialisation
                     FROM appointments a
                     JOIN patients p ON p.patient_id=a.patient_id
-                    LEFT JOIN doctors d ON d.doctor_id=a.doctor_id
+                    JOIN doctors  d ON d.doctor_id=a.doctor_id
                     {where}
                     ORDER BY a.scheduled_at DESC LIMIT 200""", args).fetchall()
                 return success(rows_to_list(rows))
 
             if method == "POST":
-                if user["role"] == "doctor":
-                    return error("Doctors cannot schedule appointments. Only receptionists or admins can schedule.", 403, "FORBIDDEN")
                 b = body
-                if not b.get("patient_id") or not b.get("scheduled_at"):
-                    return error("patient_id and scheduled_at are required")
-                doc_id = b.get("doctor_id") if b.get("doctor_id") else None
-                if doc_id:
-                    doc_check = con.execute("SELECT first_name, last_name, is_available FROM doctors WHERE doctor_id=?", (doc_id,)).fetchone()
-                    if not doc_check:
-                        return error("Selected doctor not found", 404, "NOT_FOUND")
-                    if not doc_check["is_available"]:
-                        return error(f"Dr. {doc_check['first_name']} {doc_check['last_name']} is currently unavailable/off duty and cannot be scheduled.", 400, "DOCTOR_UNAVAILABLE")
-                
-                bsource = b.get("booking_source", "Call Booking")
-                cur = con.execute("""INSERT INTO appointments(patient_id,doctor_id,scheduled_at,duration_mins,status,reason,priority,booking_source)
-                    VALUES(?,?,?,?,?,?,?,?)""",
-                    (b["patient_id"], doc_id, b["scheduled_at"],
-                     int(b.get("duration_mins",30) or 30),
-                     b.get("status","scheduled"),
-                     b.get("reason",""),
-                     b.get("priority","normal"),
-                     bsource))
-                con.commit()
+                if not b.get("patient_id") or not b.get("doctor_id") or not b.get("scheduled_at"):
+                    return error("patient_id, doctor_id and scheduled_at are required")
+                # Save appointment
+                cur = con.execute("""INSERT INTO appointments(patient_id,doctor_id,scheduled_at,duration_mins,status,reason,priority)
+                    VALUES(?,?,?,?,?,?,?)""",
+                    (b["patient_id"], b["doctor_id"], b["scheduled_at"],
+                     b.get("duration_mins",30), "scheduled", b.get("reason",""), b.get("priority","normal")))
                 appt_id = cur.lastrowid
+                con.commit()
 
-                # Trigger ML risk prediction if doctor assigned
-                pred = predict_no_show_risk(b["patient_id"], doc_id or 1, b["scheduled_at"], con)
-                con.execute("""UPDATE appointments
-                    SET no_show_probability=?, risk_level=?, recommended_action=?
+                # ML prediction
+                patient = con.execute("SELECT * FROM patients WHERE patient_id=?", (b["patient_id"],)).fetchone()
+                treat   = con.execute("SELECT * FROM treatments WHERE treatment_id=?", (b.get("treatment_id",1),)).fetchone()
+                prior   = con.execute("SELECT COUNT(*) FROM appointments WHERE patient_id=? AND status='no_show'", (b["patient_id"],)).fetchone()[0]
+                prev    = con.execute("SELECT COUNT(*) FROM appointments WHERE patient_id=?", (b["patient_id"],)).fetchone()[0]
+                from datetime import datetime
+                try:
+                    sched = datetime.fromisoformat(b["scheduled_at"].replace("T"," ")[:16])
+                    lead  = max(0, (sched - datetime.now()).days)
+                    hour  = sched.hour
+                    month = sched.month
+                    dow   = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"][sched.weekday()]
+                except:
+                    lead, hour, month, dow = 7, 10, 5, "wednesday"
+
+                dob = patient["date_of_birth"] if patient else "1990-01-01"
+                try:
+                    age = int((datetime.now() - datetime.strptime(dob, "%Y-%m-%d")).days / 365.25)
+                except:
+                    age = 35
+
+                features = {
+                    "lead_time_days": lead, "prior_no_shows": prior,
+                    "appointment_hour": hour, "age": age,
+                    "distance_km": 5.0, "treatment_cost": float(treat["base_cost"]) if treat else 1000,
+                    "previous_appointments": prev, "month": month,
+                    "reminder_sent": 0, "has_insurance": 0, "is_follow_up": 1 if prev > 0 else 0,
+                    "day_of_week": dow,
+                    "treatment_category": treat["category"] if treat else "restorative",
+                    "gender": patient["gender"] if patient else "other",
+                }
+                pred = ml_predict(features)
+                con.execute("""UPDATE appointments SET no_show_probability=?, risk_level=?, recommended_action=?
                     WHERE appointment_id=?""",
                     (pred["no_show_probability"], pred["risk_level"], pred["recommended_action"], appt_id))
+                con.execute("""INSERT INTO ml_predictions(appointment_id,model_name,model_version,prediction_score,prediction_label)
+                    VALUES(?,?,?,?,?)""",
+                    (appt_id, "no_show_xgboost", pred["model_version"], pred["no_show_probability"], pred["label"]))
                 con.commit()
 
                 row = con.execute("""SELECT a.*, p.first_name||' '||p.last_name AS patient_name,
-                    COALESCE(d.first_name||' '||d.last_name, 'Unassigned') AS doctor_name,
-                    COALESCE(a.booking_source, 'Call Booking') AS booking_source
-                    FROM appointments a JOIN patients p ON p.patient_id=a.patient_id
-                    LEFT JOIN doctors d ON d.doctor_id=a.doctor_id
+                    d.first_name||' '||d.last_name AS doctor_name
+                    FROM appointments a
+                    JOIN patients p ON p.patient_id=a.patient_id
+                    JOIN doctors  d ON d.doctor_id =a.doctor_id
                     WHERE a.appointment_id=?""", (appt_id,)).fetchone()
                 result = dict(row)
                 result.update(pred)
                 return success(result, 201)
-
-        appt_cancel_m = re.match(r"^/api/appointments/(\d+)/cancel$", path)
-        if appt_cancel_m and method == "POST":
-            aid = int(appt_cancel_m.group(1))
-            if user["role"] not in ("admin", "receptionist"):
-                return error("Forbidden", 403, "FORBIDDEN")
-            con.execute("UPDATE appointments SET status='cancelled', updated_at=datetime('now') WHERE appointment_id=?", (aid,))
-            con.commit()
-            row = con.execute("SELECT * FROM appointments WHERE appointment_id=?", (aid,)).fetchone()
-            return success(dict(row))
 
         appt_m = re.match(r"^/api/appointments/(\d+)$", path)
         if appt_m:
             aid = int(appt_m.group(1))
             if method == "GET":
                 row = con.execute("""SELECT a.*, p.first_name||' '||p.last_name AS patient_name,
-                    COALESCE(d.first_name||' '||d.last_name, 'Unassigned') AS doctor_name,
-                    COALESCE(a.booking_source, 'Call Booking') AS booking_source
+                    d.first_name||' '||d.last_name AS doctor_name
                     FROM appointments a JOIN patients p ON p.patient_id=a.patient_id
-                    LEFT JOIN doctors d ON d.doctor_id=a.doctor_id WHERE a.appointment_id=?""", (aid,)).fetchone()
+                    JOIN doctors d ON d.doctor_id=a.doctor_id WHERE a.appointment_id=?""", (aid,)).fetchone()
                 return success(dict(row)) if row else error("Not found", 404, "NOT_FOUND")
             if method in ("PUT","PATCH"):
-                if user["role"] == "patient":
-                    return error("Patients cannot edit clinical records or appointment details", 403, "FORBIDDEN")
-                # Check doctor ownership & status modification
+                # Check doctor ownership
                 if user["role"] == "doctor":
-                    if "status" in body and body["status"] in ("confirmed", "cancelled"):
-                        return error("Doctors cannot confirm or cancel appointments. Only receptionists/admin can manage appointment statuses.", 403, "FORBIDDEN")
                     doc_row = con.execute("SELECT doctor_id FROM doctors WHERE user_id=?", (user["userId"],)).fetchone()
                     owns = con.execute("SELECT 1 FROM appointments WHERE appointment_id=? AND doctor_id=?",
                                       (aid, doc_row["doctor_id"] if doc_row else -1)).fetchone()
                     if not owns:
                         return error("You can only update your own appointments", 403, "FORBIDDEN")
-                fields = {k: body[k] for k in ("status","notes","reason","scheduled_at","reminder_sent","priority","doctor_id","booking_source") if k in body}
+                fields = {k: body[k] for k in ("status","notes","reason","scheduled_at","reminder_sent","priority") if k in body}
                 if fields:
                     sets = ", ".join(f"{k}=?" for k in fields)
                     con.execute(f"UPDATE appointments SET {sets}, updated_at=datetime('now') WHERE appointment_id=?",
@@ -1000,25 +783,13 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 row = con.execute("SELECT * FROM appointments WHERE appointment_id=?", (aid,)).fetchone()
                 return success(dict(row))
             if method == "DELETE":
-                if user["role"] != "admin":
-                    return error("Forbidden", 403, "FORBIDDEN")
-                con.execute("DELETE FROM invoices WHERE appointment_id=?", (aid,))
-                con.execute("DELETE FROM appointments WHERE appointment_id=?", (aid,))
+                con.execute("UPDATE appointments SET status='cancelled' WHERE appointment_id=?", (aid,))
                 con.commit()
-                return success({"deleted": aid})
+                return success({"cancelled": aid})
 
         # ── Invoices ──────────────────────────────────────────────────────
         if path == "/api/invoices":
             if method == "GET":
-                if user["role"] == "patient":
-                    pat_row = con.execute("SELECT patient_id FROM patients WHERE user_id=?", (user["userId"],)).fetchone()
-                    if pat_row:
-                        rows = con.execute("""SELECT i.*, p.first_name||' '||p.last_name AS patient_name
-                            FROM invoices i JOIN patients p ON p.patient_id=i.patient_id
-                            WHERE i.patient_id=?
-                            ORDER BY i.issued_at DESC""", (pat_row["patient_id"],)).fetchall()
-                        return success(rows_to_list(rows))
-                    return success([])
                 rows = con.execute("""SELECT i.*, p.first_name||' '||p.last_name AS patient_name
                     FROM invoices i JOIN patients p ON p.patient_id=i.patient_id
                     ORDER BY i.issued_at DESC""").fetchall()
@@ -1034,96 +805,6 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 return success({"invoice_id": cur.lastrowid}, 201)
 
         inv_pay = re.match(r"^/api/invoices/(\d+)/pay$", path)
-        if inv_pay and method == "PATCH":
-            iid = int(inv_pay.group(1))
-            con.execute("UPDATE invoices SET payment_status='paid', payment_method=?, paid_at=datetime('now') WHERE invoice_id=?",
-                        (body.get("payment_method","cash"), iid))
-            con.commit()
-            row = con.execute("SELECT * FROM invoices WHERE invoice_id=?", (iid,)).fetchone()
-            return success(dict(row))
-
-        # ── Prescriptions ─────────────────────────────────────────────────
-        if path == "/api/prescriptions":
-            if method == "GET":
-                conditions, args = [], []
-                if user["role"] == "patient":
-                    pat_row = con.execute("SELECT patient_id FROM patients WHERE user_id=?", (user["userId"],)).fetchone()
-                    if pat_row:
-                        conditions.append("pr.patient_id=?")
-                        args.append(pat_row["patient_id"])
-                    else:
-                        conditions.append("1=0")
-                elif user["role"] == "doctor":
-                    doc_row = con.execute("SELECT doctor_id FROM doctors WHERE user_id=?", (user["userId"],)).fetchone()
-                    if doc_row:
-                        conditions.append("pr.doctor_id=?")
-                        args.append(doc_row["doctor_id"])
-                else:
-                    if params.get("patient_id"):
-                        conditions.append("pr.patient_id=?")
-                        args.append(int(params["patient_id"]))
-                    if params.get("doctor_id"):
-                        conditions.append("pr.doctor_id=?")
-                        args.append(int(params["doctor_id"]))
-
-                where = ("WHERE " + " AND ".join(conditions)) if conditions else ""
-                rows = con.execute(f"""
-                    SELECT pr.*,
-                        p.first_name||' '||p.last_name AS patient_name, p.phone AS patient_phone, p.gender AS patient_gender, p.date_of_birth AS patient_dob,
-                        d.first_name||' '||d.last_name AS doctor_name, d.specialisation AS doctor_specialisation, d.license_number AS doctor_license, d.phone AS doctor_phone,
-                        a.scheduled_at AS appointment_date, a.reason AS appointment_reason
-                    FROM prescriptions pr
-                    JOIN patients p ON p.patient_id=pr.patient_id
-                    JOIN doctors d ON d.doctor_id=pr.doctor_id
-                    LEFT JOIN appointments a ON a.appointment_id=pr.appointment_id
-                    {where}
-                    ORDER BY pr.issued_at DESC""", args).fetchall()
-                return success(rows_to_list(rows))
-
-            if method == "POST":
-                if user["role"] not in ("admin", "doctor", "receptionist"):
-                    return error("Forbidden", 403, "FORBIDDEN")
-                b = body
-                patient_id = b.get("patient_id")
-                doctor_id = b.get("doctor_id")
-                if not doctor_id and user["role"] == "doctor":
-                    doc_row = con.execute("SELECT doctor_id FROM doctors WHERE user_id=?", (user["userId"],)).fetchone()
-                    if doc_row:
-                        doctor_id = doc_row["doctor_id"]
-                if not patient_id or not doctor_id or not b.get("medications"):
-                    return error("patient_id, doctor_id and medications are required", 400, "BAD_REQUEST")
-
-                meds = b["medications"]
-                meds_str = json.dumps(meds) if isinstance(meds, (list, dict)) else str(meds)
-
-                cur = con.execute("""INSERT INTO prescriptions(appointment_id,patient_id,doctor_id,diagnosis,medications,advice)
-                    VALUES(?,?,?,?,?,?)""",
-                    (b.get("appointment_id"), patient_id, doctor_id, b.get("diagnosis",""), meds_str, b.get("advice","")))
-                con.commit()
-                rx_id = cur.lastrowid
-                row = con.execute("""SELECT pr.*,
-                    p.first_name||' '||p.last_name AS patient_name, p.phone AS patient_phone,
-                    d.first_name||' '||d.last_name AS doctor_name, d.specialisation AS doctor_specialisation, d.license_number AS doctor_license
-                    FROM prescriptions pr
-                    JOIN patients p ON p.patient_id=pr.patient_id
-                    JOIN doctors d ON d.doctor_id=pr.doctor_id
-                    WHERE pr.prescription_id=?""", (rx_id,)).fetchone()
-                return success(dict(row), 201)
-
-        rx_m = re.match(r"^/api/prescriptions/(\d+)$", path)
-        if rx_m and method == "GET":
-            rx_id = int(rx_m.group(1))
-            row = con.execute("""SELECT pr.*,
-                p.first_name||' '||p.last_name AS patient_name, p.phone AS patient_phone, p.gender AS patient_gender, p.date_of_birth AS patient_dob, p.allergies AS patient_allergies, p.blood_group AS patient_blood_group,
-                d.first_name||' '||d.last_name AS doctor_name, d.specialisation AS doctor_specialisation, d.license_number AS doctor_license, d.phone AS doctor_phone,
-                a.scheduled_at AS appointment_date, a.reason AS appointment_reason
-                FROM prescriptions pr
-                JOIN patients p ON p.patient_id=pr.patient_id
-                JOIN doctors d ON d.doctor_id=pr.doctor_id
-                LEFT JOIN appointments a ON a.appointment_id=pr.appointment_id
-                WHERE pr.prescription_id=?""", (rx_id,)).fetchone()
-            if not row: return error("Prescription not found", 404, "NOT_FOUND")
-            return success(dict(row))
         if inv_pay and method == "PATCH":
             iid = int(inv_pay.group(1))
             con.execute("UPDATE invoices SET payment_status='paid', payment_method=?, paid_at=datetime('now') WHERE invoice_id=?",
@@ -1194,11 +875,6 @@ class Handler(http.server.BaseHTTPRequestHandler):
 # ── Main ──────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     init_db()
-    if any(arg in sys.argv for arg in ("--export-csv", "-export-csv", "export-csv")):
-        import export_csv
-        export_csv.export_data()
-        sys.exit(0)
-
     server = http.server.ThreadingHTTPServer(("0.0.0.0", PORT), Handler)
     print(f"\n{'='*52}")
     print(f"  SmileClinic DMS — All-in-one Server")

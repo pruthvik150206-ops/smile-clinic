@@ -1,8 +1,10 @@
 invoice_id,invoice_number,patient_name,subtotal,discount_amount,tax_amount,total_amount,payment_status,payment_method,issued_at,paid_at
+4,INV-00004,Meera Patel,5500.0,0.0,0.0,5500.0,paid,cash,2026-07-29T07:13:46.479627,2026-07-29T15:13:08.353178
+5,INV-00005,Rahul Verma,1200.0,0.0,0.0,1200.0,paid,cash,2026-07-29T07:13:46.479627,2026-07-29T15:13:01.482064
+6,INV-00006,Sunita Rao,18000.0,0.0,0.0,18000.0,paid,cash,2026-07-29T07:13:46.479627,2026-07-29T15:12:51.214472
+9,INV-00009,pruthvik gowda. b k,1400.0,200.0,0.0,1200.0,paid,insurance,2026-07-22 17:20:50,
 8,INV-00008,pruthvik Gowda B K,8999.0,999.0,0.0,8000.0,paid,cash,2026-07-22 06:34:54,
 7,INV-00007,sharma patel,2000.0,0.0,0.0,2000.0,paid,cash,2026-06-25 22:13:04,
-6,INV-00006,pruthvik Gowda B K,9000.0,0.0,0.0,9000.0,paid,cash,2026-06-25 22:10:08,
-5,INV-00005,prashant desai,900.0,0.0,0.0,900.0,paid,cash,2026-05-25 07:57:34,
-4,INV-00004,Meera Patel,1500.0,300.0,0.0,1200.0,paid,cash,2026-05-25 05:26:43,2026-05-26 03:30:16
-2,INV-00002,Meera Patel,2800.0,200.0,0.0,2600.0,paid,Card,2026-05-24 19:09:55,
-3,INV-00003,Rahul Verma,600.0,0.0,0.0,600.0,paid,cash,2026-05-24 19:09:55,2026-05-26 03:30:18
+1,INV-00001,Meera Patel,1400.0,0.0,0.0,1400.0,paid,upi,2026-06-19T07:13:46.479627,2026-06-21T07:13:46.479627
+2,INV-00002,Rahul Verma,3000.0,200.0,0.0,2800.0,paid,card,2026-06-19T07:13:46.479627,2026-06-23T07:13:46.479627
+3,INV-00003,Sunita Rao,600.0,0.0,0.0,600.0,paid,cash,2026-04-30T07:13:46.479627,2026-05-03T07:13:46.479627

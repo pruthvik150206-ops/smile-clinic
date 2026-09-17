@@ -1,15 +1,17 @@
-appointment_id,patient_id,doctor_id,scheduled_at,duration_mins,status,reason,notes,no_show_probability,risk_level,recommended_action,priority,reminder_sent,created_at,updated_at
-2,2,1,2026-05-22 10:00,30,completed,Filling follow-up,"it was fine 
-
-Follow-up: 1 week",,,,normal,0,2026-05-24 19:09:55,2026-05-24 19:12:50
-3,1,2,2026-05-27 11:00,60,confirmed,Braces consultation,,,,,normal,0,2026-05-24 19:09:55,2026-05-26 03:26:42
-5,3,1,2026-05-25T15:00,30,completed,,"molar check up done will need to take the medications and follow a liquid only diet 
-
-Follow-up: 1 week",0.233,Low,✅ Standard automated reminder is sufficient,high,0,2026-05-25 05:30:30,2026-05-25 07:57:03
-6,6,4,2026-05-26T08:00,30,confirmed,,,0.2229,Low,✅ Standard automated reminder is sufficient,high,0,2026-05-26 03:27:03,2026-05-26 03:31:52
-7,4,1,2026-05-26T08:00,30,completed,left upper molar ache ,pain due to cavity suggested to floss mouth before sleeping ,0.2502,Low,✅ Standard automated reminder is sufficient,high,0,2026-05-26 03:28:13,2026-05-26 03:31:23
-8,5,2,2026-05-26T08:00,30,confirmed,braces appointment ,,0.0929,Low,✅ Standard automated reminder is sufficient,normal,0,2026-05-26 03:28:40,2026-06-25 22:10:21
-9,6,1,2026-05-26T08:00,30,scheduled,unbearable tooth pain ,,0.2439,Low,✅ Standard automated reminder is sufficient,urgent,0,2026-05-26 03:30:06,2026-05-26 03:30:06
-10,8,2,2026-06-26T03:00,30,completed,,,0.2545,Low,✅ Standard automated reminder is sufficient,normal,0,2026-06-25 22:11:36,2026-06-25 22:12:33
-11,6,2,2026-07-22T12:00,30,confirmed,,,0.1623,Low,✅ Standard automated reminder is sufficient,normal,0,2026-07-22 06:39:03,2026-07-22 10:04:42
-12,4,1,2026-07-22T15:00,30,completed,upper molar ache ,gargle twice with hot water and salt,0.1675,Low,✅ Standard automated reminder is sufficient,high,0,2026-07-22 09:37:03,2026-07-22 09:52:40
+appointment_id,patient_id,doctor_id,scheduled_at,duration_mins,status,reason,notes,no_show_probability,risk_level,recommended_action,priority,booking_source,reminder_sent,created_at,updated_at
+1,1,1,2026-07-30T10:00:00,90,scheduled,Root canal — upper left first molar,,0.235,Low,,normal,0,2026-07-29T07:13:46.479627,2026-07-30T03:16:15.551344,Call Booking
+2,2,1,2026-07-30T14:30:00,30,confirmed,Filling follow-up,,0.067,Low,,normal,0,2026-07-29T07:13:46.479627,2026-07-30T03:16:15.666565,Call Booking
+3,3,2,2026-07-31T11:00:00,60,scheduled,Braces fitting — upper arch,,0.051,Low,,normal,0,2026-07-29T07:13:46.479627,2026-07-30T03:16:15.716635,Call Booking
+4,1,1,2026-07-31T16:00:00,45,scheduled,Routine scaling and cleaning,,0.082,Low,,normal,0,2026-07-29T07:13:46.479627,2026-07-30T03:16:15.761537,Call Booking
+5,2,1,2026-03-15T14:00:00,30,completed,Composite filling — lower molar,,0.114,Low,,normal,0,2026-07-29T07:13:46.479627,2026-07-29T07:13:46.479627,Call Booking
+6,3,2,2026-02-20T11:00:00,60,completed,Braces consultation and OPG,,0.043,Low,,normal,0,2026-07-29T07:13:46.479627,2026-07-29T07:13:46.479627,Call Booking
+7,4,1,2026-05-26T08:00,30,completed,left upper molar ache ,pain due to cavity suggested to floss mouth before sleeping ,0.2502,Low,✅ Standard automated reminder is sufficient,high,0,2026-05-26 03:28:13,2026-05-26 03:31:23,Call Booking
+8,5,2,2026-05-26T08:00,30,confirmed,braces appointment ,,0.0929,Low,✅ Standard automated reminder is sufficient,normal,0,2026-05-26 03:28:40,2026-06-25 22:10:21,Call Booking
+9,6,1,2026-05-26T08:00,30,scheduled,unbearable tooth pain ,,0.2439,Low,✅ Standard automated reminder is sufficient,urgent,0,2026-05-26 03:30:06,2026-05-26 03:30:06,Call Booking
+10,8,2,2026-06-26T03:00,30,completed,,,0.2545,Low,✅ Standard automated reminder is sufficient,normal,0,2026-06-25 22:11:36,2026-06-25 22:12:33,Call Booking
+11,6,2,2026-07-22T12:00,30,confirmed,,,0.1623,Low,✅ Standard automated reminder is sufficient,normal,0,2026-07-22 06:39:03,2026-07-22 10:04:42,Call Booking
+12,4,1,2026-07-22T15:00,30,scheduled,upper molar ache ,gargle twice with hot water and salt,0.1675,Low,✅ Standard automated reminder is sufficient,high,0,2026-07-22 09:37:03,2026-07-24 05:27:37,Call Booking
+13,10,1,2026-05-25T10:00,30,scheduled,Routine checkup test,,,,,normal,0,2026-09-10 10:38:18,2026-09-10 10:38:18,Call Booking
+14,10,1,2026-09-11T04:30,30,scheduled,Online Website Booking,,,,,normal,0,2026-09-10 10:46:59,2026-09-10 10:46:59,Call Booking
+15,10,,2026-09-25T14:30,30,scheduled,Severe tooth sensitivity,,,,,normal,Website Booking,0,2026-09-11 04:16:18,2026-09-11 04:16:18
+16,10,1,2026-09-30T11:00,30,scheduled,Toothache and scaling,,,,,normal,Website Booking,0,2026-09-11 04:17:41,2026-09-11 04:17:41

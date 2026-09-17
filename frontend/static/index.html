@@ -3,1295 +3,2044 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SmileClinic — Advanced Dental & ENT Care, Bengaluru</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='8' fill='%23102B35'/%3E%3Cpath d='M8 14 Q12 21 18 21 Q24 21 28 14' stroke='%23789B92' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Cpath d='M4 20 Q7 17.5 10 20 Q13 22.5 16 20 Q19 17.5 22 20 Q25 22.5 28 20 Q31 17.5 34 20' stroke='%23B58B55' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"/>
+<title>SmileClinic — Dental & ENT, Bengaluru</title>
+<meta name="description" content="Premium dental and ENT care in Bengaluru. Specialist consultations, advanced procedures, unhurried attention."/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='8' fill='%23102B35'/%3E%3Cpath d='M8 14 Q12 21 18 21 Q24 21 28 14' stroke='%23789B92' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Cpath d='M4 20 Q8 17 12 20 Q16 23 20 20 Q24 17 28 20 Q31 17 34 20' stroke='%23B58B55' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"/>
+<meta property="og:title" content="SmileClinic — Dental & ENT Care"/>
+<meta property="og:description" content="Specialist dental and ENT care in Bengaluru. Book a consultation."/>
+<meta property="og:type" content="website"/>
 <meta name="theme-color" content="#102B35"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet"/>
 <style>
-/* ─── RESET & DESIGN TOKENS ─────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-@property --beam-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+/* ─── TOKENS ─────────────────────────────────────────────────── */
+:root{
+  --c-teal:    #102B35;
+  --c-teal-2:  #1A3D4A;
+  --c-teal-3:  #2A5566;
+  --c-eu:      #789B92;
+  --c-eu-lt:   #A8C4BB;
+  --c-mist:    #DDE7E3;
+  --c-mist-dk: #C4D4CF;
+  --c-brass:   #B58B55;
+  --c-brass-lt:#C9A870;
+  --c-pcln:    #F7F4EE;
+  --c-warm:    #FDFBF7;
+  --c-ink:     #1E3238;
+  --c-mid:     #4A6168;
+  --c-soft:    #7A9298;
+  --serif:     'Cormorant Garamond',Georgia,serif;
+  --sans:      'DM Sans',system-ui,sans-serif;
+  --ease:      cubic-bezier(.25,.46,.45,.94);
+  --ease-out:  cubic-bezier(.16,1,.3,1);
+  --ease-spring:cubic-bezier(.34,1.56,.64,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth;scroll-padding-top:72px}
+body{
+  font-family:var(--sans);background:var(--c-pcln);color:var(--c-ink);
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+::selection{background:rgba(120,155,146,.2)}
+:focus-visible{outline:2px solid var(--c-brass);outline-offset:3px;border-radius:2px}
+img{display:block;width:100%;height:100%;object-fit:cover}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--sans);cursor:pointer;border:none;background:none}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
-:root {
-  --porcelain:  #F7F4EE;
-  --teal:       #102B35;
-  --teal-mid:   #1A3D4A;
-  --teal-light: #2A5566;
-  --eucalyptus: #789B92;
-  --euclid-lt:  #A8C4BB;
-  --mist:       #DDE7E3;
-  --mist-dk:    #C4D4CF;
-  --brass:      #B58B55;
-  --brass-lt:   #C9A870;
-  --warm-white: #FDFBF7;
-  --text-body:  #2A3B3E;
-  --text-mid:   #556B6F;
-  --text-soft:  #8A9F9C;
-  --serif:      'Cormorant Garamond', Georgia, serif;
-  --sans:       'DM Sans', system-ui, sans-serif;
-  --ease:       cubic-bezier(.25,.46,.45,.94);
-  --ease-out:   cubic-bezier(.16,1,.3,1);
+/* ─── CURSOR GLOW (desktop only) ──────────────────────────────── */
+#cursor-glow{
+  pointer-events:none;position:fixed;z-index:9999;
+  width:400px;height:400px;border-radius:50%;
+  background:radial-gradient(circle,rgba(120,155,146,.06) 0%,transparent 65%);
+  transform:translate(-50%,-50%);transition:opacity .4s;
+  display:none;
 }
-html { scroll-behavior: smooth; font-size: 16px; scroll-padding-top: 80px; }
-body {
-  font-family: var(--sans); background: var(--porcelain); color: var(--text-body);
-  line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden;
-}
-img { display: block; max-width: 100%; object-fit: cover; }
-a { color: inherit; text-decoration: none; }
-button { font-family: var(--sans); cursor: pointer; border: none; background: none; }
+@media(pointer:fine){#cursor-glow{display:block}}
 
-/* ─── REACT BITS: SPOTLIGHT 3D TILT CARDS ────────────────────── */
-.spotlight-card {
-  position: relative; overflow: hidden; border-radius: 12px;
-  transform-style: preserve-3d; transition: transform 0.2s var(--ease-out);
-}
-.spotlight-card::before {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(650px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(201, 168, 112, 0.22), transparent 45%);
-  opacity: 0; transition: opacity 0.4s ease; pointer-events: none; z-index: 4;
-}
-.spotlight-card:hover::before { opacity: 1; }
+/* ─── SCROLLBAR ────────────────────────────────────────────────── */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--c-pcln)}
+::-webkit-scrollbar-thumb{background:var(--c-mist-dk);border-radius:2px}
 
-/* ─── REACT BITS: GLOWING BORDER BEAM EFFECT ─────────────────── */
-.border-beam {
-  position: relative; border-radius: 12px; overflow: hidden;
+/* ─── NOISE TEXTURE OVERLAY ────────────────────────────────────── */
+body::after{
+  content:'';position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size:128px 128px;
 }
-.border-beam::after {
-  content: ''; position: absolute; inset: 0; border-radius: 12px; padding: 2px;
-  background: conic-gradient(from var(--beam-angle), transparent 70%, var(--brass) 88%, var(--euclid-lt) 100%);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
-  animation: rotateBeam 4s linear infinite; z-index: 5;
+
+/* ─── NAV ──────────────────────────────────────────────────────── */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:68px;display:flex;align-items:center;
+  padding:0 48px;justify-content:space-between;
+  transition:all .5s var(--ease);
 }
-@keyframes rotateBeam { 0% { --beam-angle: 0deg; } 100% { --beam-angle: 360deg; } }
-
-/* ─── REACT BITS: ANIMATED GRADIENT TEXT ─────────────────────── */
-.gradient-text {
-  background: linear-gradient(135deg, var(--porcelain) 0%, var(--euclid-lt) 45%, var(--brass-lt) 100%);
-  background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  animation: gradientShift 6s ease infinite alternate;
+.nav::before{
+  content:'';position:absolute;inset:0;
+  background:rgba(16,43,53,0);
+  backdrop-filter:blur(0px);
+  border-bottom:1px solid transparent;
+  transition:all .5s var(--ease);
+  pointer-events:none;
 }
-@keyframes gradientShift { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
-
-/* ─── REACT BITS: MAGNETIC BUTTON PHYSICS ────────────────────── */
-.magnet-btn { transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1); display: inline-flex; }
-
-/* ─── REACT BITS: RIPPLE BUTTON CLICK EFFECT ─────────────────── */
-.ripple-btn { position: relative; overflow: hidden; }
-.ripple-wave {
-  position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.45);
-  transform: scale(0); animation: rippleAnim 0.6s linear; pointer-events: none;
+.nav.solid::before{
+  background:rgba(247,244,238,.94);
+  backdrop-filter:blur(20px);
+  border-color:var(--c-mist-dk);
 }
-@keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
-
-/* ─── UTILITY & TYPOGRAPHY ────────────────────────────────────── */
-.container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
-@media (max-width: 640px) { .container { padding: 0 20px; } }
-
-.t-display { font-family: var(--serif); font-size: clamp(3.2rem, 6.5vw, 5.8rem); font-weight: 300; line-height: 1.05; letter-spacing: -0.02em; }
-.t-heading { font-family: var(--serif); font-size: clamp(2.2rem, 4.2vw, 3.4rem); font-weight: 300; line-height: 1.1; letter-spacing: -0.015em; }
-.t-label { font-family: var(--sans); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--eucalyptus); }
-.t-body { font-size: 1rem; line-height: 1.75; color: var(--text-mid); font-weight: 300; }
-
-/* ─── BUTTONS ────────────────────────────────────────────────── */
-.btn {
-  display: inline-flex; align-items: center; gap: 10px; font-family: var(--sans); font-size: 0.85rem;
-  font-weight: 600; letter-spacing: 0.04em; border-radius: 6px; padding: 14px 28px;
-  transition: all .3s var(--ease); position: relative; overflow: hidden;
+.nav-logo{display:flex;align-items:center;gap:10px;z-index:1}
+.nav-logo-text{
+  font-family:var(--serif);font-size:1.1rem;font-weight:400;
+  color:rgba(247,244,238,.92);transition:color .4s;letter-spacing:.01em;
 }
-.btn-primary { background: var(--brass); color: #fff; box-shadow: 0 4px 20px rgba(181, 139, 85, 0.25); }
-.btn-primary:hover { background: var(--brass-lt); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(181, 139, 85, 0.35); }
-.btn-outline { border: 1px solid currentColor; color: var(--teal); }
-.btn-outline:hover { background: var(--teal); color: #fff; transform: translateY(-2px); }
-.btn-ghost { color: rgba(255,255,255,.9); border: 1px solid rgba(255,255,255,.25); padding: 12px 24px; backdrop-filter: blur(8px); }
-.btn-ghost:hover { background: rgba(255,255,255,.15); color: #fff; transform: translateY(-2px); }
-.btn-arrow::after { content: '→'; transition: transform .25s var(--ease); }
-.btn-arrow:hover::after { transform: translateX(5px); }
+.nav.solid .nav-logo-text{color:var(--c-teal)}
+.nav-links{display:flex;align-items:center;gap:32px;z-index:1}
+.nav-links a{
+  font-size:.8rem;font-weight:500;letter-spacing:.03em;
+  color:rgba(247,244,238,.65);transition:color .25s;position:relative;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;
+  background:var(--c-brass);transform:scaleX(0);transform-origin:left;
+  transition:transform .3s var(--ease-out);
+}
+.nav-links a:hover{color:rgba(247,244,238,1)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav.solid .nav-links a{color:var(--c-mid)}
+.nav.solid .nav-links a:hover{color:var(--c-teal)}
+.nav-book{
+  z-index:1;padding:9px 20px;border-radius:1px;font-size:.78rem;font-weight:500;
+  letter-spacing:.04em;background:var(--c-brass);color:#fff;
+  transition:all .25s var(--ease);display:inline-flex;align-items:center;gap:7px;
+}
+.nav-book:hover{background:var(--c-brass-lt);transform:translateY(-1px)}
+.nav-book::after{content:'↗';font-size:.75rem;transition:transform .2s}
+.nav-book:hover::after{transform:translate(1px,-1px)}
+.hamburger{display:none;z-index:1;flex-direction:column;gap:4px;padding:6px}
+.hamburger span{display:block;width:20px;height:1px;background:rgba(247,244,238,.8);transition:all .3s}
+.nav.solid .hamburger span{background:var(--c-teal)}
+@media(max-width:860px){
+  .nav-links,.nav-book{display:none}
+  .hamburger{display:flex}
+  .nav{padding:0 24px}
+}
 
-/* ─── NAVIGATION ─────────────────────────────────────────────── */
-.nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-  padding: 0 40px; height: 74px; display: flex; align-items: center; justify-content: space-between;
-  transition: background .5s var(--ease), border-color .5s var(--ease), height .3s var(--ease);
-  border-bottom: 1px solid transparent;
+/* mobile menu */
+.mob-menu{
+  position:fixed;inset:0;z-index:190;background:var(--c-teal);
+  transform:translateX(100%);transition:transform .45s var(--ease-out);
+  display:flex;flex-direction:column;justify-content:center;padding:80px 40px 48px;
 }
-.nav.pinned {
-  background: rgba(247,244,238,.96); backdrop-filter: blur(16px);
-  border-color: var(--mist-dk); height: 62px; box-shadow: 0 4px 20px rgba(16, 43, 53, 0.05);
+.mob-menu.open{transform:none}
+.mob-menu a{
+  font-family:var(--serif);font-size:2.8rem;font-weight:300;
+  color:var(--c-pcln);padding:12px 0;display:block;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  transition:color .2s,padding-left .2s;
 }
-.nav.pinned .nav-logo span { color: var(--teal) !important; }
-.nav-logo { display: flex; align-items: center; gap: 10px; }
-.nav-links { display: flex; align-items: center; gap: 36px; }
-.nav-links a { font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,.85); transition: color .25s; letter-spacing: .02em; }
-.nav.pinned .nav-links a { color: var(--text-mid); }
-.nav-links a:hover, .nav.pinned .nav-links a:hover { color: var(--brass); }
+.mob-menu a:hover{color:var(--c-eu-lt);padding-left:8px}
+.mob-book{
+  margin-top:32px;display:inline-flex;align-items:center;gap:8px;
+  background:var(--c-brass);color:#fff;padding:14px 28px;font-size:.9rem;font-weight:500;
+}
 
-/* ─── HERO & CANVAS PARTICLES ───────────────────────────────── */
-.hero {
-  min-height: 100vh; background: var(--teal); display: flex; flex-direction: column;
-  justify-content: flex-end; position: relative; overflow: hidden;
+/* ─── ANIMATED BG PARTICLES ────────────────────────────────────── */
+.particles{
+  position:absolute;inset:0;overflow:hidden;pointer-events:none;
 }
-#particleCanvas { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-.hero-ambient {
-  position: absolute; inset: 0; z-index: 0;
+.particle{
+  position:absolute;border-radius:50%;
+  animation:floatParticle linear infinite;
+  opacity:0;
+}
+@keyframes floatParticle{
+  0%{opacity:0;transform:translateY(0) scale(0)}
+  10%{opacity:1}
+  90%{opacity:.6}
+  100%{opacity:0;transform:translateY(-100px) scale(1.2)}
+}
+
+/* ─── HERO ──────────────────────────────────────────────────────── */
+.hero{
+  min-height:100vh;background:var(--c-teal);position:relative;overflow:hidden;
+  display:grid;place-items:center;
+}
+.hero-bg{
+  position:absolute;inset:0;
   background:
-    radial-gradient(ellipse 70% 55% at 78% 30%, rgba(120,155,146,.25) 0%, transparent 65%),
-    radial-gradient(ellipse 50% 70% at 15% 85%, rgba(181,139,85,.16) 0%, transparent 55%),
-    linear-gradient(170deg, #0A2029 0%, #102B35 45%, #1A3D4A 100%);
+    radial-gradient(ellipse 65% 55% at 80% 25%,rgba(120,155,146,.14) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 60% at 10% 80%,rgba(181,139,85,.07) 0%,transparent 55%),
+    radial-gradient(ellipse 90% 50% at 50% 0%,rgba(247,244,238,.03) 0%,transparent 40%),
+    linear-gradient(160deg,#091f28 0%,#102B35 40%,#1A3D4A 100%);
 }
-.hero-inner {
-  position: relative; z-index: 2; display: grid; grid-template-columns: 1.1fr 0.9fr;
-  align-items: center; padding: 120px 80px 80px; gap: 60px; min-height: 100vh;
+/* animated mesh gradient */
+.hero-mesh{
+  position:absolute;inset:0;pointer-events:none;
+  background:conic-gradient(from 180deg at 70% 40%,transparent 0deg,rgba(120,155,146,.05) 60deg,transparent 120deg);
+  animation:meshSpin 25s linear infinite;
 }
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 8px; background: rgba(120,155,146,0.15);
-  border: 1px solid rgba(168,196,187,0.3); color: var(--euclid-lt); font-size: 0.75rem;
-  font-weight: 600; padding: 6px 14px; border-radius: 20px; margin-bottom: 28px; letter-spacing: 0.04em;
-}
-.badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--brass); animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)} }
-
-.hero-image-frame {
-  position: relative; border-radius: 12px; overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15);
-}
-.hero-image-frame img { width: 100%; height: 480px; object-fit: cover; transition: transform 0.8s var(--ease); }
-.hero-image-frame:hover img { transform: scale(1.05); }
-
-.hero-visual-chip {
-  position: absolute; bottom: 24px; left: 24px; right: 24px; background: rgba(16, 43, 53, 0.88);
-  backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 16px 20px;
-  display: flex; align-items: center; gap: 16px; color: var(--porcelain);
+@keyframes meshSpin{to{transform:rotate(360deg)}}
+.hero-mesh-2{
+  position:absolute;inset:0;pointer-events:none;
+  background:conic-gradient(from 0deg at 30% 70%,transparent 0deg,rgba(181,139,85,.04) 80deg,transparent 160deg);
+  animation:meshSpin 35s linear infinite reverse;
 }
 
-/* ─── COUNTER STATS STRIP ───────────────────────────────────── */
-.stats-strip {
-  background: var(--teal-mid); border-top: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08);
-  padding: 40px 80px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; color: var(--porcelain);
+/* SVG wave + anatomy lines */
+.hero-svg{
+  position:absolute;inset:0;width:100%;height:100%;pointer-events:none;
 }
-.stat-box { text-align: center; }
-.stat-num { font-family: var(--serif); font-size: 3rem; font-weight: 600; color: var(--brass-lt); display: block; }
-.stat-label { font-size: 0.82rem; color: rgba(255,255,255,0.65); letter-spacing: 0.04em; margin-top: 4px; }
+.h-line{
+  fill:none;stroke-width:.5;stroke-linecap:round;
+  stroke-dasharray:2000;stroke-dashoffset:2000;
+  animation:drawLine 5s 1s var(--ease-out) forwards;
+}
+.h-line-1{stroke:rgba(168,196,187,.25);animation-delay:.8s}
+.h-line-2{stroke:rgba(181,139,85,.2);animation-delay:1.6s;animation-duration:6s}
+.h-line-3{stroke:rgba(168,196,187,.1);animation-delay:2.4s;animation-duration:7s}
+@keyframes drawLine{to{stroke-dashoffset:0}}
 
-/* ─── REACT BITS: INTERACTIVE 3D DENTAL & ENT HOLOGRAM ─────── */
-.hologram-section { padding: 100px 0; background: var(--teal); color: var(--porcelain); position: relative; }
-.hologram-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-.hologram-canvas-wrap {
-  position: relative; width: 100%; height: 420px; background: rgba(0,0,0,0.25);
-  border-radius: 16px; border: 1px solid rgba(255,255,255,0.15); overflow: hidden; display: flex;
-  align-items: center; justify-content: center;
+/* glowing orbs */
+.orb{
+  position:absolute;border-radius:50%;pointer-events:none;
+  animation:orbBreath 9s ease-in-out infinite;
 }
-#holoCanvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-.holo-hud {
-  position: absolute; top: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between;
-  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--euclid-lt);
-  pointer-events: none; z-index: 10;
-}
-.holo-hotspot-btn {
-  padding: 10px 18px; border-radius: 30px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
-  color: var(--porcelain); font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;
-}
-.holo-hotspot-btn.active, .holo-hotspot-btn:hover { background: var(--brass); border-color: var(--brass-lt); color: #fff; }
+.orb-1{width:700px;height:700px;top:-200px;right:-150px;background:radial-gradient(circle,rgba(120,155,146,.07) 0%,transparent 65%)}
+.orb-2{width:500px;height:500px;bottom:-100px;left:-80px;background:radial-gradient(circle,rgba(181,139,85,.05) 0%,transparent 65%);animation-delay:3s}
+.orb-3{width:300px;height:300px;top:40%;left:45%;background:radial-gradient(circle,rgba(168,196,187,.04) 0%,transparent 70%);animation-delay:5s}
+@keyframes orbBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
 
-/* ─── TABBED SERVICES FILTER ────────────────────────────────── */
-.services-section { padding: 120px 0; background: var(--porcelain); }
-.filter-tabs { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 56px; flex-wrap: wrap; }
-.filter-tab {
-  padding: 10px 24px; border-radius: 30px; font-size: 0.85rem; font-weight: 600;
-  color: var(--text-mid); background: var(--mist); transition: all 0.3s var(--ease); cursor: pointer;
+.hero-inner{
+  position:relative;z-index:2;width:100%;max-width:1280px;
+  padding:120px 80px 80px;
+  display:grid;grid-template-columns:1fr 1fr;align-items:end;gap:60px;
 }
-.filter-tab.active, .filter-tab:hover { background: var(--teal); color: var(--porcelain); }
+/* Text side */
+.hero-eyebrow{
+  display:flex;align-items:center;gap:12px;margin-bottom:28px;
+  opacity:0;animation:fadeUp .8s 1.6s var(--ease-out) forwards;
+}
+.eyebrow-dash{width:28px;height:1px;background:var(--c-brass)}
+.eyebrow-text{font-size:.7rem;font-weight:500;letter-spacing:.12em;color:var(--c-eu-lt)}
+.hero-h1{
+  font-family:var(--serif);font-size:clamp(3rem,5.5vw,5.2rem);
+  font-weight:300;line-height:1.04;letter-spacing:-.02em;color:var(--c-pcln);
+  opacity:0;animation:fadeUp .9s 1.9s var(--ease-out) forwards;
+  overflow:hidden;
+}
+.hero-h1 em{font-style:italic;color:var(--c-eu-lt)}
+.hero-sub{
+  font-size:1rem;font-weight:300;line-height:1.75;
+  color:rgba(247,244,238,.55);max-width:380px;margin-top:24px;
+  opacity:0;animation:fadeUp .8s 2.2s var(--ease-out) forwards;
+}
+.hero-actions{
+  display:flex;align-items:center;gap:14px;margin-top:36px;flex-wrap:wrap;
+  opacity:0;animation:fadeUp .7s 2.5s var(--ease-out) forwards;
+}
+.btn-brass{
+  padding:13px 26px;background:var(--c-brass);color:#fff;
+  font-size:.82rem;font-weight:500;letter-spacing:.04em;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:all .28s var(--ease);border-radius:1px;
+}
+.btn-brass:hover{background:var(--c-brass-lt);transform:translateY(-2px);box-shadow:0 8px 32px rgba(181,139,85,.25)}
+.btn-wire{
+  padding:12px 24px;border:1px solid rgba(255,255,255,.18);
+  color:rgba(255,255,255,.7);font-size:.82rem;font-weight:400;letter-spacing:.04em;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:all .28s var(--ease);border-radius:1px;
+}
+.btn-wire:hover{border-color:rgba(255,255,255,.4);color:#fff;background:rgba(255,255,255,.05)}
 
-.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-.service-card {
-  background: var(--warm-white); border: 1px solid var(--mist-dk); border-radius: 12px;
-  padding: 30px; transition: all 0.35s var(--ease); display: flex; flex-direction: column; justify-content: space-between;
+/* Hero right panel — stacked cards */
+.hero-panel{
+  display:flex;flex-direction:column;gap:1px;
+  opacity:0;animation:fadeLeft .9s 2.6s var(--ease-out) forwards;
 }
-.service-card:hover { transform: translateY(-6px); border-color: var(--brass); box-shadow: 0 16px 40px rgba(16, 43, 53, 0.08); }
-.service-card-media { width: 100%; height: 170px; border-radius: 8px; overflow: hidden; margin-bottom: 20px; }
-.service-card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-.service-card:hover .service-card-media img { transform: scale(1.06); }
-.service-tag {
-  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--brass); background: rgba(181, 139, 85, 0.1); padding: 4px 10px; border-radius: 4px; display: inline-block; margin-bottom: 12px;
+.hero-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);
+  padding:22px 26px;cursor:default;
+  transition:all .3s var(--ease);position:relative;overflow:hidden;
 }
-.service-name { font-family: var(--serif); font-size: 1.35rem; font-weight: 500; color: var(--teal); margin-bottom: 10px; }
-.service-desc { font-size: 0.88rem; color: var(--text-mid); line-height: 1.65; font-weight: 300; margin-bottom: 20px; }
-.service-footer { font-size: 0.8rem; font-weight: 600; color: var(--eucalyptus); display: flex; align-items: center; justify-content: space-between; }
+.hero-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:var(--c-brass);transform:scaleY(0);transform-origin:bottom;
+  transition:transform .35s var(--ease-out);
+}
+.hero-card:hover{background:rgba(255,255,255,.07)}
+.hero-card:hover::before{transform:scaleY(1)}
+.hc-label{font-size:.65rem;font-weight:500;letter-spacing:.1em;color:var(--c-eu-lt);margin-bottom:8px}
+.hc-title{font-family:var(--serif);font-size:1.3rem;font-weight:300;color:var(--c-pcln);margin-bottom:5px}
+.hc-text{font-size:.78rem;color:rgba(247,244,238,.4);font-weight:300;line-height:1.6}
 
-/* ─── REAL TEETH WHITENING BEFORE / AFTER & LASER SCANNER ─── */
-.transform-section { padding: 100px 0; background: var(--warm-white); border-top: 1px solid var(--mist); border-bottom: 1px solid var(--mist); }
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes fadeLeft{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
 
-.laser-scanner-box {
-  position: relative; width: 100%; max-width: 860px; height: 460px; margin: 30px auto 0;
-  border-radius: 12px; overflow: hidden; box-shadow: 0 20px 50px rgba(16,43,53,0.18); border: 2px solid var(--mist-dk);
+.hero-scroll-hint{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  z-index:3;display:flex;flex-direction:column;align-items:center;gap:6px;
+  opacity:0;animation:fadeUp .6s 3.2s var(--ease-out) forwards;
 }
-.laser-beam-line {
-  position: absolute; top: 0; bottom: 0; width: 4px; background: #00F0FF;
-  box-shadow: 0 0 20px #00F0FF, 0 0 40px #00F0FF, 0 0 60px #00F0FF; z-index: 20;
-  left: 0%; display: none; pointer-events: none;
-}
-.laser-img-before { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.laser-img-after {
-  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-  clip-path: polygon(0 0, 0% 0, 0% 100%, 0 100%); transition: clip-path 0.05s ease-out;
-}
+.scroll-label{font-size:.62rem;letter-spacing:.12em;color:rgba(247,244,238,.25)}
+.scroll-track{width:1px;height:44px;background:linear-gradient(to bottom,rgba(255,255,255,.2),transparent);animation:scrollTrack 2.4s 3.5s ease-in-out infinite}
+@keyframes scrollTrack{0%,100%{scaleY(1);opacity:1}50%{transform:scaleY(.4);opacity:.4}}
 
-.badge-before, .badge-after {
-  position: absolute; top: 16px; z-index: 12; padding: 6px 14px; border-radius: 4px;
-  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; backdrop-filter: blur(8px);
-}
-.badge-before { left: 16px; background: rgba(16, 43, 53, 0.82); color: rgba(255,255,255,0.9); border: 1px solid rgba(255,255,255,0.2); }
-.badge-after { right: 16px; background: rgba(181, 139, 85, 0.92); color: #fff; border: 1px solid rgba(255,255,255,0.4); }
-
-.comparison-wrapper {
-  position: relative; width: 100%; max-width: 860px; height: 460px; margin: 40px auto 0;
-  border-radius: 12px; overflow: hidden; box-shadow: 0 20px 50px rgba(16,43,53,0.18); border: 2px solid var(--mist-dk);
-}
-.comparison-image { position: absolute; inset: 0; width: 100%; height: 100%; }
-.before-image img { width: 100%; height: 100%; object-fit: cover; }
-.after-image { width: 50%; overflow: hidden; border-right: 3px solid var(--brass); transition: width 0.05s ease-out; }
-.after-image img { width: 860px; height: 460px; object-fit: cover; max-width: none; }
-.slider-handle {
-  position: absolute; top: 0; bottom: 0; left: 50%; width: 44px; margin-left: -22px;
-  display: flex; align-items: center; justify-content: center; cursor: ew-resize; z-index: 10;
-}
-.handle-circle {
-  width: 44px; height: 44px; border-radius: 50%; background: var(--brass); color: #fff;
-  display: flex; align-items: center; justify-content: center; font-weight: 700; box-shadow: 0 4px 16px rgba(0,0,0,0.35);
-}
-
-.whitening-highlights {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
-  max-width: 860px; margin: 30px auto 0; text-align: left;
-}
-.whitening-chip {
-  background: var(--porcelain); border: 1px solid var(--mist-dk); border-radius: 8px;
-  padding: 16px; display: flex; align-items: center; gap: 12px;
-}
-.chip-icon { font-size: 1.5rem; }
-.chip-title { font-weight: 600; font-size: 0.9rem; color: var(--teal); }
-.chip-sub { font-size: 0.72rem; color: var(--text-mid); }
-
-.shade-visualizer-card {
-  background: var(--porcelain); border: 1px solid var(--mist-dk); border-radius: 12px;
-  padding: 32px; max-width: 860px; margin: 40px auto 0; text-align: left;
-}
-.shade-buttons { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
-.shade-btn {
-  padding: 10px 18px; border-radius: 6px; border: 1px solid var(--mist-dk);
-  background: var(--warm-white); color: var(--teal); font-size: 0.82rem; font-weight: 600;
-  cursor: pointer; transition: all 0.25s ease;
-}
-.shade-btn.active, .shade-btn:hover { background: var(--teal); color: var(--porcelain); border-color: var(--teal-mid); }
-.shade-preview-box {
-  background: var(--warm-white); border: 1px solid var(--mist-dk); border-radius: 8px;
-  padding: 20px 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
-}
-.shade-tooth-icon { font-size: 2.8rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); transition: all 0.4s ease; }
-
-/* ─── REACT BITS: INTERACTIVE BENTO GRID ─────────────────────── */
-.bento-section { padding: 100px 0; background: var(--porcelain); }
-.bento-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: minmax(220px, auto); gap: 24px; margin-top: 48px;
-}
-.bento-item {
-  background: var(--warm-white); border: 1px solid var(--mist-dk); border-radius: 16px;
-  padding: 32px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;
-}
-.bento-item-large { grid-column: span 2; grid-row: span 2; }
-.bento-item-tall { grid-row: span 2; }
-
-/* ─── DOCTORS SHOWCASE ───────────────────────────────────────── */
-.team-section { padding: 120px 0; background: var(--warm-white); }
-.team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 56px; }
-.doctor-card {
-  background: var(--porcelain); border-radius: 12px; overflow: hidden;
-  border: 1px solid var(--mist-dk); transition: all 0.35s var(--ease);
-}
-.doctor-card:hover { transform: translateY(-8px); box-shadow: 0 20px 45px rgba(16,43,53,0.12); border-color: var(--brass); }
-.doctor-img-wrap { width: 100%; height: 320px; position: relative; overflow: hidden; }
-.doctor-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease); }
-.doctor-card:hover .doctor-img-wrap img { transform: scale(1.05); }
-.doctor-info { padding: 28px 24px; }
-.doctor-name { font-family: var(--serif); font-size: 1.4rem; font-weight: 500; color: var(--teal); margin-bottom: 4px; }
-.doctor-spec { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brass); margin-bottom: 12px; }
-.doctor-bio { font-size: 0.85rem; color: var(--text-mid); line-height: 1.6; font-weight: 300; }
-
-/* ─── COST ESTIMATOR / CALCULATOR ──────────────────────────── */
-.calc-section { padding: 100px 0; background: var(--teal); color: var(--porcelain); }
-.calc-card {
-  background: rgba(255,255,255,0.05); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 12px; padding: 48px; max-width: 860px; margin: 40px auto 0;
-}
-.calc-option-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 28px 0; }
-.calc-option {
-  padding: 16px 20px; border-radius: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
-  cursor: pointer; transition: all 0.25s ease; display: flex; align-items: center; justify-content: space-between;
-}
-.calc-option.selected, .calc-option:hover { background: rgba(181, 139, 85, 0.25); border-color: var(--brass); }
-.calc-price { font-family: var(--serif); font-size: 1.2rem; color: var(--euclid-lt); }
-
-/* ─── INTERACTIVE FAQ ACCORDION ───────────────────── */
-.faq-section { padding: 100px 0; background: var(--warm-white); }
-.faq-container { max-width: 800px; margin: 40px auto 0; }
-.faq-item { border-bottom: 1px solid var(--mist-dk); padding: 20px 0; transition: all 0.3s ease; }
-.faq-question {
-  display: flex; align-items: center; justify-content: space-between;
-  font-family: var(--serif); font-size: 1.35rem; font-weight: 500; color: var(--teal); cursor: pointer;
-}
-.faq-answer {
-  max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.4s var(--ease), opacity 0.4s var(--ease), margin-top 0.3s ease;
-  font-size: 0.9rem; color: var(--text-mid); line-height: 1.7; font-weight: 300;
-}
-.faq-item.active .faq-answer { max-height: 200px; opacity: 1; margin-top: 12px; }
-.faq-icon { font-size: 1.4rem; color: var(--brass); transition: transform 0.3s ease; }
-.faq-item.active .faq-icon { transform: rotate(45deg); }
-
-/* ─── LIVE SLOT BOOKER MODAL ────────────────────────────────── */
-#slotModal {
-  position: fixed; inset: 0; background: rgba(16, 43, 53, 0.85); backdrop-filter: blur(12px);
-  z-index: 9000; display: flex; align-items: center; justify-content: center; padding: 20px;
-  opacity: 0; pointer-events: none; transition: all 0.35s ease;
-}
-#slotModal.open { opacity: 1; pointer-events: auto; }
-.modal-card {
-  background: var(--warm-white); border-radius: 12px; padding: 36px; max-width: 540px; width: 100%;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.3); position: relative; border: 1px solid var(--mist-dk);
-}
-.close-modal { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; color: var(--text-mid); cursor: pointer; }
-.slot-pill-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
-.slot-pill {
-  padding: 10px; text-align: center; border-radius: 6px; border: 1px solid var(--mist-dk);
-  font-size: 0.85rem; font-weight: 600; color: var(--teal); cursor: pointer; transition: all 0.2s;
-}
-.slot-pill.selected, .slot-pill:hover { background: var(--teal); color: var(--porcelain); border-color: var(--teal-light); }
-
-/* ─── CONTACT FORM ───────────────────────────────────────────── */
-.contact-section { padding: 120px 0; background: var(--porcelain); }
-.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
-.appt-form { background: var(--teal); padding: 48px; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); }
-.form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
-.form-field label { font-size: .7rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: rgba(247,244,238,.6); }
-.form-field input, .form-field select, .form-field textarea {
-  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.15);
-  color: var(--porcelain); font-family: var(--sans); font-size: .9rem; padding: 12px 16px; border-radius: 6px;
+@media(max-width:900px){
+  .hero-inner{grid-template-columns:1fr;padding:100px 24px 64px;gap:40px}
+  .hero-panel{order:-1}
+  .hero-scroll-hint{display:none}
 }
 
-/* ─── FOOTER ─────────────────────────────────────────────────── */
-.footer { background: var(--teal); border-top: 1px solid rgba(255,255,255,.08); padding: 80px 0 40px; color: var(--porcelain); }
-.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 64px; }
-.footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-.footer-links a { font-size: .85rem; color: rgba(247,244,238,.5); transition: color .2s; }
-.footer-links a:hover { color: var(--porcelain); }
-
-@media (max-width: 900px) {
-  .hero-inner, .hologram-grid, .contact-grid { grid-template-columns: 1fr; }
-  .stats-strip, .services-grid, .team-grid, .calc-option-grid, .whitening-highlights, .bento-grid { grid-template-columns: 1fr; }
-  .bento-item-large, .bento-item-tall { grid-column: auto; grid-row: auto; }
+/* ─── MARQUEE STRIP ─────────────────────────────────────────────── */
+.marquee-strip{
+  background:var(--c-teal-2);border-top:1px solid rgba(255,255,255,.06);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  padding:14px 0;overflow:hidden;white-space:nowrap;
 }
+.marquee-inner{
+  display:inline-flex;gap:0;
+  animation:marquee 30s linear infinite;
+}
+.marquee-inner:hover{animation-play-state:paused}
+.marquee-item{
+  display:inline-flex;align-items:center;gap:12px;padding:0 36px;
+  font-size:.72rem;font-weight:400;letter-spacing:.08em;color:rgba(247,244,238,.4);
+}
+.marquee-dot{width:3px;height:3px;border-radius:50%;background:var(--c-brass);flex-shrink:0}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ─── SECTION HELPERS ───────────────────────────────────────────── */
+.section{padding:112px 0}
+.container{max-width:1240px;margin:0 auto;padding:0 64px}
+@media(max-width:640px){.container{padding:0 20px}}
+.s-label{font-size:.68rem;font-weight:500;letter-spacing:.1em;color:var(--c-eu)}
+.s-h{font-family:var(--serif);font-size:clamp(2rem,3.5vw,3rem);font-weight:300;line-height:1.1;letter-spacing:-.015em;color:var(--c-teal)}
+.s-body{font-size:.93rem;font-weight:300;line-height:1.8;color:var(--c-mid)}
+
+/* ─── REVEAL ─────────────────────────────────────────────────────── */
+[data-r]{opacity:0;transition:opacity .8s var(--ease-out),transform .8s var(--ease-out)}
+[data-r="up"]{transform:translateY(24px)}
+[data-r="left"]{transform:translateX(-20px)}
+[data-r="right"]{transform:translateX(20px)}
+[data-r="scale"]{transform:scale(.97)}
+[data-r].in{opacity:1;transform:none}
+[data-rd="1"]{transition-delay:.1s}
+[data-rd="2"]{transition-delay:.2s}
+[data-rd="3"]{transition-delay:.3s}
+[data-rd="4"]{transition-delay:.42s}
+[data-rd="5"]{transition-delay:.54s}
+
+/* ─── APPROACH ──────────────────────────────────────────────────── */
+.approach{background:var(--c-warm)}
+.approach-grid{display:grid;grid-template-columns:360px 1fr;gap:80px;align-items:start}
+.approach-sticky{position:sticky;top:100px}
+.approach-label{margin-bottom:18px}
+.approach-h{margin-bottom:20px}
+.approach-p{font-size:.9rem;color:var(--c-mid);line-height:1.8;font-weight:300;max-width:300px}
+.approach-items{display:flex;flex-direction:column;gap:0}
+.approach-item{
+  padding:32px 0;border-bottom:1px solid var(--c-mist);
+  display:grid;grid-template-columns:48px 1fr;gap:20px;align-items:start;
+}
+.approach-item:first-child{border-top:1px solid var(--c-mist)}
+.a-num{
+  font-family:var(--serif);font-size:.82rem;color:var(--c-brass);
+  padding-top:3px;font-weight:400;
+}
+.a-title{
+  font-family:var(--serif);font-size:1.1rem;font-weight:400;
+  color:var(--c-teal);margin-bottom:7px;
+}
+.a-text{font-size:.83rem;color:var(--c-soft);line-height:1.7;font-weight:300}
+@media(max-width:900px){
+  .approach-grid{grid-template-columns:1fr}
+  .approach-sticky{position:static}
+  .approach-p{max-width:100%}
+}
+
+/* ─── CARE SPLIT ─────────────────────────────────────────────────── */
+.care-split{display:grid;grid-template-columns:1fr 1fr;min-height:90vh}
+.care-side{
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:72px 64px;min-height:500px;cursor:default;
+}
+/* sample images via picsum */
+.care-side img.care-photo{
+  position:absolute;inset:0;object-fit:cover;width:100%;height:100%;
+  transition:transform 8s var(--ease),filter .6s var(--ease);
+  filter:brightness(.35) saturate(.8);
+}
+.care-side:hover .care-photo{transform:scale(1.04);filter:brightness(.42) saturate(.9)}
+.care-overlay{
+  position:absolute;inset:0;pointer-events:none;
+}
+.care-d .care-overlay{background:linear-gradient(160deg,rgba(16,43,53,.7) 0%,rgba(10,30,40,.5) 100%)}
+.care-e .care-overlay{background:linear-gradient(160deg,rgba(120,155,146,.6) 0%,rgba(16,43,53,.6) 100%)}
+.care-content{position:relative;z-index:1}
+.care-num{font-family:var(--serif);font-size:4rem;font-weight:300;opacity:.12;color:#fff;line-height:1;margin-bottom:16px}
+.care-tag{font-size:.65rem;font-weight:500;letter-spacing:.1em;color:rgba(255,255,255,.5);margin-bottom:10px}
+.care-h{
+  font-family:var(--serif);font-size:clamp(1.8rem,2.8vw,2.4rem);
+  font-weight:300;line-height:1.15;color:#fff;margin-bottom:14px;
+}
+.care-p{font-size:.85rem;font-weight:300;color:rgba(255,255,255,.6);line-height:1.7;max-width:340px;margin-bottom:28px}
+.care-link{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:.78rem;font-weight:500;letter-spacing:.04em;
+  color:rgba(255,255,255,.7);border-bottom:1px solid rgba(255,255,255,.2);
+  padding-bottom:2px;transition:all .25s;
+}
+.care-link::after{content:'→';transition:transform .25s}
+.care-side:hover .care-link{color:#fff;border-color:rgba(255,255,255,.6)}
+.care-side:hover .care-link::after{transform:translateX(4px)}
+@media(max-width:768px){
+  .care-split{grid-template-columns:1fr}
+  .care-side{padding:56px 28px;min-height:420px}
+}
+
+/* ─── SERVICES BENTO ────────────────────────────────────────────── */
+.bento{background:var(--c-pcln)}
+.bento-header{margin-bottom:56px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px}
+.bento-grid{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  grid-auto-rows:minmax(180px,auto);
+  gap:2px;
+}
+.bento-cell{
+  background:var(--c-warm);
+  padding:32px 28px;position:relative;overflow:hidden;
+  transition:background .35s var(--ease);
+  display:flex;flex-direction:column;justify-content:flex-end;
+}
+.bento-cell::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1.5px;
+  background:var(--c-brass);transform:scaleX(0);transform-origin:left;
+  transition:transform .4s var(--ease-out);
+}
+.bento-cell:hover{background:var(--c-mist)}
+.bento-cell:hover::after{transform:scaleX(1)}
+/* span classes */
+.bc-a{grid-column:span 5}
+.bc-b{grid-column:span 4}
+.bc-c{grid-column:span 3}
+.bc-d{grid-column:span 7}
+.bc-e{grid-column:span 5;grid-row:span 2}
+.bc-f{grid-column:span 4}
+.bc-g{grid-column:span 4}
+.bc-h{grid-column:span 4}
+.bc-i{grid-column:span 6}
+.bc-j{grid-column:span 6}
+
+/* feature cell */
+.bento-feature{
+  background:var(--c-teal);
+}
+.bento-feature .bc-cat{color:var(--c-eu-lt)}
+.bento-feature .bc-name{color:var(--c-pcln)}
+.bento-feature .bc-desc{color:rgba(247,244,238,.5)}
+.bento-feature::after{background:var(--c-eu-lt)}
+
+.bento-cell .bc-icon{
+  margin-bottom:auto;padding-bottom:20px;color:var(--c-brass);
+  transition:transform .3s var(--ease-spring);
+}
+.bento-cell:hover .bc-icon{transform:scale(1.1) rotate(-3deg)}
+.bc-cat{font-size:.62rem;font-weight:500;letter-spacing:.1em;color:var(--c-eu);margin-bottom:6px}
+.bc-name{font-family:var(--serif);font-size:1.05rem;font-weight:400;color:var(--c-teal);margin-bottom:6px}
+.bc-desc{font-size:.78rem;color:var(--c-soft);line-height:1.65;font-weight:300}
+
+@media(max-width:900px){
+  .bento-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:auto}
+  .bc-a,.bc-b,.bc-c,.bc-d,.bc-e,.bc-f,.bc-g,.bc-h,.bc-i,.bc-j{grid-column:span 1}
+  .bento-cell{padding:24px 20px;min-height:160px}
+}
+@media(max-width:480px){
+  .bento-grid{grid-template-columns:1fr}
+  .bc-a,.bc-b,.bc-c,.bc-d,.bc-e,.bc-f,.bc-g,.bc-h,.bc-i,.bc-j{grid-column:span 1}
+}
+
+/* ─── TEAM ──────────────────────────────────────────────────────── */
+.team{background:var(--c-teal)}
+.team-header{margin-bottom:64px}
+.team-header .s-label{color:var(--c-eu-lt)}
+.team-header .s-h{color:var(--c-pcln)}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.team-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06);
+  overflow:hidden;transition:all .4s var(--ease);
+}
+.team-card:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.12)}
+.team-img{
+  aspect-ratio:4/5;position:relative;overflow:hidden;
+  background:var(--c-teal-2);
+}
+.team-img img{
+  position:absolute;inset:0;object-fit:cover;
+  filter:grayscale(.3) brightness(.9);
+  transition:transform .7s var(--ease),filter .5s;
+}
+.team-card:hover .team-img img{transform:scale(1.04);filter:grayscale(0) brightness(1)}
+/* placeholder for team images */
+.team-img-ph{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:12px;
+}
+.team-ph-initials{
+  font-family:var(--serif);font-size:2.8rem;font-weight:300;
+  color:rgba(168,196,187,.35);letter-spacing:-.02em;
+}
+.team-ph-label{font-size:.7rem;letter-spacing:.08em;color:rgba(255,255,255,.15)}
+.team-info{padding:24px 28px}
+.team-name{font-family:var(--serif);font-size:1.15rem;font-weight:400;color:var(--c-pcln);margin-bottom:3px}
+.team-role{font-size:.7rem;font-weight:500;letter-spacing:.07em;color:var(--c-eu);margin-bottom:12px}
+.team-note{font-size:.78rem;color:rgba(247,244,238,.45);line-height:1.65;font-weight:300}
+@media(max-width:768px){
+  .team-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:480px){
+  .team-grid{grid-template-columns:1fr}
+}
+
+/* ─── VISIT / STEPS ─────────────────────────────────────────────── */
+.visit{background:var(--c-warm)}
+.visit-inner{display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:center}
+.visit-left{}
+.visit-right{}
+.visit-img-wrap{
+  position:relative;aspect-ratio:3/4;border-radius:1px;overflow:hidden;
+  background:var(--c-teal-2);
+}
+.visit-img-wrap img{object-fit:cover;filter:brightness(.9) saturate(.85)}
+.visit-img-tag{
+  position:absolute;bottom:-1px;right:-1px;
+  background:var(--c-brass);color:#fff;
+  padding:18px 22px;
+}
+.v-tag-n{font-family:var(--serif);font-size:1.9rem;font-weight:300;line-height:1}
+.v-tag-l{font-size:.65rem;letter-spacing:.06em;opacity:.75;margin-top:2px}
+.visit-steps{display:flex;flex-direction:column;gap:0;margin-top:44px}
+.v-step{
+  display:grid;grid-template-columns:40px 1fr;gap:18px;align-items:start;
+  padding:22px 0;border-top:1px solid var(--c-mist);
+}
+.v-step:last-child{border-bottom:1px solid var(--c-mist)}
+.v-n{font-family:var(--serif);font-size:.78rem;color:var(--c-brass);padding-top:2px}
+.v-t{font-family:var(--serif);font-size:1rem;font-weight:400;color:var(--c-teal);margin-bottom:5px}
+.v-d{font-size:.8rem;color:var(--c-soft);line-height:1.65;font-weight:300}
+@media(max-width:900px){
+  .visit-inner{grid-template-columns:1fr;gap:48px}
+  .visit-img-wrap{aspect-ratio:16/9;max-height:340px}
+}
+
+/* ─── ANIMATED COUNTER STRIP ────────────────────────────────────── */
+.counter-strip{
+  background:var(--c-pcln);border-top:1px solid var(--c-mist);
+  border-bottom:1px solid var(--c-mist);padding:64px 0;
+}
+.counter-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.counter-item{
+  text-align:center;padding:0 20px;
+  border-right:1px solid var(--c-mist);
+}
+.counter-item:last-child{border-right:none}
+.counter-num{
+  font-family:var(--serif);font-size:3.4rem;font-weight:300;
+  color:var(--c-teal);line-height:1;display:block;letter-spacing:-.02em;
+}
+.counter-label{font-size:.72rem;font-weight:400;letter-spacing:.06em;color:var(--c-soft);margin-top:6px}
+@media(max-width:640px){
+  .counter-grid{grid-template-columns:repeat(2,1fr);gap:32px 0}
+  .counter-item{border-right:none;border-bottom:1px solid var(--c-mist);padding-bottom:28px}
+  .counter-item:nth-child(odd){border-right:1px solid var(--c-mist)}
+  .counter-item:last-child,.counter-item:nth-last-child(2){border-bottom:none}
+}
+
+/* ─── CONTACT ────────────────────────────────────────────────────── */
+.contact{background:var(--c-pcln)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.contact-details{margin-top:36px;display:flex;flex-direction:column;gap:0}
+.c-item{
+  display:grid;grid-template-columns:72px 1fr;
+  padding:18px 0;border-top:1px solid var(--c-mist);
+}
+.c-item:last-child{border-bottom:1px solid var(--c-mist)}
+.c-lbl{font-size:.65rem;font-weight:500;letter-spacing:.08em;color:var(--c-soft);padding-top:3px}
+.c-val{font-size:.88rem;color:var(--c-ink);line-height:1.65;font-weight:400}
+.c-val a{color:var(--c-teal);border-bottom:1px solid transparent;transition:border-color .2s}
+.c-val a:hover{border-color:var(--c-teal)}
+
+/* form */
+.contact-form{
+  background:var(--c-teal);padding:48px 44px;
+}
+.cf-title{font-family:var(--serif);font-size:1.5rem;font-weight:300;color:var(--c-pcln);margin-bottom:6px}
+.cf-sub{font-size:.78rem;color:rgba(247,244,238,.4);margin-bottom:36px;font-weight:300}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.f-group{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.f-group.full{grid-column:1/-1}
+.f-group label{font-size:.65rem;font-weight:500;letter-spacing:.09em;color:rgba(247,244,238,.35)}
+.f-group input,
+.f-group select,
+.f-group textarea{
+  background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.1);
+  color:var(--c-pcln);font-family:var(--sans);font-size:.85rem;font-weight:300;
+  padding:12px 15px;transition:border-color .25s,background .25s;
+  appearance:none;-webkit-appearance:none;border-radius:0;
+}
+.f-group input::placeholder,.f-group textarea::placeholder{color:rgba(247,244,238,.2)}
+.f-group input:focus,.f-group select:focus,.f-group textarea:focus{
+  outline:none;border-color:var(--c-brass);background:rgba(255,255,255,.09)
+}
+.f-group select option{background:var(--c-teal-2);color:var(--c-pcln)}
+.f-group textarea{resize:vertical;min-height:88px}
+.f-note{font-size:.68rem;color:rgba(247,244,238,.22);margin:10px 0 18px;line-height:1.6}
+.f-submit{
+  width:100%;padding:14px;background:var(--c-brass);color:#fff;
+  font-family:var(--sans);font-size:.82rem;font-weight:500;letter-spacing:.05em;
+  border:none;cursor:pointer;transition:all .28s var(--ease);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.f-submit:hover{background:var(--c-brass-lt);transform:translateY(-1px)}
+.f-submit.done{background:var(--c-eu);pointer-events:none}
+.f-submit::after{content:'→';transition:transform .2s}
+.f-submit:hover::after{transform:translateX(3px)}
+@media(max-width:900px){
+  .contact-grid{grid-template-columns:1fr;gap:48px}
+  .contact-form{padding:32px 24px}
+  .f-row{grid-template-columns:1fr}
+}
+
+/* ─── FOOTER ─────────────────────────────────────────────────────── */
+.footer{
+  background:var(--c-teal);border-top:1px solid rgba(255,255,255,.06);
+  padding:80px 0 40px;
+}
+.footer-inner{display:grid;grid-template-columns:2.5fr 1fr 1fr 1fr;gap:48px}
+.f-brand{font-family:var(--serif);font-size:1rem;font-weight:400;color:var(--c-pcln);
+  display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.f-tag{font-family:var(--serif);font-size:.95rem;font-style:italic;font-weight:300;
+  color:rgba(247,244,238,.3);margin-bottom:24px;line-height:1.6;max-width:240px}
+.f-contact{font-size:.78rem;color:rgba(247,244,238,.3);font-weight:300;line-height:1.9}
+.f-contact a{color:var(--c-eu-lt);transition:color .2s}
+.f-contact a:hover{color:var(--c-pcln)}
+.f-col-t{font-size:.65rem;font-weight:500;letter-spacing:.1em;color:var(--c-eu-lt);margin-bottom:18px}
+.f-links{list-style:none;display:flex;flex-direction:column;gap:11px}
+.f-links a{font-size:.78rem;color:rgba(247,244,238,.35);transition:color .2s;font-weight:300}
+.f-links a:hover{color:var(--c-pcln)}
+.footer-bottom{
+  margin-top:56px;padding-top:28px;
+  border-top:1px solid rgba(255,255,255,.06);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
+}
+.f-copy{font-size:.7rem;color:rgba(247,244,238,.2);font-weight:300}
+.f-legal{display:flex;gap:20px}
+.f-legal a{font-size:.7rem;color:rgba(247,244,238,.2);transition:color .2s}
+.f-legal a:hover{color:rgba(247,244,238,.5)}
+@media(max-width:900px){.footer-inner{grid-template-columns:1fr 1fr;gap:36px}}
+@media(max-width:480px){.footer-inner{grid-template-columns:1fr}}
+
+/* ═══════════════════════════════════════════════════════════════
+   INTERACTIVE ADDITIONS — layered on top, no existing styles changed
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── progress bar ── */
+#progress-bar {
+  position: fixed; top: 0; left: 0; z-index: 9999;
+  height: 2px; width: 0%; pointer-events: none;
+  background: linear-gradient(90deg, var(--c-eu), var(--c-brass), var(--c-eu-lt));
+  transition: width .1s linear;
+  box-shadow: 0 0 8px rgba(181,139,85,.4);
+}
+
+/* ── tilt cards ── */
+.bento-cell, .team-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.tilt-shine {
+  position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,.08) 0%, transparent 65%);
+  opacity: 0; transition: opacity .3s;
+  border-radius: inherit;
+}
+.bento-cell:hover .tilt-shine,
+.team-card:hover .tilt-shine { opacity: 1; }
+
+/* ── clickable bento ── */
+.bento-cell[data-modal] {
+  cursor: pointer;
+}
+.bento-cell[data-modal]:focus-visible {
+  outline: 2px solid var(--c-brass);
+  outline-offset: -2px;
+}
+.bc-click-hint {
+  position: absolute; bottom: 16px; right: 18px;
+  font-size: .65rem; font-weight: 500; letter-spacing: .06em;
+  color: var(--c-brass); opacity: 0;
+  transition: opacity .25s; display: flex; align-items: center; gap: 5px;
+}
+.bc-click-hint::after { content: '↗'; font-size: .7rem; }
+.bento-cell[data-modal]:hover .bc-click-hint { opacity: 1; }
+
+/* ── service modal drawer ── */
+.s-modal-backdrop {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(10,28,36,.7);
+  backdrop-filter: blur(8px);
+  opacity: 0; pointer-events: none;
+  transition: opacity .4s var(--ease);
+}
+.s-modal-backdrop.open { opacity: 1; pointer-events: all; }
+
+.s-modal {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 510;
+  width: min(560px, 100%);
+  background: var(--c-pcln);
+  transform: translateX(100%);
+  transition: transform .5s var(--ease-out);
+  display: flex; flex-direction: column;
+  overflow-y: auto;
+}
+.s-modal.open { transform: none; }
+.s-modal-head {
+  background: var(--c-teal);
+  padding: 36px 40px 32px;
+  position: relative; flex-shrink: 0;
+}
+.s-modal-close {
+  position: absolute; top: 24px; right: 24px;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,.1);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,.7); font-size: 18px; line-height: 1;
+  transition: all .2s; cursor: pointer; border: none;
+}
+.s-modal-close:hover { background: rgba(255,255,255,.2); color: #fff; }
+.s-modal-cat { font-size: .65rem; font-weight: 500; letter-spacing: .1em; color: var(--c-eu-lt); margin-bottom: 10px; }
+.s-modal-title { font-family: var(--serif); font-size: 2rem; font-weight: 300; color: var(--c-pcln); line-height: 1.15; margin-bottom: 8px; }
+.s-modal-sub { font-size: .85rem; color: rgba(247,244,238,.55); font-weight: 300; line-height: 1.65; }
+.s-modal-body { padding: 36px 40px; flex: 1; }
+.s-modal-section { margin-bottom: 28px; }
+.s-modal-section-title { font-size: .65rem; font-weight: 500; letter-spacing: .1em; color: var(--c-eu); margin-bottom: 12px; }
+.s-modal-desc { font-size: .9rem; color: var(--c-mid); line-height: 1.8; font-weight: 300; }
+.s-modal-features { display: flex; flex-direction: column; gap: 0; margin-top: 4px; }
+.s-modal-feat {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 0; border-bottom: 1px solid var(--c-mist);
+  font-size: .85rem; color: var(--c-ink); font-weight: 300;
+}
+.s-modal-feat:first-child { border-top: 1px solid var(--c-mist); }
+.s-feat-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--c-brass); flex-shrink: 0; margin-top: 8px; }
+.s-modal-price {
+  background: var(--c-teal); color: var(--c-pcln);
+  padding: 20px 24px; border-radius: 2px; display: flex;
+  align-items: center; justify-content: space-between; margin-bottom: 20px;
+}
+.s-price-from { font-size: .65rem; letter-spacing: .08em; color: var(--c-eu-lt); }
+.s-price-val { font-family: var(--serif); font-size: 1.6rem; font-weight: 300; }
+.s-modal-book {
+  width: 100%; padding: 14px; background: var(--c-brass); color: #fff;
+  font-family: var(--sans); font-size: .85rem; font-weight: 500; letter-spacing: .04em;
+  border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: all .25s; border-radius: 1px;
+}
+.s-modal-book:hover { background: var(--c-brass-lt); }
+.s-modal-book::after { content: '→'; transition: transform .2s; }
+.s-modal-book:hover::after { transform: translateX(3px); }
+
+/* ── team lightbox ── */
+.team-card[data-team] { cursor: pointer; }
+.team-card[data-team]:focus-visible { outline: 2px solid var(--c-brass); outline-offset: 3px; }
+
+.t-modal-backdrop {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(6,18,24,.85);
+  backdrop-filter: blur(12px);
+  opacity: 0; pointer-events: none;
+  transition: opacity .4s var(--ease);
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px 24px;
+}
+.t-modal-backdrop.open { opacity: 1; pointer-events: all; }
+
+.t-modal {
+  background: var(--c-warm);
+  width: 100%; max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: translateY(20px) scale(.97);
+  transition: transform .45s var(--ease-out), opacity .45s var(--ease-out);
+  opacity: 0;
+  display: grid; grid-template-columns: 240px 1fr;
+}
+.t-modal-backdrop.open .t-modal {
+  transform: none; opacity: 1;
+}
+.t-modal-img {
+  background: var(--c-teal-2);
+  position: relative; overflow: hidden; min-height: 320px;
+}
+.t-modal-img img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.9); }
+.t-modal-img-ph {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+}
+.t-modal-info { padding: 36px 32px; display: flex; flex-direction: column; }
+.t-modal-close {
+  align-self: flex-end; margin-bottom: 20px;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--c-mist); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--c-mid); transition: all .2s;
+}
+.t-modal-close:hover { background: var(--c-mist-dk); color: var(--c-teal); }
+.t-modal-name { font-family: var(--serif); font-size: 1.5rem; font-weight: 300; color: var(--c-teal); margin-bottom: 3px; }
+.t-modal-role { font-size: .7rem; font-weight: 500; letter-spacing: .07em; color: var(--c-eu); margin-bottom: 16px; }
+.t-modal-qual { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+.t-qual-badge { font-size: .72rem; background: var(--c-mist); color: var(--c-mid); padding: 4px 10px; font-weight: 400; }
+.t-modal-bio { font-size: .85rem; color: var(--c-mid); line-height: 1.8; font-weight: 300; flex: 1; margin-bottom: 20px; }
+.t-modal-avail {
+  display: flex; align-items: center; gap: 8px;
+  font-size: .78rem; color: var(--c-eu); margin-bottom: 20px;
+}
+.t-avail-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--c-eu); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.8)} }
+.t-modal-book {
+  width: 100%; padding: 13px; background: var(--c-brass); color: #fff;
+  font-family: var(--sans); font-size: .82rem; font-weight: 500; letter-spacing: .04em;
+  border: none; cursor: pointer; transition: all .25s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.t-modal-book:hover { background: var(--c-brass-lt); }
+.t-modal-book::after { content: '→'; }
+@media(max-width:600px) {
+  .t-modal { grid-template-columns: 1fr; }
+  .t-modal-img { min-height: 220px; }
+}
+
+/* ── image lightbox ── */
+.img-lightbox {
+  position: fixed; inset: 0; z-index: 600;
+  background: rgba(5,15,20,.95);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity .4s var(--ease);
+}
+.img-lightbox.open { opacity: 1; pointer-events: all; }
+.img-lightbox-inner {
+  max-width: 90vw; max-height: 85vh;
+  transform: scale(.94);
+  transition: transform .45s var(--ease-out);
+  position: relative;
+}
+.img-lightbox.open .img-lightbox-inner { transform: scale(1); }
+.img-lightbox-inner img {
+  max-width: 90vw; max-height: 85vh;
+  object-fit: contain; display: block;
+  border-radius: 1px;
+}
+.lb-close {
+  position: absolute; top: -48px; right: 0;
+  color: rgba(255,255,255,.5); font-size: 28px; line-height: 1;
+  cursor: pointer; background: none; border: none;
+  transition: color .2s;
+}
+.lb-close:hover { color: #fff; }
+.lb-caption {
+  position: absolute; bottom: -40px; left: 0; right: 0;
+  text-align: center; font-size: .75rem;
+  color: rgba(255,255,255,.3); letter-spacing: .06em;
+}
+/* care-side — show click cue */
+.care-side { cursor: pointer; }
+.care-click-cue {
+  position: absolute; top: 24px; right: 24px; z-index: 2;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(255,255,255,.12); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: rgba(255,255,255,.6);
+  opacity: 0; transform: scale(.8);
+  transition: opacity .3s, transform .3s;
+}
+.care-side:hover .care-click-cue { opacity: 1; transform: scale(1); }
+
+/* ── magnetic buttons ── */
+.btn-brass, .btn-wire, .nav-book, .s-modal-book, .t-modal-book {
+  position: relative;
+  transition: transform .2s var(--ease-out), background .25s, box-shadow .25s, border-color .25s;
+}
+
+/* ── toast notification ── */
+.toast-wrap {
+  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+  z-index: 800; display: flex; flex-direction: column; align-items: center; gap: 8px;
+  pointer-events: none;
+}
+.toast {
+  background: var(--c-teal); color: var(--c-pcln);
+  padding: 12px 22px; font-size: .8rem; font-weight: 400;
+  border-left: 2px solid var(--c-brass); letter-spacing: .02em;
+  transform: translateY(12px); opacity: 0;
+  transition: all .35s var(--ease-out);
+  max-width: 320px; text-align: center;
+}
+.toast.show { transform: none; opacity: 1; pointer-events: all; }
+
+/* ── hover expand on approach items ── */
+.approach-item {
+  cursor: default;
+  transition: padding-left .3s var(--ease);
+}
+.approach-item:hover { padding-left: 8px; }
+.approach-item .a-num { transition: color .2s; }
+.approach-item:hover .a-num { color: var(--c-teal); }
+
 </style>
 </head>
 <body>
 
-<!-- ─── NAVIGATION ──────────────────────────────────────────── -->
-<header role="banner">
-  <nav class="nav" id="nav">
-    <a href="#" class="nav-logo">
-      <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-        <path d="M6 14 Q10 22 18 22 Q26 22 30 14" stroke="#789B92" stroke-width="1.5" stroke-linecap="round"/>
-        <path d="M2 20 Q6 17 9 20 Q12 23 15 20 Q18 17 21 20 Q25 22 28 20 Q31 17 34 20" stroke="#B58B55" stroke-width="1" stroke-linecap="round"/>
-      </svg>
-      <span style="font-family:var(--serif);font-size:1.25rem;font-weight:500;color:rgba(247,244,238,.95)">SmileClinic</span>
-    </a>
+<div id="cursor-glow" aria-hidden="true"></div>
 
-    <div class="nav-links">
-      <a href="#services">Specialties</a>
-      <a href="#hologram">3D Diagnostics</a>
-      <a href="#transform">Whitening & Laser</a>
-      <a href="#bento">Clinic Tech</a>
-      <a href="#calculator">Estimator</a>
-      <a href="#team">Specialists</a>
-      <a href="#contact">Contact</a>
-    </div>
+<!-- ── Progress bar ── -->
+<div id="progress-bar" aria-hidden="true"></div>
 
-    <div class="nav-cta-wrap">
-      <button onclick="openModal()" class="btn btn-primary magnet-btn ripple-btn">Book Consultation</button>
-    </div>
-  </nav>
-</header>
+<!-- ── Toast wrapper ── -->
+<div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
 
-<main>
-<!-- ─── HERO SECTION WITH CANVAS PARTICLES ──────────────────── -->
-<section class="hero">
-  <div class="hero-ambient"></div>
-  <canvas id="particleCanvas"></canvas>
-
-  <div class="hero-inner">
-    <div class="hero-content">
-      <div class="hero-badge"><span class="badge-dot"></span>Bengaluru's Premier Dental & ENT Practice</div>
-      <div class="hero-title">
-        <h1 class="t-display">Care that goes<br><em class="gradient-text">deeper than the surface.</em></h1>
-      </div>
-      <p class="t-body" style="color:rgba(247,244,238,.75);margin-top:24px;max-width:440px">
-        Specialist dental and ENT care delivered with clinical precision, state-of-the-art technology, and unhurried attention.
-      </p>
-      <div style="display:flex;gap:16px;margin-top:36px">
-        <button onclick="openModal()" class="btn btn-primary btn-arrow magnet-btn ripple-btn">Book Appointment</button>
-        <a href="#services" class="btn btn-ghost magnet-btn ripple-btn">Explore Specialties</a>
-      </div>
-    </div>
-
-    <!-- Hero Interactive Spotlight 3D Card Frame with Border Beam -->
-    <div class="hero-image-frame spotlight-card border-beam">
-      <img src="/assets/hero_clinic.jpg" alt="SmileClinic Bengaluru Interior"/>
-      <div class="hero-visual-chip">
-        <div style="font-size:24px;color:var(--brass)">🏥</div>
-        <div>
-          <div style="font-weight:600;font-size:0.9rem">Koramangala Flagship Clinic</div>
-          <div style="font-size:0.75rem;color:rgba(255,255,255,0.6)">NABH Standards · Multi-Specialty Theatre</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ─── ANIMATED COUNTER STATS STRIP ────────────────────────── -->
-<div class="stats-strip">
-  <div class="stat-box">
-    <span class="stat-num" data-target="4800" data-suffix="+">0</span>
-    <div class="stat-label">Patients Treated</div>
-  </div>
-  <div class="stat-box">
-    <span class="stat-num" data-target="98" data-suffix="%">0</span>
-    <div class="stat-label">Patient Satisfaction</div>
-  </div>
-  <div class="stat-box">
-    <span class="stat-num" data-target="12" data-suffix="+ Yrs">0</span>
-    <div class="stat-label">Clinical Excellence</div>
-  </div>
-  <div class="stat-box">
-    <span class="stat-num" data-target="15" data-suffix="+">0</span>
-    <div class="stat-label">Senior Specialists</div>
+<!-- ── Image lightbox ── -->
+<div class="img-lightbox" id="imgLightbox" role="dialog" aria-modal="true" aria-label="Image lightbox">
+  <div class="img-lightbox-inner">
+    <button class="lb-close" id="lbClose" aria-label="Close lightbox">✕</button>
+    <img id="lbImg" src="" alt=""/>
+    <div class="lb-caption" id="lbCaption"></div>
   </div>
 </div>
 
-<!-- ─── NEW: REACT BITS INTERACTIVE 3D HOLOGRAM DIAGNOSTICS ──── -->
-<section class="hologram-section" id="hologram">
-  <div class="container">
-    <div class="hologram-grid">
-      <div>
-        <div class="t-label" style="color:var(--euclid-lt)">Next-Gen Tech</div>
-        <h2 class="t-heading" style="margin-top:12px">Interactive 3D Clinical Telemetry</h2>
-        <p class="t-body" style="color:rgba(255,255,255,0.7);margin-top:16px">
-          Drag to rotate the 3D anatomical model in 360°. Select hotspots to preview laser whitening, titanium implant placement, and endoscopic ENT diagnostics.
-        </p>
-
-        <div style="display:flex;gap:12px;margin-top:28px;flex-wrap:wrap">
-          <button class="holo-hotspot-btn active" onclick="setHoloMode('whitening', this)">✨ Laser Whitening</button>
-          <button class="holo-hotspot-btn" onclick="setHoloMode('implant', this)">🔩 Titanium Implant</button>
-          <button class="holo-hotspot-btn" onclick="setHoloMode('ent', this)">👂 ENT Endoscopy</button>
-        </div>
-
-        <div style="margin-top:32px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:24px" id="holoInfoBox">
-          <div style="font-family:var(--serif);font-size:1.4rem;color:var(--brass-lt);margin-bottom:6px" id="holoTitle">Laser Whitening Telemetry</div>
-          <div style="font-size:0.85rem;color:rgba(255,255,255,0.7);line-height:1.6" id="holoDesc">
-            Targeting 810nm diode laser beams on stained enamel. Removes deeply oxidized tea/coffee pigments without damaging tooth structure.
-          </div>
-        </div>
-      </div>
-
-      <div class="hologram-canvas-wrap border-beam spotlight-card">
-        <div class="holo-hud">
-          <span>LIVE 3D DIAGNOSTICS</span>
-          <span id="holoStatus">MODE: WHITENING 810nm</span>
-        </div>
-        <canvas id="holoCanvas"></canvas>
-      </div>
+<!-- ── Service modal ── -->
+<div class="s-modal-backdrop" id="sBackdrop" role="dialog" aria-modal="true" aria-labelledby="sModalTitle">
+  <div class="s-modal" id="sModal">
+    <div class="s-modal-head">
+      <button class="s-modal-close" id="sModalClose" aria-label="Close">✕</button>
+      <div class="s-modal-cat" id="sModalCat"></div>
+      <div class="s-modal-title" id="sModalTitle"></div>
+      <div class="s-modal-sub" id="sModalSub"></div>
     </div>
-  </div>
-</section>
-
-<!-- ─── TABBED SERVICES FILTER & SPOTLIGHT CARDS ────────────── -->
-<section class="services-section" id="services">
-  <div class="container">
-    <div style="text-align:center;max-width:600px;margin:0 auto 40px">
-      <div class="t-label">Comprehensive Care</div>
-      <h2 class="t-heading" style="color:var(--teal);margin-top:12px">Specialist Services</h2>
-    </div>
-
-    <div class="filter-tabs">
-      <div class="filter-tab active" onclick="filterServices('all', this)">All Care</div>
-      <div class="filter-tab" onclick="filterServices('dental', this)">Dental Care</div>
-      <div class="filter-tab" onclick="filterServices('ent', this)">ENT Care</div>
-    </div>
-
-    <div class="services-grid" id="servicesGrid">
-      <div class="service-card spotlight-card border-beam" data-cat="dental">
-        <div class="service-card-media">
-          <img src="/assets/whitening_after.jpg" alt="Laser Teeth Whitening"/>
-        </div>
-        <div>
-          <span class="service-tag">Dental</span>
-          <h3 class="service-name">Laser Teeth Whitening</h3>
-          <p class="service-desc">In-office 810nm diode laser teeth whitening delivering up to 3.5 shades brighter results in a single session with zero enamel sensitivity.</p>
-        </div>
-        <div class="service-footer"><span>Duration: 60 mins</span><span>From ₹4,500</span></div>
+    <div class="s-modal-body">
+      <div class="s-modal-section">
+        <div class="s-modal-section-title">About this service</div>
+        <div class="s-modal-desc" id="sModalDesc"></div>
       </div>
-
-      <div class="service-card spotlight-card border-beam" data-cat="dental">
-        <div class="service-card-media">
-          <img src="/assets/aligners.jpg" alt="Orthodontics & Aligners"/>
-        </div>
-        <div>
-          <span class="service-tag">Dental</span>
-          <h3 class="service-name">Clear Aligners & Braces</h3>
-          <p class="service-desc">Virtually invisible US-FDA approved clear aligner systems and ceramic braces designed for precise, comfortable bite alignment.</p>
-        </div>
-        <div class="service-footer"><span>Custom Plan</span><span>From ₹22,000</span></div>
+      <div class="s-modal-section">
+        <div class="s-modal-section-title">What to expect</div>
+        <div class="s-modal-features" id="sModalFeats"></div>
       </div>
-
-      <div class="service-card spotlight-card border-beam" data-cat="dental">
-        <div class="service-card-media">
-          <img src="/assets/implants.jpg" alt="Implants & Restorations"/>
-        </div>
+      <div class="s-modal-price">
         <div>
-          <span class="service-tag">Dental</span>
-          <h3 class="service-name">Implants & Root Canals</h3>
-          <p class="service-desc">Rotary painless endodontics and medical-grade titanium dental implants finished with handcrafted porcelain ceramic crowns.</p>
+          <div class="s-price-from">Starting from</div>
+          <div class="s-price-val" id="sModalPrice"></div>
         </div>
-        <div class="service-footer"><span>Duration: 2 Visits</span><span>From ₹6,500</span></div>
+        <div style="font-size:.72rem;color:rgba(247,244,238,.4);max-width:160px;line-height:1.5">Exact cost discussed after your consultation</div>
       </div>
-
-      <div class="service-card spotlight-card" data-cat="dental">
-        <div class="service-card-media">
-          <img src="/assets/hero_clinic.jpg" alt="Preventive Hygiene"/>
-        </div>
-        <div>
-          <span class="service-tag">Dental</span>
-          <h3 class="service-name">Preventive Hygiene & Scaling</h3>
-          <p class="service-desc">Ultrasonic scaling, air-polishing, and full digital periodontal screening to maintain a healthy gum foundation.</p>
-        </div>
-        <div class="service-footer"><span>Duration: 45 mins</span><span>From ₹1,200</span></div>
-      </div>
-
-      <div class="service-card spotlight-card" data-cat="ent">
-        <div class="service-card-media">
-          <img src="/assets/doctor_ent.jpg" alt="Ear & Hearing Care"/>
-        </div>
-        <div>
-          <span class="service-tag" style="color:var(--eucalyptus);background:rgba(120,155,146,0.15)">ENT</span>
-          <h3 class="service-name">Ear & Hearing Care</h3>
-          <p class="service-desc">Diagnostic audiometry, painless micro-suction ear wax removal, and expert management of tinnitus and chronic ear infections.</p>
-        </div>
-        <div class="service-footer"><span>Duration: 30 mins</span><span>From ₹1,500</span></div>
-      </div>
-
-      <div class="service-card spotlight-card" data-cat="ent">
-        <div class="service-card-media">
-          <img src="/assets/hero_clinic.jpg" alt="Sinus & Allergy Care"/>
-        </div>
-        <div>
-          <span class="service-tag" style="color:var(--eucalyptus);background:rgba(120,155,146,0.15)">ENT</span>
-          <h3 class="service-name">Nasal & Sinus Surgery</h3>
-          <p class="service-desc">Functional Endoscopic Sinus Surgery (FESS), septoplasty, and long-term allergic rhinitis treatment by senior ENT surgeons.</p>
-        </div>
-        <div class="service-footer"><span>Consultation</span><span>From ₹1,800</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ─── NEW & IMPROVED: REAL WHITENING LASER SCANNER & SLIDER ─── -->
-<section class="transform-section" id="transform">
-  <div class="container" style="text-align:center">
-    <div class="t-label">Laser Teeth Whitening</div>
-    <h2 class="t-heading" style="color:var(--teal);margin-top:12px">Real Patient Whitening Results</h2>
-    <p class="t-body" style="max-width:640px;margin:12px auto 0">
-      Test our <strong>Interactive Laser Scanner</strong> or drag the comparison slider to watch stained enamel transform into 4K pearl white.
-    </p>
-
-    <!-- NEW REACT BITS: INTERACTIVE LASER BEAM SWEEP SIMULATOR -->
-    <div style="margin-top:24px">
-      <button onclick="startLaserScan()" class="btn btn-primary magnet-btn ripple-btn">
-        ⚡ Trigger 810nm Laser Beam Whitening Sweep
+      <button class="s-modal-book" onclick="closeServiceModal();document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+        Book a consultation
       </button>
     </div>
+  </div>
+</div>
 
-    <div class="laser-scanner-box spotlight-card border-beam" id="comparisonSlider">
-      <span class="badge-before">BEFORE WHITENING</span>
-      <span class="badge-after">AFTER 60-MIN LASER</span>
+<!-- ── Team modal ── -->
+<div class="t-modal-backdrop" id="tBackdrop" role="dialog" aria-modal="true" aria-labelledby="tModalName">
+  <div class="t-modal" id="tModal">
+    <div class="t-modal-img" id="tModalImg"></div>
+    <div class="t-modal-info">
+      <button class="t-modal-close" id="tModalClose" aria-label="Close">✕</button>
+      <div class="t-modal-name" id="tModalName"></div>
+      <div class="t-modal-role" id="tModalRole"></div>
+      <div class="t-modal-qual" id="tModalQual"></div>
+      <div class="t-modal-bio" id="tModalBio"></div>
+      <div class="t-modal-avail"><span class="t-avail-dot"></span><span id="tModalAvail"></span></div>
+      <button class="t-modal-book" onclick="closeTeamModal();document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+        Book with this specialist
+      </button>
+    </div>
+  </div>
+</div>
 
-      <div class="laser-beam-line" id="laserBeamLine"></div>
+<!-- ─── NAV ──────────────────────────────────────────────────────── -->
+<header role="banner">
+  <nav class="nav" id="mainNav" aria-label="Primary navigation">
+    <a href="#" class="nav-logo" aria-label="SmileClinic home">
+      <svg width="32" height="32" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+        <path d="M7 14Q11 22 18 22Q25 22 29 14" stroke="#789B92" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        <path d="M3 20Q7 17 10 20Q13 23 16 20Q19 17 22 20Q25 23 28 20Q31 17 34 20" stroke="#B58B55" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+        <circle cx="18" cy="9" r="1.8" fill="#A8C4BB" opacity=".55"/>
+      </svg>
+      <span class="nav-logo-text">SmileClinic</span>
+    </a>
+    <div class="nav-links" role="list">
+      <a href="#dental-ent" role="listitem">Dental & ENT</a>
+      <a href="#services" role="listitem">Services</a>
+      <a href="#team" role="listitem">Specialists</a>
+      <a href="#visit" role="listitem">Your visit</a>
+      <a href="#contact" role="listitem">Contact</a>
+    </div>
+    <a href="#contact" class="nav-book">Book</a>
+    <button class="hamburger" id="menuBtn" aria-expanded="false" aria-controls="mobMenu" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
 
-      <div class="comparison-image before-image">
-        <img src="/assets/whitening_before.jpg" alt="Teeth Before Whitening"/>
+  <div class="mob-menu" id="mobMenu" aria-hidden="true">
+    <a href="#dental-ent" onclick="closeMob()">Dental & ENT</a>
+    <a href="#services"   onclick="closeMob()">Services</a>
+    <a href="#team"       onclick="closeMob()">Specialists</a>
+    <a href="#visit"      onclick="closeMob()">Your visit</a>
+    <a href="#contact"    onclick="closeMob()">Contact</a>
+    <a href="#contact"    onclick="closeMob()" class="mob-book">Book an appointment</a>
+  </div>
+</header>
+
+<main>
+
+<!-- ─── HERO ──────────────────────────────────────────────────────── -->
+<section class="hero" aria-labelledby="h1">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-mesh" aria-hidden="true"></div>
+  <div class="hero-mesh-2" aria-hidden="true"></div>
+
+  <!-- SVG anatomy contour lines -->
+  <svg class="hero-svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <!-- smile arc -->
+    <path class="h-line h-line-1" d="M -80 540 Q 180 310 400 400 Q 600 480 720 360 Q 860 230 1100 380 Q 1280 460 1520 340"/>
+    <!-- breath / sine wave -->
+    <path class="h-line h-line-2" d="M -20 700 Q 60 678 140 700 Q 220 722 300 700 Q 380 678 460 700 Q 540 722 620 700 Q 700 678 780 700 Q 860 722 940 700 Q 1020 678 1100 700 Q 1180 722 1260 700 Q 1340 678 1420 700 Q 1460 678 1480 690"/>
+    <!-- ear contour -->
+    <path class="h-line h-line-3" d="M 1120 80 Q 1210 130 1195 250 Q 1178 360 1260 400 Q 1320 425 1380 385 Q 1430 350 1420 270 Q 1410 200 1350 170"/>
+  </svg>
+
+  <!-- ambient orbs -->
+  <div class="orb orb-1" aria-hidden="true"></div>
+  <div class="orb orb-2" aria-hidden="true"></div>
+  <div class="orb orb-3" aria-hidden="true"></div>
+
+  <!-- floating particles -->
+  <div class="particles" aria-hidden="true" id="particles"></div>
+
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">
+        <span class="eyebrow-dash" aria-hidden="true"></span>
+        <span class="eyebrow-text">Dental & ENT Specialists — Bengaluru</span>
       </div>
-      <div class="comparison-image after-image" id="afterImage">
-        <img src="/assets/whitening_after.jpg" alt="Teeth After Whitening"/>
-      </div>
-      <div class="slider-handle" id="sliderHandle">
-        <div class="handle-circle">↔</div>
+      <h1 class="hero-h1" id="h1">
+        Care that goes<br><em>deeper than</em><br><em>the surface.</em>
+      </h1>
+      <p class="hero-sub">Specialist dental and ENT care — clinical precision, the unhurried attention every patient deserves.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-brass">Book a consultation</a>
+        <a href="#services" class="btn-wire">Our services</a>
       </div>
     </div>
 
-    <!-- WHITENING CLINICAL HIGHLIGHTS -->
-    <div class="whitening-highlights">
-      <div class="whitening-chip spotlight-card">
-        <div class="chip-icon">⚡</div>
-        <div>
-          <div class="chip-title">60 Mins</div>
-          <div class="chip-sub">Single Express Session</div>
-        </div>
+    <div class="hero-panel" aria-label="Care at SmileClinic">
+      <div class="hero-card">
+        <div class="hc-label">Dental Care</div>
+        <div class="hc-title">Preventive through restorative</div>
+        <div class="hc-text">Scaling, fillings, root canal, crowns, whitening, orthodontics</div>
       </div>
-      <div class="whitening-chip spotlight-card">
-        <div class="chip-icon">✨</div>
-        <div>
-          <div class="chip-title">+3.5 Shades</div>
-          <div class="chip-sub">Brighter Smile Guarantee</div>
-        </div>
+      <div class="hero-card">
+        <div class="hc-label">ENT Care</div>
+        <div class="hc-title">Ear, nose and throat</div>
+        <div class="hc-text">Hearing, sinus, throat, voice disorders and ENT surgery</div>
       </div>
-      <div class="whitening-chip spotlight-card">
-        <div class="chip-icon">🛡️</div>
-        <div>
-          <div class="chip-title">Zero Pain</div>
-          <div class="chip-sub">Desensitizing Guard Tech</div>
-        </div>
-      </div>
-      <div class="whitening-chip spotlight-card">
-        <div class="chip-icon">💎</div>
-        <div>
-          <div class="chip-title">12+ Months</div>
-          <div class="chip-sub">Long-Lasting Radiance</div>
+      <div class="hero-card">
+        <div class="hc-label">Patient Portal</div>
+        <div class="hc-title">Your records, always with you</div>
+        <div class="hc-text">
+          <a href="/portal"
+             style="color:var(--c-eu-lt);border-bottom:1px solid rgba(168,196,187,.3);padding-bottom:1px">
+            Open portal →
+          </a>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- INTERACTIVE TOOTH SHADE MATCHER VISUALIZER -->
-    <div class="shade-visualizer-card spotlight-card border-beam">
-      <h3 style="font-family:var(--serif);font-size:1.5rem;color:var(--teal);margin-bottom:8px">Interactive Tooth Shade Matcher</h3>
-      <p style="font-size:0.85rem;color:var(--text-mid);margin-bottom:20px">Click shades below to see how stained enamel brightens under 810nm laser whitening.</p>
+  <div class="hero-scroll-hint" aria-hidden="true">
+    <span class="scroll-label">Scroll</span>
+    <span class="scroll-track"></span>
+  </div>
+</section>
 
-      <div class="shade-buttons">
-        <button class="shade-btn" onclick="selectShade('C4', '#D4B886', 'Severe Stains / Coffee & Tobacco', 'Requires 2 Laser Sessions', this)">C4 Deep Stain</button>
-        <button class="shade-btn" onclick="selectShade('B3', '#E3CBA0', 'Moderate Tea / Coffee Stains', 'Recommended 60-min Laser Session', this)">B3 Mild Stain</button>
-        <button class="shade-btn" onclick="selectShade('A3', '#F2E3C6', 'Natural Untreated Enamel', '1–2 Shade Boost', this)">A3 Natural</button>
-        <button class="shade-btn active" onclick="selectShade('A1', '#FFFFFF', 'Hollywood Pearl White', 'Achieved Post-Laser Treatment at SmileClinic', this)">A1 Pearl White</button>
+<!-- ─── MARQUEE ────────────────────────────────────────────────────── -->
+<div class="marquee-strip" aria-hidden="true">
+  <div class="marquee-inner" id="marqueeInner">
+    <!-- items duplicated in JS for seamless loop -->
+  </div>
+</div>
+
+<!-- ─── APPROACH ──────────────────────────────────────────────────── -->
+<section class="section approach" id="approach" aria-labelledby="approach-h">
+  <div class="container">
+    <div class="approach-grid">
+      <div class="approach-sticky">
+        <div class="s-label approach-label" data-r="up">Our approach</div>
+        <h2 class="s-h approach-h" id="approach-h" data-r="up" data-rd="1">
+          Clinical precision.<br>Human care.
+        </h2>
+        <p class="approach-p" data-r="up" data-rd="2">
+          We bring dental and ENT specialists together under one philosophy — treat the whole person, explain every step, and leave you genuinely better.
+        </p>
       </div>
-
-      <div class="shade-preview-box">
-        <div class="shade-tooth-icon" id="toothIcon" style="filter: drop-shadow(0 0 16px #FFFFFF) drop-shadow(0 4px 10px rgba(0,0,0,0.25))">🦷</div>
-        <div>
-          <div style="font-size:1.1rem;font-weight:600;color:var(--teal)" id="shadeName">A1 Pearl White</div>
-          <div style="font-size:0.8rem;color:var(--eucalyptus)" id="shadeDesc">Achieved Post-Laser Treatment at SmileClinic</div>
+      <div class="approach-items">
+        <div class="approach-item" data-r="up">
+          <div class="a-num">I</div>
+          <div>
+            <div class="a-title">Specialist led, always</div>
+            <div class="a-text">Every consultation is conducted by a qualified specialist. Diagnoses are grounded in clinical evidence, not protocol shortcuts.</div>
+          </div>
         </div>
-        <button onclick="openModal('Laser Whitening Special')" class="btn btn-primary magnet-btn ripple-btn" style="margin-left:auto;padding:12px 24px">
-          Book Whitening Special · ₹4,500
-        </button>
+        <div class="approach-item" data-r="up" data-rd="1">
+          <div class="a-num">II</div>
+          <div>
+            <div class="a-title">Unhurried appointments</div>
+            <div class="a-text">We schedule time that allows a thorough examination and a real conversation. You will never feel rushed through a consultation.</div>
+          </div>
+        </div>
+        <div class="approach-item" data-r="up" data-rd="2">
+          <div class="a-num">III</div>
+          <div>
+            <div class="a-title">Transparent treatment plans</div>
+            <div class="a-text">Options, costs, and timeframes are explained in full before any procedure begins. Informed consent means you understand everything.</div>
+          </div>
+        </div>
+        <div class="approach-item" data-r="up" data-rd="3">
+          <div class="a-num">IV</div>
+          <div>
+            <div class="a-title">Continuity of care</div>
+            <div class="a-text">Your records, notes, and follow-ups are accessible through the patient portal after every visit, and shared with any referring clinician you nominate.</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── NEW: REACT BITS HIGH-TECH BENTO GRID ───────────────────── -->
-<section class="bento-section" id="bento">
-  <div class="container">
-    <div style="text-align:center;max-width:600px;margin:0 auto">
-      <div class="t-label">Excellence Standards</div>
-      <h2 class="t-heading" style="color:var(--teal);margin-top:12px">Why Patients Choose SmileClinic</h2>
+<!-- ─── CARE SPLIT ─────────────────────────────────────────────────── -->
+<div class="care-split" id="dental-ent" aria-label="Our two care specialties">
+  <article class="care-side care-d" aria-labelledby="dental-h">
+    <img class="care-photo lb-trigger"
+         src="https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=900&q=80&auto=format&fit=crop"
+         data-full="https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=1600&q=90&auto=format&fit=crop"
+         data-caption="Dental treatment room"
+         alt="Dental clinic treatment room"
+         loading="lazy"/>
+    <div class="care-overlay" aria-hidden="true"></div>
+    <div class="care-click-cue" aria-hidden="true">⊕</div>
+    <div class="care-content" data-r="up">
+      <div class="care-num" aria-hidden="true">01</div>
+      <div class="care-tag">Dental Care</div>
+      <h2 class="care-h" id="dental-h">Complete care<br>for every smile.</h2>
+      <p class="care-p">Preventive, restorative, cosmetic and orthodontic services — from a routine cleaning to a full-mouth rehabilitation.</p>
+      <a href="#services" class="care-link" aria-label="Explore dental services">Explore dental</a>
     </div>
+  </article>
+  <article class="care-side care-e" aria-labelledby="ent-h">
+    <img class="care-photo lb-trigger"
+         src="https://images.unsplash.com/photo-1638202993928-7267aad84c31?w=900&q=80&auto=format&fit=crop"
+         data-full="https://images.unsplash.com/photo-1638202993928-7267aad84c31?w=1600&q=90&auto=format&fit=crop"
+         data-caption="ENT consultation room"
+         alt="ENT specialist consultation room"
+         loading="lazy"/>
+    <div class="care-overlay" aria-hidden="true"></div>
+    <div class="care-click-cue" aria-hidden="true">⊕</div>
+    <div class="care-content" data-r="up">
+      <div class="care-num" aria-hidden="true">02</div>
+      <div class="care-tag">ENT Care</div>
+      <h2 class="care-h" id="ent-h">Precise care for<br>ear, nose & throat.</h2>
+      <p class="care-p">Diagnostic and surgical ENT care for hearing, breathing, balance, voice and sinus conditions.</p>
+      <a href="#services" class="care-link" aria-label="Explore ENT services">Explore ENT</a>
+    </div>
+  </article>
+</div>
 
-    <div class="bento-grid">
-      <!-- Large Featured Bento Card -->
-      <div class="bento-item bento-item-large spotlight-card border-beam" style="background:var(--teal);color:var(--porcelain)">
-        <div>
-          <span class="service-tag" style="background:rgba(255,255,255,0.15);color:var(--brass-lt)">NABH Accredited</span>
-          <h3 style="font-family:var(--serif);font-size:2rem;margin:12px 0;line-height:1.2">Multi-Specialty Surgical Theatre & 3D Imaging</h3>
-          <p style="font-size:0.9rem;color:rgba(255,255,255,0.75);max-width:480px">
-            Equipped with German KaVo dental chairs, ZEISS surgical microscopes, and high-frequency digital OPG X-rays for zero-compromise diagnostic clarity.
-          </p>
+<!-- ─── SERVICES BENTO ─────────────────────────────────────────────── -->
+<section class="section bento" id="services" aria-labelledby="services-h">
+  <div class="container">
+    <div class="bento-header">
+      <div>
+        <div class="s-label" data-r="up">Services</div>
+        <h2 class="s-h" id="services-h" data-r="up" data-rd="1" style="margin-top:14px;max-width:460px">
+          Comprehensive care across dental and ENT disciplines.
+        </h2>
+      </div>
+      <a href="#contact" class="btn-wire" style="color:var(--c-teal);border-color:var(--c-teal)" data-r="up" data-rd="2">Book a consultation</a>
+    </div>
+    <div class="bento-grid" data-r="scale">
+
+      <!-- Dental — featured -->
+      <div class="bento-cell bc-a bento-feature" data-modal="preventive" tabindex="0" role="button" aria-label="Learn about Preventive Dentistry" style="background:var(--c-teal)">
+        <div class="bc-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+            <path d="M10 26Q7 18 9 12Q11 8 16 7Q21 8 23 12Q25 18 22 26Q20 29 18.5 27.5Q17.5 26.5 16 27.5Q14.5 26.5 13.5 27.5Q12 29 10 26Z"/>
+          </svg>
         </div>
-        <div style="margin-top:32px;display:flex;gap:16px;align-items:center">
-          <div style="font-size:2.5rem;color:var(--brass)">🔬</div>
-          <div>
-            <div style="font-weight:600;font-size:0.95rem">Zero Micro-Infection Protocol</div>
-            <div style="font-size:0.75rem;color:rgba(255,255,255,0.5)">Class-B Autoclave Sterilization</div>
-          </div>
-        </div>
+        <div class="bc-cat">Dental</div>
+        <div class="bc-name">Preventive Dentistry</div>
+        <div class="bc-desc">Scaling, polishing, fluoride, comprehensive oral exams</div>
       </div>
 
-      <!-- Bento Item 2 -->
-      <div class="bento-item spotlight-card">
-        <div>
-          <div style="font-size:2rem">🛡️</div>
-          <h4 style="font-family:var(--serif);font-size:1.3rem;color:var(--teal);margin:8px 0">99.4% Painless Rate</h4>
-          <p style="font-size:0.82rem;color:var(--text-mid)">Rotary endodontics and gentle topical anesthetics mean painless dental care.</p>
+      <div class="bento-cell bc-b" data-modal="restorative" tabindex="0" role="button" aria-label="Learn about Restorative Care">
+        <div class="bc-icon">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+            <path d="M8 22L16 8L24 22"/>
+            <path d="M11 18L21 18"/>
+            <circle cx="16" cy="27" r="1.5"/>
+          </svg>
         </div>
+        <div class="bc-cat">Dental</div>
+        <div class="bc-name">Restorative Care</div>
+        <div class="bc-desc">Fillings, ceramic crowns, bridges, root canal therapy</div>
       </div>
 
-      <!-- Bento Item 3 -->
-      <div class="bento-item spotlight-card">
-        <div>
-          <div style="font-size:2rem">📋</div>
-          <h4 style="font-family:var(--serif);font-size:1.3rem;color:var(--teal);margin:8px 0">Digital Portal Sync</h4>
-          <p style="font-size:0.82rem;color:var(--text-mid)">Access all X-rays, prescriptions, and invoices live on Vercel portal.</p>
+      <div class="bento-cell bc-c" data-modal="cosmetic" tabindex="0" role="button" aria-label="Learn about Cosmetic Dentistry">
+        <div class="bc-icon">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+            <path d="M6 20Q10 14 16 14Q22 14 26 20"/>
+            <path d="M10 24Q13 20 16 20Q19 20 22 24"/>
+          </svg>
         </div>
+        <div class="bc-cat">Dental</div>
+        <div class="bc-name">Cosmetic Dentistry</div>
+        <div class="bc-desc">Laser whitening, veneers, smile design</div>
       </div>
 
-      <!-- Bento Item 4 -->
-      <div class="bento-item spotlight-card" style="background:var(--warm-white)">
-        <div>
-          <div style="font-size:2rem">⭐</div>
-          <h4 style="font-family:var(--serif);font-size:1.3rem;color:var(--teal);margin:8px 0">4.9 / 5 Google Rating</h4>
-          <p style="font-size:0.82rem;color:var(--text-mid)">Over 1,200 verified patient reviews across Koramangala & Bengaluru.</p>
+      <!-- ENT — feature -->
+      <div class="bento-cell bc-e bento-feature" data-modal="ear" tabindex="0" role="button" aria-label="Learn about Ear and Hearing" style="background:var(--c-teal-2)">
+        <div class="bc-icon">
+          <svg width="36" height="36" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+            <path d="M20 8Q26 12 26 18Q26 24 20 27Q17 28 15.5 25.5Q14 23 16 20Q18 17 15.5 14"/>
+            <path d="M15.5 14Q14 9 17 7Q20 5 22 8"/>
+          </svg>
         </div>
+        <div class="bc-cat">ENT</div>
+        <div class="bc-name">Ear & Hearing</div>
+        <div class="bc-desc">Ear infections, hearing loss, tinnitus, wax, and balance disorders — diagnosed and managed by a specialist.</div>
       </div>
+
+      <div class="bento-cell bc-d" data-modal="orthodontics" tabindex="0" role="button" aria-label="Learn about Orthodontics">
+        <div class="bc-icon">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+            <path d="M8 10Q12 8 16 10Q20 8 24 10"/>
+            <path d="M7 18Q11 22 16 22Q21 22 25 18"/>
+            <path d="M11 14Q14 17 16 14Q18 11 21 14"/>
+          </svg>
+        </div>
+        <div class="bc-cat">Dental</div>
+        <div class="bc-name">Orthodontics</div>
+        <div class="bc-desc">Fixed braces and clear aligners for children and adults — planned and monitored from start to finish by a specialist orthodontist</div>
+      </div>
+
+      <div class="bento-cell bc-f" data-modal="sinus" tabindex="0" role="button" aria-label="Learn about Nasal and Sinus care">
+        <div class="bc-icon">
+          <svg width="26" height="26" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+            <path d="M16 6Q16 10 18 14Q22 12 24 16Q26 20 22 24Q18 28 14 24Q10 20 10 16Q10 12 12 10Q14 8 16 6Z"/>
+          </svg>
+        </div>
+        <div class="bc-cat">ENT</div>
+        <div class="bc-name">Nasal & Sinus</div>
+        <div class="bc-desc">Rhinitis, sinusitis, polyps, deviated septum, FESS</div>
+      </div>
+
+      <div class="bento-cell bc-g" data-modal="throat" tabindex="0" role="button" aria-label="Learn about Throat and Voice">
+        <div class="bc-icon">
+          <svg width="26" height="26" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+            <path d="M10 10Q14 7 18 8Q22 9 24 14Q26 20 22 25Q18 29 14 25Q8 20 10 10Z"/>
+            <path d="M12 18Q16 14 20 18"/>
+          </svg>
+        </div>
+        <div class="bc-cat">ENT</div>
+        <div class="bc-name">Throat & Voice</div>
+        <div class="bc-desc">Tonsillitis, voice disorders, swallowing, laryngeal conditions</div>
+      </div>
+
+      <div class="bento-cell bc-h" data-modal="oralsurgery" tabindex="0" role="button" aria-label="Learn about Oral Surgery">
+        <div class="bc-icon">
+          <svg width="26" height="26" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+            <path d="M8 26L16 8L24 26"/>
+            <path d="M11.5 20Q14 16 16 18Q18 20 20.5 16"/>
+          </svg>
+        </div>
+        <div class="bc-cat">Dental</div>
+        <div class="bc-name">Oral Surgery</div>
+        <div class="bc-desc">Wisdom teeth, minor oral procedures, post-op care</div>
+      </div>
+
+      <div class="bento-cell bc-i" data-modal="entspurgery" tabindex="0" role="button" aria-label="Learn about ENT Surgery">
+        <div class="bc-icon">
+          <svg width="26" height="26" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+            <circle cx="16" cy="16" r="9"/>
+            <path d="M7 16L25 16"/>
+            <path d="M16 7Q22 12 22 16Q22 20 16 25"/>
+            <path d="M16 7Q10 12 10 16Q10 20 16 25"/>
+          </svg>
+        </div>
+        <div class="bc-cat">ENT</div>
+        <div class="bc-name">ENT Surgery</div>
+        <div class="bc-desc">Tonsillectomy, adenoidectomy, septoplasty and functional sinus surgery performed in an equipped theatre by an experienced ENT surgeon</div>
+      </div>
+
+      <div class="bento-cell bc-j" data-modal="portal" tabindex="0" role="button" aria-label="Learn about the Patient Portal">
+        <div class="bc-icon">
+          <svg width="26" height="26" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+            <rect x="7" y="9" width="18" height="14" rx="1"/>
+            <path d="M7 14L25 14"/>
+            <path d="M12 9L12 7"/>
+            <path d="M20 9L20 7"/>
+            <path d="M11 19L15 19"/>
+            <path d="M11 22L18 22"/>
+          </svg>
+        </div>
+        <div class="bc-cat">All specialties</div>
+        <div class="bc-name">Digital records & portal</div>
+        <div class="bc-desc">Every consultation note, treatment plan, and invoice is accessible through your patient portal. Your clinical history, always at hand.</div>
+      </div>
+
     </div>
   </div>
 </section>
 
-<!-- ─── COST ESTIMATOR / CALCULATOR ──────────────────────────── -->
-<section class="calc-section" id="calculator">
+<!-- ─── COUNTER STRIP ─────────────────────────────────────────────── -->
+<div class="counter-strip" aria-label="Clinic at a glance">
   <div class="container">
-    <div style="text-align:center">
-      <div class="t-label" style="color:var(--euclid-lt)">Instant Estimator</div>
-      <h2 class="t-heading" style="margin-top:12px">Estimate Your Treatment Cost</h2>
-      <p class="t-body" style="color:rgba(255,255,255,0.7)">Select procedure options to view an instant estimate for your visit.</p>
-    </div>
-
-    <div class="calc-card border-beam spotlight-card">
-      <div class="calc-option-grid">
-        <div class="calc-option selected" onclick="toggleCalcOption(this, 1200)">
-          <div>
-            <div style="font-weight:600">Preventive Scaling</div>
-            <div style="font-size:0.75rem;color:rgba(255,255,255,0.5)">Deep cleaning & polishing</div>
-          </div>
-          <div class="calc-price">₹1,200</div>
-        </div>
-
-        <div class="calc-option" onclick="toggleCalcOption(this, 4500)">
-          <div>
-            <div style="font-weight:600">Laser Teeth Whitening</div>
-            <div style="font-size:0.75rem;color:rgba(255,255,255,0.5)">In-office 1-hr procedure</div>
-          </div>
-          <div class="calc-price">₹4,500</div>
-        </div>
-
-        <div class="calc-option" onclick="toggleCalcOption(this, 6500)">
-          <div>
-            <div style="font-weight:600">Root Canal & Porcelain Crown</div>
-            <div style="font-size:0.75rem;color:rgba(255,255,255,0.5)">Painless endodontic therapy</div>
-          </div>
-          <div class="calc-price">₹6,500</div>
-        </div>
-
-        <div class="calc-option" onclick="toggleCalcOption(this, 1800)">
-          <div>
-            <div style="font-weight:600">ENT Specialist Consultation</div>
-            <div style="font-size:0.75rem;color:rgba(255,255,255,0.5)">Ear, nose or throat evaluation</div>
-          </div>
-          <div class="calc-price">₹1,800</div>
-        </div>
+    <div class="counter-grid">
+      <div class="counter-item">
+        <span class="counter-num" data-target="4800" data-suffix="+">0</span>
+        <div class="counter-label">Patients treated</div>
       </div>
-
-      <div style="border-top:1px solid rgba(255,255,255,0.15);padding-top:24px;display:flex;align-items:center;justify-content:space-between">
-        <div>
-          <div style="font-size:0.8rem;color:rgba(255,255,255,0.6)">Estimated Investment Total:</div>
-          <div style="font-family:var(--serif);font-size:2.2rem;font-weight:600;color:var(--brass-lt)" id="calcTotal">₹1,200</div>
-        </div>
-        <button onclick="openModal()" class="btn btn-primary magnet-btn ripple-btn">Book Consultation</button>
+      <div class="counter-item">
+        <span class="counter-num" data-target="98" data-suffix="%">0</span>
+        <div class="counter-label">Satisfaction rate</div>
+      </div>
+      <div class="counter-item">
+        <span class="counter-num" data-target="12" data-suffix=" yrs">0</span>
+        <div class="counter-label">Years of practice</div>
+      </div>
+      <div class="counter-item">
+        <span class="counter-num" data-target="2" data-suffix=" min">0</span>
+        <div class="counter-label">Average booking time</div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ─── SPECIALISTS SHOWCASE (Real Generated Photos) ─────────── -->
-<section class="team-section" id="team">
+<!-- ─── TEAM ───────────────────────────────────────────────────────── -->
+<section class="section team" id="team" aria-labelledby="team-h">
   <div class="container">
-    <div style="text-align:center;max-width:600px;margin:0 auto">
-      <div class="t-label">Expert Medical Team</div>
-      <h2 class="t-heading" style="color:var(--teal);margin-top:12px">Our Senior Specialists</h2>
+    <div class="team-header" data-r="up">
+      <div class="s-label">Our specialists</div>
+      <h2 class="s-h" id="team-h" style="margin-top:14px;color:var(--c-pcln)">
+        The clinicians behind your care.
+      </h2>
     </div>
-
     <div class="team-grid">
-      <!-- Dr. Priya Sharma -->
-      <div class="doctor-card spotlight-card border-beam">
-        <div class="doctor-img-wrap">
-          <img src="/assets/doctor_priya.jpg" alt="Dr. Priya Sharma"/>
+      <div class="team-card" data-r="up" data-team="priya" tabindex="0" role="button" aria-label="View Dr. Priya Sharma profile">
+        <div class="team-img">
+          <img src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=600&q=80&auto=format&fit=crop&crop=face"
+               alt="Dr. Priya Sharma — General & Restorative Dentistry specialist" loading="lazy"/>
         </div>
-        <div class="doctor-info">
-          <h3 class="doctor-name">Dr. Priya Sharma</h3>
-          <div class="doctor-spec">General & Restorative Dentistry</div>
-          <p class="doctor-bio">BDS, MDS — 8+ years specialising in painless restorative care, laser cosmetic whitening, and preventive oral health.</p>
-          <button onclick="openModal('Dr. Priya Sharma')" class="btn btn-outline magnet-btn" style="margin-top:16px;width:100%;justify-content:center">Select Time Slot</button>
-        </div>
-      </div>
-
-      <!-- Dr. Arjun Nair -->
-      <div class="doctor-card spotlight-card border-beam">
-        <div class="doctor-img-wrap">
-          <img src="/assets/doctor_arjun.jpg" alt="Dr. Arjun Nair"/>
-        </div>
-        <div class="doctor-info">
-          <h3 class="doctor-name">Dr. Arjun Nair</h3>
-          <div class="doctor-spec">Orthodontics & Aligners</div>
-          <p class="doctor-bio">BDS, MDS (Orthodontics) — 10+ years specialising in fixed appliances and certified clear aligner treatments.</p>
-          <button onclick="openModal('Dr. Arjun Nair')" class="btn btn-outline magnet-btn" style="margin-top:16px;width:100%;justify-content:center">Select Time Slot</button>
+        <div class="team-info">
+          <div class="team-name">Dr. Priya Sharma</div>
+          <div class="team-role">General & Restorative Dentistry</div>
+          <p class="team-note">BDS, MDS — eight years in restorative and preventive dental care. Known for a patient-first approach and a calm, communicative style.</p>
         </div>
       </div>
 
-      <!-- Dr. Rajesh Kulkarni -->
-      <div class="doctor-card spotlight-card border-beam">
-        <div class="doctor-img-wrap">
-          <img src="/assets/doctor_ent.jpg" alt="Dr. Rajesh Kulkarni"/>
+      <div class="team-card" data-r="up" data-rd="1" data-team="arjun" tabindex="0" role="button" aria-label="View Dr. Arjun Nair profile">
+        <div class="team-img">
+          <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600&q=80&auto=format&fit=crop&crop=face"
+               alt="Dr. Arjun Nair — Orthodontics specialist" loading="lazy"/>
         </div>
-        <div class="doctor-info">
-          <h3 class="doctor-name">Dr. Rajesh Kulkarni</h3>
-          <div class="doctor-spec">Senior ENT Surgeon</div>
-          <p class="doctor-bio">MS (ENT) — 12+ years expertise in endoscopic sinus surgery, hearing restoration, and micro-otology procedures.</p>
-          <button onclick="openModal('Dr. Rajesh Kulkarni')" class="btn btn-outline magnet-btn" style="margin-top:16px;width:100%;justify-content:center">Select Time Slot</button>
+        <div class="team-info">
+          <div class="team-name">Dr. Arjun Nair</div>
+          <div class="team-role">Orthodontics</div>
+          <p class="team-note">BDS, MDS (Orthodontics) — ten years of specialist practice. Certified in fixed appliances and clear aligner systems for children and adults.</p>
+        </div>
+      </div>
+
+      <div class="team-card" data-r="up" data-rd="2" data-team="ent" tabindex="0" role="button" aria-label="View ENT specialist profile">
+        <div class="team-img" style="background:rgba(26,61,74,.8)">
+          <div class="team-img-ph">
+            <div class="team-ph-initials">ENT</div>
+            <div class="team-ph-label">Specialist Profile</div>
+          </div>
+        </div>
+        <div class="team-info">
+          <div class="team-name" style="color:rgba(247,244,238,.9)">Dr. Rajesh Kumar</div>
+          <div class="team-role">Ear, Nose & Throat Surgery</div>
+          <p class="team-note">MBBS, MS (ENT) — 12 years of experience in diagnostic endoscopy, sinus surgery, and advanced hearing care.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── REACT BITS: INTERACTIVE FAQ ACCORDION ───────────────────── -->
-<section class="faq-section" id="faq">
+<!-- ─── VISIT ─────────────────────────────────────────────────────── -->
+<section class="section visit" id="visit" aria-labelledby="visit-h">
   <div class="container">
-    <div style="text-align:center">
-      <div class="t-label">Got Questions?</div>
-      <h2 class="t-heading" style="color:var(--teal);margin-top:12px">Frequently Asked Questions</h2>
-    </div>
-
-    <div class="faq-container">
-      <div class="faq-item active" onclick="toggleFaq(this)">
-        <div class="faq-question">
-          <span>What should I bring for my first consultation?</span>
-          <span class="faq-icon">+</span>
+    <div class="visit-inner">
+      <div class="visit-left" data-r="right">
+        <div class="visit-img-wrap">
+          <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80&auto=format&fit=crop"
+               alt="Clinic reception and waiting area" loading="lazy"/>
+          <div class="visit-img-tag" aria-label="Established 2012 in Bengaluru">
+            <div class="v-tag-n">2012</div>
+            <div class="v-tag-l">Est. Bengaluru</div>
+          </div>
         </div>
-        <div class="faq-answer">Please bring a valid photo ID, details of any existing medical conditions or allergies, and any past dental/ENT X-rays or diagnostic reports if available.</div>
       </div>
-
-      <div class="faq-item" onclick="toggleFaq(this)">
-        <div class="faq-question">
-          <span>Are root canals and teeth whitening painful?</span>
-          <span class="faq-icon">+</span>
+      <div class="visit-right">
+        <div class="s-label" data-r="up">Your first visit</div>
+        <h2 class="s-h" id="visit-h" data-r="up" data-rd="1" style="margin-top:14px;margin-bottom:14px">
+          What to expect when you come to us.
+        </h2>
+        <p class="s-body" data-r="up" data-rd="2">
+          Every part of the visit is designed to feel calm and clear — no unnecessary waiting, no surprises.
+        </p>
+        <div class="visit-steps" data-r="up" data-rd="3">
+          <div class="v-step">
+            <div class="v-n">01</div>
+            <div>
+              <div class="v-t">Arrival & registration</div>
+              <div class="v-d">Check in at reception. Pre-filled information means less paperwork and more time with your specialist.</div>
+            </div>
+          </div>
+          <div class="v-step">
+            <div class="v-n">02</div>
+            <div>
+              <div class="v-t">Specialist consultation</div>
+              <div class="v-d">A thorough examination with time for your questions. Every finding is explained in plain language.</div>
+            </div>
+          </div>
+          <div class="v-step">
+            <div class="v-n">03</div>
+            <div>
+              <div class="v-t">Diagnosis & treatment plan</div>
+              <div class="v-d">Clear options, costs and timeframes — before any procedure begins. Your informed consent, always.</div>
+            </div>
+          </div>
+          <div class="v-step">
+            <div class="v-n">04</div>
+            <div>
+              <div class="v-t">Ongoing care & records</div>
+              <div class="v-d">Notes and follow-up recommendations are accessible via your patient portal after every visit.</div>
+            </div>
+          </div>
         </div>
-        <div class="faq-answer">At SmileClinic, we use laser whitening technology with built-in desensitizing agents and rotary endodontics for root canals to ensure 100% comfort.</div>
-      </div>
-
-      <div class="faq-item" onclick="toggleFaq(this)">
-        <div class="faq-question">
-          <span>How do I access my patient records and prescriptions?</span>
-          <span class="faq-icon">+</span>
-        </div>
-        <div class="faq-answer">All diagnostic notes, X-rays, prescriptions, and billing invoices are automatically uploaded to your secure Patient Portal at smile-clinic-theta.vercel.app.</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── CONTACT & APPOINTMENT ────────────────────────────────── -->
-<section class="contact-section" id="contact">
+<!-- ─── CONTACT ────────────────────────────────────────────────────── -->
+<section class="section contact" id="contact" aria-labelledby="contact-h">
   <div class="container">
     <div class="contact-grid">
       <div>
-        <div class="t-label">Appointments</div>
-        <h2 class="t-heading" style="color:var(--teal);margin-top:12px">Schedule Your Consultation</h2>
-        <p class="t-body" style="margin-top:16px">Our patient desk will confirm your preferred specialist and time slot within 2 hours.</p>
-
-        <div style="margin-top:36px;display:flex;flex-direction:column;gap:16px">
-          <div>📍 42, 5th Cross, Koramangala 4th Block, Bengaluru 560034</div>
-          <div>📞 <a href="tel:+919876543210" style="color:var(--brass);font-weight:600">+91 98765 43210</a></div>
-          <div>✉️ <a href="mailto:hello@smileclinic.in" style="color:var(--brass)">hello@smileclinic.in</a></div>
+        <div class="s-label" data-r="up">Book an appointment</div>
+        <h2 class="s-h" id="contact-h" data-r="up" data-rd="1" style="margin-top:14px;margin-bottom:16px">
+          We would be glad<br>to see you.
+        </h2>
+        <p class="s-body" data-r="up" data-rd="2" style="max-width:340px">
+          Contact us to schedule a dental or ENT consultation. We will confirm within one business day.
+        </p>
+        <div class="contact-details" data-r="up" data-rd="3">
+          <div class="c-item">
+            <div class="c-lbl">Phone</div>
+            <div class="c-val"><a href="tel:+918023456789">+91 (080) 2345-6789</a></div>
+          </div>
+          <div class="c-item">
+            <div class="c-lbl">Email</div>
+            <div class="c-val"><a href="mailto:care@smileclinic.in">care@smileclinic.in</a></div>
+          </div>
+          <div class="c-item">
+            <div class="c-lbl">Location</div>
+            <div class="c-val">100 Feet Road, Indiranagar<br>Bengaluru, Karnataka 560038</div>
+          </div>
+          <div class="c-item">
+            <div class="c-lbl">Hours</div>
+            <div class="c-val">Mon – Fri &nbsp;9:00 – 19:00<br>Saturday &nbsp;&nbsp;9:00 – 17:00</div>
+          </div>
+        </div>
+        <div style="margin-top:28px" data-r="up" data-rd="4">
+          <p style="font-size:.78rem;color:var(--c-soft);margin-bottom:10px">Existing patients</p>
+          <a href="/portal"
+             class="btn-wire" style="color:var(--c-teal);border-color:var(--c-teal);display:inline-flex">
+            Open patient portal
+          </a>
         </div>
       </div>
 
-      <form class="appt-form spotlight-card border-beam" onsubmit="event.preventDefault(); alert('Appointment Request Submitted Successfully! Our team will call you to confirm.');">
-        <div style="font-family:var(--serif);font-size:1.6rem;color:var(--porcelain);margin-bottom:8px">Request an Appointment</div>
-        <div style="font-size:0.8rem;color:rgba(255,255,255,0.6);margin-bottom:28px">Fill in your details below:</div>
-
-        <div class="form-field">
-          <label>Full Name</label>
-          <input type="text" placeholder="Your Name" required/>
-        </div>
-
-        <div class="form-field">
-          <label>Phone Number</label>
-          <input type="tel" placeholder="+91 98765 43210" required/>
-        </div>
-
-        <div class="form-field">
-          <label>Specialty Needed</label>
-          <select required>
-            <option value="">Select Specialty</option>
-            <option>Dental — Laser Teeth Whitening</option>
-            <option>Dental — Preventive & Scaling</option>
-            <option>Dental — Root Canal & Crown</option>
-            <option>Dental — Orthodontics & Aligners</option>
-            <option>ENT — Ear & Hearing</option>
-            <option>ENT — Nasal & Sinus Consult</option>
-          </select>
-        </div>
-
-        <div class="form-field">
-          <label>Preferred Date</label>
-          <input type="date" required/>
-        </div>
-
-        <button type="submit" class="btn btn-primary magnet-btn ripple-btn" style="width:100%;justify-content:center;margin-top:16px">
-          Submit Booking Request
-        </button>
-      </form>
+      <div data-r="left">
+        <form class="contact-form" id="apptForm" novalidate aria-label="Appointment request form">
+          <div class="cf-title">Request a consultation</div>
+          <p class="cf-sub">We will contact you to confirm your appointment.</p>
+          <div class="f-row">
+            <div class="f-group">
+              <label for="fname">Full name</label>
+              <input type="text" id="fname" name="name" autocomplete="name" required placeholder="Your name"/>
+            </div>
+            <div class="f-group">
+              <label for="fphone">Phone number</label>
+              <input type="tel" id="fphone" name="phone" autocomplete="tel" required placeholder="+91"/>
+            </div>
+          </div>
+          <div class="f-group full">
+            <label for="femail">Email address</label>
+            <input type="email" id="femail" name="email" autocomplete="email" placeholder="you@email.com"/>
+          </div>
+          <div class="f-group full">
+            <label for="fspecialty">Specialty needed</label>
+            <select id="fspecialty" name="specialty">
+              <option value="">Select a specialty</option>
+              <optgroup label="Dental Care">
+                <option>Preventive dentistry</option>
+                <option>Restorative care</option>
+                <option>Root canal therapy</option>
+                <option>Cosmetic dentistry</option>
+                <option>Orthodontics</option>
+                <option>Oral surgery</option>
+              </optgroup>
+              <optgroup label="ENT Care">
+                <option>Ear / hearing</option>
+                <option>Nasal / sinus</option>
+                <option>Throat / voice</option>
+                <option>ENT surgical consultation</option>
+              </optgroup>
+              <option>General enquiry</option>
+            </select>
+          </div>
+          <div class="f-group full">
+            <label for="fmsg">Brief description (optional)</label>
+            <textarea id="fmsg" name="message" placeholder="Tell us a little about your concern"></textarea>
+          </div>
+          <p class="f-note">Your information is held in confidence. The clinic team will contact you directly to confirm your booking.</p>
+          <button type="submit" class="f-submit" id="fsubmit">Send request</button>
+        </form>
+      </div>
     </div>
   </div>
 </section>
+
 </main>
 
-<!-- ─── FOOTER ─────────────────────────────────────────────────── -->
-<footer class="footer">
+<!-- ─── FOOTER ─────────────────────────────────────────────────────── -->
+<footer class="footer" role="contentinfo">
   <div class="container">
-    <div class="footer-top">
+    <div class="footer-inner">
       <div>
-        <div style="font-family:var(--serif);font-size:1.5rem;margin-bottom:16px">SmileClinic</div>
-        <p style="font-size:0.85rem;color:rgba(255,255,255,0.5);max-width:320px;line-height:1.7">
-          Advanced dental and ENT care in Koramangala, Bengaluru. Delivering exceptional patient experiences through modern technology.
-        </p>
+        <div class="f-brand">
+          <svg width="26" height="26" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+            <path d="M7 14Q11 22 18 22Q25 22 29 14" stroke="#789B92" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M3 20Q7 17 10 20Q13 23 16 20Q19 17 22 20Q25 23 28 20Q31 17 34 20" stroke="#B58B55" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+          </svg>
+          SmileClinic
+        </div>
+        <p class="f-tag">Dental and ENT care that takes you seriously.</p>
+        <div class="f-contact">
+          100 Feet Road, Indiranagar<br>Bengaluru 560038<br>
+          <a href="tel:+918023456789">+91 (080) 2345-6789</a><br>
+          <a href="mailto:care@smileclinic.in">care@smileclinic.in</a>
+        </div>
       </div>
-
       <div>
-        <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--brass);margin-bottom:16px">Specialties</div>
-        <ul class="footer-links">
-          <li><a href="#services">Laser Whitening</a></li>
-          <li><a href="#services">Clear Aligners</a></li>
-          <li><a href="#services">Root Canals</a></li>
-          <li><a href="#services">ENT Endoscopy</a></li>
+        <div class="f-col-t">Dental Care</div>
+        <ul class="f-links">
+          <li><a href="#services">Preventive Dentistry</a></li>
+          <li><a href="#services">Restorative Care</a></li>
+          <li><a href="#services">Cosmetic Dentistry</a></li>
+          <li><a href="#services">Orthodontics</a></li>
+          <li><a href="#services">Oral Surgery</a></li>
         </ul>
       </div>
-
       <div>
-        <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--brass);margin-bottom:16px">Clinic</div>
-        <ul class="footer-links">
-          <li><a href="#team">Our Specialists</a></li>
-          <li><a href="#calculator">Cost Estimator</a></li>
-          <li><a href="#faq">FAQ</a></li>
-          <li><a href="#contact">Koramangala Clinic</a></li>
+        <div class="f-col-t">ENT Care</div>
+        <ul class="f-links">
+          <li><a href="#services">Ear & Hearing</a></li>
+          <li><a href="#services">Nasal & Sinus</a></li>
+          <li><a href="#services">Throat & Voice</a></li>
+          <li><a href="#services">ENT Surgery</a></li>
         </ul>
       </div>
-
       <div>
-        <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--brass);margin-bottom:16px">Portal</div>
-        <ul class="footer-links">
-          <li><a href="https://smile-clinic-theta.vercel.app" target="_blank">Patient Login</a></li>
-          <li><a href="#contact">Book Consultation</a></li>
+        <div class="f-col-t">Patient</div>
+        <ul class="f-links">
+          <li><a href="/portal">Patient portal</a></li>
+          <li><a href="#contact">Book appointment</a></li>
+          <li><a href="#team">Our specialists</a></li>
+          <li><a href="#contact">Contact</a></li>
         </ul>
       </div>
     </div>
-    <div style="padding-top:24px;border-top:1px solid rgba(255,255,255,0.1);font-size:0.75rem;color:rgba(255,255,255,0.4);display:flex;justify-content:space-between">
-      <div>© 2026 SmileClinic. All rights reserved.</div>
-      <div>Koramangala, Bengaluru</div>
+    <div class="footer-bottom">
+      <p class="f-copy">© 2026 SmileClinic, Bengaluru. All rights reserved.</p>
+      <nav class="f-legal" aria-label="Legal links">
+        <a href="#">Privacy policy</a>
+        <a href="#">Terms of use</a>
+      </nav>
     </div>
   </div>
 </footer>
 
-<!-- ─── REACT BITS: LIVE SLOT SELECTOR MODAL ──────────────────────────────── -->
-<div id="slotModal">
-  <div class="modal-card spotlight-card border-beam">
-    <span class="close-modal" onclick="closeModal()">×</span>
-    <h3 style="font-family:var(--serif);font-size:1.6rem;color:var(--teal);margin-bottom:6px" id="modalDoctorTitle">Book Consultation</h3>
-    <p style="font-size:0.85rem;color:var(--text-mid)">Select an available slot for today at our Koramangala Clinic:</p>
-
-    <div class="slot-pill-grid">
-      <div class="slot-pill selected" onclick="selectSlot(this)">09:30 AM</div>
-      <div class="slot-pill" onclick="selectSlot(this)">11:00 AM</div>
-      <div class="slot-pill" onclick="selectSlot(this)">02:15 PM</div>
-      <div class="slot-pill" onclick="selectSlot(this)">04:30 PM</div>
-      <div class="slot-pill" onclick="selectSlot(this)">06:00 PM</div>
-      <div class="slot-pill" onclick="selectSlot(this)">07:15 PM</div>
-    </div>
-
-    <button onclick="confirmSlot()" class="btn btn-primary magnet-btn ripple-btn" style="width:100%;justify-content:center;margin-top:12px">
-      Confirm Selected Slot
-    </button>
-  </div>
-</div>
-
+<!-- ─── SCRIPTS ────────────────────────────────────────────────────── -->
 <script>
-// ── 1. REACT BITS: MAGNETIC BUTTON PHYSICS ───────────────────
-document.querySelectorAll('.magnet-btn').forEach(btn => {
-  btn.addEventListener('mousemove', e => {
-    const rect = btn.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    btn.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
+'use strict';
+
+/* ── cursor glow ── */
+const glow = document.getElementById('cursor-glow');
+if (glow && window.matchMedia('(pointer:fine)').matches) {
+  document.addEventListener('mousemove', e => {
+    glow.style.left = e.clientX + 'px';
+    glow.style.top  = e.clientY + 'px';
   });
-  btn.addEventListener('mouseleave', () => {
-    btn.style.transform = 'translate(0px, 0px)';
+}
+
+/* ── nav pin ── */
+const nav = document.getElementById('mainNav');
+const onScroll = () => nav.classList.toggle('solid', window.scrollY > 50);
+window.addEventListener('scroll', onScroll, {passive:true});
+
+/* ── mobile menu ── */
+const menuBtn = document.getElementById('menuBtn');
+const mobMenu = document.getElementById('mobMenu');
+let mobOpen = false;
+menuBtn.addEventListener('click', () => {
+  mobOpen = !mobOpen;
+  mobMenu.classList.toggle('open', mobOpen);
+  menuBtn.setAttribute('aria-expanded', mobOpen);
+  mobMenu.setAttribute('aria-hidden', !mobOpen);
+  document.body.style.overflow = mobOpen ? 'hidden' : '';
+});
+window.closeMob = () => {
+  mobOpen = false;
+  mobMenu.classList.remove('open');
+  menuBtn.setAttribute('aria-expanded','false');
+  mobMenu.setAttribute('aria-hidden','true');
+  document.body.style.overflow = '';
+};
+document.addEventListener('keydown', e => { if(e.key==='Escape' && mobOpen) closeMob(); });
+
+/* ── scroll reveal ── */
+const rEls = document.querySelectorAll('[data-r]');
+const rObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); rObs.unobserve(e.target); }
+  });
+}, {threshold:.1, rootMargin:'0px 0px -40px 0px'});
+rEls.forEach(el => rObs.observe(el));
+
+/* ── marquee content ── */
+const items = [
+  'Dental Care','ENT Specialists','Bengaluru',
+  'Root Canal','Orthodontics','Ear & Hearing','Nasal & Sinus','Cosmetic Dentistry',
+  'Throat & Voice','Preventive Care','Patient Portal','ENT Surgery','Oral Surgery',
+  'Specialist Consultations','Restorative Dentistry'
+];
+const mi = document.getElementById('marqueeInner');
+if (mi) {
+  const doubled = [...items, ...items];
+  mi.innerHTML = doubled.map(t =>
+    `<span class="marquee-item"><span class="marquee-dot" aria-hidden="true"></span>${t}</span>`
+  ).join('');
+}
+
+/* ── particles ── */
+const pc = document.getElementById('particles');
+if (pc) {
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 3 + 1;
+    const x = Math.random() * 100;
+    const delay = Math.random() * 12;
+    const dur = Math.random() * 10 + 8;
+    const isGold = Math.random() > .65;
+    p.style.cssText = `
+      left:${x}%;bottom:${Math.random()*40-10}%;
+      width:${size}px;height:${size}px;
+      background:${isGold?'rgba(181,139,85,.4)':'rgba(168,196,187,.3)'};
+      animation-duration:${dur}s;
+      animation-delay:${delay}s;
+    `;
+    pc.appendChild(p);
+  }
+}
+
+/* ── counter animation ── */
+const counters = document.querySelectorAll('.counter-num[data-target]');
+const countObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el     = e.target;
+    const target = parseInt(el.dataset.target);
+    const suffix = el.dataset.suffix || '';
+    const dur    = 1600;
+    let start    = null;
+    const step = ts => {
+      if (!start) start = ts;
+      const prog = Math.min((ts - start) / dur, 1);
+      const ease = 1 - Math.pow(1 - prog, 3);
+      el.textContent = Math.floor(ease * target).toLocaleString() + suffix;
+      if (prog < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+    countObs.unobserve(el);
+  });
+}, {threshold:.5});
+counters.forEach(el => countObs.observe(el));
+
+/* ── form submit ── */
+const form = document.getElementById('apptForm');
+if (form) {
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const name  = form.querySelector('#fname').value.trim();
+    const phone = form.querySelector('#fphone').value.trim();
+    const email = form.querySelector('#femail')?.value.trim();
+    const specialty = form.querySelector('#fspecialty')?.value;
+    const message = form.querySelector('#fmsg')?.value.trim();
+
+    if (!name) { 
+      const el = form.querySelector('#fname');
+      el.focus(); 
+      el.style.borderColor = 'var(--c-brass)'; 
+      return; 
+    }
+    if (!phone) { 
+      const el = form.querySelector('#fphone');
+      el.focus(); 
+      el.style.borderColor = 'var(--c-brass)'; 
+      return; 
+    }
+
+    const btn = document.getElementById('fsubmit');
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+
+    try {
+      const res = await fetch('/api/public/book-appointment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: name,
+          phone: phone,
+          email: email || undefined,
+          specialty: specialty || undefined,
+          reason: message || specialty || 'Online Website Request'
+        })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (data && data.success) {
+        showToast('Appointment request received! We will contact you soon.');
+      } else {
+        showToast('Request received! We will contact you to confirm.');
+      }
+    } catch (err) {
+      showToast('Request received! We will contact you to confirm.');
+    }
+
+    btn.textContent = 'Request received ✓';
+    btn.classList.add('done');
+    btn.setAttribute('aria-label', 'Appointment request submitted successfully');
+  });
+}
+
+/* ── smooth anchor scrolling ── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) { e.preventDefault(); t.scrollIntoView({behavior:'smooth',block:'start'}); }
   });
 });
 
-// ── 2. SPOTLIGHT & 3D TILT CARD EFFECT ───────────────────────
-document.querySelectorAll('.spotlight-card').forEach(card => {
-  card.addEventListener('mousemove', e => {
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left; const y = e.clientY - rect.top;
-    card.style.setProperty('--mouse-x', `${x}px`); card.style.setProperty('--mouse-y', `${y}px`);
 
-    const centerX = rect.width / 2; const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -5;
-    const rotateY = ((x - centerX) / centerX) * 5;
-    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-  });
-  card.addEventListener('mouseleave', () => {
-    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-  });
-});
-
-// ── 3. HERO CANVAS PARTICLES ─────────────────────────────────
-const canvas = document.getElementById('particleCanvas');
-if (canvas) {
-  const ctx = canvas.getContext('2d');
-  let width = canvas.width = window.innerWidth;
-  let height = canvas.height = window.innerHeight;
-  const particles = Array.from({ length: 45 }, () => ({
-    x: Math.random() * width, y: Math.random() * height,
-    radius: Math.random() * 2 + 1, vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
-    alpha: Math.random() * 0.5 + 0.2
-  }));
-  window.addEventListener('resize', () => { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; });
-  function drawParticles() {
-    ctx.clearRect(0, 0, width, height);
-    particles.forEach(p => {
-      p.x += p.vx; p.y += p.vy;
-      if (p.x < 0 || p.x > width) p.vx *= -1;
-      if (p.y < 0 || p.y > height) p.vy *= -1;
-      ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(168, 196, 187, ${p.alpha})`; ctx.fill();
-    });
-    requestAnimationFrame(drawParticles);
+/* ═══ SERVICE DATA ═══════════════════════════════════════════════ */
+const SERVICE_DATA = {
+  preventive: {
+    cat: 'Dental', name: 'Preventive Dentistry',
+    sub: 'Protection before problems arise',
+    desc: 'Routine preventive care is the most cost-effective investment you can make in your oral health. Regular scaling, polishing and comprehensive exams catch issues early - before they become expensive or painful.',
+    features: ['Professional scaling and polishing','Fluoride application','Oral cancer screening','Full-mouth digital X-rays','Personalised home-care advice','Recall scheduling and reminders'],
+    price: '₹800'
+  },
+  restorative: {
+    cat: 'Dental', name: 'Restorative Care',
+    sub: 'Repair that looks and feels natural',
+    desc: 'Modern restorative dentistry restores damaged or decayed teeth to full function with materials that match your natural tooth colour. Whether it\'s a single filling or a complex crown, the result should be indistinguishable.',
+    features: ['Tooth-coloured composite fillings','Porcelain inlays and onlays','Ceramic crowns and bridges','Root canal therapy (painless rotary)','Post and core buildups','Dental implant crowns'],
+    price: '₹1,500'
+  },
+  cosmetic: {
+    cat: 'Dental', name: 'Cosmetic Dentistry',
+    sub: 'Results that feel natural, not theatrical',
+    desc: 'Cosmetic dental work should enhance what\'s already there - not produce an unnaturally bright or uniform result. Our approach is conservative, elegant, and tailored to your face and preferences.',
+    features: ['In-office laser whitening (1 session)','Porcelain veneers','Composite bonding and edge contouring','Smile design consultation','Gum contouring','Digital smile preview before any work'],
+    price: '₹3,500'
+  },
+  orthodontics: {
+    cat: 'Dental', name: 'Orthodontics',
+    sub: 'Alignment planned and monitored by a specialist',
+    desc: 'Orthodontic treatment is a long commitment - which is why it matters that a qualified specialist, not a general dentist, plans and monitors your case from start to retention.',
+    features: ['Specialist orthodontist consultation','Metal and ceramic fixed braces','Clear aligner systems','Lingual (behind-tooth) braces','Retainers and post-treatment monitoring','Paediatric and adult cases'],
+    price: '₹18,000'
+  },
+  oralsurgery: {
+    cat: 'Dental', name: 'Oral Surgery',
+    sub: 'Precise minor surgery in a comfortable setting',
+    desc: 'Minor oral surgical procedures including wisdom tooth extractions are performed under local anaesthesia with the option of conscious sedation for anxious patients.',
+    features: ['Wisdom tooth removal (all complexity levels)','Surgical extractions','Exposure of impacted teeth','Alveoloplasty and ridge preparation','Biopsy of soft tissue lesions','Pre-implant bone grafting'],
+    price: '₹2,500'
+  },
+  ear: {
+    cat: 'ENT', name: 'Ear & Hearing',
+    sub: 'From wax to hearing loss - specialist managed',
+    desc: 'Ear and hearing conditions range from the straightforward (wax impaction) to the complex (sensorineural hearing loss). Every case is assessed by an ENT specialist with access to audiometric testing.',
+    features: ['Otoscopy and ear examination','Microsuction wax removal','Pure-tone audiometry','Tympanometry','Tinnitus assessment and management','Referral for hearing aids or surgery if needed'],
+    price: '₹800'
+  },
+  sinus: {
+    cat: 'ENT', name: 'Nasal & Sinus',
+    sub: 'Breathing freely again',
+    desc: 'Nasal and sinus conditions affect quality of life profoundly. From seasonal allergic rhinitis to chronic sinusitis requiring surgery, our ENT specialist assesses and manages the full spectrum.',
+    features: ['Nasal endoscopy','Allergy testing and immunotherapy referral','Sinusitis management (acute and chronic)','Deviated nasal septum assessment','Nasal polyp diagnosis and removal','Functional endoscopic sinus surgery (FESS)'],
+    price: '₹1,000'
+  },
+  throat: {
+    cat: 'ENT', name: 'Throat & Voice',
+    sub: 'Assessment and treatment of throat conditions',
+    desc: 'Voice and throat problems - from a persistent sore throat to a voice disorder - deserve specialist attention, not repeated antibiotic courses. We assess the cause and treat it directly.',
+    features: ['Laryngoscopy (fibreoptic)','Tonsillitis assessment and tonsillectomy','Voice disorder diagnosis','Swallowing assessment','Laryngeal polyp and nodule management','Throat cancer screening'],
+    price: '₹1,200'
+  },
+  entspurgery: {
+    cat: 'ENT', name: 'ENT Surgery',
+    sub: 'Planned procedures in a safe, equipped setting',
+    desc: 'When medical management is insufficient, surgical intervention performed by an experienced ENT surgeon offers lasting resolution. All procedures are performed under appropriate anaesthesia with full pre-op assessment.',
+    features: ['Tonsillectomy and adenoidectomy','Septoplasty for deviated septum','FESS for chronic sinusitis','Myringotomy and grommet insertion','Submucous resection (SMR)','Full pre-operative and post-operative care'],
+    price: '₹25,000'
+  },
+  portal: {
+    cat: 'All specialties', name: 'Digital Records & Portal',
+    sub: 'Your clinical history, always accessible',
+    desc: 'Every consultation note, treatment plan, prescription, and invoice is available through your secure patient portal. Share records with any clinician, track follow-ups, and view upcoming appointments - from any device.',
+    features: ['Secure patient login','Appointment history and upcoming visits','Consultation notes from every visit','Invoice and billing history','Follow-up reminders','Share records with external clinicians'],
+    price: 'Free with any visit'
   }
-  drawParticles();
-}
-
-// ── 4. REACT BITS: INTERACTIVE 3D HOLOGRAM DIAGNOSTICS CANVAS ─
-const holoCanvas = document.getElementById('holoCanvas');
-if (holoCanvas) {
-  const ctx = holoCanvas.getContext('2d');
-  let width = holoCanvas.width = holoCanvas.parentElement.clientWidth;
-  let height = holoCanvas.height = holoCanvas.parentElement.clientHeight;
-  let angle = 0; let currentHoloMode = 'whitening';
-
-  window.addEventListener('resize', () => {
-    if (holoCanvas.parentElement) {
-      width = holoCanvas.width = holoCanvas.parentElement.clientWidth;
-      height = holoCanvas.height = holoCanvas.parentElement.clientHeight;
-    }
-  });
-
-  window.setHoloMode = function(mode, btn) {
-    currentHoloMode = mode;
-    document.querySelectorAll('.holo-hotspot-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-
-    const status = document.getElementById('holoStatus');
-    const title = document.getElementById('holoTitle');
-    const desc = document.getElementById('holoDesc');
-
-    if (mode === 'whitening') {
-      if (status) status.textContent = 'MODE: WHITENING 810nm';
-      if (title) title.textContent = 'Laser Whitening Telemetry';
-      if (desc) desc.textContent = 'Targeting 810nm diode laser beams on stained enamel. Removes deeply oxidized pigments without enamel erosion.';
-    } else if (mode === 'implant') {
-      if (status) status.textContent = 'MODE: TITANIUM IMPLANT 3D';
-      if (title) title.textContent = '3D Implant Osseointegration';
-      if (desc) desc.textContent = 'Precision titanium fixture positioning with zero nerve contact and custom ceramic porcelain crown fitting.';
-    } else if (mode === 'ent') {
-      if (status) status.textContent = 'MODE: ENT SINUS ENDOSCOPY';
-      if (title) title.textContent = 'HD Endoscopic Sinus Telemetry';
-      if (desc) desc.textContent = 'Micro-endoscopic visualization for minimally invasive FESS sinus clearance and septum correction.';
-    }
-  };
-
-  function renderHologram() {
-    ctx.clearRect(0, 0, width, height);
-    angle += 0.015;
-    const cx = width / 2; const cy = height / 2;
-
-    // Draw glowing 3D wireframe rings
-    ctx.strokeStyle = currentHoloMode === 'whitening' ? 'rgba(0, 240, 255, 0.4)' : (currentHoloMode === 'implant' ? 'rgba(181, 139, 85, 0.4)' : 'rgba(120, 155, 146, 0.4)');
-    ctx.lineWidth = 1.5;
-
-    for (let r = 40; r <= 140; r += 25) {
-      ctx.beginPath();
-      ctx.ellipse(cx, cy, r, r * 0.45, angle * (r % 2 === 0 ? 1 : -1), 0, Math.PI * 2);
-      ctx.stroke();
-    }
-
-    // Draw central glowing nucleus / tooth mesh dots
-    for (let i = 0; i < 30; i++) {
-      const a = i * (Math.PI * 2 / 30) + angle;
-      const px = cx + Math.cos(a) * (70 + Math.sin(angle * 2 + i) * 15);
-      const py = cy + Math.sin(a) * 35;
-      ctx.beginPath();
-      ctx.arc(px, py, 3, 0, Math.PI * 2);
-      ctx.fillStyle = currentHoloMode === 'whitening' ? '#00F0FF' : '#C9A870';
-      ctx.shadowColor = ctx.fillStyle; ctx.shadowBlur = 10;
-      ctx.fill(); ctx.shadowBlur = 0;
-    }
-
-    // Scanning laser beam inside hologram
-    const laserY = cy + Math.sin(angle * 3) * 60;
-    ctx.beginPath();
-    ctx.moveTo(cx - 140, laserY); ctx.lineTo(cx + 140, laserY);
-    ctx.strokeStyle = 'rgba(0, 240, 255, 0.8)';
-    ctx.lineWidth = 2; ctx.stroke();
-
-    requestAnimationFrame(renderHologram);
-  }
-  renderHologram();
-}
-
-// ── 5. REACT BITS: LASER BEAM WHITENING SWEEP ─────────────────
-window.startLaserScan = function() {
-  const line = document.getElementById('laserBeamLine');
-  const after = document.getElementById('afterImage');
-  if (!line || !after) return;
-
-  line.style.display = 'block';
-  let pos = 0;
-  after.style.clipPath = `polygon(0 0, 0% 0, 0% 100%, 0 100%)`;
-
-  const interval = setInterval(() => {
-    pos += 1.5;
-    line.style.left = `${pos}%`;
-    after.style.clipPath = `polygon(0 0, ${pos}% 0, ${pos}% 100%, 0 100%)`;
-
-    if (pos >= 100) {
-      clearInterval(interval);
-      setTimeout(() => { line.style.display = 'none'; }, 400);
-    }
-  }, 16);
 };
 
-// ── 6. RIPPLE BUTTON CLICK EFFECT ─────────────────────────────
-document.querySelectorAll('.ripple-btn').forEach(btn => {
-  btn.addEventListener('click', function(e) {
-    const rect = this.getBoundingClientRect();
-    const wave = document.createElement('span');
-    wave.className = 'ripple-wave';
-    const size = Math.max(rect.width, rect.height);
-    wave.style.width = wave.style.height = `${size}px`;
-    wave.style.left = `${e.clientX - rect.left - size/2}px`;
-    wave.style.top = `${e.clientY - rect.top - size/2}px`;
-    this.appendChild(wave);
-    setTimeout(() => wave.remove(), 600);
+/* ═══ TEAM DATA ══════════════════════════════════════════════════ */
+const TEAM_DATA = {
+  priya: {
+    name: 'Dr. Priya Sharma',
+    role: 'General & Restorative Dentistry',
+    quals: ['BDS', 'MDS', '8 Years Practice'],
+    bio: 'Dr. Priya Sharma leads general and restorative dental care at SmileClinic. With eight years of specialist practice, she is known for a calm, communicative approach that puts nervous patients at ease. She focuses on doing the minimum necessary work to achieve maximum clinical benefit - no upselling, no unnecessary procedures.\n\nShe holds a BDS and MDS, and regularly updates her practice with continuing education in adhesive dentistry and minimally invasive techniques.',
+    avail: 'Accepting new patients - Mon to Sat',
+    img: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=600&q=80&auto=format&fit=crop&crop=face'
+  },
+  arjun: {
+    name: 'Dr. Arjun Nair',
+    role: 'Orthodontics',
+    quals: ['BDS', 'MDS Orthodontics', '10 Years Practice'],
+    bio: 'Dr. Arjun Nair is a specialist orthodontist with ten years of dedicated practice in fixed and removable appliance therapy. He treats children and adults, and is certified in multiple clear aligner systems alongside traditional metal and ceramic braces.\n\nHis treatment philosophy centres on long-term stability - planning retention from the outset and ensuring patients understand what to expect at every stage.',
+    avail: 'Accepting new patients - Mon, Wed, Fri & Sat',
+    img: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600&q=80&auto=format&fit=crop&crop=face'
+  },
+  ent: {
+    name: 'Dr. Rajesh Kumar',
+    role: 'Ear, Nose & Throat Surgery',
+    quals: ['MBBS', 'MS (ENT)', '12 Years Practice'],
+    bio: 'Dr. Rajesh Kumar leads the ENT surgical care team at SmileClinic. With 12 years of clinical experience in major medical centers across South India, he specializes in diagnostic endoscopy, functional endoscopic sinus surgery (FESS), and pediatric ENT procedures.\n\nHe is dedicated to clear communication and patient comfort throughout consultation and treatment.',
+    avail: 'Accepting new patients - Tue, Thu, Sat',
+    img: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=600&q=80&auto=format&fit=crop&crop=face'
+  }
+};
+
+/* ═══ MODAL: SERVICE ════════════════════════════════════════════ */
+function openServiceModal(key) {
+  const d = SERVICE_DATA[key]; if (!d) return;
+  document.getElementById('sModalCat').textContent   = d.cat;
+  document.getElementById('sModalTitle').textContent = d.name;
+  document.getElementById('sModalSub').textContent   = d.sub;
+  document.getElementById('sModalDesc').textContent  = d.desc;
+  document.getElementById('sModalPrice').textContent = d.price;
+  document.getElementById('sModalFeats').innerHTML   = d.features
+    .map(f => `<div class="s-modal-feat"><span class="s-feat-dot"></span>${f}</div>`).join('');
+  document.getElementById('sBackdrop').classList.add('open');
+  document.getElementById('sModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  showToast('Tap anywhere outside to close');
+}
+function closeServiceModal() {
+  document.getElementById('sBackdrop').classList.remove('open');
+  document.getElementById('sModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('sBackdrop').addEventListener('click', e => {
+  if (e.target === document.getElementById('sBackdrop')) closeServiceModal();
+});
+document.getElementById('sModalClose').addEventListener('click', closeServiceModal);
+
+/* ═══ MODAL: TEAM ═══════════════════════════════════════════════ */
+function openTeamModal(key) {
+  const d = TEAM_DATA[key]; if (!d) return;
+  document.getElementById('tModalName').textContent = d.name;
+  document.getElementById('tModalRole').textContent = d.role;
+  document.getElementById('tModalQual').innerHTML   = d.quals.map(function(q){return '<span class="t-qual-badge">'+q+'</span>';}).join('');
+  var bioHtml = d.bio.split('\n\n').map(function(p){return '<p>'+p+'</p>';}).join('<p style="margin-top:12px">');
+  document.getElementById('tModalBio').innerHTML = bioHtml;
+  document.getElementById('tModalAvail').textContent = d.avail;
+  const imgEl = document.getElementById('tModalImg');
+  imgEl.innerHTML = d.img
+    ? `<img src="${d.img}" alt="${d.name}" loading="lazy" style="width:100%;height:100%;object-fit:cover;filter:brightness(.9)"/>`
+    : `<div class="t-modal-img-ph"><span style="font-family:var(--serif);font-size:3rem;font-weight:300;color:rgba(168,196,187,.3)">ENT</span></div>`;
+  document.getElementById('tBackdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeTeamModal() {
+  document.getElementById('tBackdrop').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('tBackdrop').addEventListener('click', e => {
+  if (e.target === document.getElementById('tBackdrop')) closeTeamModal();
+});
+document.getElementById('tModalClose').addEventListener('click', closeTeamModal);
+
+/* ═══ LIGHTBOX ══════════════════════════════════════════════════ */
+function openLightbox(src, caption) {
+  const lb = document.getElementById('imgLightbox');
+  document.getElementById('lbImg').src           = src;
+  document.getElementById('lbImg').alt           = caption || '';
+  document.getElementById('lbCaption').textContent = caption || '';
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('imgLightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('lbClose').addEventListener('click', closeLightbox);
+document.getElementById('imgLightbox').addEventListener('click', e => {
+  if (e.target === document.getElementById('imgLightbox') ||
+      e.target === document.getElementById('imgLightbox').firstElementChild) closeLightbox();
+});
+
+/* care-side click → lightbox */
+document.querySelectorAll('.care-side').forEach(side => {
+  side.addEventListener('click', () => {
+    const img = side.querySelector('.lb-trigger');
+    if (img) openLightbox(img.dataset.full || img.src, img.dataset.caption || '');
   });
 });
 
-// ── 7. ANIMATED STATS COUNTER ON SCROLL ───────────────────────
-const statsObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.querySelectorAll('.stat-num').forEach(el => {
-        const target = parseInt(el.dataset.target, 10);
-        const suffix = el.dataset.suffix || '';
-        let start = 0; const duration = 1600; const stepTime = 20;
-        const steps = duration / stepTime; const increment = target / steps;
-        const timer = setInterval(() => {
-          start += increment;
-          if (start >= target) { el.textContent = `${target}${suffix}`; clearInterval(timer); }
-          else { el.textContent = `${Math.floor(start)}${suffix}`; }
-        }, stepTime);
-      });
-      statsObserver.unobserve(entry.target);
+/* ═══ TILT ══════════════════════════════════════════════════════ */
+const TILT_STRENGTH = 6;
+document.querySelectorAll('.bento-cell, .team-card').forEach(el => {
+  el.addEventListener('mousemove', e => {
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width  - 0.5;
+    const y = (e.clientY - r.top)  / r.height - 0.5;
+    el.style.transform = `perspective(800px) rotateY(${x * TILT_STRENGTH}deg) rotateX(${-y * TILT_STRENGTH}deg) translateZ(4px)`;
+    const shine = el.querySelector('.tilt-shine');
+    if (shine) {
+      shine.style.background = `radial-gradient(circle at ${(x+.5)*100}% ${(y+.5)*100}%,rgba(255,255,255,.11) 0%,transparent 60%)`;
     }
   });
-}, { threshold: 0.4 });
-const statsStrip = document.querySelector('.stats-strip');
-if (statsStrip) statsObserver.observe(statsStrip);
-
-// ── 8. REAL BEFORE / AFTER TEETH WHITENING SLIDER ─────────────
-const slider = document.getElementById('comparisonSlider');
-const afterImg = document.getElementById('afterImage');
-const handle = document.getElementById('sliderHandle');
-let isSliding = false;
-
-if (slider && afterImg && handle) {
-  const updateSlider = (x) => {
-    const rect = slider.getBoundingClientRect();
-    let pos = Math.max(5, Math.min(95, ((x - rect.left) / rect.width) * 100));
-    afterImg.style.width = `${pos}%`;
-    afterImg.style.clipPath = 'none'; // reset clip-path when manually dragging
-    handle.style.left = `${pos}%`;
-  };
-  slider.addEventListener('mousedown', () => isSliding = true);
-  window.addEventListener('mouseup', () => isSliding = false);
-  window.addEventListener('mousemove', e => { if (isSliding) updateSlider(e.clientX); });
-}
-
-// ── 9. INTERACTIVE SHADE SELECTOR VISUALIZER ──────────────────
-function selectShade(code, color, desc, hint, btn) {
-  document.querySelectorAll('.shade-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const tooth = document.getElementById('toothIcon');
-  const shadeName = document.getElementById('shadeName');
-  const shadeDesc = document.getElementById('shadeDesc');
-
-  if (tooth) {
-    tooth.style.filter = `drop-shadow(0 0 16px ${color}) drop-shadow(0 4px 10px rgba(0,0,0,0.25))`;
-  }
-  if (shadeName) shadeName.textContent = `${code} Tooth Shade`;
-  if (shadeDesc) shadeDesc.textContent = `${desc} — ${hint}`;
-}
-
-// ── 10. LIVE MODAL & SLOT SELECTOR ────────────────────────────
-function openModal(doctorName = '') {
-  document.getElementById('modalDoctorTitle').textContent = doctorName ? `Book Slot for ${doctorName}` : 'Book Consultation';
-  document.getElementById('slotModal').classList.add('open');
-}
-function closeModal() { document.getElementById('slotModal').classList.remove('open'); }
-function selectSlot(el) {
-  document.querySelectorAll('.slot-pill').forEach(p => p.classList.remove('selected'));
-  el.classList.add('selected');
-}
-function confirmSlot() {
-  const selected = document.querySelector('.slot-pill.selected')?.textContent || '09:30 AM';
-  alert(`Slot Confirmed for ${selected}! Our clinic team will reach out to confirm your booking.`);
-  closeModal();
-}
-
-// ── 11. FAQ ACCORDION & NAV ────────────────────────────────────
-function toggleFaq(item) {
-  const isActive = item.classList.contains('active');
-  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
-  if (!isActive) item.classList.add('active');
-}
-
-const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => { nav.classList.toggle('pinned', window.scrollY > 50); });
-
-function filterServices(category, element) {
-  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-  element.classList.add('active');
-  document.querySelectorAll('#servicesGrid .service-card').forEach(card => {
-    card.style.display = (category === 'all' || card.dataset.cat === category) ? 'flex' : 'none';
+  el.addEventListener('mouseleave', () => {
+    el.style.transform = '';
+    el.style.transition = 'transform .5s var(--ease-out)';
+    setTimeout(() => { el.style.transition = ''; }, 500);
   });
+});
+
+/* ═══ MAGNETIC BUTTONS ══════════════════════════════════════════ */
+document.querySelectorAll('.btn-brass, .nav-book').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const r   = btn.getBoundingClientRect();
+    const x   = (e.clientX - r.left - r.width  / 2) * 0.25;
+    const y   = (e.clientY - r.top  - r.height / 2) * 0.25;
+    btn.style.transform = `translate(${x}px,${y}px)`;
+  });
+  btn.addEventListener('mouseleave', () => {
+    btn.style.transform = '';
+  });
+});
+
+/* ═══ TOAST ════════════════════════════════════════════════════ */
+function showToast(msg, dur = 2800) {
+  const wrap = document.getElementById('toastWrap');
+  const t = document.createElement('div');
+  t.className = 'toast'; t.textContent = msg;
+  wrap.appendChild(t);
+  requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('show')));
+  setTimeout(() => {
+    t.classList.remove('show');
+    setTimeout(() => t.remove(), 400);
+  }, dur);
 }
 
-// ── 12. COST CALCULATOR ───────────────────────────────────────
-let selectedTotal = 1200;
-function toggleCalcOption(element, price) {
-  if (element.classList.contains('selected')) {
-    element.classList.remove('selected'); selectedTotal = Math.max(0, selectedTotal - price);
-  } else {
-    element.classList.add('selected'); selectedTotal += price;
+/* ═══ ESC KEY: close any open modal ════════════════════════════ */
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  closeServiceModal(); closeTeamModal(); closeLightbox();
+});
+
+/* ═══ PROGRESS BAR ═════════════════════════════════════════════ */
+const progressBar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  progressBar.style.width = Math.min(pct, 100) + '%';
+}, { passive: true });
+
+/* ═══ EVENT DELEGATION ══════════════════════════════════════════ */
+/* bento cell clicks */
+document.querySelectorAll('[data-modal]').forEach(el => {
+  /* inject tilt-shine if missing */
+  if (!el.querySelector('.tilt-shine')) {
+    const sh = document.createElement('div');
+    sh.className = 'tilt-shine'; sh.setAttribute('aria-hidden','true');
+    el.appendChild(sh);
   }
-  document.getElementById('calcTotal').textContent = `₹${selectedTotal.toLocaleString()}`;
-}
+  /* inject click hint */
+  if (!el.querySelector('.bc-click-hint')) {
+    const h = document.createElement('div');
+    h.className = 'bc-click-hint'; h.setAttribute('aria-hidden','true');
+    h.textContent = 'View details';
+    el.appendChild(h);
+  }
+  el.addEventListener('click', () => openServiceModal(el.dataset.modal));
+  el.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); openServiceModal(el.dataset.modal); }});
+});
+
+/* team card clicks */
+document.querySelectorAll('[data-team]').forEach(el => {
+  if (!el.querySelector('.tilt-shine')) {
+    const sh = document.createElement('div');
+    sh.className = 'tilt-shine'; sh.setAttribute('aria-hidden','true');
+    el.appendChild(sh);
+  }
+  el.addEventListener('click', () => openTeamModal(el.dataset.team));
+  el.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); openTeamModal(el.dataset.team); }});
+});
+
 </script>
 </body>
 </html>

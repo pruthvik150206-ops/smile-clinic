@@ -1,15 +1,17 @@
 appointment_id,patient_name,patient_phone,doctor_name,doctor_specialty,scheduled_at,duration_mins,status,priority,reason,consultation_notes,risk_level,no_show_probability
-12,yousuf M,97217491334,Priya Sharma,General Dentistry,2026-07-22T15:00,30,completed,high,upper molar ache ,gargle twice with hot water and salt,Low,0.1675
+16,Ananya Sen,9876543210,Priya Sharma,General Dentistry,2026-09-30T11:00,30,scheduled,normal,Toothache and scaling,,,
+15,Ananya Sen,9876543210,,,2026-09-25T14:30,30,scheduled,normal,Severe tooth sensitivity,,,
+14,Ananya Sen,9876543210,Priya Sharma,General Dentistry,2026-09-11T04:30,30,scheduled,normal,Online Website Booking,,,
+4,Meera Patel,+91-9123456701,Priya Sharma,General Dentistry,2026-07-31T16:00:00,45,scheduled,normal,Routine scaling and cleaning,,Low,0.082
+3,Sunita Rao,+91-9123456703,Arjun Nair,Orthodontics,2026-07-31T11:00:00,60,scheduled,normal,Braces fitting — upper arch,,Low,0.051
+2,Rahul Verma,+91-9123456702,Priya Sharma,General Dentistry,2026-07-30T14:30:00,30,confirmed,normal,Filling follow-up,,Low,0.067
+1,Meera Patel,+91-9123456701,Priya Sharma,General Dentistry,2026-07-30T10:00:00,90,scheduled,normal,Root canal — upper left first molar,,Low,0.235
+12,pruthvik gowda. b k,+91 9845189814,Priya Sharma,General Dentistry,2026-07-22T15:00,30,scheduled,high,upper molar ache ,gargle twice with hot water and salt,Low,0.1675
 11,pruthvik Gowda B K,9845189814,Arjun Nair,Orthodontics,2026-07-22T12:00,30,confirmed,normal,,,Low,0.1623
 10,sharma patel,999888883,Arjun Nair,Orthodontics,2026-06-26T03:00,30,completed,normal,,,Low,0.2545
-3,Meera Patel,+91-9123456701,Arjun Nair,Orthodontics,2026-05-27 11:00,60,confirmed,normal,Braces consultation,,,
-6,pruthvik Gowda B K,9845189814,vijay rathod,Orthodontics,2026-05-26T08:00,30,confirmed,high,,,Low,0.2229
-7,yousuf M,97217491334,Priya Sharma,General Dentistry,2026-05-26T08:00,30,completed,high,left upper molar ache ,pain due to cavity suggested to floss mouth before sleeping ,Low,0.2502
-8,veera d akki,745562245,Arjun Nair,Orthodontics,2026-05-26T08:00,30,confirmed,normal,braces appointment ,,Low,0.0929
+7,pruthvik gowda. b k,+91 9845189814,Priya Sharma,General Dentistry,2026-05-26T08:00,30,completed,high,left upper molar ache ,pain due to cavity suggested to floss mouth before sleeping ,Low,0.2502
+8,dhanu jay,+91 9591678278,Arjun Nair,Orthodontics,2026-05-26T08:00,30,confirmed,normal,braces appointment ,,Low,0.0929
 9,pruthvik Gowda B K,9845189814,Priya Sharma,General Dentistry,2026-05-26T08:00,30,scheduled,urgent,unbearable tooth pain ,,Low,0.2439
-5,prashant desai,+91 975373837,Priya Sharma,General Dentistry,2026-05-25T15:00,30,completed,high,,"molar check up done will need to take the medications and follow a liquid only diet 
-
-Follow-up: 1 week",Low,0.233
-2,Rahul Verma,+91-9123456702,Priya Sharma,General Dentistry,2026-05-22 10:00,30,completed,normal,Filling follow-up,"it was fine 
-
-Follow-up: 1 week",,
+13,Ananya Sen,9876543210,Priya Sharma,General Dentistry,2026-05-25T10:00,30,scheduled,normal,Routine checkup test,,,
+5,Rahul Verma,+91-9123456702,Priya Sharma,General Dentistry,2026-03-15T14:00:00,30,completed,normal,Composite filling — lower molar,,Low,0.114
+6,Sunita Rao,+91-9123456703,Arjun Nair,Orthodontics,2026-02-20T11:00:00,60,completed,normal,Braces consultation and OPG,,Low,0.043
