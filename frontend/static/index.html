@@ -1065,13 +1065,12 @@
     //  CONFIG
     // ═══════════════════════════════════════════════════════════
     const API_BASE = (() => {
-      // Auto-detect: if running on Vercel/online or local server, use relative /api
+      // Auto-detect: if running on Vercel/online, use the configured server URL
+      // Change DEPLOY_URL below when you deploy your server publicly
       const DEPLOY_URL = '';  // e.g. 'https://yourclinic.onrender.com/api'
       if (DEPLOY_URL) return DEPLOY_URL;
-      if (typeof window !== 'undefined' && window.location && window.location.origin && !window.location.origin.includes('file://')) {
-        return '/api';
-      }
-      return 'http://localhost:5000/api';
+      // Default: local server
+      return 'http://localhost:8080/api';
     })();
 
     // ═══════════════════════════════════════════════════════════
