@@ -774,7 +774,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
                                       (aid, doc_row["doctor_id"] if doc_row else -1)).fetchone()
                     if not owns:
                         return error("You can only update your own appointments", 403, "FORBIDDEN")
-                fields = {k: body[k] for k in ("status","notes","reason","scheduled_at","reminder_sent","priority") if k in body}
+                fields = {k: body[k] for k in ("status","notes","reason","scheduled_at","reminder_sent","priority","doctor_id") if k in body}
                 if fields:
                     sets = ", ".join(f"{k}=?" for k in fields)
                     con.execute(f"UPDATE appointments SET {sets}, updated_at=datetime('now') WHERE appointment_id=?",

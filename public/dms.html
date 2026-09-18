@@ -550,8 +550,8 @@
     }
 
     .bg-green {
-      background: var(--green-bg);
-      color: var(--green);
+      background: rgba(181, 139, 85, .12);
+      color: var(--brass);
       border-color: var(--green-bd)
     }
 
@@ -1064,7 +1064,7 @@
     // ═══════════════════════════════════════════════════════════
     //  CONFIG
     // ═══════════════════════════════════════════════════════════
-    const API_BASE = '/api';
+    const API_BASE = 'http://localhost:8080/api';
 
     // ═══════════════════════════════════════════════════════════
     //  STATE
@@ -1123,7 +1123,7 @@
         if (!j.success && res.status === 401) { localStorage.removeItem('sc_token'); STATE.user = null; renderPage(); }
         return j;
       } catch (e) {
-        toast('Cannot reach server. Make sure backend server is running.', 'er');
+        toast('Cannot reach server. Make sure server.py is running on port 8080.', 'er');
         return { success: false, error: { message: e.message } };
       }
     }
@@ -1141,12 +1141,12 @@
       if (canSeeBilling()) calls.push(api('GET', '/invoices'));
 
       const [p, d, a, t, s, i] = await Promise.all(calls);
-      if (p.success) STATE.patients = Array.isArray(p.data) ? p.data : (p.data?.items || []);
-      if (d.success) STATE.doctors = Array.isArray(d.data) ? d.data : (d.data?.items || []);
-      if (a.success) STATE.appointments = Array.isArray(a.data) ? a.data : (a.data?.items || []);
-      if (t.success) STATE.treatments = Array.isArray(t.data) ? t.data : (t.data?.items || []);
-      if (s.success) STATE.stats = s.data || {};
-      if (i?.success) STATE.invoices = Array.isArray(i.data) ? i.data : (i.data?.items || []);
+      if (p.success) STATE.patients = p.data;
+      if (d.success) STATE.doctors = d.data;
+      if (a.success) STATE.appointments = a.data;
+      if (t.success) STATE.treatments = t.data;
+      if (s.success) STATE.stats = s.data;
+      if (i?.success) STATE.invoices = i.data;
     }
 
     // ═══════════════════════════════════════════════════════════
@@ -1246,12 +1246,27 @@
         <h1>Better care,<br><em>better smiles.</em></h1>
         <p>Dental clinic management — appointments, patients, billing, and ML-powered insights in one place.</p>
       </div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
+        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(168,196,187,.1);border:1px solid rgba(168,196,187,.2);border-radius:2px">
+          <div style="font-size:.65rem;font-weight:500;letter-spacing:.08em;color:rgba(247,244,238,.4);min-width:80px">ADMIN</div>
+          <div style="font-size:.8rem;color:rgba(247,244,238,.6);font-weight:300">admin@smile.in / admin123</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(168,196,187,.1);border:1px solid rgba(168,196,187,.2);border-radius:2px">
+          <div style="font-size:.65rem;font-weight:500;letter-spacing:.08em;color:rgba(247,244,238,.4);min-width:80px">DOCTOR</div>
+          <div style="font-size:.8rem;color:rgba(247,244,238,.6);font-weight:300">doctor@smile.in / doctor123</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(168,196,187,.1);border:1px solid rgba(168,196,187,.2);border-radius:2px">
+          <div style="font-size:.65rem;font-weight:500;letter-spacing:.08em;color:rgba(247,244,238,.4);min-width:80px">RECEPT</div>
+          <div style="font-size:.8rem;color:rgba(247,244,238,.6);font-weight:300">recept@smile.in / recept123</div>
+        </div>
+      </div>
       <div class="auth-copy">© 2026 SmileClinic DMS</div>
     </div>
 
     <div class="auth-form">
       <div class="auth-box">
         <h2>Sign in</h2>
+        <p class="sub">Enter your credentials — your role is detected automatically.</p>
         <div id="auth-err" style="display:none" class="err-msg"></div>
         <div class="fg"><label for="a-email">Email</label>
           <input id="a-email" type="email" autocomplete="email" placeholder="your@email.com"/>
@@ -1369,7 +1384,16 @@
         <thead><tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Status</th><th>Risk</th></tr></thead>
         <tbody>${list.length ? list.map(a => `<tr style="cursor:pointer" onclick="openPatientProfile(${a.patient_id || 0},'${esc(a.patient_name)}')">
           <td><div class="td-main" style="color:var(--green);text-decoration:underline;cursor:pointer">${esc(a.patient_name)}</div></td>
-          <td><span style="font-size:13px;color:var(--text2)">${esc(a.doctor_name)}</span></td>
+          <td>
+      ${canEdit() ? `
+      <select style="font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:2px;background:var(--surface);color:var(--text);cursor:pointer;max-width:160px"
+        onchange="assignDoctor(${a.appointment_id},this.value)"
+        ${a.status === 'cancelled' ? 'disabled' : ''}>
+        <option value="">Unassigned</option>
+        ${STATE.doctors.map(d => `<option value="${d.doctor_id}" ${a.doctor_id === d.doctor_id ? 'selected' : ''}>Dr. ${esc(d.last_name)}</option>`).join('')}
+      </select>` :
+          `<span style="font-size:13px;color:var(--text2)">${esc(a.doctor_name || 'Unassigned')}</span>`}
+    </td>
           <td><span style="font-family:monospace;font-size:12px">${fmtD(a.scheduled_at)}</span></td>
           <td>${statusBadge(a.status)}</td>
           <td>${riskBadge(a.risk_level, a.no_show_probability)}</td>
@@ -1384,7 +1408,7 @@
       <div class="panel-body">
         ${todayAppts.length ? todayAppts.map(a => `
         <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="openPatientProfile(${a.patient_id || 0},'${esc(a.patient_name)}')">
-          <div class="av sm" style="background:var(--green-bg);color:var(--green)">${(a.patient_name || '?')[0]}</div>
+          <div class="av sm" style="background:rgba(181,139,85,.12);color:var(--brass)">${(a.patient_name || '?')[0]}</div>
           <div style="flex:1">
             <div style="font-weight:500;color:var(--green);text-decoration:underline">${esc(a.patient_name)}</div>
             <div style="font-size:12px;color:var(--text2)">${fmtDT(a.scheduled_at)} · ${esc(a.reason || '—')}</div>
@@ -1408,8 +1432,8 @@
       <div class="panel" style="margin-bottom:0">
         <div class="panel-head"><span class="panel-title">Billing snapshot</span></div>
         <div class="panel-body">
-          ${[['Collected', fmtRs(STATE.invoices.filter(i => i.payment_status === 'paid').reduce((s, i) => s + i.total_amount, 0)), 'var(--green)'],
-        ['Pending', fmtRs(STATE.invoices.filter(i => i.payment_status === 'pending').reduce((s, i) => s + i.total_amount, 0)), 'var(--amber)']].map(([l, v, c]) => `
+          ${[['Collected', fmtRs(STATE.invoices.filter(i => i.payment_status === 'paid').reduce((s, i) => s + (parseFloat(i.total_amount) || 0), 0)), 'var(--green)'],
+        ['Pending', fmtRs(STATE.invoices.filter(i => i.payment_status === 'pending').reduce((s, i) => s + (parseFloat(i.total_amount) || 0), 0)), 'var(--amber)']].map(([l, v, c]) => `
           <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
             <span style="font-size:13px;color:var(--text2)">${l}</span>
             <span style="font-weight:600;color:${c}">${v}</span>
@@ -1450,7 +1474,7 @@
       const age = p.date_of_birth ? Math.floor((Date.now() - new Date(p.date_of_birth)) / (365.25 * 864e5)) : '?';
       const completedAppts = aps.filter(a => a.status === 'completed');
       const upcomingAppts = aps.filter(a => ['scheduled', 'confirmed'].includes(a.status));
-      const totalSpent = inv.filter(i => i.payment_status === 'paid').reduce((s, i) => s + i.total_amount, 0);
+      const totalSpent = inv.filter(i => i.payment_status === 'paid').reduce((s, i) => s + (parseFloat(i.total_amount) || 0), 0);
 
       const html = `
   <div class="modal-head">
@@ -1594,7 +1618,7 @@
       <td><div style="display:flex;align-items:center;gap:9px">
         <div class="av sm">${(p.first_name || '?')[0]}</div>
         <div>
-          <div class="td-main" style="color:var(--green);text-decoration:underline">${esc(p.first_name)} ${esc(p.last_name)}</div>
+          <div class="td-main" style="color:var(--eu);text-decoration:underline;text-underline-offset:2px">${esc(p.first_name)} ${esc(p.last_name)}</div>
           <div class="td-sub">${esc(p.email || '')}</div>
         </div>
       </div></td>
@@ -1699,9 +1723,18 @@
       const appts = STATE.appointments;
       const rows = appts.map(a => `<tr>
     <td style="cursor:pointer" onclick="openPatientProfile(${a.patient_id || 0},'${esc(a.patient_name)}')">
-      <div class="td-main" style="color:var(--green);text-decoration:underline">${esc(a.patient_name)}</div>
+      <div class="td-main" style="color:var(--eu);text-decoration:underline;text-underline-offset:2px">${esc(a.patient_name)}</div>
     </td>
-    <td><span style="font-size:13px;color:var(--text2)">${esc(a.doctor_name)}</span></td>
+    <td>
+      ${canEdit() ? `
+      <select style="font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:2px;background:var(--surface);color:var(--text);cursor:pointer;max-width:160px"
+        onchange="assignDoctor(${a.appointment_id},this.value)"
+        ${a.status === 'cancelled' ? 'disabled' : ''}>
+        <option value="">Unassigned</option>
+        ${STATE.doctors.map(d => `<option value="${d.doctor_id}" ${a.doctor_id === d.doctor_id ? 'selected' : ''}>Dr. ${esc(d.last_name)}</option>`).join('')}
+      </select>` :
+          `<span style="font-size:13px;color:var(--text2)">${esc(a.doctor_name || 'Unassigned')}</span>`}
+    </td>
     <td><span style="font-family:monospace;font-size:12px">${fmtDT(a.scheduled_at)}</span></td>
     <td><span style="color:var(--text2)">${esc(a.reason || '—')}</span></td>
     <td>${priorityBadge(a.priority || 'normal')}</td>
@@ -1714,7 +1747,7 @@
   </tr>`).join('');
 
       return `
-  <div style="background:var(--green-bg);border:1px solid var(--green-bd);border-radius:8px;padding:8px 14px;margin-bottom:14px;font-size:12px;color:var(--green)">
+  <div style="background:rgba(120,155,146,.08);border:1px solid rgba(120,155,146,.2);border-radius:2px;padding:10px 16px;margin-bottom:16px;font-size:12px;color:var(--eu)">
     💡 Click any patient name to open their full profile and medical history.
   </div>
   <div class="toolbar">
@@ -1733,12 +1766,22 @@
       <span class="badge bg-blue">${appts.filter(a => a.status === 'scheduled').length} upcoming</span>
     </div>
     <div class="tbl"><table>
-      <thead><tr><th>Patient</th><th>Doctor</th><th>Date & Time</th><th>Reason</th><th>Status</th><th>Risk</th><th>Actions</th></tr></thead>
+      <thead><tr><th>Patient</th><th>Assign Doctor</th><th>Date & Time</th><th>Reason</th><th>Priority</th><th>Status</th><th>Risk</th><th>Actions</th></tr></thead>
       <tbody id="ap-body">
       ${rows || '<tr><td colspan="7" class="empty"><div class="empty-icon">📅</div>No appointments.</td></tr>'}
       </tbody>
     </table></div>
   </div>`;
+    }
+    async function assignDoctor(appointmentId, doctorId) {
+      if (!doctorId) return;
+      const r = await api('PATCH', '/appointments/' + appointmentId, { doctor_id: parseInt(doctorId) });
+      if (r.success) {
+        showToast('Doctor assigned');
+        await loadData(); renderPage();
+      } else {
+        showToast(r.error?.message || 'Error assigning doctor', 'er');
+      }
     }
     async function confirmAppt(id) { const r = await api('PATCH', `/appointments/${id}`, { status: 'confirmed' }); if (r.success) { toast('Confirmed'); await loadData(); renderPage(); } }
     async function cancelAppt(id) { if (!confirm('Cancel this appointment?')) return; const r = await api('DELETE', `/appointments/${id}`); if (r.success) { toast('Cancelled', 'in'); await loadData(); renderPage(); } }
@@ -1788,12 +1831,12 @@
     // ═══════════════════════════════════════════════════════════
     function billingPage() {
       const inv = STATE.invoices;
-      const paid = inv.filter(i => i.payment_status === 'paid').reduce((s, i) => s + i.total_amount, 0);
-      const pend = inv.filter(i => i.payment_status !== 'paid').reduce((s, i) => s + i.total_amount, 0);
+      const paid = inv.filter(i => i.payment_status === 'paid').reduce((s, i) => s + (parseFloat(i.total_amount) || 0), 0);
+      const pend = inv.filter(i => i.payment_status !== 'paid').reduce((s, i) => s + (parseFloat(i.total_amount) || 0), 0);
       const rows = inv.map(i => `<tr>
     <td><span style="font-family:monospace;font-size:12px;font-weight:600">INV-${String(i.invoice_id).padStart(3, '0')}</span></td>
     <td style="cursor:pointer" onclick="openPatientProfile(${i.patient_id || 0},'${esc(i.patient_name)}')">
-      <div class="td-main" style="color:var(--green);text-decoration:underline">${esc(i.patient_name || '—')}</div>
+      <div class="td-main" style="color:var(--eu);text-decoration:underline;text-underline-offset:2px">${esc(i.patient_name || '—')}</div>
     </td>
     <td><span style="font-family:monospace;font-size:12px">${fmtD(i.issued_at)}</span></td>
     <td><strong>${fmtRs(i.total_amount)}</strong></td>
@@ -2053,7 +2096,7 @@
         const color = a.risk_level === 'High' ? 'var(--red)' : a.risk_level === 'Medium' ? 'var(--amber)' : 'var(--green)';
         return `<tr>
       <td style="cursor:pointer" onclick="openPatientProfile(${a.patient_id || 0},'${esc(a.patient_name)}')">
-        <div class="td-main" style="color:var(--green);text-decoration:underline">${esc(a.patient_name)}</div>
+        <div class="td-main" style="color:var(--eu);text-decoration:underline;text-underline-offset:2px">${esc(a.patient_name)}</div>
       </td>
       <td><span style="font-family:monospace;font-size:12px">${fmtDT(a.scheduled_at)}</span></td>
       <td>${esc(a.reason || '—')}</td>
@@ -2196,7 +2239,7 @@
   <div style="border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:4px;background:var(--surface2)">
     <div style="font-weight:600;font-size:13px;margin-bottom:10px">Mark appointment status</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-sm" style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd)"
+      <button class="btn btn-sm" style="background:rgba(181,139,85,.12);color:var(--brass);border:1px solid var(--green-bd)"
         onclick="saveConsultation(${appointmentId},'completed','${escHtml(patientName)}')">
         ✅ Mark as Completed
       </button>
