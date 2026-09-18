@@ -1149,12 +1149,12 @@
       if (canSeeBilling()) calls.push(api('GET', '/invoices'));
 
       const [p, d, a, t, s, i] = await Promise.all(calls);
-      if (p.success) STATE.patients = p.data;
-      if (d.success) STATE.doctors = d.data;
-      if (a.success) STATE.appointments = a.data;
-      if (t.success) STATE.treatments = t.data;
-      if (s.success) STATE.stats = s.data;
-      if (i?.success) STATE.invoices = i.data;
+      if (p?.success) STATE.patients = Array.isArray(p.data) ? p.data : (p.data?.items || []);
+      if (d?.success) STATE.doctors = Array.isArray(d.data) ? d.data : (d.data?.items || []);
+      if (a?.success) STATE.appointments = Array.isArray(a.data) ? a.data : (a.data?.items || []);
+      if (t?.success) STATE.treatments = Array.isArray(t.data) ? t.data : (t.data?.items || []);
+      if (s?.success) STATE.stats = s.data || {};
+      if (i?.success) STATE.invoices = Array.isArray(i.data) ? i.data : (i.data?.items || []);
     }
 
     // ═══════════════════════════════════════════════════════════
@@ -1321,12 +1321,12 @@
     //  DASHBOARD  (role-aware)
     // ═══════════════════════════════════════════════════════════
     function dashboardPage() {
-      const s = STATE.stats, ap = STATE.appointments.slice(0, 6), r = role();
-
-      // Doctor sees only their own appointments today
+      const s = STATE.stats, r = role();
+      const ap = Array.isArray(STATE.appointments) ? STATE.appointments : [];
+      const docs = Array.isArray(STATE.doctors) ? STATE.doctors : [];
       const myAppts = isDoctor()
-        ? STATE.appointments.filter(a => a.doctor_name && a.doctor_name.toLowerCase().includes((STATE.user?.username || '').toLowerCase().replace('dr_', '')))
-        : STATE.appointments;
+        ? ap.filter(a => a.doctor_name && a.doctor_name.toLowerCase().includes((STATE.user?.username || '').toLowerCase().replace('dr_', '')))
+        : ap;
       const todayAppts = myAppts.filter(a => a.scheduled_at && a.scheduled_at.startsWith(new Date().toISOString().slice(0, 10)));
 
       const statsCards = isDoctor() ? `
@@ -2315,7 +2315,11 @@
         app.innerHTML = shell(inner);
       } catch (err) {
         console.error('renderPage error:', err);
-        if (app) app.innerHTML = authPage();
+        if (app && STATE.user) {
+          app.innerHTML = shell(`<div class="panel" style="padding:40px;text-align:center"><h3>⚠️ Dashboard Error</h3><p style="color:var(--text2);margin-top:10px">${esc(err.message)}</p><button class="btn btn-primary" style="margin-top:20px" onclick="location.reload()">Reload Page</button></div>`);
+        } else if (app) {
+          app.innerHTML = authPage();
+        }
       }
     }
 
