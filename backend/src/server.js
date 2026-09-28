@@ -47,9 +47,11 @@ const candidatePaths = [
   path.join(process.cwd(), 'frontend/static'),
   path.join(__dirname, '../../frontend/static'),
   path.join(__dirname, '../frontend/static'),
+  '/var/task/frontend/static',              // Vercel Lambda root
   path.join(process.cwd(), 'public')
 ];
 const staticPath = candidatePaths.find(p => fs.existsSync(path.join(p, 'dms.html'))) || candidatePaths[0];
+console.log('[static] resolved path:', staticPath, '| landing exists:', fs.existsSync(path.join(staticPath, 'landing.html')));
 
 app.use(express.static(staticPath, { index: false }));
 
