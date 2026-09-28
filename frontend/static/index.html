@@ -1840,7 +1840,10 @@
     <td><strong>${fmtRs(i.total_amount)}</strong></td>
     <td>${statusBadge(i.payment_status)}</td>
     <td>${esc(i.payment_method || '—')}</td>
-    <td>${i.payment_status !== 'paid' ? `<button class="btn btn-sm btn-primary" onclick="markPaid(${i.invoice_id})">Mark paid</button>` : ''}</td>
+    <td style="display:flex;gap:6px;align-items:center">
+      ${i.payment_status !== 'paid' ? `<button class="btn btn-sm btn-primary" onclick="markPaid(${i.invoice_id})">Mark paid</button>` : ''}
+      <button class="btn btn-sm" style="border:1px solid var(--border);background:var(--surface2)" onclick="printInvoice(${i.invoice_id},'${esc(i.patient_name)}','${fmtD(i.issued_at)}','${fmtRs(i.total_amount)}','${esc(i.payment_status)}','${esc(i.payment_method||'')}')">Print</button>
+    </td>
   </tr>`).join('');
       return `
   <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
@@ -1861,6 +1864,36 @@
   </div>`;
     }
     async function markPaid(id) { const m = prompt('Payment method (cash/card/upi/insurance):', 'cash'); if (!m) return; const r = await api('PATCH', `/invoices/${id}/pay`, { payment_method: m.toLowerCase() }); if (r.success) { toast('Marked as paid'); await loadData(); renderPage(); } else toast(r.error?.message || 'Error', 'er'); }
+    function printInvoice(id, patient, date, amount, status, method) {
+      const w = window.open('', '_blank', 'width=600,height=700');
+      w.document.write(`<!DOCTYPE html><html><head><title>Invoice INV-${String(id).padStart(3,'0')}</title><style>
+        body{font-family:Georgia,serif;margin:40px;color:#1a1a1a;}
+        .header{border-bottom:2px solid #102B35;padding-bottom:16px;margin-bottom:24px;}
+        .clinic{font-size:22px;font-weight:700;color:#102B35;}
+        .sub{font-size:13px;color:#555;margin-top:4px;}
+        h2{margin:0 0 24px;font-size:18px;color:#102B35;}
+        table{width:100%;border-collapse:collapse;margin-bottom:24px;}
+        td{padding:10px 8px;border-bottom:1px solid #eee;font-size:14px;}
+        td:first-child{color:#555;width:40%;}
+        td:last-child{font-weight:600;}
+        .total td{font-size:17px;border-top:2px solid #102B35;border-bottom:none;padding-top:14px;}
+        .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;background:${status==='paid'?'#e6f4ea':'#fff3e0'};color:${status==='paid'?'#2e7d32':'#e65100'};}
+        .footer{margin-top:40px;font-size:12px;color:#888;text-align:center;border-top:1px solid #eee;padding-top:16px;}
+      </style></head><body>
+        <div class="header"><div class="clinic">SmileClinic</div><div class="sub">Dental &amp; ENT | Bengaluru</div></div>
+        <h2>Invoice INV-${String(id).padStart(3,'0')}</h2>
+        <table>
+          <tr><td>Patient</td><td>${patient}</td></tr>
+          <tr><td>Date</td><td>${date}</td></tr>
+          <tr><td>Payment Method</td><td>${method||'—'}</td></tr>
+          <tr><td>Status</td><td><span class="badge">${status}</span></td></tr>
+          <tr class="total"><td>Total Amount</td><td>${amount}</td></tr>
+        </table>
+        <div class="footer">Thank you for choosing SmileClinic &mdash; Generated ${new Date().toLocaleDateString('en-IN')}</div>
+        <script>window.onload=()=>{window.print();}<\/script>
+      </body></html>`);
+      w.document.close();
+    }
     function openAddInvoice() {
       const pts = STATE.patients;
       openModal(`
