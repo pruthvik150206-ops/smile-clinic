@@ -51,7 +51,7 @@ const candidatePaths = [
 ];
 const staticPath = candidatePaths.find(p => fs.existsSync(path.join(p, 'dms.html'))) || candidatePaths[0];
 
-app.use(express.static(staticPath));
+app.use(express.static(staticPath, { index: false }));
 
 app.get(['/', '/landing', '/landing.html'], (req, res) => {
   const landingFile = path.join(staticPath, 'landing.html');
