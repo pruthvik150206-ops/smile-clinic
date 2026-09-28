@@ -45,24 +45,35 @@ const fs = require('fs');
 
 const candidatePaths = [
   path.join(process.cwd(), 'frontend/static'),
+  '/var/task/frontend/static',
   path.join(__dirname, '../../frontend/static'),
   path.join(__dirname, '../frontend/static'),
-  '/var/task/frontend/static',              // Vercel Lambda root
   path.join(process.cwd(), 'public')
 ];
 const staticPath = candidatePaths.find(p => fs.existsSync(path.join(p, 'dms.html'))) || candidatePaths[0];
-console.log('[static] resolved path:', staticPath, '| landing exists:', fs.existsSync(path.join(staticPath, 'landing.html')));
+const landingExists = fs.existsSync(path.join(staticPath, 'landing.html'));
+console.log('[static] cwd:', process.cwd(), '| __dirname:', __dirname);
+console.log('[static] resolved:', staticPath, '| landing:', landingExists);
 
 app.use(express.static(staticPath, { index: false }));
+
+// Debug route — remove after confirming paths
+app.get('/api/debug-paths', (req, res) => {
+  const results = candidatePaths.map(p => ({
+    path: p,
+    exists: fs.existsSync(p),
+    hasLanding: fs.existsSync(path.join(p, 'landing.html')),
+    hasDms: fs.existsSync(path.join(p, 'dms.html')),
+  }));
+  res.json({ cwd: process.cwd(), dirname: __dirname, resolved: staticPath, landingExists, candidates: results });
+});
 
 app.get(['/', '/landing', '/landing.html'], (req, res) => {
   const landingFile = path.join(staticPath, 'landing.html');
   if (fs.existsSync(landingFile)) {
     return res.sendFile(landingFile);
   }
-  // Fall back to index.html if landing.html is missing
-  const idxFile = path.join(staticPath, 'index.html');
-  return fs.existsSync(idxFile) ? res.sendFile(idxFile) : res.status(404).send('Landing page not found');
+  return res.status(500).json({ error: 'landing.html not found', tried: landingFile, cwd: process.cwd(), dirname: __dirname });
 });
 
 app.get(['/dms', '/dms.html', '/portal', '/portal.html', '/login', '/login.html'], (req, res) => {
