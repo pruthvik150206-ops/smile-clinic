@@ -53,6 +53,16 @@ const staticPath = candidatePaths.find(p => fs.existsSync(path.join(p, 'dms.html
 
 app.use(express.static(staticPath));
 
+app.get(['/', '/landing', '/landing.html'], (req, res) => {
+  const landingFile = path.join(staticPath, 'landing.html');
+  if (fs.existsSync(landingFile)) {
+    return res.sendFile(landingFile);
+  }
+  // Fall back to index.html if landing.html is missing
+  const idxFile = path.join(staticPath, 'index.html');
+  return fs.existsSync(idxFile) ? res.sendFile(idxFile) : res.status(404).send('Landing page not found');
+});
+
 app.get(['/dms', '/dms.html', '/portal', '/portal.html', '/login', '/login.html'], (req, res) => {
   const dmsFile = path.join(staticPath, 'dms.html');
   if (fs.existsSync(dmsFile)) {
