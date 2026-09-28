@@ -11,28 +11,19 @@
           "database/**"
         ]
       }
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/index.js"
-    },
-    {
-      "src": "/dms",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/portal",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/login",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/api/index.js"
-    }
+    { "src": "/api/(.*)", "dest": "/api/index.js" },
+    { "src": "/", "dest": "/public/landing.html" },
+    { "src": "/landing", "dest": "/public/landing.html" },
+    { "src": "/dms", "dest": "/public/dms.html" },
+    { "src": "/portal", "dest": "/public/portal.html" },
+    { "src": "/login", "dest": "/public/index.html" },
+    { "src": "/(.*)", "dest": "/api/index.js" }
   ]
 }
