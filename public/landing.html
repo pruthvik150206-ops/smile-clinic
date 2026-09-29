@@ -198,6 +198,10 @@
       color: var(--c-teal)
     }
 
+    .nav.solid .nav-logo img {
+      content: url('/assets/trident-logo-dark.png');
+    }
+
     .nav-links {
       display: flex;
       align-items: center;
@@ -2651,7 +2655,7 @@
   <header role="banner">
     <nav class="nav" id="mainNav" aria-label="Primary navigation">
       <a href="#" class="nav-logo" aria-label="Trident Dental &amp; ENT Clinic home" style="display:flex;align-items:center;text-decoration:none">
-        <img src="/assets/trident-logo.png" onerror="this.onerror=null;this.src='assets/trident-logo.png';" alt="Trident Dental &amp; ENT Clinic" style="height:48px;width:auto;object-fit:contain;display:block" />
+        <img id="navLogoImg" src="/assets/trident-logo.png" onerror="this.onerror=null;this.src='assets/trident-logo.png';" alt="Trident Dental &amp; ENT Clinic" style="height:48px;width:auto;object-fit:contain;display:block" />
       </a>
       <div class="nav-links" role="list">
         <a href="#dental-ent" role="listitem">Dental & ENT</a>
@@ -3329,7 +3333,15 @@
 
     /* ── nav pin ── */
     const nav = document.getElementById('mainNav');
-    const onScroll = () => nav.classList.toggle('solid', window.scrollY > 50);
+    const navLogo = document.getElementById('navLogoImg');
+    const onScroll = () => {
+      const isSolid = window.scrollY > 50;
+      nav.classList.toggle('solid', isSolid);
+      if (navLogo) {
+        navLogo.src = isSolid ? '/assets/trident-logo-dark.png' : '/assets/trident-logo.png';
+        navLogo.onerror = function() { this.onerror = null; this.src = isSolid ? 'assets/trident-logo-dark.png' : 'assets/trident-logo.png'; };
+      }
+    };
     window.addEventListener('scroll', onScroll, { passive: true });
 
     /* ── mobile menu ── */
