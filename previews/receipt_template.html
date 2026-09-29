@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receipt Template Test</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #EAE6DF;
+      padding: 30px;
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .receipt-sheet {
+      width: 100%;
+      max-width: 800px;
+      background: #FFFFFF;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      border-radius: 4px;
+      overflow: hidden;
+      color: #102B35;
+      font-size: 13px;
+    }
+
+    /* Top banner */
+    .r-header {
+      background: #0E252D;
+      color: #FFFFFF;
+      padding: 24px 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .r-brand {
+      display: flex;
+      flex-direction: column;
+    }
+    .r-logo {
+      font-family: 'Cinzel', serif;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      color: #FFFFFF;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .r-logo-sub {
+      font-size: 8.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      color: #A8C4BB;
+      margin-top: 6px;
+      font-weight: 600;
+    }
+    .r-inv-title-box {
+      text-align: right;
+    }
+    .r-inv-title {
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      line-height: 1.1;
+    }
+    .r-inv-sub {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    /* Tagline */
+    .r-tagline-bar {
+      background: #F2F7F5;
+      padding: 6px 36px;
+      font-size: 11px;
+      font-style: italic;
+      color: #385E57;
+      border-bottom: 1px solid #E1ECE9;
+    }
+
+    .r-body {
+      padding: 24px 36px 36px 36px;
+    }
+
+    /* Metadata ribbon */
+    .r-meta-strip {
+      background: #F3F8F6;
+      border: 1px solid #D7E7E3;
+      border-radius: 4px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      margin-bottom: 22px;
+      overflow: hidden;
+    }
+    .r-meta-col {
+      padding: 10px 14px;
+      border-right: 1px solid #D7E7E3;
+    }
+    .r-meta-col:last-child { border-right: none; }
+    .r-meta-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #557871;
+      margin-bottom: 3px;
+    }
+    .r-meta-val {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #102B35;
+      font-family: monospace;
+    }
+    .r-meta-val.text {
+      font-family: inherit;
+    }
+
+    /* Section headings */
+    .r-sec-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #102B35;
+      margin-bottom: 10px;
+    }
+
+    /* Patient Details Table */
+    .r-info-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #D7E7E3;
+      border-radius: 4px;
+      margin-bottom: 24px;
+      background: #FFFFFF;
+    }
+    .r-info-table td {
+      border: 1px solid #D7E7E3;
+      padding: 9px 14px;
+      vertical-align: top;
+      width: 33.33%;
+    }
+    .r-info-label {
+      font-size: 8.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #6C8B85;
+      margin-bottom: 3px;
+    }
+    .r-info-val {
+      font-size: 12.5px;
+      color: #102B35;
+      font-weight: 500;
+    }
+
+    /* Treatments Table */
+    .r-tx-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #D7E7E3;
+      border-bottom: none;
+    }
+    .r-tx-table th {
+      background: #0E4854;
+      color: #FFFFFF;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 9px 12px;
+      text-align: left;
+    }
+    .r-tx-table th.center { text-align: center; }
+    .r-tx-table th.right { text-align: right; }
+    .r-tx-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #E4EEEB;
+      font-size: 12.5px;
+      color: #1C333B;
+    }
+    .r-tx-table td.center { text-align: center; font-family: monospace; font-size: 11.5px; }
+    .r-tx-table td.right { text-align: right; font-weight: 600; }
+
+    /* Summary block */
+    .r-summary-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1.4fr;
+      border: 1px solid #D7E7E3;
+      border-top: none;
+      background: #FFFFFF;
+      margin-bottom: 30px;
+    }
+    .r-note-box {
+      padding: 14px 18px;
+      border-right: 1px solid #D7E7E3;
+      background: #FAFCFB;
+    }
+    .r-note-title {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #557871;
+      margin-bottom: 4px;
+    }
+    .r-note-text {
+      font-size: 11px;
+      color: #6A8287;
+      line-height: 1.45;
+    }
+    .r-totals-box {
+      padding: 12px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .r-tot-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #4A6369;
+    }
+    .r-tot-row.grand {
+      margin-top: 6px;
+      padding-top: 8px;
+      border-top: 1.5px solid #0E4854;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #0E4854;
+    }
+
+    /* Footer */
+    .r-footer {
+      border-top: 1px solid #D7E7E3;
+      padding-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      font-size: 11px;
+      color: #6C858A;
+    }
+    .r-footer-clinic {
+      font-weight: 700;
+      font-size: 11.5px;
+      color: #102B35;
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .r-footer-thanks {
+      font-style: italic;
+      color: #557871;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="receipt-sheet" id="receiptSheet">
+    <!-- Top Header -->
+    <div class="r-header">
+      <div class="r-brand">
+        <div class="r-logo">TRIDENT</div>
+        <div class="r-logo-sub">DENTAL AND ENT CLINIC</div>
+      </div>
+      <div class="r-inv-title-box">
+        <div class="r-inv-title">INVOICE / RECEIPT</div>
+        <div class="r-inv-sub">TRIDENT DENTAL AND ENT CLINIC</div>
+      </div>
+    </div>
+
+    <!-- Tagline Bar -->
+    <div class="r-tagline-bar">
+      Aesthetic care. Clear records.
+    </div>
+
+    <div class="r-body">
+      <!-- Metadata Strip -->
+      <div class="r-meta-strip">
+        <div class="r-meta-col">
+          <div class="r-meta-label">BILL NO.</div>
+          <div class="r-meta-val">TRD-2026-00428</div>
+        </div>
+        <div class="r-meta-col">
+          <div class="r-meta-label">DATE</div>
+          <div class="r-meta-val text">29 September 2026</div>
+        </div>
+        <div class="r-meta-col">
+          <div class="r-meta-label">PATIENT ID</div>
+          <div class="r-meta-val">PT-0248</div>
+        </div>
+        <div class="r-meta-col">
+          <div class="r-meta-label">PAYMENT</div>
+          <div class="r-meta-val text">PAID · CARD</div>
+        </div>
+      </div>
+
+      <!-- Section: Patient & Visit Details -->
+      <div class="r-sec-title">PATIENT &amp; VISIT DETAILS</div>
+      <table class="r-info-table">
+        <tr>
+          <td>
+            <div class="r-info-label">PATIENT NAME</div>
+            <div class="r-info-val">Aarav Mehta</div>
+          </td>
+          <td>
+            <div class="r-info-label">DOCTOR</div>
+            <div class="r-info-val">Dr. Anika Rao, BDS</div>
+          </td>
+          <td>
+            <div class="r-info-label">VISIT TYPE</div>
+            <div class="r-info-val">Consultation</div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="r-info-label">PHONE</div>
+            <div class="r-info-val">+91 98765 43210</div>
+          </td>
+          <td>
+            <div class="r-info-label">EMAIL</div>
+            <div class="r-info-val">aarav.mehta@example.com</div>
+          </td>
+          <td>
+            <div class="r-info-label">NEXT VISIT</div>
+            <div class="r-info-val">14 Oct 2026</div>
+          </td>
+        </tr>
+      </table>
+
+      <!-- Section: Services & Treatments -->
+      <div class="r-sec-title">SERVICES &amp; TREATMENTS</div>
+      <table class="r-tx-table">
+        <thead>
+          <tr>
+            <th class="center" style="width:45px">#</th>
+            <th>DESCRIPTION</th>
+            <th class="center" style="width:65px">QTY</th>
+            <th class="right" style="width:130px">AMOUNT</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="center">01</td>
+            <td>Comprehensive dental consultation</td>
+            <td class="center">1</td>
+            <td class="right">₹ 800.00</td>
+          </tr>
+          <tr>
+            <td class="center">02</td>
+            <td>Digital OPG radiograph</td>
+            <td class="center">1</td>
+            <td class="right">₹ 1,200.00</td>
+          </tr>
+          <tr>
+            <td class="center">03</td>
+            <td>Professional scaling and polishing</td>
+            <td class="center">1</td>
+            <td class="right">₹ 2,500.00</td>
+          </tr>
+          <tr>
+            <td class="center">04</td>
+            <td>Fluoride treatment</td>
+            <td class="center">1</td>
+            <td class="right">₹ 750.00</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Totals & Clinic Note -->
+      <div class="r-summary-grid">
+        <div class="r-note-box">
+          <div class="r-note-title">CLINIC NOTE</div>
+          <div class="r-note-text">Please retain this receipt for your records. Prices include applicable taxes.</div>
+        </div>
+        <div class="r-totals-box">
+          <div class="r-tot-row">
+            <span>SUBTOTAL</span>
+            <span style="font-weight:600">₹ 5,250.00</span>
+          </div>
+          <div class="r-tot-row">
+            <span>TAX · 5%</span>
+            <span style="font-weight:600">₹ 262.50</span>
+          </div>
+          <div class="r-tot-row grand">
+            <span>TOTAL PAID</span>
+            <span>₹ 5,512.50</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="r-footer">
+        <div>
+          <div class="r-footer-clinic">TRIDENT DENTAL AND ENT CLINIC</div>
+          <div>28 Meridian Avenue, Indiranagar, Bengaluru 560038 · +91 80 4123 7788 · hello@tridentclinic.example</div>
+        </div>
+        <div class="r-footer-thanks">
+          Thank you for choosing Trident.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
