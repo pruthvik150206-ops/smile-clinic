@@ -9,6 +9,17 @@
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap"
     rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <script>
+    (function() {
+      try {
+        const p = new URLSearchParams(window.location.search).get('theme');
+        if (p === 'light' || p === 'dark') localStorage.setItem('sc_theme', p);
+      } catch (e) {}
+      const saved = localStorage.getItem('sc_theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+    })();
+  </script>
   <style>
     * {
       box-sizing: border-box;
@@ -16,42 +27,87 @@
       padding: 0
     }
 
-    :root {
-      --bg: #F7F4EE;
-      --surface: #FDFBF7;
-      --surface2: #DDE7E3;
-      --border: #C4D4CF;
+    :root, [data-theme="light"] {
+      --bg: #F8F6F1;
+      --surface: #FFFFFF;
+      --surface2: #F4F1EA;
+      --surface3: #EAE6DC;
+      --border: rgba(16, 43, 53, 0.08);
+      --border-strong: rgba(16, 43, 53, 0.16);
       --text: #102B35;
       --text2: #4A6168;
       --text3: #7A9298;
       --green: #2A6E52;
-      --green-bg: #D4EDE4;
-      --green-bd: #89C4A8;
+      --green-bg: rgba(120, 155, 146, 0.14);
+      --green-bd: #789B92;
       --amber: #B58B55;
-      --amber-bg: #F5ECD8;
-      --amber-bd: #D4A96A;
+      --amber-bg: rgba(181, 139, 85, 0.12);
+      --amber-bd: #B58B55;
       --red: #B84040;
-      --red-bg: #F5DADA;
-      --red-bd: #D48989;
+      --red-bg: #FDF2F2;
+      --red-bd: #EAA8A8;
       --blue: #2A5566;
-      --blue-bg: #D4E4EC;
-      --blue-bd: #89B4C4;
-      --sidebar: 236px;
-      --r: 2px;
-      --font: 'DM Sans', sans-serif;
+      --blue-bg: #EAF2F6;
+      --blue-bd: #98B8C6;
+      --sidebar: 248px;
+      --r: 8px;
+      --r-sm: 5px;
+      --font: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --serif: 'Cormorant Garamond', Georgia, serif;
       --eu: #789B92;
       --eu-lt: #A8C4BB;
       --brass: #B58B55;
       --brass-lt: #C9A870;
+      --btn-primary-text: #FFFFFF;
+      --shadow-sm: 0 1px 3px rgba(16, 43, 53, 0.04), 0 1px 2px rgba(16, 43, 53, 0.02);
+      --shadow-md: 0 4px 16px rgba(16, 43, 53, 0.05), 0 1px 3px rgba(16, 43, 53, 0.03);
+      --shadow-lg: 0 10px 30px rgba(16, 43, 53, 0.08);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0D1C22;
+      --surface: #142830;
+      --surface2: #18313A;
+      --surface3: #1D3A45;
+      --border: rgba(255, 255, 255, 0.09);
+      --border-strong: rgba(255, 255, 255, 0.18);
+      --text: #F7F4EE;
+      --text2: #A2B6BA;
+      --text3: #768E94;
+      --green: #48BB78;
+      --green-bg: rgba(72, 187, 120, 0.16);
+      --green-bd: #48BB78;
+      --amber: #C9A870;
+      --amber-bg: rgba(201, 168, 112, 0.16);
+      --amber-bd: #C9A870;
+      --red: #F87171;
+      --red-bg: rgba(248, 113, 113, 0.16);
+      --red-bd: #F87171;
+      --blue: #60A5FA;
+      --blue-bg: rgba(96, 165, 250, 0.16);
+      --blue-bd: #60A5FA;
+      --sidebar: 248px;
+      --r: 8px;
+      --r-sm: 5px;
+      --font: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --eu: #789B92;
+      --eu-lt: #A8C4BB;
+      --brass: #B58B55;
+      --brass-lt: #C9A870;
+      --btn-primary-text: #0D1C22;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
 
     body {
       font-family: var(--font);
       background: var(--bg);
       color: var(--text);
-      font-size: 14px;
-      min-height: 100vh
+      font-size: 13.5px;
+      min-height: 100vh;
+      transition: background .2s ease, color .2s ease;
     }
 
     /* ── AUTH ─────────────────────────────────────── */
@@ -62,13 +118,14 @@
     }
 
     .auth-brand {
-      background: var(--text);
+      background: #0A1C22;
       padding: 56px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       position: relative;
-      overflow: hidden
+      overflow: hidden;
+      border-right: 1px solid var(--border);
     }
 
     .auth-brand::before {
@@ -77,9 +134,9 @@
       width: 480px;
       height: 480px;
       border-radius: 50%;
-      border: 90px solid rgba(255, 255, 255, .07);
+      border: 90px solid rgba(181, 139, 85, 0.08);
       top: -110px;
-      right: -110px
+      right: -110px;
     }
 
     .auth-brand::after {
@@ -88,41 +145,42 @@
       width: 280px;
       height: 280px;
       border-radius: 50%;
-      border: 60px solid rgba(255, 255, 255, .05);
+      border: 60px solid rgba(120, 155, 146, 0.08);
       bottom: 50px;
-      left: -70px
+      left: -70px;
     }
 
     .auth-logo {
       font-family: var(--serif);
       font-size: 26px;
-      color: #fff;
-      z-index: 1
+      color: #FFFFFF;
+      z-index: 1;
     }
 
     .auth-hl {
-      z-index: 1
+      z-index: 1;
     }
 
     .auth-hl h1 {
       font-family: var(--serif);
-      font-size: 44px;
-      color: #fff;
+      font-size: 46px;
+      color: #FFFFFF;
       line-height: 1.15;
-      margin-bottom: 14px
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
     }
 
     .auth-hl p {
-      color: rgba(255, 255, 255, .65);
+      color: rgba(247, 244, 238, 0.75);
       font-size: 15px;
       line-height: 1.65;
-      max-width: 300px
+      max-width: 320px;
     }
 
     .auth-copy {
       font-size: 12px;
-      color: rgba(255, 255, 255, .35);
-      z-index: 1
+      color: rgba(247, 244, 238, 0.4);
+      z-index: 1;
     }
 
     .auth-form {
@@ -130,24 +188,34 @@
       align-items: center;
       justify-content: center;
       padding: 40px;
-      background: var(--surface)
+      background: var(--bg);
+      position: relative;
     }
 
     .auth-box {
       width: 100%;
-      max-width: 400px
+      max-width: 420px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      box-shadow: var(--shadow-md);
+      padding: 38px 34px;
     }
 
     .auth-box h2 {
       font-family: var(--serif);
-      font-size: 30px;
-      margin-bottom: 5px
+      font-size: 32px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
     }
 
     .auth-box .sub {
       color: var(--text2);
-      margin-bottom: 28px;
-      font-size: 14px
+      margin-bottom: 24px;
+      font-size: 13.5px;
+      line-height: 1.5;
     }
 
     /* quick role pills */
@@ -228,12 +296,12 @@
 
     .fg label {
       display: block;
-      font-size: 11px;
+      font-size: 11.5px;
       font-weight: 600;
       letter-spacing: .06em;
       text-transform: uppercase;
-      color: var(--text2);
-      margin-bottom: 5px
+      color: var(--text3);
+      margin-bottom: 6px;
     }
 
     .fg input,
@@ -241,31 +309,33 @@
     .fg textarea {
       width: 100%;
       padding: 9px 12px;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
       font-family: var(--font);
-      font-size: 14px;
-      background: var(--bg);
+      font-size: 13.5px;
+      background: var(--surface2);
       color: var(--text);
       outline: none;
-      transition: border-color .2s
+      transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
     }
 
     .fg input:focus,
     .fg select:focus,
     .fg textarea:focus {
-      border-color: var(--green)
+      border-color: var(--brass);
+      background: var(--surface);
+      box-shadow: 0 0 0 2px rgba(181, 139, 85, 0.15);
     }
 
     .fg textarea {
       resize: vertical;
-      min-height: 70px
+      min-height: 75px;
     }
 
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px
+      gap: 12px;
     }
 
     /* ── BUTTONS ──────────────────────────────────── */
@@ -274,54 +344,59 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      padding: 9px 17px;
-      border-radius: 8px;
+      padding: 9px 16px;
+      border-radius: var(--r-sm);
       font-family: var(--font);
       font-weight: 500;
-      font-size: 14px;
+      font-size: 13.5px;
       cursor: pointer;
-      border: none;
-      transition: all .15s;
-      line-height: 1
+      border: 1px solid transparent;
+      transition: all .15s ease;
+      line-height: 1.2;
+      text-decoration: none;
     }
 
     .btn-primary {
       background: var(--brass);
-      color: #fff
+      color: var(--btn-primary-text);
+      font-weight: 600;
+      border-color: var(--brass);
     }
 
     .btn-primary:hover {
-      background: #0A2029
+      background: var(--brass-lt);
+      border-color: var(--brass-lt);
     }
 
     .btn-secondary {
-      background: var(--surface2);
+      background: var(--surface);
       color: var(--text);
-      border: 1px solid var(--border)
+      border: 1px solid var(--border);
     }
 
     .btn-secondary:hover {
-      background: var(--border)
+      background: var(--surface2);
+      border-color: var(--border-strong);
     }
 
     .btn-danger {
       background: var(--red-bg);
       color: var(--red);
-      border: 1px solid var(--red-bd)
+      border: 1px solid var(--red-bd);
     }
 
     .btn-danger:hover {
-      filter: brightness(.95)
+      filter: brightness(.95);
     }
 
     .btn-ghost {
       background: none;
       color: var(--text2);
-      border: 1px solid var(--border)
+      border: 1px solid var(--border);
     }
 
     .btn-ghost:hover {
-      background: var(--surface2)
+      background: var(--surface2);
     }
 
     .btn-full {
@@ -401,9 +476,9 @@
     .nav-item {
       display: flex;
       align-items: center;
-      gap: 9px;
-      padding: 9px 10px;
-      border-radius: 8px;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: var(--r-sm);
       cursor: pointer;
       color: var(--text2);
       font-size: 13.5px;
@@ -412,62 +487,69 @@
       background: none;
       width: 100%;
       text-align: left;
-      transition: all .12s;
-      margin-bottom: 2px
+      transition: all .14s ease;
+      margin-bottom: 3px;
     }
 
     .nav-item:hover {
       background: var(--surface2);
-      color: var(--text)
+      color: var(--text);
     }
 
     .nav-item.active {
-      background: rgba(120, 155, 146, .12);
+      background: var(--surface2);
       color: var(--text);
-      border-left: 2px solid var(--brass);
-      padding-left: 8px
+      font-weight: 600;
+      box-shadow: inset 3px 0 0 var(--brass);
     }
 
     .nav-icon {
-      font-size: 15px;
-      width: 20px;
-      text-align: center;
-      flex-shrink: 0
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--text2);
+    }
+
+    .nav-item.active .nav-icon {
+      color: var(--brass);
     }
 
     .sb-footer {
       padding: 14px;
-      border-top: 1px solid var(--border)
+      border-top: 1px solid var(--border);
     }
 
     .user-chip {
       display: flex;
       align-items: center;
       gap: 9px;
-      padding: 9px;
+      padding: 9px 12px;
       background: var(--surface2);
-      border-radius: 9px
+      border-radius: var(--r-sm);
     }
 
     .av {
       width: 30px;
       height: 30px;
-      border-radius: 7px;
-      background: var(--green);
-      color: #fff;
+      border-radius: var(--r-sm);
+      background: var(--brass);
+      color: var(--btn-primary-text);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 600;
       font-size: 12px;
-      flex-shrink: 0
+      flex-shrink: 0;
     }
 
     .av.sm {
       width: 26px;
       height: 26px;
       font-size: 11px;
-      border-radius: 6px
+      border-radius: 4px;
     }
 
     .u-name {
@@ -475,13 +557,13 @@
       font-size: 13px;
       overflow: hidden;
       text-overflow: ellipsis;
-      white-space: nowrap
+      white-space: nowrap;
     }
 
     .u-role {
       font-size: 11px;
       color: var(--text3);
-      text-transform: capitalize
+      text-transform: capitalize;
     }
 
     .logout-btn {
@@ -491,13 +573,14 @@
       cursor: pointer;
       color: var(--text3);
       font-size: 15px;
-      padding: 3px;
-      border-radius: 5px;
-      line-height: 1
+      padding: 4px;
+      border-radius: 4px;
+      line-height: 1;
     }
 
     .logout-btn:hover {
-      color: var(--red)
+      color: var(--red);
+      background: var(--surface);
     }
 
     .main {
@@ -505,36 +588,62 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      min-height: 100vh
+      min-height: 100vh;
     }
 
     .topbar {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 0 24px;
-      height: 56px;
+      padding: 0 28px;
+      height: 60px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       position: sticky;
       top: 0;
-      z-index: 50
+      z-index: 50;
+      transition: background .2s ease, border-color .2s ease;
     }
 
     .page-title {
       font-family: var(--serif);
-      font-size: 20px
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: -0.01em;
     }
 
     .topbar-right {
       display: flex;
       align-items: center;
-      gap: 10px
+      gap: 12px;
+    }
+
+    .theme-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text2);
+      cursor: pointer;
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 500;
+      transition: all .15s ease;
+    }
+
+    .theme-toggle-btn:hover {
+      background: var(--surface3);
+      color: var(--text);
+      border-color: var(--border-strong);
     }
 
     .content {
-      padding: 24px;
-      flex: 1
+      padding: 28px;
+      flex: 1;
     }
 
     /* ── BADGES ───────────────────────────────────── */
@@ -583,27 +692,31 @@
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      margin-bottom: 20px
+      gap: 16px;
+      margin-bottom: 24px;
     }
 
     .stat-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--r);
-      padding: 18px 20px;
+      padding: 20px 22px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       position: relative;
-      overflow: hidden
+      overflow: hidden;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
     }
 
     .stat-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2.5px;
-      background: var(--accent-color, var(--green))
+      display: none;
     }
 
     .stat-label {
@@ -611,21 +724,23 @@
       font-weight: 600;
       color: var(--text3);
       text-transform: uppercase;
-      letter-spacing: .06em;
-      margin-bottom: 8px
+      letter-spacing: .07em;
+      margin-bottom: 10px;
     }
 
     .stat-val {
       font-family: var(--serif);
-      font-size: 32px;
+      font-size: 34px;
+      font-weight: 500;
       line-height: 1;
-      color: var(--accent-color, var(--text))
+      color: var(--text);
+      letter-spacing: -0.01em;
     }
 
     .stat-sub {
       font-size: 12px;
       color: var(--text2);
-      margin-top: 5px
+      margin-top: 6px;
     }
 
     /* ── PANELS ───────────────────────────────────── */
@@ -633,46 +748,50 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--r);
+      box-shadow: var(--shadow-sm);
       overflow: hidden;
-      margin-bottom: 18px
+      margin-bottom: 20px;
     }
 
     .panel-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--border)
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
     }
 
     .panel-title {
       font-weight: 600;
-      font-size: 14px
+      font-size: 14.5px;
+      color: var(--text);
+      letter-spacing: -0.01em;
     }
 
     .panel-body {
-      padding: 20px
+      padding: 20px 22px;
     }
 
     .g2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px
+      gap: 16px;
     }
 
     .chart-wrap {
       height: 210px;
-      position: relative
+      position: relative;
     }
 
     /* ── TABLE ────────────────────────────────────── */
     .tbl {
-      overflow-x: auto
+      overflow-x: auto;
     }
 
     table {
       width: 100%;
-      border-collapse: collapse
+      border-collapse: collapse;
     }
 
     th {
@@ -681,26 +800,27 @@
       font-weight: 600;
       color: var(--text3);
       text-transform: uppercase;
-      letter-spacing: .06em;
-      padding: 10px 16px;
-      border-bottom: 1.5px solid var(--border);
-      background: var(--bg);
-      white-space: nowrap
+      letter-spacing: .07em;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface2);
+      white-space: nowrap;
     }
 
     td {
-      padding: 11px 16px;
+      padding: 13px 18px;
       border-bottom: 1px solid var(--border);
       vertical-align: middle;
-      font-size: 13.5px
+      font-size: 13.5px;
+      color: var(--text);
     }
 
     tr:last-child td {
-      border-bottom: none
+      border-bottom: none;
     }
 
     tr:hover td {
-      background: var(--bg)
+      background: var(--surface2);
     }
 
     .td-main {
@@ -725,72 +845,85 @@
     .search {
       position: relative;
       flex: 1;
-      min-width: 180px
+      min-width: 180px;
     }
 
     .search input {
       width: 100%;
-      padding: 9px 13px 9px 34px;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
+      padding: 9px 13px 9px 36px;
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
       font-family: var(--font);
-      font-size: 14px;
+      font-size: 13.5px;
       background: var(--surface);
+      color: var(--text);
       outline: none;
-      transition: border-color .2s
+      transition: border-color .15s ease, box-shadow .15s ease;
     }
 
     .search input:focus {
-      border-color: var(--green)
+      border-color: var(--brass);
+      box-shadow: 0 0 0 2px rgba(181, 139, 85, 0.15);
     }
 
     .search-ic {
       position: absolute;
-      left: 11px;
+      left: 12px;
       top: 50%;
       transform: translateY(-50%);
-      color: var(--text3)
+      color: var(--text3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
     }
 
     /* ── MODAL ────────────────────────────────────── */
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, .38);
+      background: rgba(10, 25, 30, 0.55);
       z-index: 300;
       display: flex;
       align-items: center;
       justify-content: center;
-      backdrop-filter: blur(2px);
-      animation: fadeIn .15s
+      backdrop-filter: blur(4px);
+      animation: fadeIn .15s ease;
     }
 
     .modal {
       background: var(--surface);
-      border-radius: 14px;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--r);
       padding: 28px;
       width: 100%;
-      max-width: 500px;
-      box-shadow: 0 24px 64px rgba(0, 0, 0, .16);
+      max-width: 520px;
+      box-shadow: var(--shadow-lg);
       animation: slideUp .2s ease;
       max-height: 90vh;
-      overflow-y: auto
+      overflow-y: auto;
+      color: var(--text);
     }
 
     .modal-lg {
-      max-width: 640px
+      max-width: 660px;
     }
 
     .modal-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 22px
+      margin-bottom: 22px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
     }
 
     .modal-head h3 {
       font-family: var(--serif);
-      font-size: 22px
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: -0.01em;
     }
 
     .close-btn {
@@ -798,24 +931,27 @@
       border: none;
       cursor: pointer;
       color: var(--text3);
-      font-size: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      border-radius: var(--r-sm);
+      transition: all .15s ease;
       line-height: 1;
-      padding: 3px;
-      border-radius: 5px
     }
 
     .close-btn:hover {
       color: var(--text);
-      background: var(--surface2)
+      background: var(--surface2);
     }
 
     .modal-foot {
       display: flex;
       justify-content: flex-end;
-      gap: 8px;
-      margin-top: 20px;
+      gap: 10px;
+      margin-top: 24px;
       padding-top: 18px;
-      border-top: 1px solid var(--border)
+      border-top: 1px solid var(--border);
     }
 
     /* ── TOAST ────────────────────────────────────── */
@@ -1101,7 +1237,7 @@
     function toast(msg, type = 'ok') {
       const d = document.createElement('div');
       d.className = `toast ${type}`;
-      d.innerHTML = `<span>${type === 'ok' ? '✓' : type === 'er' ? '✕' : 'ℹ'}</span><span>${esc(msg)}</span>`;
+      d.innerHTML = `<span>${esc(msg)}</span>`;
       document.getElementById('toasts').appendChild(d);
       setTimeout(() => d.remove(), 3200);
     }
@@ -1171,20 +1307,44 @@
     function closeModal() { document.getElementById('modal-ol')?.remove(); }
 
     // ═══════════════════════════════════════════════════════════
-    //  NAV
+    //  NAV & ICONS
     // ═══════════════════════════════════════════════════════════
     const PAGE_TITLES = { dashboard: 'Dashboard', patients: 'Patients', appointments: 'Appointments', billing: 'Billing', doctors: 'Doctors', ml: 'ML Insights' };
     const NAV_ALL = [
-      { id: 'dashboard', label: 'Dashboard', icon: '📊' },
-      { id: 'patients', label: 'Patients', icon: '🧑‍⚕️' },
-      { id: 'appointments', label: 'Appointments', icon: '📅' },
-      { id: 'billing', label: 'Billing', icon: '💳', restrict: ['admin', 'receptionist'] },
-      { id: 'doctors', label: 'Doctors', icon: '👨‍⚕️', restrict: ['admin', 'receptionist'] },
-      { id: 'ml', label: 'ML Insights', icon: '🤖', restrict: ['admin'] },
+      { id: 'dashboard', label: 'Dashboard', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>' },
+      { id: 'patients', label: 'Patients', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>' },
+      { id: 'appointments', label: 'Appointments', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>' },
+      { id: 'billing', label: 'Billing', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>', restrict: ['admin', 'receptionist'] },
+      { id: 'doctors', label: 'Doctors', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>', restrict: ['admin', 'receptionist'] },
+      { id: 'ml', label: 'ML Insights', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>', restrict: ['admin'] },
     ];
 
     function nav(page) { STATE.page = page; loadData().then(renderPage); }
     function logout() { localStorage.removeItem('sc_token'); STATE.user = null; renderPage(); }
+
+    // ═══════════════════════════════════════════════════════════
+    //  THEME ENGINE
+    // ═══════════════════════════════════════════════════════════
+    function getTheme() {
+      return document.documentElement.getAttribute('data-theme') || 'light';
+    }
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('sc_theme', theme);
+      updateThemeLabels();
+    }
+    function toggleTheme() {
+      const next = getTheme() === 'dark' ? 'light' : 'dark';
+      setTheme(next);
+    }
+    function updateThemeLabels() {
+      const isDark = getTheme() === 'dark';
+      document.querySelectorAll('.theme-toggle-btn').forEach(btn => {
+        btn.innerHTML = isDark
+          ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg><span>Light mode</span>'
+          : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg><span>Dark mode</span>';
+      });
+    }
 
     // ═══════════════════════════════════════════════════════════
     //  SHELL
@@ -1192,20 +1352,22 @@
     function shell(inner) {
       const r = role();
       const vis = NAV_ALL.filter(n => !n.restrict || n.restrict.includes(r));
-      // Role color
       const roleCls = { admin: 'bg-red', doctor: 'bg-blue', receptionist: 'bg-amber', patient: 'bg-gray' }[r] || 'bg-gray';
-      // Role label for topbar
-      const roleLabel = { admin: '🔑 Admin', doctor: '🩺 Doctor', receptionist: '🗓 Receptionist', patient: '👤 Patient' }[r] || r;
+      const roleLabel = { admin: 'Admin', doctor: 'Doctor', receptionist: 'Receptionist', patient: 'Patient' }[r] || r;
+      const isDark = getTheme() === 'dark';
 
       return `
   <div class="app">
     <aside class="sidebar">
-      <div class="sb-logo" style="display:flex;align-items:center;gap:9px">
-        <div class="sb-logo-name">SmileClinic</div>
-        <div class="sb-logo-sub">Dental Management System</div>
+      <div class="sb-logo" style="display:flex;align-items:center;gap:11px;padding:18px 16px;border-bottom:1px solid var(--border)">
+        <div style="width:30px;height:30px;background:var(--brass);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;color:var(--btn-primary-text);font-family:var(--serif);font-size:17px;font-weight:700">S</div>
+        <div>
+          <div style="font-family:var(--serif);font-size:19px;font-weight:600;color:var(--text);line-height:1.1">SmileClinic</div>
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;color:var(--brass)">Clinical Suite</div>
+        </div>
       </div>
       <nav class="sb-nav">
-        <div class="sb-sec">Menu</div>
+        <div class="sb-sec">Navigation</div>
         ${vis.map(n => `
           <button class="nav-item ${STATE.page === n.id ? 'active' : ''}" onclick="nav('${n.id}')">
             <span class="nav-icon">${n.icon}</span><span>${n.label}</span>
@@ -1216,9 +1378,9 @@
           <div class="av">${(STATE.user?.username || '?')[0].toUpperCase()}</div>
           <div style="flex:1;min-width:0">
             <div class="u-name">${esc(STATE.user?.username || '')}</div>
-            <div class="u-role">${esc(r)}</div>
+            <div class="u-role">${esc(roleLabel)}</div>
           </div>
-          <button class="logout-btn" onclick="logout()" title="Sign out">⬡</button>
+          <button class="logout-btn" onclick="logout()" title="Sign out"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg></button>
         </div>
       </div>
     </aside>
@@ -1226,6 +1388,11 @@
       <div class="topbar">
         <span class="page-title">${PAGE_TITLES[STATE.page] || ''}</span>
         <div class="topbar-right">
+          <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
+            ${isDark
+              ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg><span>Light mode</span>'
+              : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg><span>Dark mode</span>'}
+          </button>
           <span class="badge ${roleCls}">${roleLabel}</span>
           <span style="font-size:13px;color:var(--text2)">${esc(STATE.user?.email || '')}</span>
         </div>
@@ -1240,8 +1407,16 @@
     // ═══════════════════════════════════════════════════════════
     const DEMOS = { admin: { email: 'admin@smile.in', pass: 'admin123' }, doctor: { email: 'doctor@smile.in', pass: 'doctor123' }, receptionist: { email: 'recept@smile.in', pass: 'recept123' }, arjun: { email: 'arjun@smile.in', pass: 'arjun123' } };
     function authPage() {
+      const isDark = getTheme() === 'dark';
       return `
   <div class="auth-wrap">
+    <div style="position:fixed;top:20px;right:24px;z-index:50">
+      <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Light/Dark Theme">
+        ${isDark
+          ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg><span>Light mode</span>'
+          : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg><span>Dark mode</span>'}
+      </button>
+    </div>
     <div class="auth-brand">
       <div class="auth-logo">
         <svg width="26" height="26" viewBox="0 0 36 36" fill="none">
@@ -1271,9 +1446,6 @@
             onkeydown="if(event.key==='Enter')doLogin()"/>
         </div>
         <button class="btn btn-primary btn-full" style="margin-bottom:16px" onclick="doLogin()">Sign in</button>
-        <div style="font-size:.72rem;color:var(--text3);text-align:center;margin-top:4px;line-height:1.6">
-          Requires local server running at <code style="background:var(--surface2);padding:1px 5px;border-radius:2px">localhost:8080</code>
-        </div>
         <p style="text-align:center;font-size:.78rem;color:var(--text3)">
           New staff? <a class="link-btn" onclick="showRegister()">Create account</a>
         </p>
@@ -1395,7 +1567,7 @@
           <td><span style="font-family:monospace;font-size:12px">${fmtD(a.scheduled_at)}</span></td>
           <td>${statusBadge(a.status)}</td>
           <td>${riskBadge(a.risk_level, a.no_show_probability)}</td>
-        </tr>`).join('') : '<tr><td colspan="5" class="empty"><div class="empty-icon">📭</div>No appointments</td></tr>'}
+        </tr>`).join('') : '<tr><td colspan="5" class="empty">No appointments scheduled</td></tr>'}
         </tbody>
       </table></div>
     </div>`;
@@ -1412,14 +1584,14 @@
             <div style="font-size:12px;color:var(--text2)">${fmtDT(a.scheduled_at)} · ${esc(a.reason || '—')}</div>
           </div>
           ${riskBadge(a.risk_level, a.no_show_probability)}
-        </div>`).join('') : '<div class="empty"><div class="empty-icon">🎉</div>No patients today</div>'}
+        </div>`).join('') : '<div class="empty">No patients scheduled for today</div>'}
       </div>
     </div>` : `
     <div style="display:flex;flex-direction:column;gap:16px">
       <div class="panel" style="margin-bottom:0">
         <div class="panel-head"><span class="panel-title">No-show risk</span><span class="badge bg-green">ML</span></div>
         <div class="panel-body">
-          ${[['🔴 High', (s.risk?.high ?? 0), 'var(--red)'], ['🟡 Medium', (s.risk?.medium ?? 0), 'var(--amber)'], ['🟢 Low', (s.risk?.low ?? 0), 'var(--green)']].map(([l, v, c]) => `
+          ${[['High', (s.risk?.high ?? 0), 'var(--red)'], ['Medium', (s.risk?.medium ?? 0), 'var(--amber)'], ['Low', (s.risk?.low ?? 0), 'var(--green)']].map(([l, v, c]) => `
           <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
             <span style="font-size:13px;color:var(--text2)">${l}</span>
             <span style="font-weight:700;font-size:18px;color:${c}">${v}</span>
@@ -1453,7 +1625,7 @@
     async function openPatientProfile(patientId, patientName) {
       if (!patientId) { toast('Patient ID not available', 'er'); return; }
 
-      openModal(`<div class="modal-head"><h3>Loading patient…</h3><button class="close-btn" onclick="closeModal()">✕</button></div>
+      openModal(`<div class="modal-head"><h3>Loading patient…</h3><button class="close-btn" onclick="closeModal()" title="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>
     <div style="text-align:center;padding:32px"><div class="spinner"></div></div>`, true);
 
       // Fetch patient details + their appointments + their invoices
@@ -1477,7 +1649,7 @@
       const html = `
   <div class="modal-head">
     <h3>Patient Profile</h3>
-    <button class="close-btn" onclick="closeModal()">✕</button>
+    <button class="close-btn" onclick="closeModal()" title="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
   </div>
 
   <!-- Header card -->
@@ -1510,17 +1682,17 @@
   <!-- Allergies & Medical notes -->
   ${(p.allergies && p.allergies !== 'None') ? `
   <div style="background:var(--red-bg);border:1px solid var(--red-bd);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px">
-    <strong style="color:var(--red)">⚠️ Allergies:</strong> <span style="color:var(--red)">${esc(p.allergies)}</span>
+    <strong style="color:var(--red)">Allergies:</strong> <span style="color:var(--red)">${esc(p.allergies)}</span>
   </div>` : ''}
   ${p.medical_notes ? `
   <div style="background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px">
-    <strong style="color:var(--blue)">📋 Medical Notes:</strong> ${esc(p.medical_notes)}
+    <strong style="color:var(--blue)">Medical Notes:</strong> ${esc(p.medical_notes)}
   </div>` : ''}
 
   <!-- Upcoming appointments -->
   <div style="margin-bottom:18px">
     <div style="font-weight:600;font-size:13px;margin-bottom:8px;display:flex;align-items:center;gap:8px">
-      📅 Upcoming Appointments <span class="badge bg-blue">${upcomingAppts.length}</span>
+      Upcoming Appointments <span class="badge bg-blue">${upcomingAppts.length}</span>
     </div>
     ${upcomingAppts.length ? `
     <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden">
@@ -1544,7 +1716,7 @@
   <!-- Treatment / visit history -->
   <div style="margin-bottom:18px">
     <div style="font-weight:600;font-size:13px;margin-bottom:8px;display:flex;align-items:center;gap:8px">
-      🦷 Treatment History <span class="badge bg-gray">${completedAppts.length} visits</span>
+      Treatment History <span class="badge bg-gray">${completedAppts.length} visits</span>
     </div>
     ${completedAppts.length ? `
     <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden">
@@ -1567,7 +1739,7 @@
   ${canSeeBilling() && inv.length ? `
   <div>
     <div style="font-weight:600;font-size:13px;margin-bottom:8px;display:flex;align-items:center;gap:8px">
-      💳 Billing History <span class="badge bg-green">${inv.length} invoices</span>
+      Billing History <span class="badge bg-green">${inv.length} invoices</span>
     </div>
     <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden">
       ${inv.slice(0, 5).map((i2, idx) => `
@@ -1583,7 +1755,7 @@
   <!-- Upcoming appointment actions for doctors -->
   ${upcomingAppts.length && (isDoctor() || isAdmin()) ? `
   <div style="margin-bottom:16px">
-    <div style="font-weight:600;font-size:13px;margin-bottom:8px">🩺 Update Consultation</div>
+    <div style="font-weight:600;font-size:13px;margin-bottom:8px">Update Consultation</div>
     <div style="display:flex;flex-direction:column;gap:6px">
       ${upcomingAppts.filter(a => ['scheduled', 'confirmed'].includes(a.status)).map(a => `
       <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surface2);border-radius:8px;border:1px solid var(--border)">
@@ -1592,7 +1764,7 @@
           <div style="font-size:12px;color:var(--text2)">${fmtDT(a.scheduled_at)} · ${esc(a.doctor_name || '')}</div>
         </div>
         <button class="btn btn-sm btn-primary" onclick="openConsultation(${a.appointment_id},'${esc(p.first_name + ' ' + p.last_name)}','${esc(a.notes || '')}')">
-          📋 Open & Update
+          Open Consultation
         </button>
       </div>`).join('')}
     </div>
@@ -1632,10 +1804,10 @@
       }).join('');
       return `
   <div style="background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:var(--blue)">
-    💡 Click any patient row to view their full medical history, appointments and billing.
+    Click any patient row to view full medical history, appointments, and billing.
   </div>
   <div class="toolbar">
-    <div class="search"><span class="search-ic">🔍</span>
+    <div class="search"><span class="search-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
       <input id="pt-s" placeholder="Search by name or phone…" oninput="filterTable('pt-s','pt-body',0,1,2)"/>
     </div>
     ${canEdit() ? `<button class="btn btn-primary" onclick="openAddPatient()">+ Add Patient</button>` : ''}
@@ -1648,7 +1820,7 @@
     <div class="tbl"><table>
       <thead><tr><th>Patient</th><th>Age</th><th>Phone</th><th>Blood</th><th>Allergies</th><th>Actions</th></tr></thead>
       <tbody id="pt-body">
-      ${rows || '<tr><td colspan="6" class="empty"><div class="empty-icon">🧑‍⚕️</div>No patients yet.</td></tr>'}
+      ${rows || '<tr><td colspan="6" class="empty">No patients registered yet.</td></tr>'}
       </tbody>
     </table></div>
   </div>`;
@@ -1656,7 +1828,7 @@
 
     function openAddPatient() {
       openModal(`
-  <div class="modal-head"><h3>New Patient</h3><button class="close-btn" onclick="closeModal()">✕</button></div>
+  <div class="modal-head"><h3>New Patient</h3><button class="close-btn" onclick="closeModal()" title="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>
   <div class="form-row">
     <div class="fg"><label>First name *</label><input id="pf-fn" placeholder="Meera"/></div>
     <div class="fg"><label>Last name *</label><input id="pf-ln" placeholder="Patel"/></div>
@@ -1687,7 +1859,7 @@
     async function openEditPatient(id) {
       const p = STATE.patients.find(x => x.patient_id === id); if (!p) return;
       openModal(`
-  <div class="modal-head"><h3>Edit Patient</h3><button class="close-btn" onclick="closeModal()">✕</button></div>
+  <div class="modal-head"><h3>Edit Patient</h3><button class="close-btn" onclick="closeModal()" title="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>
   <div class="form-row">
     <div class="fg"><label>First name</label><input id="ef-fn" value="${esc(p.first_name)}"/></div>
     <div class="fg"><label>Last name</label><input id="ef-ln" value="${esc(p.last_name)}"/></div>
@@ -1746,16 +1918,16 @@
 
       return `
   <div style="background:rgba(120,155,146,.08);border:1px solid rgba(120,155,146,.2);border-radius:2px;padding:10px 16px;margin-bottom:16px;font-size:12px;color:var(--eu)">
-    💡 Click any patient name to open their full profile and medical history.
+    Click any patient name to open their full profile and medical history.
   </div>
   <div class="toolbar">
-    <div class="search"><span class="search-ic">🔍</span>
+    <div class="search"><span class="search-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
       <input id="ap-s" placeholder="Search by patient or reason…" oninput="filterTable('ap-s','ap-body',0,3)"/>
     </div>
     <button class="btn btn-sm btn-ghost" onclick="filterByPriority('')" id="pf-all" style="border-color:var(--green);color:var(--green)">All</button>
-    <button class="btn btn-sm btn-ghost" onclick="filterByPriority('urgent')" id="pf-urgent">🔴 Urgent</button>
-    <button class="btn btn-sm btn-ghost" onclick="filterByPriority('high')" id="pf-high">🟠 High</button>
-    <button class="btn btn-sm btn-ghost" onclick="filterByPriority('normal')" id="pf-normal">🔵 Normal</button>
+    <button class="btn btn-sm btn-ghost" onclick="filterByPriority('urgent')" id="pf-urgent">Urgent</button>
+    <button class="btn btn-sm btn-ghost" onclick="filterByPriority('high')" id="pf-high">High</button>
+    <button class="btn btn-sm btn-ghost" onclick="filterByPriority('normal')" id="pf-normal">Normal</button>
     ${canEdit() || isDoctor() ? `<button class="btn btn-primary" onclick="openAddAppt()">+ Schedule</button>` : ''}
   </div>
   <div class="panel">
@@ -1766,7 +1938,7 @@
     <div class="tbl"><table>
       <thead><tr><th>Patient</th><th>Assign Doctor</th><th>Date & Time</th><th>Reason</th><th>Priority</th><th>Status</th><th>Risk</th><th>Actions</th></tr></thead>
       <tbody id="ap-body">
-      ${rows || '<tr><td colspan="7" class="empty"><div class="empty-icon">📅</div>No appointments.</td></tr>'}
+      ${rows || '<tr><td colspan="7" class="empty">No appointments scheduled.</td></tr>'}
       </tbody>
     </table></div>
   </div>`;
@@ -1788,7 +1960,7 @@
       const now = new Date(); now.setMinutes(0, 0, 0);
       const dtLocal = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
       openModal(`
-  <div class="modal-head"><h3>Schedule Appointment</h3><button class="close-btn" onclick="closeModal()">✕</button></div>
+  <div class="modal-head"><h3>Schedule Appointment</h3><button class="close-btn" onclick="closeModal()" title="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>
   <div class="form-row">
     <div class="fg"><label>Patient *</label><select id="af-pt">${pts.length ? pts.map(p => `<option value="${p.patient_id}">${esc(p.first_name + ' ' + p.last_name)}</option>`).join('') : '<option>No patients</option>'}</select></div>
     <div class="fg"><label>Doctor *</label><select id="af-dr">${docs.map(d => `<option value="${d.doctor_id}">Dr. ${esc(d.first_name + ' ' + d.last_name)}</option>`).join('')}</select></div>
@@ -1801,10 +1973,10 @@
   <div class="fg"><label>Reason / chief complaint</label><input id="af-re" placeholder="e.g. Toothache upper right…"/></div>
   <div class="fg"><label>Priority</label>
     <select id="af-pri">
-      <option value="urgent">🔴 Urgent — needs immediate attention</option>
-      <option value="high">🟠 High — see today if possible</option>
-      <option value="normal" selected>🔵 Normal — routine appointment</option>
-      <option value="low">⚪ Low — flexible scheduling</option>
+      <option value="urgent">Urgent — needs immediate attention</option>
+      <option value="high">High — see today if possible</option>
+      <option value="normal" selected>Normal — routine appointment</option>
+      <option value="low">Low — flexible scheduling</option>
     </select>
   </div>
   <div class="modal-foot">
@@ -1840,7 +2012,10 @@
     <td><strong>${fmtRs(i.total_amount)}</strong></td>
     <td>${statusBadge(i.payment_status)}</td>
     <td>${esc(i.payment_method || '—')}</td>
-    <td>${i.payment_status !== 'paid' ? `<button class="btn btn-sm btn-primary" onclick="markPaid(${i.invoice_id})">Mark paid</button>` : ''}</td>
+    <td style="display:flex;gap:6px;align-items:center">
+      ${i.payment_status !== 'paid' ? `<button class="btn btn-sm btn-primary" onclick="markPaid(${i.invoice_id})">Mark paid</button>` : ''}
+      <button class="btn btn-sm" style="border:1px solid var(--border);background:var(--surface2)" onclick="printInvoice(${i.invoice_id},'${esc(i.patient_name)}','${fmtD(i.issued_at)}','${fmtRs(i.total_amount)}','${esc(i.payment_status)}','${esc(i.payment_method||'')}')">Print</button>
+    </td>
   </tr>`).join('');
       return `
   <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
@@ -1849,22 +2024,52 @@
     <div class="stat-card" style="--accent-color:var(--blue)"><div class="stat-label">Total invoices</div><div class="stat-val">${inv.length}</div><div class="stat-sub">All time</div></div>
   </div>
   <div class="toolbar">
-    <div class="search"><span class="search-ic">🔍</span><input id="iv-s" placeholder="Search invoices…" oninput="filterTable('iv-s','iv-body',0,1)"/></div>
+    <div class="search"><span class="search-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span><input id="iv-s" placeholder="Search invoices…" oninput="filterTable('iv-s','iv-body',0,1)"/></div>
     <button class="btn btn-primary" onclick="openAddInvoice()">+ New Invoice</button>
   </div>
   <div class="panel">
     <div class="panel-head"><span class="panel-title">Invoices (${inv.length})</span></div>
     <div class="tbl"><table>
       <thead><tr><th>Invoice</th><th>Patient</th><th>Date</th><th>Amount</th><th>Status</th><th>Method</th><th>Actions</th></tr></thead>
-      <tbody id="iv-body">${rows || '<tr><td colspan="7" class="empty"><div class="empty-icon">💳</div>No invoices yet.</td></tr>'}</tbody>
+      <tbody id="iv-body">${rows || '<tr><td colspan="7" class="empty">No invoices recorded.</td></tr>'}</tbody>
     </table></div>
   </div>`;
     }
     async function markPaid(id) { const m = prompt('Payment method (cash/card/upi/insurance):', 'cash'); if (!m) return; const r = await api('PATCH', `/invoices/${id}/pay`, { payment_method: m.toLowerCase() }); if (r.success) { toast('Marked as paid'); await loadData(); renderPage(); } else toast(r.error?.message || 'Error', 'er'); }
+    function printInvoice(id, patient, date, amount, status, method) {
+      const w = window.open('', '_blank', 'width=600,height=700');
+      w.document.write(`<!DOCTYPE html><html><head><title>Invoice INV-${String(id).padStart(3,'0')}</title><style>
+        body{font-family:Georgia,serif;margin:40px;color:#1a1a1a;}
+        .header{border-bottom:2px solid #102B35;padding-bottom:16px;margin-bottom:24px;}
+        .clinic{font-size:22px;font-weight:700;color:#102B35;}
+        .sub{font-size:13px;color:#555;margin-top:4px;}
+        h2{margin:0 0 24px;font-size:18px;color:#102B35;}
+        table{width:100%;border-collapse:collapse;margin-bottom:24px;}
+        td{padding:10px 8px;border-bottom:1px solid #eee;font-size:14px;}
+        td:first-child{color:#555;width:40%;}
+        td:last-child{font-weight:600;}
+        .total td{font-size:17px;border-top:2px solid #102B35;border-bottom:none;padding-top:14px;}
+        .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;background:${status==='paid'?'#e6f4ea':'#fff3e0'};color:${status==='paid'?'#2e7d32':'#e65100'};}
+        .footer{margin-top:40px;font-size:12px;color:#888;text-align:center;border-top:1px solid #eee;padding-top:16px;}
+      </style></head><body>
+        <div class="header"><div class="clinic">SmileClinic</div><div class="sub">Dental &amp; ENT | Bengaluru</div></div>
+        <h2>Invoice INV-${String(id).padStart(3,'0')}</h2>
+        <table>
+          <tr><td>Patient</td><td>${patient}</td></tr>
+          <tr><td>Date</td><td>${date}</td></tr>
+          <tr><td>Payment Method</td><td>${method||'—'}</td></tr>
+          <tr><td>Status</td><td><span class="badge">${status}</span></td></tr>
+          <tr class="total"><td>Total Amount</td><td>${amount}</td></tr>
+        </table>
+        <div class="footer">Thank you for choosing SmileClinic &mdash; Generated ${new Date().toLocaleDateString('en-IN')}</div>
+        <script>window.onload=()=>{window.print();}<\/script>
+      </body></html>`);
+      w.document.close();
+    }
     function openAddInvoice() {
       const pts = STATE.patients;
       openModal(`
-  <div class="modal-head"><h3>New Invoice</h3><button class="close-btn" onclick="closeModal()">✕</button></div>
+  <div class="modal-head"><h3>New Invoice</h3><button class="close-btn" onclick="closeModal()" title="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>
   <div class="fg"><label>Patient *</label><select id="if-pt">${pts.map(p => `<option value="${p.patient_id}">${esc(p.first_name + ' ' + p.last_name)}</option>`).join('')}</select></div>
   <div class="form-row">
     <div class="fg"><label>Amount (₹) *</label><input id="if-am" type="number" min="0" placeholder="1200"/></div>
@@ -1903,12 +2108,12 @@
     <td>${esc(d.specialisation)}</td>
     <td>${esc(d.phone)}</td>
     <td><strong>${fmtRs(d.consultation_fee)}</strong></td>
-    <td>${d.is_available ? '<span class="badge bg-green">✅ Yes</span>' : '<span class="badge bg-gray">⏸ No</span>'}</td>
+    <td>${d.is_available ? '<span class="badge bg-green">Available</span>' : '<span class="badge bg-gray">Off Duty</span>'}</td>
     ${isAdmin() ? `<td><div style="display:flex;gap:4px;flex-wrap:wrap">
-      <button class="btn btn-sm btn-ghost" onclick="openEditDoctor(${d.doctor_id})" title="Edit details" style="padding:5px 8px">✏️</button>
-      <button class="btn btn-sm btn-ghost" onclick="openChangePassword(${d.doctor_id},'${esc(d.first_name)}')" title="Change password" style="padding:5px 8px;color:var(--amber)">🔑</button>
-      <button class="btn btn-sm btn-ghost" onclick="toggleAvailability(${d.doctor_id},${d.is_available ? 0 : 1})" title="${d.is_available ? 'Set unavailable' : 'Set available'}" style="padding:5px 8px">${d.is_available ? '⏸' : '▶️'}</button>
-      <button class="btn btn-sm btn-danger" onclick="deleteDoctor(${d.doctor_id},'${esc(d.first_name + ' ' + d.last_name)}')" title="Remove doctor" style="padding:5px 8px">🗑️</button>
+      <button class="btn btn-sm btn-ghost" onclick="openEditDoctor(${d.doctor_id})" title="Edit details" style="padding:5px 8px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></button>
+      <button class="btn btn-sm btn-ghost" onclick="openChangePassword(${d.doctor_id},'${esc(d.first_name)}')" title="Change password" style="padding:5px 8px;color:var(--amber)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"></circle><path d="m21 2-9.6 9.6"></path><path d="m15.5 7.5 3 3L22 7l-3-3"></path></svg></button>
+      <button class="btn btn-sm btn-ghost" onclick="toggleAvailability(${d.doctor_id},${d.is_available ? 0 : 1})" title="${d.is_available ? 'Set unavailable' : 'Set available'}" style="padding:5px 8px">${d.is_available ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>' : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>'}</button>
+      <button class="btn btn-sm btn-danger" onclick="deleteDoctor(${d.doctor_id},'${esc(d.first_name + ' ' + d.last_name)}')" title="Remove doctor" style="padding:5px 8px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
     </div></td>`: '<td></td>'}
   </tr>`).join('');
       return `
@@ -1925,7 +2130,7 @@
     </div>
     <div class="tbl" style="overflow-x:auto"><table style="min-width:600px">
       <thead><tr><th>Doctor</th><th>Specialisation</th><th>Phone</th><th>Fee</th><th>On call</th><th style="min-width:130px">Actions</th></tr></thead>
-      <tbody>${rows || '<tr><td colspan="6" class="empty"><div class="empty-icon">👨‍⚕️</div>No doctors on record.</td></tr>'}</tbody>
+      <tbody>${rows || '<tr><td colspan="6" class="empty">No doctors on record.</td></tr>'}</tbody>
     </table></div>
   </div>`;
     }
@@ -1933,7 +2138,7 @@
     // ── Add Doctor ────────────────────────────────────────────────
     function openAddDoctor() {
       openModal(`
-  <div class="modal-head"><h3>Add Doctor</h3><button class="close-btn" onclick="closeModal()">✕</button></div>
+  <div class="modal-head"><h3>Add Doctor</h3><button class="close-btn" onclick="closeModal()" title="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>
   <div class="form-row">
     <div class="fg"><label>First name *</label><input id="df-fn" placeholder="Priya"/></div>
     <div class="fg"><label>Last name *</label><input id="df-ln" placeholder="Sharma"/></div>
@@ -1994,7 +2199,7 @@
       });
       if (btn) { btn.textContent = 'Add Doctor'; btn.disabled = false; }
       if (!docRes.success) { toast(docRes.error?.message || 'Error creating doctor profile', 'er'); return; }
-      toast(`✅ Dr. ${fn} ${ln} added! Login: ${em}`);
+      toast(`Dr. ${fn} ${ln} added! Login: ${em}`);
       closeModal(); await loadData(); renderPage();
     }
 
@@ -2002,7 +2207,7 @@
     async function openEditDoctor(id) {
       const d = STATE.doctors.find(x => x.doctor_id === id); if (!d) return;
       openModal(`
-  <div class="modal-head"><h3>Edit Doctor</h3><button class="close-btn" onclick="closeModal()">✕</button></div>
+  <div class="modal-head"><h3>Edit Doctor</h3><button class="close-btn" onclick="closeModal()" title="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>
   <div style="background:var(--surface2);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:var(--text2)">
     Editing: <strong>Dr. ${esc(d.first_name)} ${esc(d.last_name)}</strong> · ${esc(d.email || '')}
   </div>
@@ -2021,8 +2226,8 @@
   </div>
   <div class="fg"><label>Availability</label>
     <select id="ef-dav">
-      <option value="1" ${d.is_available ? 'selected' : ''}>✅ Available</option>
-      <option value="0" ${!d.is_available ? 'selected' : ''}>⏸ Unavailable (on leave)</option>
+      <option value="1" ${d.is_available ? 'selected' : ''}>Available</option>
+      <option value="0" ${!d.is_available ? 'selected' : ''}>Unavailable (on leave)</option>
     </select>
   </div>
   <div class="modal-foot">
@@ -2053,9 +2258,9 @@
     // ── Change password ────────────────────────────────────────────
     function openChangePassword(id, name) {
       openModal(`
-  <div class="modal-head"><h3>Change Password</h3><button class="close-btn" onclick="closeModal()">✕</button></div>
+  <div class="modal-head"><h3>Change Password</h3><button class="close-btn" onclick="closeModal()" title="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>
   <div style="background:var(--amber-bg);border:1px solid var(--amber-bd);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:var(--amber)">
-    🔑 Changing password for: <strong>Dr. ${esc(name)}</strong>
+    Changing password for: <strong>Dr. ${esc(name)}</strong>
   </div>
   <div class="fg"><label>New password *</label><input id="pw-new" type="password" placeholder="min 6 characters"/></div>
   <div class="fg"><label>Confirm password *</label><input id="pw-confirm" type="password" placeholder="repeat password"/></div>
@@ -2103,7 +2308,7 @@
         <span style="font-family:monospace;font-size:12px;color:${color}">${prob != null ? (prob * 100).toFixed(0) + '%' : '—'}</span>
       </div></td>
       <td>${riskBadge(a.risk_level, prob)}</td>
-      <td style="font-size:12px;color:var(--text2)">${a.risk_level === 'High' ? '📞 Call' : a.risk_level === 'Medium' ? '💬 SMS' : '✅ Auto'}</td>
+      <td style="font-size:12px;color:var(--text2)">${a.risk_level === 'High' ? 'Phone call' : a.risk_level === 'Medium' ? 'SMS reminder' : 'Automated'}</td>
     </tr>`;
       }).join('');
       const feats = [['prior_no_shows', 0.281, 'var(--red)'], ['reminder_sent', 0.164, 'var(--green)'], ['lead_time_days', 0.132, 'var(--amber)'], ['has_insurance', 0.098, 'var(--green)'], ['distance_km', 0.081, 'var(--amber)'], ['treatment_cost', 0.073, 'var(--green)'], ['appointment_hour', 0.062, 'var(--amber)'], ['age', 0.051, 'var(--blue)'], ['day_of_week', 0.048, 'var(--amber)'], ['treatment_category', 0.037, 'var(--blue)']];
@@ -2116,10 +2321,10 @@
   </div>
   <div class="g2">
     <div class="panel" style="margin-bottom:0">
-      <div class="panel-head"><span class="panel-title">Upcoming — risk scores</span><span class="badge bg-blue">💡 Click patient name for full profile</span></div>
+      <div class="panel-head"><span class="panel-title">Upcoming — risk scores</span><span class="badge bg-blue">Click patient name for full profile</span></div>
       <div class="tbl"><table>
         <thead><tr><th>Patient</th><th>Date</th><th>Reason</th><th>Probability</th><th>Risk</th><th>Action</th></tr></thead>
-        <tbody>${rows || '<tr><td colspan="6" class="empty"><div class="empty-icon">🤖</div>No upcoming appointments.</td></tr>'}</tbody>
+        <tbody>${rows || '<tr><td colspan="6" class="empty">No upcoming appointments.</td></tr>'}</tbody>
       </table></div>
     </div>
     <div style="display:flex;flex-direction:column;gap:16px">
@@ -2144,7 +2349,7 @@
             <div class="fg"><label>Day</label><select id="ml-dy">${['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'].map(d => `<option value="${d}">${d[0].toUpperCase() + d.slice(1)}</option>`).join('')}</select></div>
             <div class="fg"><label>Category</label><select id="ml-ca">${['preventive', 'restorative', 'cosmetic', 'surgical', 'diagnostic', 'orthodontic'].map(c => `<option value="${c}">${c[0].toUpperCase() + c.slice(1)}</option>`).join('')}</select></div>
           </div>
-          <button class="btn btn-primary btn-full" onclick="runPredict()" style="margin-top:4px">⚡ Predict No-show Risk</button>
+          <button class="btn btn-primary btn-full" onclick="runPredict()" style="margin-top:4px">Calculate Risk Score</button>
           <div id="ml-res"></div>
         </div>
       </div>
@@ -2177,13 +2382,13 @@
 
     function priorityBadge(p) {
       const cfg = {
-        urgent: { cls: 'bg-red', icon: '🔴', label: 'Urgent' },
-        high: { cls: 'bg-amber', icon: '🟠', label: 'High' },
-        normal: { cls: 'bg-blue', icon: '🔵', label: 'Normal' },
-        low: { cls: 'bg-gray', icon: '⚪', label: 'Low' },
+        urgent: { cls: 'bg-red', label: 'Urgent' },
+        high: { cls: 'bg-amber', label: 'High' },
+        normal: { cls: 'bg-blue', label: 'Normal' },
+        low: { cls: 'bg-gray', label: 'Low' },
       };
       const c = cfg[p] || cfg.normal;
-      return `<span class="badge ${c.cls}" title="Priority: ${c.label}">${c.icon} ${c.label}</span>`;
+      return `<span class="badge ${c.cls}" title="Priority: ${c.label}">${c.label}</span>`;
     }
 
     function filterByPriority(p) {
@@ -2210,8 +2415,8 @@
     async function openConsultation(appointmentId, patientName, currentNotes) {
       openModal(`
   <div class="modal-head">
-    <h3>📋 Consultation Notes</h3>
-    <button class="close-btn" onclick="closeModal()">✕</button>
+    <h3>Consultation Notes</h3>
+    <button class="close-btn" onclick="closeModal()" title="Close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
   </div>
   <div style="background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:var(--blue)">
     Patient: <strong>${escHtml(patientName)}</strong> · Appointment #${appointmentId}
@@ -2239,15 +2444,15 @@
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn btn-sm" style="background:rgba(181,139,85,.12);color:var(--brass);border:1px solid var(--green-bd)"
         onclick="saveConsultation(${appointmentId},'completed','${escHtml(patientName)}')">
-        ✅ Mark as Completed
+        Mark as Completed
       </button>
       <button class="btn btn-sm btn-ghost"
         onclick="saveConsultation(${appointmentId},'confirmed','${escHtml(patientName)}')">
-        💾 Save Notes Only
+        Save Notes Only
       </button>
       <button class="btn btn-sm" style="background:var(--red-bg);color:var(--red);border:1px solid var(--red-bd)"
         onclick="saveConsultation(${appointmentId},'no_show','${escHtml(patientName)}')">
-        ❌ Mark No-show
+        Mark No-show
       </button>
     </div>
   </div>
@@ -2278,9 +2483,9 @@
       }
 
       const statusMsg = {
-        completed: '✅ Appointment marked as completed',
-        confirmed: '💾 Notes saved',
-        no_show: '❌ Marked as no-show',
+        completed: 'Appointment marked as completed',
+        confirmed: 'Notes saved',
+        no_show: 'Marked as no-show',
       }[status] || 'Saved';
 
       toast(statusMsg);
@@ -2316,7 +2521,7 @@
       } catch (err) {
         console.error('renderPage error:', err);
         if (app && STATE.user) {
-          app.innerHTML = shell(`<div class="panel" style="padding:40px;text-align:center"><h3>⚠️ Dashboard Error</h3><p style="color:var(--text2);margin-top:10px">${esc(err.message)}</p><button class="btn btn-primary" style="margin-top:20px" onclick="location.reload()">Reload Page</button></div>`);
+          app.innerHTML = shell(`<div class="panel" style="padding:40px;text-align:center"><h3>Dashboard Error</h3><p style="color:var(--text2);margin-top:10px">${esc(err.message)}</p><button class="btn btn-primary" style="margin-top:20px" onclick="location.reload()">Reload Page</button></div>`);
         } else if (app) {
           app.innerHTML = authPage();
         }

@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SmileClinic DMS - Concept A (Dark Mode)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0D1C22;
+      --surface: #142830;
+      --surface-subtle: #18313A;
+      --border: rgba(255, 255, 255, 0.09);
+      --border-strong: rgba(255, 255, 255, 0.18);
+      --ink: #F7F4EE;
+      --ink-mid: #A2B6BA;
+      --ink-soft: #768E94;
+      --brass: #B58B55;
+      --brass-lt: #C9A870;
+      --brass-bg: rgba(181, 139, 85, 0.16);
+      --sage: #789B92;
+      --sage-bg: rgba(120, 155, 146, 0.16);
+      --alert-bg: rgba(184, 64, 64, 0.16);
+      --alert-text: #F87171;
+      --sidebar-w: 248px;
+      --radius: 8px;
+      --radius-sm: 5px;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'DM Sans', system-ui, -apple-system, sans-serif;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 13.5px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    /* ── SIDEBAR ── */
+    aside {
+      width: var(--sidebar-w);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; bottom: 0; left: 0;
+      z-index: 20;
+    }
+    .sb-brand {
+      padding: 22px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      background: var(--brass);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0D1C22;
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      line-height: 1.1;
+    }
+    .brand-tag {
+      font-size: 10px;
+      color: var(--brass);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+    
+    .sb-nav {
+      flex: 1;
+      padding: 16px 12px;
+      overflow-y: auto;
+    }
+    .nav-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      color: var(--ink-soft);
+      padding: 0 10px;
+      margin: 14px 0 6px;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      color: var(--ink-mid);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.15s ease;
+      margin-bottom: 2px;
+    }
+    .nav-link:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--ink);
+    }
+    .nav-link.active {
+      background: var(--surface-subtle);
+      color: var(--ink);
+      font-weight: 600;
+      box-shadow: inset 3px 0 0 var(--brass);
+    }
+    .nav-badge {
+      margin-left: auto;
+      background: var(--brass-bg);
+      color: var(--brass-lt);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 1px 7px;
+      border-radius: 10px;
+    }
+    
+    .sb-user {
+      padding: 14px 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .user-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--brass-bg);
+      border: 1px solid var(--brass);
+      color: var(--brass-lt);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .user-meta { flex: 1; min-width: 0; }
+    .user-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+    .user-role { font-size: 11px; color: var(--ink-soft); }
+
+    /* ── MAIN CONTENT ── */
+    main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    
+    /* ── TOPBAR ── */
+    header {
+      height: 64px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .top-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 7px 12px;
+      width: 320px;
+      color: var(--ink-soft);
+      font-size: 12.5px;
+    }
+    .search-box input {
+      border: none;
+      background: none;
+      outline: none;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 12.5px;
+      width: 100%;
+    }
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .theme-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 12px;
+      color: var(--ink-mid);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+      font-size: 13px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: inherit;
+      transition: all 0.15s ease;
+    }
+    .btn-primary {
+      background: var(--brass);
+      color: #0D1C22;
+      font-weight: 600;
+    }
+    .btn-primary:hover {
+      background: var(--brass-lt);
+    }
+    .btn-secondary {
+      background: var(--surface);
+      border-color: var(--border);
+      color: var(--ink);
+    }
+    .btn-secondary:hover {
+      background: var(--surface-subtle);
+    }
+
+    /* ── DASHBOARD BODY ── */
+    .dashboard-body {
+      padding: 32px;
+    }
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 24px;
+    }
+    .page-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .page-subtitle {
+      font-size: 13px;
+      color: var(--ink-soft);
+      margin-top: 2px;
+    }
+
+    /* ── STATS ROW ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .stat-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .stat-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      font-weight: 600;
+      color: var(--ink-soft);
+    }
+    .stat-pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 12px;
+      background: var(--sage-bg);
+      color: var(--sage);
+    }
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 34px;
+      font-weight: 500;
+      color: var(--ink);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-desc {
+      font-size: 12px;
+      color: var(--ink-mid);
+    }
+
+    /* ── SPLIT LAYOUT ── */
+    .dashboard-split {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+    
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    .panel-header {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .panel-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .panel-action {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--brass-lt);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    
+    /* ── TABLE ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      font-weight: 600;
+      color: var(--ink-soft);
+      padding: 12px 22px;
+      background: var(--surface-subtle);
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 14px 22px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--ink);
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .patient-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .p-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      color: var(--ink);
+      font-weight: 600;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .p-name { font-weight: 600; color: var(--ink); }
+    .p-id { font-size: 11px; color: var(--ink-soft); }
+    
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 11.5px;
+      font-weight: 500;
+    }
+    .status-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .status-confirmed {
+      background: var(--sage-bg);
+      color: var(--sage);
+    }
+    .status-confirmed::before { background: var(--sage); }
+    .status-pending {
+      background: var(--brass-bg);
+      color: var(--brass-lt);
+    }
+    .status-pending::before { background: var(--brass-lt); }
+    .status-completed {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--ink-mid);
+    }
+    .status-completed::before { background: var(--ink-soft); }
+
+    /* ── RIGHT PANEL (ML Risk & Analytics) ── */
+    .ai-card {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin: 16px;
+    }
+    .ai-badge {
+      display: inline-block;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      color: var(--brass-lt);
+      margin-bottom: 6px;
+    }
+    .ai-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .ai-body {
+      font-size: 12px;
+      color: var(--ink-mid);
+      line-height: 1.45;
+      margin-bottom: 12px;
+    }
+    .risk-meter {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .risk-fill {
+      width: 14%;
+      height: 100%;
+      background: var(--sage);
+      border-radius: 3px;
+    }
+    .risk-stats {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--ink-soft);
+    }
+
+    .timeline-item {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 12px;
+    }
+    .timeline-item:last-child { border-bottom: none; }
+    .t-time {
+      font-weight: 600;
+      font-size: 12px;
+      color: var(--brass-lt);
+      width: 80px;
+    }
+    .t-info { flex: 1; }
+    .t-title { font-weight: 600; font-size: 12.5px; color: var(--ink); }
+    .t-sub { font-size: 11.5px; color: var(--ink-soft); }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside>
+    <div class="sb-brand">
+      <div class="brand-mark">S</div>
+      <div>
+        <div class="brand-title">SmileClinic</div>
+        <div class="brand-tag">Clinical Suite</div>
+      </div>
+    </div>
+    
+    <div class="sb-nav">
+      <div class="nav-label">Management</div>
+      <a href="#" class="nav-link active">
+        <span>Dashboard</span>
+      </a>
+      <a href="#" class="nav-link">
+        <span>Appointments</span>
+        <span class="nav-badge">18</span>
+      </a>
+      <a href="#" class="nav-link">
+        <span>Patients</span>
+      </a>
+      <a href="#" class="nav-link">
+        <span>Treatments</span>
+      </a>
+      
+      <div class="nav-label">Finance & ML</div>
+      <a href="#" class="nav-link">
+        <span>Invoices & Billing</span>
+      </a>
+      <a href="#" class="nav-link">
+        <span>No-Show Intelligence</span>
+      </a>
+      <a href="#" class="nav-link">
+        <span>Reports & Audits</span>
+      </a>
+      
+      <div class="nav-label">Settings</div>
+      <a href="#" class="nav-link">
+        <span>Clinic Profile</span>
+      </a>
+      <a href="#" class="nav-link">
+        <span>Staff Accounts</span>
+      </a>
+    </div>
+    
+    <div class="sb-user">
+      <div class="user-avatar">DR</div>
+      <div class="user-meta">
+        <div class="user-name">Dr. Sarah Vance</div>
+        <div class="user-role">Senior Orthodontist</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+    <header>
+      <div class="top-left">
+        <div class="search-box">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" placeholder="Search patients, phone, or appointment..." />
+        </div>
+      </div>
+      <div class="top-right">
+        <div class="theme-pill">Theme: Dark Mode</div>
+        <button class="btn btn-secondary">Export Schedule</button>
+        <button class="btn btn-primary">+ New Appointment</button>
+      </div>
+    </header>
+
+    <div class="dashboard-body">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Executive Clinical Dashboard</div>
+          <div class="page-subtitle">SmileClinic Bengaluru Central Branch &bull; Tuesday, 29 September 2026</div>
+        </div>
+      </div>
+
+      <!-- KPI Stat Cards -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-head">
+            <span class="stat-title">Today's Queue</span>
+            <span class="stat-pill">+3 Added</span>
+          </div>
+          <div class="stat-value">18</div>
+          <div class="stat-desc">4 Completed &bull; 12 Confirmed &bull; 2 In-Chair</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-head">
+            <span class="stat-title">Active Patients</span>
+            <span class="stat-pill">+14 this wk</span>
+          </div>
+          <div class="stat-value">1,420</div>
+          <div class="stat-desc">98.4% patient satisfaction rating</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-head">
+            <span class="stat-title">September Revenue</span>
+            <span class="stat-pill">88% Paid</span>
+          </div>
+          <div class="stat-value">INR 2,84,500</div>
+          <div class="stat-desc">INR 34,200 pending across 4 invoices</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-head">
+            <span class="stat-title">ML Attendance Model</span>
+            <span class="stat-pill">Optimal</span>
+          </div>
+          <div class="stat-value">95.8%</div>
+          <div class="stat-desc">Predicted show-up rate &bull; 1 at-risk flagged</div>
+        </div>
+      </div>
+
+      <!-- Split Layout -->
+      <div class="dashboard-split">
+        
+        <!-- Table Column -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Today's Appointment Schedule</div>
+            <a href="#" class="panel-action">View Full Calendar &rarr;</a>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Patient</th>
+                <th>Procedure</th>
+                <th>Time & Doctor</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="patient-cell">
+                    <div class="p-avatar">RS</div>
+                    <div>
+                      <div class="p-name">Rahul Sharma</div>
+                      <div class="p-id">PID-0024 &bull; +91 98450 12345</div>
+                    </div>
+                  </div>
+                </td>
+                <td>Root Canal Therapy</td>
+                <td>
+                  <div style="font-weight: 500;">09:30 AM</div>
+                  <div style="font-size: 11px; color: var(--ink-soft);">Dr. Sarah Vance</div>
+                </td>
+                <td><span class="status-badge status-confirmed">Confirmed</span></td>
+                <td><button class="btn btn-secondary" style="padding: 4px 10px; font-size: 11.5px;">View Chart</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="patient-cell">
+                    <div class="p-avatar" style="background: var(--brass-bg); color: var(--brass-lt); border-color: var(--brass);">PP</div>
+                    <div>
+                      <div class="p-name">Priya Patel</div>
+                      <div class="p-id">PID-0031 &bull; +91 99001 88721</div>
+                    </div>
+                  </div>
+                </td>
+                <td>Comprehensive Scaling</td>
+                <td>
+                  <div style="font-weight: 500;">10:15 AM</div>
+                  <div style="font-size: 11px; color: var(--ink-soft);">Dr. Amit Mehta</div>
+                </td>
+                <td><span class="status-badge status-confirmed">In-Chair</span></td>
+                <td><button class="btn btn-secondary" style="padding: 4px 10px; font-size: 11.5px;">View Chart</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="patient-cell">
+                    <div class="p-avatar">AK</div>
+                    <div>
+                      <div class="p-name">Ananya Kulkarni</div>
+                      <div class="p-id">PID-0045 &bull; +91 98860 55432</div>
+                    </div>
+                  </div>
+                </td>
+                <td>Orthodontic Alignment Check</td>
+                <td>
+                  <div style="font-weight: 500;">11:00 AM</div>
+                  <div style="font-size: 11px; color: var(--ink-soft);">Dr. Sarah Vance</div>
+                </td>
+                <td><span class="status-badge status-pending">SMS Sent</span></td>
+                <td><button class="btn btn-secondary" style="padding: 4px 10px; font-size: 11.5px;">View Chart</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="patient-cell">
+                    <div class="p-avatar">VN</div>
+                    <div>
+                      <div class="p-name">Vikram Nair</div>
+                      <div class="p-id">PID-0052 &bull; +91 97400 99120</div>
+                    </div>
+                  </div>
+                </td>
+                <td>Dental Crown Delivery</td>
+                <td>
+                  <div style="font-weight: 500;">11:45 AM</div>
+                  <div style="font-size: 11px; color: var(--ink-soft);">Dr. Amit Mehta</div>
+                </td>
+                <td><span class="status-badge status-completed">Completed</span></td>
+                <td><button class="btn btn-secondary" style="padding: 4px 10px; font-size: 11.5px;">View Bill</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="patient-cell">
+                    <div class="p-avatar">MG</div>
+                    <div>
+                      <div class="p-name">Meera Gowda</div>
+                      <div class="p-id">PID-0060 &bull; +91 94480 33211</div>
+                    </div>
+                  </div>
+                </td>
+                <td>Cosmetic Veneer Consultation</td>
+                <td>
+                  <div style="font-weight: 500;">02:00 PM</div>
+                  <div style="font-size: 11px; color: var(--ink-soft);">Dr. Sarah Vance</div>
+                </td>
+                <td><span class="status-badge status-confirmed">Confirmed</span></td>
+                <td><button class="btn btn-secondary" style="padding: 4px 10px; font-size: 11.5px;">View Chart</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Intelligence Column -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">AI No-Show Intelligence</div>
+              <span style="font-size: 11px; color: var(--ink-soft);">Model v2.1</span>
+            </div>
+            <div class="ai-card">
+              <span class="ai-badge">High Confidence Assessment</span>
+              <div class="ai-title">14% Clinic Average Risk Today</div>
+              <div class="ai-body">The ML prediction pipeline evaluated lead times, prior cancellations, and appointment hours for today's queue.</div>
+              <div class="risk-meter">
+                <div class="risk-fill"></div>
+              </div>
+              <div class="risk-stats">
+                <span>Safe Zone (&lt; 23%)</span>
+                <span>Flagged: 1 / 18</span>
+              </div>
+            </div>
+            <div style="padding: 0 16px 16px;">
+              <div style="font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--ink);">Flagged At-Risk Patient:</div>
+              <div style="font-size: 12px; color: var(--ink-mid); background: var(--surface-subtle); border: 1px solid var(--border); padding: 10px 12px; border-radius: var(--radius-sm);">
+                <strong style="color: var(--ink);">Kavita Iyer (03:30 PM)</strong> &bull; Risk: 42%<br>
+                <span style="color: var(--brass-lt); font-weight: 500;">Action recommended:</span> Automated WhatsApp confirmation dispatched.
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">Upcoming Shifts & Chairs</div>
+            </div>
+            <div>
+              <div class="timeline-item">
+                <div class="t-time">Operatory 1</div>
+                <div class="t-info">
+                  <div class="t-title">Surgical & Restorative</div>
+                  <div class="t-sub">Dr. Amit Mehta &bull; Occupied until 12:30 PM</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="t-time">Operatory 2</div>
+                <div class="t-info">
+                  <div class="t-title">Orthodontics & Consults</div>
+                  <div class="t-sub">Dr. Sarah Vance &bull; Open at 12:45 PM</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

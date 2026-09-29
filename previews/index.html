@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SmileClinic DMS - Concept A (Light & Dark Mode)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0A1417;
+      --surface: #102127;
+      --surface-subtle: #162C34;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --text: #F1F5F5;
+      --text-muted: #8EACB3;
+      --brass: #B58B55;
+      --brass-lt: #C9A870;
+      --radius: 8px;
+      --font: 'DM Sans', system-ui, sans-serif;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      background: var(--brass);
+      color: #0A1417;
+      border-radius: 6px;
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .brand-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #FFF;
+      letter-spacing: -0.01em;
+    }
+    .brand-subtitle {
+      font-size: 11px;
+      color: var(--brass);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+    
+    .theme-selector {
+      display: flex;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 4px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .theme-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+    }
+    .theme-btn:hover {
+      color: #FFF;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .theme-btn.active {
+      background: var(--brass);
+      color: #0A1417;
+      font-weight: 600;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .view-mode-toggle {
+      display: flex;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .mode-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+    .mode-btn.active {
+      background: rgba(255, 255, 255, 0.12);
+      color: #FFF;
+    }
+    .launch-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-strong);
+      color: #FFF;
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+    .launch-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    main {
+      flex: 1;
+      padding: 24px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .concept-meta {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .meta-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #FFF;
+      margin-bottom: 4px;
+    }
+    .meta-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .meta-tags {
+      display: flex;
+      gap: 8px;
+    }
+    .tag {
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .viewer-container {
+      flex: 1;
+      min-height: 720px;
+      background: #000;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      position: relative;
+    }
+    .viewer-image {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      background: #0B1316;
+    }
+    .viewer-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      min-height: 820px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand-wrap">
+      <div class="brand-mark">S</div>
+      <div>
+        <div class="brand-title">SmileClinic DMS</div>
+        <div class="brand-subtitle">Concept A — Theme System</div>
+      </div>
+    </div>
+
+    <div class="theme-selector">
+      <button class="theme-btn active" id="btn-theme-light" onclick="setTheme('light')">
+        Concept A: Light Mode (Warm Porcelain)
+      </button>
+      <button class="theme-btn" id="btn-theme-dark" onclick="setTheme('dark')">
+        Concept A: Dark Mode (Midnight Forest)
+      </button>
+    </div>
+
+    <div class="top-actions">
+      <div class="view-mode-toggle">
+        <button class="mode-btn active" id="btn-mode-img" onclick="setMode('image')">Image View</button>
+        <button class="mode-btn" id="btn-mode-live" onclick="setMode('live')">Interactive Live View</button>
+      </div>
+      <a id="btn-launch" class="launch-btn" href="concept_a.html" target="_blank" rel="noopener">
+        Open Fullscreen &rarr;
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <div class="concept-meta">
+      <div>
+        <div class="meta-title" id="meta-title">Concept A: Light Mode (Warm Porcelain)</div>
+        <div class="meta-desc" id="meta-desc">Warm porcelain canvas (#F8F6F1), floating alabaster cards with subtle multi-layer drop shadows, Cormorant Garamond display serif typography, and brushed brass highlights.</div>
+      </div>
+      <div class="meta-tags" id="meta-tags">
+        <span class="tag">#F8F6F1 Porcelain</span>
+        <span class="tag">Cormorant Garamond</span>
+        <span class="tag">#B58B55 Brass</span>
+        <span class="tag">Landing Page Harmonized</span>
+      </div>
+    </div>
+
+    <div class="viewer-container">
+      <img id="viewer-img" class="viewer-image" src="concept_a_editorial_warm.png" alt="Concept A" />
+      <iframe id="viewer-frame" class="viewer-frame" src="concept_a.html"></iframe>
+    </div>
+  </main>
+
+  <script>
+    const THEMES = {
+      light: {
+        title: "Concept A: Light Mode (Warm Porcelain)",
+        desc: "Warm porcelain canvas (#F8F6F1), floating alabaster cards with subtle multi-layer drop shadows, Cormorant Garamond display serif typography, and brushed brass highlights.",
+        img: "concept_a_editorial_warm.png",
+        live: "concept_a.html",
+        tags: ["#F8F6F1 Porcelain", "Cormorant Garamond", "#B58B55 Brass", "Landing Page Harmonized"]
+      },
+      dark: {
+        title: "Concept A: Dark Mode (Midnight Forest Ink)",
+        desc: "Deep midnight forest canvas (#0D1C22), elevated dark teal-slate cards (#142830), matching Cormorant Garamond display typography, and brushed brass highlights with low glare.",
+        img: "concept_a_dark.png",
+        live: "concept_a_dark.html",
+        tags: ["#0D1C22 Midnight Forest", "#142830 Elevated Cards", "#B58B55 Brass", "Low-Glare Clinical"]
+      }
+    };
+
+    let currentTheme = 'light';
+    let currentMode = 'image';
+
+    function setTheme(theme) {
+      currentTheme = theme;
+      document.getElementById('btn-theme-light').classList.toggle('active', theme === 'light');
+      document.getElementById('btn-theme-dark').classList.toggle('active', theme === 'dark');
+      
+      const data = THEMES[theme];
+      document.getElementById('meta-title').textContent = data.title;
+      document.getElementById('meta-desc').textContent = data.desc;
+      document.getElementById('btn-launch').href = data.live;
+      document.getElementById('viewer-img').src = data.img;
+      document.getElementById('viewer-frame').src = data.live;
+      document.getElementById('meta-tags').innerHTML = data.tags.map(t => `<span class="tag">${t}</span>`).join('');
+    }
+
+    function setMode(mode) {
+      currentMode = mode;
+      document.getElementById('btn-mode-img').classList.toggle('active', mode === 'image');
+      document.getElementById('btn-mode-live').classList.toggle('active', mode === 'live');
+      if (mode === 'image') {
+        document.getElementById('viewer-img').style.display = 'block';
+        document.getElementById('viewer-frame').style.display = 'none';
+      } else {
+        document.getElementById('viewer-img').style.display = 'none';
+        document.getElementById('viewer-frame').style.display = 'block';
+      }
+    }
+  </script>
+
+</body>
+</html>

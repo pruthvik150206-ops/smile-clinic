@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SmileClinic DMS - Concept B: Modern Minimal Slate SaaS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --border: #E2E8F0;
+      --border-subtle: #F1F5F9;
+      --text: #0F172A;
+      --text-muted: #64748B;
+      --text-soft: #94A3B8;
+      --primary: #0F172A;
+      --primary-hover: #1E293B;
+      --emerald: #059669;
+      --emerald-bg: #ECFDF5;
+      --emerald-border: #A7F3D0;
+      --amber: #D97706;
+      --amber-bg: #FFFBEB;
+      --blue: #2563EB;
+      --blue-bg: #EFF6FF;
+      --sidebar-w: 240px;
+      --radius: 8px;
+      --font: 'Inter', system-ui, -apple-system, sans-serif;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.07), 0 1px 2px -1px rgba(0, 0, 0, 0.07);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    /* ── SIDEBAR ── */
+    aside {
+      width: var(--sidebar-w);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; bottom: 0; left: 0;
+      z-index: 20;
+    }
+    .sb-brand {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .brand-title {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    
+    .sb-nav {
+      flex: 1;
+      padding: 14px 10px;
+      overflow-y: auto;
+    }
+    .nav-label {
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 600;
+      color: var(--text-soft);
+      padding: 0 10px;
+      margin: 14px 0 6px;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.12s ease;
+      margin-bottom: 2px;
+    }
+    .nav-link:hover {
+      background: var(--border-subtle);
+      color: var(--text);
+    }
+    .nav-link.active {
+      background: var(--primary);
+      color: #FFF;
+      font-weight: 500;
+    }
+    .nav-badge {
+      margin-left: auto;
+      background: rgba(0, 0, 0, 0.06);
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 10px;
+    }
+    .nav-link.active .nav-badge {
+      background: rgba(255, 255, 255, 0.2);
+      color: #FFF;
+    }
+    
+    .sb-user {
+      padding: 14px 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      background: #E2E8F0;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .user-meta { flex: 1; min-width: 0; }
+    .user-name { font-size: 12.5px; font-weight: 600; color: var(--text); }
+    .user-role { font-size: 11px; color: var(--text-muted); }
+
+    /* ── MAIN ── */
+    main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    header {
+      height: 58px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--border-subtle);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 12px;
+      width: 320px;
+      color: var(--text-muted);
+    }
+    .search-box input {
+      border: none;
+      background: none;
+      outline: none;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 12.5px;
+      width: 100%;
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      border-radius: 6px;
+      font-weight: 500;
+      font-size: 12.5px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.12s ease;
+    }
+    .btn-dark {
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-dark:hover {
+      background: var(--primary-hover);
+    }
+    .btn-outline {
+      background: var(--surface);
+      border-color: var(--border);
+      color: var(--text);
+    }
+    .btn-outline:hover {
+      background: var(--border-subtle);
+    }
+
+    .body-content {
+      padding: 28px;
+    }
+    .page-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .title {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    
+    /* ── STATS CARDS ── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      box-shadow: var(--shadow-sm);
+    }
+    .kpi-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .kpi-name {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    .kpi-trend {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--emerald);
+      background: var(--emerald-bg);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+    .kpi-num {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .kpi-foot {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    /* ── SPLIT GRID ── */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+    }
+    .card-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    .card-panel-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .panel-heading {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    
+    /* Table */
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      padding: 10px 18px;
+      background: #F8FAFC;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    td {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12.5px;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #F8FAFC; }
+    
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11.5px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .pill-green { background: var(--emerald-bg); color: var(--emerald); }
+    .pill-amber { background: var(--amber-bg); color: var(--amber); }
+    .pill-blue { background: var(--blue-bg); color: var(--blue); }
+    
+    .cell-patient { font-weight: 600; color: var(--text); }
+    .cell-sub { font-size: 11px; color: var(--text-muted); }
+
+    /* Side widget */
+    .metric-bar-group {
+      padding: 16px 18px;
+    }
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+    .progress-track {
+      height: 6px;
+      background: #E2E8F0;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <aside>
+    <div class="sb-brand">
+      <div class="brand-mark">S</div>
+      <div class="brand-title">SmileClinic OS</div>
+    </div>
+    <div class="sb-nav">
+      <div class="nav-label">Core</div>
+      <a href="#" class="nav-link active">Dashboard</a>
+      <a href="#" class="nav-link">Appointments <span class="nav-badge">18</span></a>
+      <a href="#" class="nav-link">Patients</a>
+      <a href="#" class="nav-link">Treatments</a>
+
+      <div class="nav-label">Billing & AI</div>
+      <a href="#" class="nav-link">Invoices</a>
+      <a href="#" class="nav-link">No-Show Prediction</a>
+      <a href="#" class="nav-link">Analytics</a>
+
+      <div class="nav-label">System</div>
+      <a href="#" class="nav-link">Settings</a>
+    </div>
+    <div class="sb-user">
+      <div class="user-avatar">SV</div>
+      <div class="user-meta">
+        <div class="user-name">Dr. Sarah Vance</div>
+        <div class="user-role">Lead Clinician</div>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <header>
+      <div class="search-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" placeholder="Search patients, invoices, doctors..." />
+      </div>
+      <div class="top-actions">
+        <button class="btn btn-outline">Filter Date</button>
+        <button class="btn btn-dark">+ Add Appointment</button>
+      </div>
+    </header>
+
+    <div class="body-content">
+      <div class="page-title-row">
+        <div>
+          <div class="title">Clinical Operations Overview</div>
+          <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 2px;">Real-time clinic activity and attendance pipeline</div>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-name">Today's Appointments</span>
+            <span class="kpi-trend">+12% vs avg</span>
+          </div>
+          <div class="kpi-num">18</div>
+          <div class="kpi-foot">14 confirmed &bull; 4 pending arrival</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-name">Active Patient Roster</span>
+            <span class="kpi-trend">+24 new</span>
+          </div>
+          <div class="kpi-num">1,420</div>
+          <div class="kpi-foot">Across 4 dental specializations</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-name">Month-to-Date Collections</span>
+            <span class="kpi-trend">88.2%</span>
+          </div>
+          <div class="kpi-num">&#8377; 2,84,500</div>
+          <div class="kpi-foot">&#8377; 34,200 accounts receivable</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-name">ML Attendance Accuracy</span>
+            <span class="kpi-trend">AUC 0.89</span>
+          </div>
+          <div class="kpi-num">95.8%</div>
+          <div class="kpi-foot">Low clinic-wide no-show probability</div>
+        </div>
+      </div>
+
+      <div class="content-grid">
+        <div class="card-panel">
+          <div class="card-panel-header">
+            <div class="panel-heading">Today's Scheduled Consultations</div>
+            <span style="font-size: 12px; color: var(--text-muted);">18 Total</span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Patient Details</th>
+                <th>Procedure</th>
+                <th>Time & Doctor</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="cell-patient">Rahul Sharma</div>
+                  <div class="cell-sub">PID-0024 &bull; +91 98450 12345</div>
+                </td>
+                <td>Root Canal Therapy</td>
+                <td>09:30 AM &bull; Dr. Vance</td>
+                <td><span class="pill pill-green">Confirmed</span></td>
+                <td><button class="btn btn-outline" style="padding: 3px 8px; font-size: 11px;">Open Chart</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="cell-patient">Priya Patel</div>
+                  <div class="cell-sub">PID-0031 &bull; +91 99001 88721</div>
+                </td>
+                <td>Scaling & Polishing</td>
+                <td>10:15 AM &bull; Dr. Mehta</td>
+                <td><span class="pill pill-blue">In Operatory</span></td>
+                <td><button class="btn btn-outline" style="padding: 3px 8px; font-size: 11px;">Open Chart</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="cell-patient">Ananya Kulkarni</div>
+                  <div class="cell-sub">PID-0045 &bull; +91 98860 55432</div>
+                </td>
+                <td>Orthodontic Review</td>
+                <td>11:00 AM &bull; Dr. Vance</td>
+                <td><span class="pill pill-amber">Awaiting SMS</span></td>
+                <td><button class="btn btn-outline" style="padding: 3px 8px; font-size: 11px;">Open Chart</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="cell-patient">Vikram Nair</div>
+                  <div class="cell-sub">PID-0052 &bull; +91 97400 99120</div>
+                </td>
+                <td>Crown Placement</td>
+                <td>11:45 AM &bull; Dr. Mehta</td>
+                <td><span class="pill pill-green">Completed</span></td>
+                <td><button class="btn btn-outline" style="padding: 3px 8px; font-size: 11px;">Receipt</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="cell-patient">Meera Gowda</div>
+                  <div class="cell-sub">PID-0060 &bull; +91 94480 33211</div>
+                </td>
+                <td>Cosmetic Consultation</td>
+                <td>02:00 PM &bull; Dr. Vance</td>
+                <td><span class="pill pill-green">Confirmed</span></td>
+                <td><button class="btn btn-outline" style="padding: 3px 8px; font-size: 11px;">Open Chart</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <div class="panel-heading">Predictive Intelligence</div>
+            </div>
+            <div class="metric-bar-group">
+              <div class="metric-row">
+                <span style="color: var(--text-muted);">Clinic Show-Up Probability</span>
+                <span style="font-weight: 600; color: var(--emerald);">94.8%</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" style="width: 95%; background: var(--emerald);"></div>
+              </div>
+
+              <div class="metric-row">
+                <span style="color: var(--text-muted);">Chair Occupancy Rate</span>
+                <span style="font-weight: 600;">82.0%</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" style="width: 82%; background: var(--blue);"></div>
+              </div>
+
+              <div class="metric-row">
+                <span style="color: var(--text-muted);">Collections Realization</span>
+                <span style="font-weight: 600;">88.2%</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" style="width: 88%; background: var(--primary);"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <div class="panel-heading">Daily Operatory Distribution</div>
+            </div>
+            <div style="padding: 16px 18px;">
+              <div style="margin-bottom: 12px;">
+                <div style="font-weight: 600; font-size: 12.5px;">Chair 1 (Restorative & Endodontics)</div>
+                <div style="font-size: 11.5px; color: var(--text-muted);">Dr. Amit Mehta &bull; 6 Procedures Scheduled</div>
+              </div>
+              <div>
+                <div style="font-weight: 600; font-size: 12.5px;">Chair 2 (Orthodontics & Consultations)</div>
+                <div style="font-size: 11.5px; color: var(--text-muted);">Dr. Sarah Vance &bull; 8 Procedures Scheduled</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>
