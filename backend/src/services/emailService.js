@@ -11,13 +11,13 @@ async function sendOTPEmail(toEmail, otpCode, purpose = 'forgot_password') {
   const fromEmail    = process.env.EMAIL_FROM || 'onboarding@resend.dev';
   
   const subject = purpose === '2fa_login' 
-    ? 'SmileClinic 2FA Verification Code' 
-    : 'SmileClinic Password Reset OTP';
+    ? 'Trident Dental & ENT Clinic 2FA Verification Code' 
+    : 'Trident Dental & ENT Clinic Password Reset OTP';
     
   const html = `
     <div style="font-family: system-ui, -apple-system, sans-serif; max-width: 500px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff;">
-      <div style="font-size: 22px; font-weight: 800; color: #059669; margin-bottom: 8px;">SmileClinic</div>
-      <div style="font-size: 14px; color: #475569; margin-bottom: 20px;">Dental Management System Security Verification</div>
+      <div style="font-size: 22px; font-weight: 800; color: #0E4854; margin-bottom: 8px;">Trident Dental &amp; ENT Clinic</div>
+      <div style="font-size: 14px; color: #475569; margin-bottom: 20px;">Clinical Management System Security Verification</div>
       
       <p style="font-size: 14px; color: #1e293b; line-height: 1.5;">
         You requested a verification code for your account (<strong>${toEmail}</strong>).
@@ -67,7 +67,7 @@ async function sendOTPEmail(toEmail, otpCode, purpose = 'forgot_password') {
           body: JSON.stringify({
             from: fromEmail,
             to: [recipient],
-            subject: `[SmileClinic OTP for ${toEmail}] ${subject}`,
+            subject: `[Trident Clinic OTP for ${toEmail}] ${subject}`,
             html: html,
           }),
         });

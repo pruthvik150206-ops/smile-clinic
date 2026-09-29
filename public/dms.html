@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SmileClinic DMS</title>
+  <title>Trident Dental &amp; ENT Clinic &mdash; DMS</title>
+  <link rel="icon" type="image/png" href="/assets/trident-mark.png" />
   <link
     href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap"
     rel="stylesheet" />
@@ -1631,12 +1632,8 @@
       return `
   <div class="app">
     <aside class="sidebar">
-      <div class="sb-logo" style="display:flex;align-items:center;gap:11px;padding:18px 16px;border-bottom:1px solid var(--border)">
-        <div style="width:30px;height:30px;background:var(--brass);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;color:var(--btn-primary-text);font-family:var(--serif);font-size:17px;font-weight:700">S</div>
-        <div>
-          <div style="font-family:var(--serif);font-size:19px;font-weight:600;color:var(--text);line-height:1.1">SmileClinic</div>
-          <div style="font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;color:var(--brass)">Clinical Suite</div>
-        </div>
+      <div class="sb-logo" style="display:flex;align-items:center;padding:16px 14px;border-bottom:1px solid var(--border)">
+        <img src="/assets/trident-logo.png" onerror="this.onerror=null;this.src='assets/trident-logo.png';" alt="Trident Dental &amp; ENT Clinic" style="height:36px;width:auto;max-width:100%;object-fit:contain;border-radius:4px;display:block" />
       </div>
       <nav class="sb-nav">
         <div class="sb-sec">Navigation</div>
@@ -1690,19 +1687,15 @@
       </button>
     </div>
     <div class="auth-brand">
-      <div class="auth-logo">
-        <svg width="26" height="26" viewBox="0 0 36 36" fill="none">
-          <path d="M7 14Q11 22 18 22Q25 22 29 14" stroke="#789B92" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-          <path d="M3 20Q7 17 10 20Q13 23 16 20Q19 17 22 20Q25 23 28 20Q31 17 34 20" stroke="#B58B55" stroke-width="1.1" fill="none" stroke-linecap="round"/>
-        </svg>
-        SmileClinic
+      <div class="auth-logo" style="display:flex;align-items:center;margin-bottom:24px">
+        <img src="/assets/trident-logo.png" onerror="this.onerror=null;this.src='assets/trident-logo.png';" alt="Trident Dental &amp; ENT Clinic" style="height:44px;width:auto;object-fit:contain;border-radius:4px;display:block" />
       </div>
       <div class="auth-hl">
-        <h1>Better care,<br><em>better smiles.</em></h1>
-        <p>Dental clinic management — appointments, patients, billing, and ML-powered insights in one place.</p>
+        <h1>Aesthetic care,<br><em>clear records.</em></h1>
+        <p>Dental &amp; ENT clinic management &mdash; appointments, patients, billing, and ML-powered insights in one place.</p>
       </div>
 
-      <div class="auth-copy">© 2026 SmileClinic DMS</div>
+      <div class="auth-copy">&copy; 2026 Trident Dental &amp; ENT Clinic</div>
     </div>
 
     <div class="auth-form">
@@ -1741,7 +1734,7 @@
     function showRegister() {
       document.getElementById('app').innerHTML = `
   <div class="auth-wrap">
-    <div class="auth-brand"><div class="auth-logo">SmileClinic</div><div class="auth-hl"><h1>Join the<br><i>team.</i></h1><p>Create a staff account to access the dashboard.</p></div><div class="auth-copy">© 2026 SmileClinic DMS</div></div>
+    <div class="auth-brand"><div class="auth-logo" style="display:flex;align-items:center;margin-bottom:24px"><img src="/assets/trident-logo.png" onerror="this.onerror=null;this.src='assets/trident-logo.png';" alt="Trident Dental &amp; ENT Clinic" style="height:44px;width:auto;object-fit:contain;border-radius:4px;display:block" /></div><div class="auth-hl"><h1>Join the<br><i>team.</i></h1><p>Create a staff account to access the dashboard.</p></div><div class="auth-copy">&copy; 2026 Trident Dental &amp; ENT Clinic</div></div>
     <div class="auth-form"><div class="auth-box">
       <h2>Create account</h2><p class="sub">New staff registration</p>
       <div id="reg-err" style="display:none" class="err-msg"></div>
