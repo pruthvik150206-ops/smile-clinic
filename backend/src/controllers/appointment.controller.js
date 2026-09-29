@@ -139,8 +139,9 @@ const AppointmentController = {
 
   async publicBook(req, res) {
     try {
-      const { first_name, last_name, name, email, phone, doctor_id, scheduled_at, reason, notes } = req.body;
+      const { first_name, last_name, name, email, phone, doctor_id, scheduled_at, reason, notes, specialty, message } = req.body;
       const patientName = name || `${first_name || ''} ${last_name || ''}`.trim() || 'Guest Patient';
+      const bookingReason = reason || [specialty, message].filter(Boolean).join(' - ') || notes || 'Website Online Booking';
 
       let patient = null;
       if (email || phone) {
@@ -163,7 +164,7 @@ const AppointmentController = {
           phone: phone || '0000000000',
           gender: 'Other',
           date_of_birth: '1990-01-01',
-          medical_history: reason || notes || 'Online website booking'
+          medical_history: bookingReason
         }).catch(err => {
           logger.warn('Failed to auto-create patient for public booking', { error: err.message });
           return { patient_id: 1 };
@@ -178,8 +179,8 @@ const AppointmentController = {
         doctor_id: docId,
         scheduled_at: apptDate,
         status: 'scheduled',
-        reason: reason || notes || 'Website Online Booking',
-        notes: reason || notes || 'Website Online Booking',
+        reason: bookingReason,
+        notes: bookingReason,
         booking_source: req.body.booking_source || 'Website Booking'
       });
 

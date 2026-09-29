@@ -3447,7 +3447,7 @@
         btn.textContent = 'Sending...';
         btn.disabled = true;
         try {
-          const res = await fetch('http://localhost:8080/api/public/book', {
+          const res = await fetch('/api/public/book', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

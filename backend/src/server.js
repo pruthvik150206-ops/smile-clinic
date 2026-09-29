@@ -102,6 +102,7 @@ app.get('/api/health', async (req, res) => {
 const AppointmentController = require('./controllers/appointment.controller');
 const DoctorModel           = require('./models/doctor.model');
 
+app.post('/api/public/book',             AppointmentController.publicBook);
 app.post('/api/public/book-appointment', AppointmentController.publicBook);
 app.get('/api/public/doctors', async (req, res) => {
   try {
