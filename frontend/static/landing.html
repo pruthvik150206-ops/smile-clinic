@@ -3443,22 +3443,30 @@
         const phone = form.querySelector('#fphone').value.trim();
         if (!name) { form.querySelector('#fname').focus(); form.querySelector('#fname').style.borderColor = 'var(--c-brass)'; return; }
         if (!phone) { form.querySelector('#fphone').focus(); form.querySelector('#fphone').style.borderColor = 'var(--c-brass)'; return; }
+        const email = (form.querySelector('#femail')?.value || '').trim();
+        const specialty = form.querySelector('#fspecialty')?.value || '';
+        const message = (form.querySelector('#fmsg')?.value || '').trim();
+        const reason = [specialty, message].filter(Boolean).join(' - ') || 'Website Online Booking';
+
         const btn = document.getElementById('fsubmit');
         btn.textContent = 'Sending...';
         btn.disabled = true;
         try {
-          const res = await fetch('/api/public/book', {
+          const res = await fetch('/api/public/book-appointment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              name: form.querySelector('#fname').value.trim(),
-              phone: form.querySelector('#fphone').value.trim(),
-              specialty: form.querySelector('#fspecialty').value,
-              message: form.querySelector('#fmsg').value.trim(),
+              name,
+              phone,
+              email,
+              specialty,
+              message,
+              reason,
+              notes: message || specialty || reason
             })
           });
-          const data = await res.json();
-          if (data.success) {
+          const data = await res.json().catch(() => ({}));
+          if (res.ok && data.success) {
             btn.textContent = 'Booking received';
             btn.classList.add('done');
             btn.setAttribute('aria-label', 'Appointment request submitted successfully');
@@ -3466,7 +3474,7 @@
           } else {
             btn.textContent = 'Send request';
             btn.disabled = false;
-            showToast((data.error && data.error.message) || 'Something went wrong. Please call us.');
+            showToast((data.error && data.error.message) || data.message || 'Something went wrong. Please call us.');
           }
         } catch (e) {
           btn.textContent = 'Send request';

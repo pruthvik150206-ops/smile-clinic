@@ -410,7 +410,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             })
 
         # ── PUBLIC: website booking (no auth required) ───────────────────
-        if path == "/api/public/book" and method == "POST":
+        if path in ("/api/public/book", "/api/public/book-appointment") and method == "POST":
             import uuid as _uuid
             b        = body
             name     = (b.get("name") or "").strip()
