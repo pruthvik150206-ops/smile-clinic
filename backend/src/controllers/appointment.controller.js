@@ -105,6 +105,27 @@ const AppointmentController = {
   async update(req, res) {
     const existing = await AppointmentModel.findById(req.params.id);
     if (!existing) return notFound(res, 'Appointment');
+
+    // Rule: Once a doctor is assigned, receptionists cannot change doctor unless the assigned doctor is unavailable (not there)
+    if (req.user && req.user.role === 'receptionist' && req.body.doctor_id !== undefined) {
+      const newDoctorId = req.body.doctor_id ? parseInt(req.body.doctor_id) : null;
+      const currentDoctorId = existing.doctor_id ? parseInt(existing.doctor_id) : null;
+
+      if (currentDoctorId && newDoctorId !== currentDoctorId) {
+        const currentDoc = await DoctorModel.findById(currentDoctorId);
+        const isDocAvailable = currentDoc && (currentDoc.is_available === 1 || currentDoc.is_available === true);
+        if (isDocAvailable) {
+          return res.status(403).json({
+            success: false,
+            error: {
+              code: 'DOCTOR_REASSIGN_RESTRICTED',
+              message: `Doctor Dr. ${currentDoc.last_name || currentDoc.first_name || ''} is assigned and on duty. Receptionists cannot reassign unless the doctor is unavailable.`
+            }
+          });
+        }
+      }
+    }
+
     const updated = await AppointmentModel.update(req.params.id, req.body);
     return success(res, updated);
   },

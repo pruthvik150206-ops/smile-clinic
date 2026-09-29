@@ -1554,16 +1554,7 @@
         <thead><tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Status</th><th>Risk</th></tr></thead>
         <tbody>${list.length ? list.map(a => `<tr style="cursor:pointer" onclick="openPatientProfile(${a.patient_id || 0},'${esc(a.patient_name)}')">
           <td><div class="td-main" style="color:var(--green);text-decoration:underline;cursor:pointer">${esc(a.patient_name)}</div></td>
-          <td>
-      ${canEdit() ? `
-      <select style="font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:2px;background:var(--surface);color:var(--text);cursor:pointer;max-width:160px"
-        onchange="assignDoctor(${a.appointment_id},this.value)"
-        ${a.status === 'cancelled' ? 'disabled' : ''}>
-        <option value="">Unassigned</option>
-        ${STATE.doctors.map(d => `<option value="${d.doctor_id}" ${a.doctor_id === d.doctor_id ? 'selected' : ''}>Dr. ${esc(d.last_name)}</option>`).join('')}
-      </select>` :
-          `<span style="font-size:13px;color:var(--text2)">${esc(a.doctor_name || 'Unassigned')}</span>`}
-    </td>
+          <td>${renderDoctorAssignCell(a)}</td>
           <td><span style="font-family:monospace;font-size:12px">${fmtD(a.scheduled_at)}</span></td>
           <td>${statusBadge(a.status)}</td>
           <td>${riskBadge(a.risk_level, a.no_show_probability)}</td>
@@ -1888,6 +1879,47 @@
     // ═══════════════════════════════════════════════════════════
     //  APPOINTMENTS PAGE  (role-aware)
     // ═══════════════════════════════════════════════════════════
+    function renderDoctorAssignCell(a) {
+      const assignedDoc = STATE.doctors.find(d => d.doctor_id === a.doctor_id);
+      const isDocAvailable = assignedDoc ? (assignedDoc.is_available === 1 || assignedDoc.is_available === true) : true;
+      const isAssigned = !!a.doctor_id;
+      const isCancelled = a.status === 'cancelled';
+      const r = role();
+
+      if (!canEdit()) {
+        return `<span style="font-size:13px;color:var(--text2)">${esc(a.doctor_name || 'Unassigned')}</span>`;
+      }
+
+      if (isCancelled) {
+        return `<span style="font-size:13px;color:var(--text3)">${esc(a.doctor_name || 'Unassigned')}</span>`;
+      }
+
+      // Rule: Once a doctor is assigned, receptionist cannot change doctor unless the assigned doctor wasn't there (!isDocAvailable)
+      const isLockedForReceptionist = r === 'receptionist' && isAssigned && isDocAvailable;
+
+      if (isLockedForReceptionist) {
+        const docLastName = assignedDoc ? assignedDoc.last_name : (a.doctor_name ? a.doctor_name.replace(/^Dr\.\s*/i, '') : 'Assigned');
+        return `
+          <div style="display:inline-flex;align-items:center;gap:6px" title="Doctor is assigned and on duty. Receptionists cannot reassign unless doctor is off duty.">
+            <select style="font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface2);color:var(--text2);cursor:not-allowed;max-width:145px;opacity:0.85" disabled>
+              <option selected>Dr. ${esc(docLastName)}</option>
+            </select>
+          </div>`;
+      }
+
+      const isOffDutyReassign = r === 'receptionist' && isAssigned && !isDocAvailable;
+
+      return `
+        <div>
+          <select style="font-size:12px;padding:4px 8px;border:1px solid ${isOffDutyReassign ? 'var(--amber-bd)' : 'var(--border)'};border-radius:var(--r-sm);background:${isOffDutyReassign ? 'var(--amber-bg)' : 'var(--surface)'};color:var(--text);cursor:pointer;max-width:150px"
+            onchange="assignDoctor(${a.appointment_id},this.value)">
+            <option value="">Unassigned</option>
+            ${STATE.doctors.map(d => `<option value="${d.doctor_id}" ${a.doctor_id === d.doctor_id ? 'selected' : ''} ${!d.is_available ? 'disabled' : ''}>Dr. ${esc(d.last_name)}${!d.is_available ? ' (Off duty)' : ''}</option>`).join('')}
+          </select>
+          ${isOffDutyReassign ? '<div style="font-size:10px;color:var(--amber);margin-top:2px;font-weight:600">Doctor off duty · Reassignment allowed</div>' : ''}
+        </div>`;
+    }
+
     function appointmentsPage() {
       // Doctor: show only their own appointments + highlight patient clickable
       const appts = STATE.appointments;
@@ -1895,16 +1927,7 @@
     <td style="cursor:pointer" onclick="openPatientProfile(${a.patient_id || 0},'${esc(a.patient_name)}')">
       <div class="td-main" style="color:var(--eu);text-decoration:underline;text-underline-offset:2px">${esc(a.patient_name)}</div>
     </td>
-    <td>
-      ${canEdit() ? `
-      <select style="font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:2px;background:var(--surface);color:var(--text);cursor:pointer;max-width:160px"
-        onchange="assignDoctor(${a.appointment_id},this.value)"
-        ${a.status === 'cancelled' ? 'disabled' : ''}>
-        <option value="">Unassigned</option>
-        ${STATE.doctors.map(d => `<option value="${d.doctor_id}" ${a.doctor_id === d.doctor_id ? 'selected' : ''}>Dr. ${esc(d.last_name)}</option>`).join('')}
-      </select>` :
-          `<span style="font-size:13px;color:var(--text2)">${esc(a.doctor_name || 'Unassigned')}</span>`}
-    </td>
+    <td>${renderDoctorAssignCell(a)}</td>
     <td><span style="font-family:monospace;font-size:12px">${fmtDT(a.scheduled_at)}</span></td>
     <td><span style="color:var(--text2)">${esc(a.reason || '—')}</span></td>
     <td>${priorityBadge(a.priority || 'normal')}</td>
@@ -1945,12 +1968,23 @@
     }
     async function assignDoctor(appointmentId, doctorId) {
       if (!doctorId) return;
+      const appt = STATE.appointments.find(x => x.appointment_id === appointmentId);
+      if (appt && appt.doctor_id && role() === 'receptionist') {
+        const currentDoc = STATE.doctors.find(d => d.doctor_id === appt.doctor_id);
+        const isAvailable = currentDoc && (currentDoc.is_available === 1 || currentDoc.is_available === true);
+        if (isAvailable) {
+          toast(`Dr. ${currentDoc.last_name || 'Assigned'} is on duty. Receptionists cannot reassign unless doctor is off duty.`, 'er');
+          renderPage();
+          return;
+        }
+      }
       const r = await api('PATCH', '/appointments/' + appointmentId, { doctor_id: parseInt(doctorId) });
       if (r.success) {
-        showToast('Doctor assigned');
+        toast('Doctor assigned');
         await loadData(); renderPage();
       } else {
-        showToast(r.error?.message || 'Error assigning doctor', 'er');
+        toast(r.error?.message || 'Error assigning doctor', 'er');
+        await loadData(); renderPage();
       }
     }
     async function confirmAppt(id) { const r = await api('PATCH', `/appointments/${id}`, { status: 'confirmed' }); if (r.success) { toast('Confirmed'); await loadData(); renderPage(); } }
