@@ -12,7 +12,7 @@ const poolConfig = databaseUrl
       ssl: { rejectUnauthorized: false },
       max: parseInt(process.env.DB_POOL_MAX || '10'),
       idleTimeoutMillis: parseInt(process.env.DB_POOL_IDLE_MS || '30000'),
-      connectionTimeoutMillis: parseInt(process.env.DB_POOL_ACQUIRE_MS || '5000'),
+      connectionTimeoutMillis: parseInt(process.env.DB_POOL_ACQUIRE_MS || '2500'),
       keepAlive: true,
     }
   : {
@@ -23,7 +23,7 @@ const poolConfig = databaseUrl
       password: process.env.DB_PASSWORD || '',
       max:      parseInt(process.env.DB_POOL_MAX        || '10'),
       idleTimeoutMillis:    parseInt(process.env.DB_POOL_IDLE_MS    || '30000'),
-      connectionTimeoutMillis: parseInt(process.env.DB_POOL_ACQUIRE_MS || '5000'),
+      connectionTimeoutMillis: parseInt(process.env.DB_POOL_ACQUIRE_MS || '2500'),
       ssl: isSslEnabled ? { rejectUnauthorized: false } : false,
       keepAlive: true,
     };
@@ -33,7 +33,7 @@ const pool = new Pool(poolConfig);
 pool.on('error', (err) => logger.error('PostgreSQL idle client error', { error: err.message }));
 
 let lastPgFailureTimestamp = 0;
-const PG_COOLDOWN_MS = 5000; // 5 seconds fast retry when PG is offline
+const PG_COOLDOWN_MS = 25000; // 25 seconds fast retry when PG is offline
 
 /**
  * Execute a single query with circuit-breaker protection.

@@ -3,13 +3,17 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Trident Dental &amp; ENT Clinic &mdash; DMS</title>
   <link rel="icon" type="image/png" href="/assets/trident-mark.png" />
+  <link rel="preload" as="image" href="/assets/trident-logo.png?v=2" />
+  <link rel="preload" as="image" href="/assets/trident-logo-light.png?v=3" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
     href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap"
     rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
   <script>
     (function() {
       try {
@@ -102,12 +106,21 @@
       --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
 
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
     body {
       font-family: var(--font);
       background: var(--bg);
       color: var(--text);
       font-size: 13.5px;
       min-height: 100vh;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      width: 100%;
+      max-width: 100%;
       transition: background .2s ease, color .2s ease;
     }
 
@@ -355,6 +368,15 @@
       transition: all .15s ease;
       line-height: 1.2;
       text-decoration: none;
+      touch-action: manipulation;
+      user-select: none;
+    }
+
+    .btn:active,
+    .nav-item:active,
+    .rpill:active {
+      transform: scale(0.97);
+      opacity: 0.88;
     }
 
     .btn-primary {
@@ -908,7 +930,10 @@
       box-shadow: var(--shadow-lg);
       animation: slideUp .2s ease;
       max-height: 90vh;
+      max-height: 90dvh;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
       color: var(--text);
     }
 
@@ -1452,7 +1477,9 @@
       }
 
       .sidebar {
-        width: 58px
+        width: 58px;
+        height: 100vh;
+        height: 100dvh;
       }
 
       .sb-logo-name,
@@ -1471,6 +1498,65 @@
 
       .main {
         margin-left: 58px
+      }
+    }
+
+    @media(max-width:540px) {
+      .content {
+        padding: 18px 14px;
+      }
+
+      .topbar {
+        padding: 0 14px;
+      }
+
+      .page-title {
+        font-size: 19px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .stat-card {
+        padding: 16px 18px;
+      }
+
+      .modal {
+        padding: 20px 16px;
+        max-width: calc(100vw - 24px);
+        margin: 12px auto;
+      }
+
+      .filter-bar,
+      .table-actions {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+    }
+
+    @media (orientation: landscape) and (max-height: 520px) {
+      .sidebar {
+        height: 100vh;
+        height: 100dvh;
+      }
+
+      .sb-nav {
+        padding: 6px 4px;
+      }
+
+      .nav-item {
+        padding: 8px 6px;
+      }
+
+      .modal {
+        max-height: 88dvh;
+        padding: 16px 20px;
+      }
+
+      .content {
+        padding: 16px 20px;
       }
     }
   </style>
@@ -1561,7 +1647,28 @@
     // ═══════════════════════════════════════════════════════════
     //  DATA LOADING
     // ═══════════════════════════════════════════════════════════
-    async function loadData() {
+    async function loadData(resource = null) {
+      if (resource === 'appointments') {
+        const a = await api('GET', '/appointments');
+        if (a?.success) STATE.appointments = Array.isArray(a.data) ? a.data : (a.data?.items || []);
+        return;
+      }
+      if (resource === 'patients') {
+        const p = await api('GET', '/patients');
+        if (p?.success) STATE.patients = Array.isArray(p.data) ? p.data : (p.data?.items || []);
+        return;
+      }
+      if (resource === 'doctors') {
+        const d = await api('GET', '/doctors');
+        if (d?.success) STATE.doctors = Array.isArray(d.data) ? d.data : (d.data?.items || []);
+        return;
+      }
+      if (resource === 'invoices') {
+        const i = await api('GET', '/invoices');
+        if (i?.success) STATE.invoices = Array.isArray(i.data) ? i.data : (i.data?.items || []);
+        return;
+      }
+
       const calls = [
         api('GET', '/patients'), api('GET', '/doctors'),
         api('GET', '/appointments'), api('GET', '/treatments'),
@@ -1605,7 +1712,7 @@
       { id: 'ml', label: 'ML Insights', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>', restrict: ['admin'] },
     ];
 
-    function nav(page) { STATE.page = page; loadData().then(renderPage); }
+    function nav(page) { STATE.page = page; renderPage(); loadData().then(renderPage); }
     function logout() { localStorage.removeItem('sc_token'); STATE.user = null; renderPage(); }
 
     // ═══════════════════════════════════════════════════════════
@@ -1836,13 +1943,18 @@
       <div class="panel-head"><span class="panel-title">${title}</span><span class="badge bg-blue">${list.length} shown</span></div>
       <div class="tbl"><table>
         <thead><tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Status</th><th>Risk</th></tr></thead>
-        <tbody>${list.length ? list.map(a => `<tr style="cursor:pointer" onclick="openPatientProfile(${a.patient_id || 0},'${esc(a.patient_name)}')">
-          <td><div class="td-main" style="color:var(--green);text-decoration:underline;cursor:pointer">${esc(a.patient_name)}</div></td>
+        <tbody>${list.length ? list.map(a => {
+          const isWeb = a.booking_source === 'Website Booking';
+          const isScheduled = a.status === 'scheduled';
+          const rowStyle = isWeb && isScheduled ? 'cursor:pointer;background:var(--amber-bg);border-left:3px solid var(--brass);' : 'cursor:pointer;';
+          return `<tr style="${rowStyle}" onclick="openPatientProfile(${a.patient_id || 0},'${esc(a.patient_name)}')">
+          <td><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="td-main" style="color:var(--green);text-decoration:underline;cursor:pointer">${esc(a.patient_name)}</span>${isWeb ? '<span class="badge bg-amber" style="font-size:9.5px;padding:1px 5px;font-weight:600">Web Booking</span>' : ''}</div></td>
           <td>${renderDoctorAssignCell(a)}</td>
           <td><span style="font-family:monospace;font-size:12px">${fmtD(a.scheduled_at)}</span></td>
           <td>${statusBadge(a.status)}</td>
           <td>${riskBadge(a.risk_level, a.no_show_probability)}</td>
-        </tr>`).join('') : '<tr><td colspan="5" class="empty">No appointments scheduled</td></tr>'}
+        </tr>`;
+        }).join('') : '<tr><td colspan="5" class="empty">No appointments scheduled</td></tr>'}
         </tbody>
       </table></div>
     </div>`;
@@ -2053,18 +2165,52 @@
       openModal(html, true);
     }
 
+    function getPatientHighlight(p) {
+      if (!p || !p.patient_id) return null;
+      const appts = (STATE.appointments || []).filter(a => a.patient_id === p.patient_id);
+      const webAppt = appts.find(a => a.booking_source === 'Website Booking' && a.status === 'scheduled');
+      if (webAppt) {
+        return {
+          type: 'web',
+          label: 'New Web Booking',
+          cls: 'bg-amber',
+          date: webAppt.scheduled_at,
+          reason: webAppt.reason
+        };
+      }
+      const pendingAppt = appts.find(a => a.status === 'scheduled');
+      const isRecent = p.created_at && (Date.now() - new Date(p.created_at).getTime() < 7 * 86400000);
+      if (pendingAppt && isRecent) {
+        return {
+          type: 'new',
+          label: 'New Patient',
+          cls: 'bg-green',
+          date: pendingAppt.scheduled_at,
+          reason: pendingAppt.reason
+        };
+      }
+      return null;
+    }
+
     // ═══════════════════════════════════════════════════════════
     //  PATIENTS PAGE
     // ═══════════════════════════════════════════════════════════
     function patientsPage() {
+      let newBookingCount = 0;
       const rows = STATE.patients.map(p => {
         const age = p.date_of_birth ? Math.floor((Date.now() - new Date(p.date_of_birth)) / (365.25 * 864e5)) : '?';
-        return `<tr style="cursor:pointer" onclick="openPatientProfile(${p.patient_id},'${esc(p.first_name + ' ' + p.last_name)}')">
+        const hl = getPatientHighlight(p);
+        if (hl) newBookingCount++;
+        const rowStyle = hl ? 'cursor:pointer;background:var(--amber-bg);border-left:3px solid var(--brass);' : 'cursor:pointer;';
+        return `<tr style="${rowStyle}" onclick="openPatientProfile(${p.patient_id},'${esc(p.first_name + ' ' + p.last_name)}')">
       <td><div style="display:flex;align-items:center;gap:9px">
-        <div class="av sm">${(p.first_name || '?')[0]}</div>
+        <div class="av sm" style="${hl ? 'background:var(--brass);color:#fff;font-weight:700;' : ''}">${(p.first_name || '?')[0]}</div>
         <div>
-          <div class="td-main" style="color:var(--eu);text-decoration:underline;text-underline-offset:2px">${esc(p.first_name)} ${esc(p.last_name)}</div>
-          <div class="td-sub">${esc(p.email || '')}</div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            <span class="td-main" style="color:var(--eu);text-decoration:underline;text-underline-offset:2px">${esc(p.first_name)} ${esc(p.last_name)}</span>
+            ${hl ? `<span class="badge ${hl.cls}" style="font-size:10px;padding:2px 7px;font-weight:600;letter-spacing:.02em">${hl.label}</span>` : ''}
+          </div>
+          <div class="td-sub">${esc(p.email || '')}${hl && hl.reason ? ` · <span style="color:var(--amber);font-weight:500">${esc(hl.reason)}</span>` : ''}</div>
         </div>
       </div></td>
       <td>${age}</td>
@@ -2077,10 +2223,16 @@
       </div></td>
     </tr>`;
       }).join('');
+
       return `
+  ${newBookingCount > 0 ? `
+  <div style="background:var(--amber-bg);border:1px solid var(--amber-bd);border-radius:8px;padding:11px 16px;margin-bottom:14px;font-size:13px;color:var(--amber);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+    <div><strong>${newBookingCount} new appointment booking(s) received</strong> — highlighted in amber below.</div>
+    <button class="btn btn-sm btn-ghost" style="border-color:var(--amber-bd);color:var(--amber)" onclick="nav('appointments')">View Appointments &rarr;</button>
+  </div>` : `
   <div style="background:var(--blue-bg);border:1px solid var(--blue-bd);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:var(--blue)">
     Click any patient row to view full medical history, appointments, and billing.
-  </div>
+  </div>`}
   <div class="toolbar">
     <div class="search"><span class="search-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
       <input id="pt-s" placeholder="Search by name or phone…" oninput="filterTable('pt-s','pt-body',0,1,2)"/>
@@ -2090,7 +2242,10 @@
   <div class="panel">
     <div class="panel-head">
       <span class="panel-title">Patients (${STATE.patients.length})</span>
-      <span class="badge bg-green">${STATE.patients.length} total</span>
+      <div style="display:flex;gap:6px">
+        ${newBookingCount > 0 ? `<span class="badge bg-amber">${newBookingCount} new bookings</span>` : ''}
+        <span class="badge bg-green">${STATE.patients.length} total</span>
+      </div>
     </div>
     <div class="tbl"><table>
       <thead><tr><th>Patient</th><th>Age</th><th>Phone</th><th>Blood</th><th>Allergies</th><th>Actions</th></tr></thead>
@@ -2207,9 +2362,16 @@
     function appointmentsPage() {
       // Doctor: show only their own appointments + highlight patient clickable
       const appts = STATE.appointments;
-      const rows = appts.map(a => `<tr>
+      const rows = appts.map(a => {
+        const isWeb = a.booking_source === 'Website Booking';
+        const isScheduled = a.status === 'scheduled';
+        const rowStyle = isWeb && isScheduled ? 'background:var(--amber-bg);border-left:3px solid var(--brass);' : '';
+        return `<tr style="${rowStyle}">
     <td style="cursor:pointer" onclick="openPatientProfile(${a.patient_id || 0},'${esc(a.patient_name)}')">
-      <div class="td-main" style="color:var(--eu);text-decoration:underline;text-underline-offset:2px">${esc(a.patient_name)}</div>
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+        <span class="td-main" style="color:var(--eu);text-decoration:underline;text-underline-offset:2px">${esc(a.patient_name)}</span>
+        ${isWeb ? `<span class="badge bg-amber" style="font-size:10px;padding:2px 6px;font-weight:600">Web Booking</span>` : ''}
+      </div>
     </td>
     <td>${renderDoctorAssignCell(a)}</td>
     <td><span style="font-family:monospace;font-size:12px">${fmtDT(a.scheduled_at)}</span></td>
@@ -2221,7 +2383,8 @@
       ${a.status === 'scheduled' && canEdit() ? `<button class="btn btn-sm btn-primary" onclick="confirmAppt(${a.appointment_id})">Confirm</button>` : ''}
       ${['scheduled', 'confirmed'].includes(a.status) && (canEdit() || isDoctor()) ? `<button class="btn btn-sm btn-danger" onclick="cancelAppt(${a.appointment_id})">Cancel</button>` : ''}
     </div></td>
-  </tr>`).join('');
+  </tr>`;
+      }).join('');
 
       return `
   <div style="background:rgba(120,155,146,.08);border:1px solid rgba(120,155,146,.2);border-radius:2px;padding:10px 16px;margin-bottom:16px;font-size:12px;color:var(--eu)">
@@ -2262,17 +2425,58 @@
           return;
         }
       }
+      const prevDocId = appt ? appt.doctor_id : null;
+      const prevDocName = appt ? appt.doctor_name : null;
+      const doc = STATE.doctors.find(d => d.doctor_id === parseInt(doctorId));
+      if (appt && doc) {
+        appt.doctor_id = doc.doctor_id;
+        appt.doctor_name = 'Dr. ' + (doc.last_name || doc.first_name);
+        renderPage();
+      }
       const r = await api('PATCH', '/appointments/' + appointmentId, { doctor_id: parseInt(doctorId) });
       if (r.success) {
         toast('Doctor assigned');
-        await loadData(); renderPage();
+        loadData('appointments');
       } else {
+        if (appt) { appt.doctor_id = prevDocId; appt.doctor_name = prevDocName; renderPage(); }
         toast(r.error?.message || 'Error assigning doctor', 'er');
-        await loadData(); renderPage();
       }
     }
-    async function confirmAppt(id) { const r = await api('PATCH', `/appointments/${id}`, { status: 'confirmed' }); if (r.success) { toast('Confirmed'); await loadData(); renderPage(); } }
-    async function cancelAppt(id) { if (!confirm('Cancel this appointment?')) return; const r = await api('DELETE', `/appointments/${id}`); if (r.success) { toast('Cancelled', 'in'); await loadData(); renderPage(); } }
+
+    async function confirmAppt(id) {
+      const appt = STATE.appointments.find(x => x.appointment_id === id);
+      const prevStatus = appt ? appt.status : 'scheduled';
+      if (appt) {
+        appt.status = 'confirmed';
+        renderPage();
+      }
+      const r = await api('PATCH', `/appointments/${id}`, { status: 'confirmed' });
+      if (r.success) {
+        toast('Confirmed');
+        loadData('appointments');
+      } else {
+        if (appt) { appt.status = prevStatus; renderPage(); }
+        toast(r.error?.message || 'Error confirming', 'er');
+      }
+    }
+
+    async function cancelAppt(id) {
+      if (!confirm('Cancel this appointment?')) return;
+      const appt = STATE.appointments.find(x => x.appointment_id === id);
+      const prevStatus = appt ? appt.status : 'scheduled';
+      if (appt) {
+        appt.status = 'cancelled';
+        renderPage();
+      }
+      const r = await api('DELETE', `/appointments/${id}`);
+      if (r.success) {
+        toast('Cancelled', 'in');
+        loadData('appointments');
+      } else {
+        if (appt) { appt.status = prevStatus; renderPage(); }
+        toast(r.error?.message || 'Error cancelling', 'er');
+      }
+    }
     function openAddAppt() {
       const pts = STATE.patients, docs = STATE.doctors, txs = STATE.treatments;
       const now = new Date(); now.setMinutes(0, 0, 0);
@@ -2830,11 +3034,18 @@
       toast('Doctor updated'); closeModal(); await loadData(); renderPage();
     }
 
-    // ── Toggle availability ────────────────────────────────────────
     async function toggleAvailability(id, newVal) {
+      const doc = STATE.doctors.find(d => d.doctor_id === id);
+      const prevVal = doc ? doc.is_available : !newVal;
+      if (doc) { doc.is_available = newVal; renderPage(); }
       const r = await api('PATCH', '/doctors/' + id, { is_available: newVal });
-      if (r.success) { toast(newVal ? 'Doctor set to Available' : 'Doctor set to Unavailable'); await loadData(); renderPage(); }
-      else toast(r.error?.message || 'Error', 'er');
+      if (r.success) {
+        toast(newVal ? 'Doctor set to Available' : 'Doctor set to Unavailable');
+        loadData('doctors');
+      } else {
+        if (doc) { doc.is_available = prevVal; renderPage(); }
+        toast(r.error?.message || 'Error', 'er');
+      }
     }
 
     // ── Change password ────────────────────────────────────────────
@@ -3118,8 +3329,13 @@
         const token = localStorage.getItem('sc_token');
         if (token) {
           const r = await api('GET', '/auth/me');
-          if (r.success && r.data) { STATE.user = r.data; await loadData(); }
-          else localStorage.removeItem('sc_token');
+          if (r.success && r.data) {
+            STATE.user = r.data;
+            renderPage();
+            await loadData();
+          } else {
+            localStorage.removeItem('sc_token');
+          }
         }
       } catch (e) {
         console.error('Boot error:', e);
