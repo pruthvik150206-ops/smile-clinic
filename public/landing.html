@@ -655,6 +655,10 @@ body::after{
 .f-contact{font-size:.82rem;color:rgba(255,255,255,.7);font-weight:300;line-height:1.9}
 .f-contact a{color:var(--c-accent-lt);transition:color .2s}
 .f-contact a:hover{color:var(--c-pcln)}
+.f-dir-link{color:var(--c-accent-lt);font-weight:500;text-decoration:underline;text-underline-offset:4px;display:inline-flex;align-items:center;gap:5px;margin:3px 0 5px;transition:all .2s ease}
+.f-dir-link:hover{color:#fff;text-decoration-color:#fff}
+.f-dir-link svg{transition:transform .2s ease}
+.f-dir-link:hover svg{transform:translateX(3px)}
 .f-col-t{font-size:.7rem;font-weight:600;letter-spacing:.12em;color:var(--c-accent-lt);margin-bottom:18px;text-transform:uppercase}
 .f-links{list-style:none;display:flex;flex-direction:column;gap:11px}
 .f-links a{font-size:.82rem;color:rgba(255,255,255,.65);transition:color .2s;font-weight:300}
@@ -1453,7 +1457,12 @@ body::after{
           </div>
           <div class="c-item">
             <div class="c-lbl">Location</div>
-            <div class="c-val">12th Main Road, 4th Block, Rajajinagar<br>Bengaluru, Karnataka 560010</div>
+            <div class="c-val">
+              12th Main Road, 4th Block, Rajajinagar<br>Bengaluru, Karnataka 560010<br>
+              <a href="https://www.google.com/maps/dir/?api=1&destination=12th+Main+Rd,+4th+Block,+Rajajinagar,+Bengaluru,+Karnataka+560010" target="_blank" rel="noopener noreferrer" style="color:var(--c-primary);font-weight:500;text-decoration:underline;text-underline-offset:3px;font-size:.82rem;display:inline-flex;align-items:center;gap:4px;margin-top:4px">
+                <span>Get directions on Google Maps &rarr;</span>
+              </a>
+            </div>
           </div>
           <div class="c-item">
             <div class="c-lbl">Hours</div>
@@ -1533,6 +1542,10 @@ body::after{
         <p class="f-tag">Specialist dental and ENT care &mdash; clinical precision, unhurried attention.</p>
         <div class="f-contact">
           12th Main Road, 4th Block, Rajajinagar<br>Bengaluru, Karnataka 560010<br>
+          <a href="https://www.google.com/maps/dir/?api=1&destination=12th+Main+Rd,+4th+Block,+Rajajinagar,+Bengaluru,+Karnataka+560010" target="_blank" rel="noopener noreferrer" class="f-dir-link">
+            <span>Get directions on Google Maps</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          </a><br>
           <a href="tel:+918025531000">+91 80 2553 1000</a><br>
           <a href="mailto:care@tridentclinic.in">care@tridentclinic.in</a>
         </div>
