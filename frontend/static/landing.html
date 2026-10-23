@@ -77,7 +77,7 @@ body::after{
 /* ─── NAV ──────────────────────────────────────────────────────── */
 .nav{
   position:fixed;top:0;left:0;right:0;z-index:200;
-  height:74px;display:flex;align-items:center;
+  height:82px;display:flex;align-items:center;
   padding:0 48px;justify-content:space-between;
   transition:all .45s var(--ease);
 }
@@ -98,10 +98,10 @@ body::after{
   display:flex;align-items:center;gap:12px;z-index:1;text-decoration:none;
 }
 .nav-logo img.logo-white{
-  height:40px;width:auto;object-fit:contain;transition:opacity .3s;
+  height:52px;width:auto;object-fit:contain;transition:opacity .3s;
 }
 .nav-logo img.logo-color{
-  height:40px;width:auto;object-fit:contain;display:none;transition:opacity .3s;
+  height:52px;width:auto;object-fit:contain;display:none;transition:opacity .3s;
 }
 .nav.solid .logo-white{display:none!important}
 .nav.solid .logo-color{display:block!important}
@@ -973,8 +973,8 @@ body::after{
 <header role="banner">
   <nav class="nav" id="mainNav" aria-label="Primary navigation">
     <a href="#" class="nav-logo" aria-label="Trident Dental & ENT Clinic home">
-      <img src="/assets/trident-new-logo-white.png" alt="Trident Dental & ENT Clinic" class="logo-white"/>
-      <img src="/assets/trident-new-logo.png" alt="Trident Dental & ENT Clinic" class="logo-color"/>
+      <img src="/assets/trident-logo-nav-white.png" alt="Trident Dental & ENT Clinic" class="logo-white"/>
+      <img src="/assets/trident-logo-nav.png" alt="Trident Dental & ENT Clinic" class="logo-color"/>
     </a>
     <div class="nav-links" role="list">
       <a href="#dental-ent" role="listitem">Dental & ENT</a>
@@ -1029,7 +1029,6 @@ body::after{
       <h1 class="hero-h1" id="h1">
         Care that goes<br><em>deeper than</em><br><em>the surface.</em>
       </h1>
-      <div class="hero-tagline">Care for your smile and senses.</div>
       <p class="hero-sub">Specialist dental and ENT care &mdash; clinical precision, unhurried attention, and clear treatment plans.</p>
       <div class="hero-actions">
         <a href="#contact" class="btn-brass">Book a consultation</a>
@@ -1529,9 +1528,9 @@ body::after{
     <div class="footer-inner">
       <div>
         <div class="f-brand">
-          <img src="/assets/trident-new-logo-white.png" alt="Trident Dental & ENT Clinic"/>
+          <img src="/assets/trident-logo-nav-white.png" alt="Trident Dental & ENT Clinic" style="height:56px;width:auto;object-fit:contain"/>
         </div>
-        <p class="f-tag">Care for your smile and senses &mdash; clinical precision and specialist care.</p>
+        <p class="f-tag">Specialist dental and ENT care &mdash; clinical precision, unhurried attention.</p>
         <div class="f-contact">
           12th Main Road, 4th Block, Rajajinagar<br>Bengaluru, Karnataka 560010<br>
           <a href="tel:+918025531000">+91 80 2553 1000</a><br>
@@ -1640,7 +1639,7 @@ setTimeout(() => {
 /* ── marquee content ── */
 const items = [
   'Dental Care','ENT Specialists','Bengaluru',
-  'Care for your smile & senses','Root Canal Therapy','Orthodontics','Ear & Hearing','Nasal & Sinus','Cosmetic Dentistry',
+  'Root Canal Therapy','Orthodontics','Ear & Hearing','Nasal & Sinus','Cosmetic Dentistry',
   'Throat & Voice','Preventive Care','Digital Patient Portal','ENT Surgery','Oral Surgery',
   'Specialist Consultations','Restorative Dentistry'
 ];
