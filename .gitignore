@@ -7,3 +7,5 @@ __pycache__
 *.db
 *.db-shm
 *.db-wal
+*_backup.html
+previews/*.png
